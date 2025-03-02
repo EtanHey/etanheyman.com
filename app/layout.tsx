@@ -2,8 +2,9 @@ import type {Metadata} from 'next';
 import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
 
-import Nav from './components/Nav';
-import {BottomMobileBgCover, TopMobileBgCover} from './components/mobileBgCover';
+import Nav from './components/navigation/Nav';
+import {BottomMobileBgCover, TopMobileBgCover} from './components/navigation/mobileBgCover';
+import Footer from './components/Footer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,15 +28,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} overscroll-none -z-20 bg-background antialiased min-h-screen relative`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} h-full flex flex-col justify-center overscroll-none -z-20 bg-background antialiased min-h-screen relative`}>
         {/* Top SVGs (fixed to viewport) */}
         <Nav />
         {/* Main content */}
-        <div className='relative overflow-hidden z-0'>
+        <div className='relative bg-background flex flex-col items-center justify-center grow h-full overflow-hidden z-0'>
           <TopMobileBgCover />
           <BottomMobileBgCover />
           {children}
         </div>
+        <Footer />
       </body>
     </html>
   );
