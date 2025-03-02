@@ -3,6 +3,28 @@
 @theme {
   --color-background: #00003f;
   --color-foreground: var(--foreground);
+
+  /* Blue color palette from light to dark */
+  --color-blue-50: #e7f5fe; /* Light blue */
+  --color-blue-100: #b8e2fb; /* Light blue */
+  --color-blue-200: #88cff8; /* Medium light blue */
+  --color-blue-300: #59bcf5; /* Medium blue */
+  --color-blue-400: #2aa9f2; /* Medium-strong blue */
+  --color-blue-500: #0f82eb; /* Primary blue */
+  --color-blue-600: #0085d7; /* Strong blue */
+  --color-blue-700: #0053a4; /* Dark blue */
+  --color-blue-800: #002072; /* Very dark blue */
+  --color-blue-900: #00003f; /* Deepest blue */
+
+  /* Primary blue */
+  --color-primary: var(--color-blue-500);
+
+  /* White and Black */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Red */
+  --color-red: #e70e0e;
 }
 
 /*
@@ -13,6 +35,7 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+
 @layer base {
   *,
   ::after,
