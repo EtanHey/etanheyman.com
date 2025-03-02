@@ -3,7 +3,7 @@ import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
 
 import Nav from './components/Nav';
-import { BottomMobileBgCover, TopMobileBgCover } from './components/mobileBgCover';
+import {BottomMobileBgCover, TopMobileBgCover} from './components/mobileBgCover';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -29,12 +29,11 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} overscroll-none -z-20 bg-background antialiased min-h-screen relative`}>
         {/* Top SVGs (fixed to viewport) */}
-
-          <Nav />
+        <Nav />
         {/* Main content */}
-        <div className='relative z-0'>
-        <TopMobileBgCover />
-        <BottomMobileBgCover />
+        <div className='relative overflow-hidden z-0'>
+          <TopMobileBgCover />
+          <BottomMobileBgCover />
           {children}
         </div>
       </body>
