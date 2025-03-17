@@ -1,5 +1,3 @@
-import React from 'react';
-
 const NotFound = () => {
   return (
     <div className='h-full flex items-center justify-center grow w-full'>
@@ -151,20 +149,20 @@ const NotFound = () => {
         <path d='M236.005 191.859H235.431L234.765 190.195C234.788 190.38 234.827 190.659 234.827 191.046V191.859H234.424V189.761H234.982L235.664 191.426C235.641 191.286 235.602 190.992 235.602 190.682V189.761H236.005V191.859Z' fill='#00003F' />
         <defs>
           <linearGradient id='paint0_linear_77_6832' x1='162.125' y1='159.47' x2='162.125' y2='41.1345' gradientUnits='userSpaceOnUse'>
-            <stop stop-color='white' />
-            <stop offset='1' stop-color='#00003F' />
+            <stop stopColor='white' />
+            <stop offset='1' stopColor='#00003F' />
           </linearGradient>
           <linearGradient id='paint1_linear_77_6832' x1='83.5701' y1='160.942' x2='83.5701' y2='111.769' gradientUnits='userSpaceOnUse'>
-            <stop stop-color='white' />
-            <stop offset='1' stop-color='#00003F' />
+            <stop stopColor='white' />
+            <stop offset='1' stopColor='#00003F' />
           </linearGradient>
           <linearGradient id='paint2_linear_77_6832' x1='175.651' y1='160.314' x2='175.651' y2='81.7415' gradientUnits='userSpaceOnUse'>
-            <stop stop-color='white' />
-            <stop offset='1' stop-color='#00003F' />
+            <stop stopColor='white' />
+            <stop offset='1' stopColor='#00003F' />
           </linearGradient>
           <linearGradient id='paint3_linear_77_6832' x1='266.787' y1='160.942' x2='266.787' y2='111.769' gradientUnits='userSpaceOnUse'>
-            <stop stop-color='white' />
-            <stop offset='1' stop-color='#00003F' />
+            <stop stopColor='white' />
+            <stop offset='1' stopColor='#00003F' />
           </linearGradient>
         </defs>
       </svg>
