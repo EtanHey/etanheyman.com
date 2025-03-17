@@ -104,7 +104,7 @@ const BottomMobileBgCover = () => {
   }
 
   return (
-    <div className='absolute h-fit bottom-0 left-0 w-full z-10 pointer-events-none'>
+    <div className='absolute h-fit bottom-0 left-0 w-full pointer-events-none'>
       {/* Bottom Right SVG */}
       <div className='absolute h-fit right-0 bottom-0' style={{bottom: `${bottomRightPosition}px`}}>
         <span className='absolute -right-3 size-36 bg-blue-500 blur-[45px] opacity-60' style={{bottom: `${bottomRightPosition}px`}}></span>
@@ -128,7 +128,7 @@ const TopMobileBgCover = () => {
   const isHomeOrNotFoundPage = pathname === '/' || pathname === '';
 
   return (
-    <div className='absolute top-0 left-0 h-fit w-full z-10 pointer-events-none'>
+    <div className='absolute top-0 left-0 h-fit w-full  pointer-events-none'>
       {/* Top Right SVG - fixed position for all pages */}
       <div className='absolute h-fit right-0 -top-[54px]'>
         <span className='absolute -right-3 -bottom-5 size-36 bg-blue-200 blur-[45px] opacity-60'></span>
