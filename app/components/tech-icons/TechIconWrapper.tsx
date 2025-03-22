@@ -60,7 +60,7 @@ export const TechIconWrapper: React.FC<TechIconWrapperProps> = ({name, wrapperCl
   }
 
   return (
-    <TechWrapper className={wrapperClassName}>
+    <TechWrapper className={wrapperClassName} name={name}>
       <IconComponent className={iconClassName} {...iconProps} />
     </TechWrapper>
   );

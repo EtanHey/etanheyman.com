@@ -3,15 +3,20 @@ import React, {ReactNode, useMemo} from 'react';
 interface TechWrapperProps {
   children: ReactNode;
   className?: string;
+  name?: string; // Add name prop to create deterministic opacity
 }
 
-const TechWrapper: React.FC<TechWrapperProps> = ({children, className = ''}) => {
-  // Generate a random opacity value with a fixed 70% chance of full opacity
+const TechWrapper: React.FC<TechWrapperProps> = ({children, className = '', name = ''}) => {
+  // Generate a deterministic opacity value based on the component name
+  // This ensures server and client rendering match
   const opacity = useMemo(() => {
-    // Using a fixed 70% probability (middle of 60-80% range)
-    // This ensures approximately 70% of wrappers will have full opacity
-    return Math.random() < 0.7 ? 1.0 : 0.8;
-  }, []);
+    if (!name) return 0.8; // Default opacity for unnamed items
+
+    // Use a deterministic approach based on name
+    // Sum the character codes of the name and use modulo for determinism
+    const nameSum = name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    return nameSum % 2 === 0 ? 0.8 : 1;
+  }, [name]);
 
   return (
     <div
