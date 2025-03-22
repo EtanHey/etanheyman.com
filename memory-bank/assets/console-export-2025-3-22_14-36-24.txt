@@ -1,0 +1,602 @@
+ParallaxWrapper rendering app_38caee._.js:1228:13
+ParallaxWrapper rendering <anonymous code>:1:148389
+🚫 Arrow not rendered - visibility check failed app_b432e8._.js:410:57
+🚫 Arrow not rendered - visibility check failed <anonymous code>:1:148389
+A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+      <LoadingBoundary loading={null}>
+        <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+          <RedirectBoundary>
+            <RedirectErrorBoundary router={{...}}>
+              <InnerLayoutRouter parallelRouterKey="children" url="/about" tree={[...]} childNodes={Map} ...>
+                <ClientPageRoot Component={function AboutPage} searchParams={{}} params={{}}>
+                  <AboutPage params={Promise} searchParams={Promise}>
+                    <div className="flex w-ful...">
+                      <div>
+                      <div className="relative r...">
+                        <div className="grid grid-...">
+                          <TechIconWrapper name="Mongoose">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper name="Figma">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper name="AWS">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper>
+                          <TechIconWrapper name="Prettier">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper name="Jira">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:1}}
+-                               style={{opacity:"0.8"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper name="Cypress">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper name="Expo">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper>
+                          <TechIconWrapper name="Make">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper name="Socket">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:1}}
+-                               style={{opacity:"0.8"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper name="Tailwind">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper name="Dndkit">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:1}}
+-                               style={{opacity:"0.8"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper>
+                          <TechIconWrapper name="Vue">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper>
+                          <TechIconWrapper name="Dart">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:1}}
+-                               style={{opacity:"0.8"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper name="MaterialUI">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:1}}
+-                               style={{opacity:"0.8"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper name="Motion">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:1}}
+-                               style={{opacity:"0.8"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper name="MongoDB">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:1}}
+-                               style={{opacity:"0.8"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                          <TechIconWrapper name="Cloudinary">
+                            <TechWrapper className="">
+                              <div
++                               style={{opacity:0.8}}
+-                               style={{opacity:"1"}}
+                                className={"\n        relative bg-blue-50 flex items-center justify-center \n        ..."}
+                              >
+                      ...
+                ...
+<anonymous code>:1:145535
+📏 Timeline boundaries: 
+Object { start: 994.8499755859375, end: 2554.8499755859375, currentScroll: 0 }
+app_b432e8._.js:262:33
+👁️ Arrow visibility changing: 
+Object { visible: true, scrollY: 0, timelineStart: 0, timelineEnd: 0 }
+app_b432e8._.js:329:37
+ParallaxWrapper mounted app_38caee._.js:1220:21
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 0 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 0 }
+<anonymous code>:1:148389
+[Fast Refresh] rebuilding node_modules_next_dist_client_523921._.js:13666:25
+[Fast Refresh] rebuilding 2 node_modules_next_dist_client_523921._.js:13666:25
+Source map error: Error: request failed with status 404
+Stack in the worker:networkRequest@resource://devtools/client/shared/source-map-loader/utils/network-request.js:43:9
+
+Resource URL: http://localhost:3000/%3Canonymous%20code%3E
+Source Map URL: installHook.js.map
+[Fast Refresh] rebuilding node_modules_next_dist_client_523921._.js:13666:25
+👁️ Arrow visibility changing: 
+Object { visible: false, scrollY: 1, timelineStart: 994.8499755859375, timelineEnd: 2554.8499755859375 }
+app_b432e8._.js:329:37
+🚫 Arrow not rendered - visibility check failed app_b432e8._.js:410:57
+🚫 Arrow not rendered - visibility check failed <anonymous code>:1:148389
+👁️ Arrow visibility changing: 
+Object { visible: true, scrollY: 1005.5, timelineStart: 994.8499755859375, timelineEnd: 2554.8499755859375 }
+app_b432e8._.js:329:37
+🔄 Active item changed: 
+Object { previous: 0, new: 1 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🔄 Active item changed: 
+Object { previous: 1, new: 2 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🔄 Active item changed: 
+Object { previous: 2, new: 3 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 3 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 3 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 3 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 3 }
+<anonymous code>:1:148389
+🔄 Active item changed: 
+Object { previous: 3, new: 4 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 4 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 4 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 4 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 4 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 4 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 4 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 4 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 4 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 4 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 4 }
+<anonymous code>:1:148389
+🔄 Active item changed: 
+Object { previous: 4, new: 5 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 5 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 5 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 5 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 5 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 5 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 5 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 5 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 5 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 5 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 5 }
+<anonymous code>:1:148389
+🔄 Active item changed: 
+Object { previous: 5, new: 4 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 4 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 4 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 4 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 4 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 4 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 4 }
+<anonymous code>:1:148389
+🔄 Active item changed: 
+Object { previous: 4, new: 3 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 3 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 3 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 3 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 3 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 3 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 3 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 3 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 3 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 3 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 3 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 3 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 3 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 3 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 3 }
+<anonymous code>:1:148389
+🔄 Active item changed: 
+Object { previous: 3, new: 2 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🔄 Active item changed: 
+Object { previous: 2, new: 1 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+👁️ Arrow visibility changing: 
+Object { visible: false, scrollY: 982.566650390625, timelineStart: 994.8499755859375, timelineEnd: 2554.8499755859375 }
+app_b432e8._.js:329:37
+🚫 Arrow not rendered - visibility check failed app_b432e8._.js:410:57
+🚫 Arrow not rendered - visibility check failed <anonymous code>:1:148389
+👁️ Arrow visibility changing: 
+Object { visible: true, scrollY: 1000.0999755859375, timelineStart: 994.8499755859375, timelineEnd: 2554.8499755859375 }
+app_b432e8._.js:329:37
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 1 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 1 }
+<anonymous code>:1:148389
+🔄 Active item changed: 
+Object { previous: 1, new: 2 }
+app_b432e8._.js:196:29
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389
+🖌️ Rendering arrow: 
+Object { position: {…}, activeItemIndex: 2 }
+app_b432e8._.js:414:17
+🖌️ Rendering arrow:  
+Object { position: {…}, activeItemIndex: 2 }
+<anonymous code>:1:148389

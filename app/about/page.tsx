@@ -3,9 +3,8 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import LaptopIcon from '../components/navigation/about/LaptopIcon';
 import LocationIcon from '../components/navigation/about/LocationIcon';
-import ParallaxArrow from '../components/navigation/about/ParallaxArrow';
-import {techIconMap, TechIconName, TechIconWrapper} from '../components/tech-icons/TechIconWrapper';
 import Timeline from '../components/navigation/about/Timeline';
+import {techIconMap, TechIconName, TechIconWrapper} from '../components/tech-icons/TechIconWrapper';
 
 const AboutPage = () => {
   const careerSectionRef = useRef<HTMLDivElement>(null);
@@ -81,14 +80,10 @@ const AboutPage = () => {
         </div>
       </div>
 
-      {/* Career Journey Section - This is what we want to track */}
-      <div ref={careerSectionRef} className='w-full mt-8 border-t-2 border-blue-500 pt-4' id='career-section'>
+      {/* Career Journey Section */}
+      <div className='w-full mt-8 border-t-2 border-blue-500 pt-4' id='career-section'>
         <h2 className='text-2xl font-bold mb-6'>My career journey</h2>
-
-        <section className='mb-12'>
-          <h2 className='text-2xl font-semibold mb-4'>Career</h2>
-          <Timeline />
-        </section>
+        <Timeline />
       </div>
     </div>
   );
