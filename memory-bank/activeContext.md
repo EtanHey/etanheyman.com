@@ -8,8 +8,9 @@ The project is currently in the development phase, with the main structure and c
 
 - Set up Next.js 15+ project with App Router
 - Implemented basic layout structure with navigation and footer
-- Added ParallaxWrapper component for scrolling effects
-- Created tech-icons components
+- Created custom TimelineArrow component to replace ParallaxWrapper for timeline navigation
+- Fixed hydration issues in dynamic components using client-side rendering detection
+- Added tech-icons components
 - Established color theme in globals.css with blue color palette
 - Implemented responsive design with mobile considerations
 
@@ -17,7 +18,10 @@ The project is currently in the development phase, with the main structure and c
 
 - **Design System**: Using TailwindCSS v4 with custom color variables
 - **Component Structure**: Component-based architecture with reusable UI components
-- **Animation Strategy**: Using react-scroll-parallax for scroll effects
+- **Animation Strategy**: 
+  - Migrating away from react-scroll-parallax for timeline arrow in favor of custom scroll-based solutions
+  - Using Intersection Observer API for more efficient scroll detection
+  - Implementing proper fixed/scrolling transitions
 - **Responsive Approach**: Mobile-first design with responsive breakpoints
 
 ## Current Challenges
@@ -26,6 +30,8 @@ The project is currently in the development phase, with the main structure and c
 - Optimizing for performance while maintaining visual appeal
 - Balancing between static and dynamic content
 - Ensuring accessibility across all components
+- Fixing hydration mismatches between server and client rendering
+- Fine-tuning scroll-based animations for optimal user experience
 
 ## Next Steps
 

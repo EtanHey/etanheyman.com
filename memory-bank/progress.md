@@ -9,11 +9,12 @@ The project is in active development with the basic structure and components in 
 - ✅ Project setup with Next.js 15+, React 19, and TypeScript
 - ✅ Basic layout structure with navigation and footer
 - ✅ TailwindCSS v4 integration with custom theme
-- ✅ Parallax scrolling effects via react-scroll-parallax
+- ✅ Custom scroll-based timeline arrow implementation with Intersection Observer API
 - ✅ Dark/light mode support
 - ✅ Mobile-responsive design foundations
 - ✅ Tech icons component implementation
 - ✅ Basic routing with Next.js App Router
+- ✅ Client-side hydration handling for dynamic components
 
 ## In Progress
 
@@ -22,20 +23,22 @@ The project is in active development with the basic structure and components in 
 - 🔄 Mobile navigation refinement
 - 🔄 Animation and transition effects
 - 🔄 Content population
+- 🔄 Performance optimization for scroll-based animations
 
 ## Not Yet Started
 
 - ❌ Projects section (if applicable)
 - ❌ Contact functionality
 - ❌ SEO optimization
-- ❌ Performance optimization
 - ❌ Comprehensive testing
 - ❌ Deployment setup
 - ❌ Analytics integration
 
 ## Known Issues
 
-- No critical issues identified yet
+- ~No critical issues identified yet~
+- Fixed: Hydration mismatch in TimelineArrow component
+- Fixed: Timeline arrow positioning and sizing
 - Mobile responsiveness may need further refinement
 - Animation performance may need optimization
 
@@ -51,13 +54,17 @@ The project is in active development with the basic structure and components in 
 
 - Complete home page with all sections
 - Develop about page with personal information
+  - ✅ Implement custom timeline navigation
+  - ✅ Create timeline component with interactive arrow
 - Optimize for mobile devices
 
-### Milestone 3: Refinement (Not Started)
+### Milestone 3: Refinement (In Progress)
 
 - Add any additional content sections
 - Implement contact functionality
 - Optimize performance and animations
+  - ✅ Replace react-scroll-parallax with custom scroll solution for timeline
+  - ✅ Fix hydration issues with client-side rendering detection
 
 ### Milestone 4: Launch Preparation (Not Started)
 
@@ -70,5 +77,5 @@ The project is in active development with the basic structure and components in 
 1. Complete remaining content for home page
 2. Finish about page development
 3. Refine mobile navigation experience
-4. Optimize animations and transitions
+4. Optimize remaining animations and transitions
 5. Prepare for initial testing
