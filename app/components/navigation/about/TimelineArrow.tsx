@@ -68,28 +68,6 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
           });
         }
         setActiveItemIndex(closestItem);
-
-        // Update debug highlighting
-        if (DEBUG_MODE) {
-          items.forEach((item, i) => {
-            const element = item as HTMLElement;
-            element.style.outline = i === closestItem ? '2px dashed red' : '';
-
-            // Clean up/add debug message
-            const debugMessage = element.querySelector('.debug-message');
-            if (debugMessage) debugMessage.remove();
-
-            if (i === closestItem) {
-              const message = document.createElement('div');
-              message.className = 'debug-message';
-              message.style.fontSize = '10px';
-              message.style.color = 'red';
-              message.style.fontWeight = 'bold';
-              message.textContent = `ACTIVE ITEM (${i})`;
-              element.prepend(message);
-            }
-          });
-        }
       }
 
       // Get active item position
@@ -209,24 +187,22 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
         setIsVisible(isInTimelineRange);
 
         // If becoming visible, ensure the first item is selected initially
-        if (isInTimelineRange && !isCurrentlyVisible.current) {
+        if (isInTimelineRange && !isCurrentlyVisible.current && timelineItemsRef.current) {
           // When first becoming visible, prioritize the first item
           setActiveItemIndex(0);
 
           // Force update position for the first item
-          if (timelineItemsRef.current) {
-            const items = Array.from(timelineItemsRef.current.children);
-            if (items.length > 0) {
-              const firstItem = items[0] as HTMLElement;
-              const firstItemRect = firstItem.getBoundingClientRect();
+          const items = Array.from(timelineItemsRef.current.children);
+          if (items.length > 0) {
+            const firstItem = items[0] as HTMLElement;
+            const firstItemRect = firstItem.getBoundingClientRect();
 
-              if (timelineRef.current) {
-                const timelineRect = timelineRef.current.getBoundingClientRect();
-                setPosition({
-                  top: firstItemRect.top + firstItemRect.height / 2,
-                  left: timelineRect.left
-                });
-              }
+            if (timelineRef.current) {
+              const timelineRect = timelineRef.current.getBoundingClientRect();
+              setPosition({
+                top: firstItemRect.top + firstItemRect.height / 2,
+                left: timelineRect.left
+              });
             }
           }
         }
@@ -243,7 +219,7 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
       lastScrollY.current = scrollY;
 
       // Only update position if in timeline range
-      if (isInTimelineRange) {
+      if (isInTimelineRange && timelineItemsRef.current) {
         const items = Array.from(timelineItemsRef.current.children);
         updateArrowPosition(items, viewportHeight);
       }
@@ -266,16 +242,6 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
     return () => {
       window.removeEventListener('scroll', scrollListener);
       if (rafId.current) cancelAnimationFrame(rafId.current);
-
-      // Clean up debug elements
-      if (DEBUG_MODE && timelineItemsRef.current) {
-        Array.from(timelineItemsRef.current.children).forEach((item) => {
-          const element = item as HTMLElement;
-          element.style.outline = '';
-          const debugMessage = element.querySelector('.debug-message');
-          if (debugMessage) debugMessage.remove();
-        });
-      }
     };
   }, [timelineRef, timelineItemsRef, timelineRange, updateArrowPosition]);
 
