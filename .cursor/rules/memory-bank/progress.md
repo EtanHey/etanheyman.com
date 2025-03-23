@@ -1,0 +1,88 @@
+# Progress: etanheyman.com
+
+## Current Status
+
+The project is in active development with the basic structure and components in place. The site is taking shape with the main layout, navigation, and some content components implemented.
+
+## What Works
+
+- ✅ Project setup with Next.js 15+, React 19, and TypeScript
+- ✅ Basic layout structure with navigation and footer
+- ✅ TailwindCSS v4 integration with custom theme
+- ✅ Custom scroll-based timeline arrow implementation with Intersection Observer API
+- ✅ Dark/light mode support
+- ✅ Mobile-responsive design foundations
+- ✅ Tech icons component implementation
+- ✅ Basic routing with Next.js App Router
+- ✅ Client-side hydration handling for dynamic components
+- ✅ Removed external animation library dependencies in favor of custom solutions
+- ✅ Clean timeline implementation with only an arrow indicator
+- ✅ Converted all inline styles to Tailwind CSS v4 classes
+
+## In Progress
+
+- 🔄 Home page content and styling
+- 🔄 About page development
+- 🔄 Mobile navigation refinement
+- 🔄 Animation and transition effects
+- 🔄 Content population
+- 🔄 Performance optimization for scroll-based animations
+- 🔄 Research for simpler timeline code implementation
+
+## Not Yet Started
+
+- ❌ Projects section (if applicable)
+- ❌ Contact functionality
+- ❌ SEO optimization
+- ❌ Comprehensive testing
+- ❌ Deployment setup
+- ❌ Analytics integration
+
+## Known Issues
+
+- ~No critical issues identified yet~
+- Fixed: Hydration mismatch in TimelineArrow component
+- Fixed: Timeline arrow positioning and sizing
+- Mobile responsiveness may need further refinement
+- Animation performance may need optimization
+
+## Milestones
+
+### Milestone 1: Basic Structure (Completed)
+
+- Set up project with Next.js, React, and TypeScript
+- Implement basic layout and navigation
+- Establish design system with TailwindCSS
+
+### Milestone 2: Core Pages (In Progress)
+
+- Complete home page with all sections
+- Develop about page with personal information
+  - ✅ Implement custom timeline navigation
+  - ✅ Create timeline component with interactive arrow
+- Optimize for mobile devices
+
+### Milestone 3: Refinement (In Progress)
+
+- Add any additional content sections
+- Implement contact functionality
+- Optimize performance and animations
+  - ✅ Replace react-scroll-parallax with custom scroll solution for timeline
+  - ✅ Remove unnecessary animation libraries
+  - ✅ Convert inline styles to Tailwind CSS v4 classes
+  - ✅ Fix hydration issues with client-side rendering detection
+
+### Milestone 4: Launch Preparation (Not Started)
+
+- Conduct testing across devices and browsers
+- Implement SEO optimizations
+- Set up deployment pipeline
+
+## Next Actions
+
+1. Complete remaining content for home page
+2. Finish about page development
+3. Refine mobile navigation experience
+4. Optimize remaining animations and transitions
+5. Research potential libraries to simplify timeline code
+6. Prepare for initial testing

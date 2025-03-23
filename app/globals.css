@@ -3,6 +3,32 @@
 @theme {
   --color-background: #00003f;
   --color-foreground: var(--foreground);
+
+  /* Blue color palette from light to dark */
+  --color-blue-50: #e7f5fe; /* Light blue */
+  --color-blue-100: #b8e2fb; /* Light blue */
+  --color-blue-200: #88cff8; /* Medium light blue */
+  --color-blue-300: #59bcf5; /* Medium blue */
+  --color-blue-400: #2aa9f2; /* Medium-strong blue */
+  --color-blue-500: #0f82eb; /* Primary blue */
+  --color-blue-600: #0085d7; /* Strong blue */
+  --color-blue-700: #0053a4; /* Dark blue */
+  --color-blue-800: #002072; /* Very dark blue */
+  --color-blue-900: #00003f; /* Deepest blue */
+
+  /* Primary blue */
+  --color-primary: var(--color-blue-500);
+
+  /* White and Black */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Red */
+  --color-red: #e70e0e;
+
+  /* Animation keyframes */
+  --animation-float: float 2s ease-in-out infinite;
+  --animation-pulse-scale: pulse-scale 2s ease-in-out infinite;
 }
 
 /*
@@ -13,6 +39,7 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+
 @layer base {
   *,
   ::after,
@@ -20,6 +47,52 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@layer utilities {
+  /* For Webkit-based browsers (Chrome, Safari and Opera) */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-none {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Custom animation utilities */
+  .animate-float {
+    animation: float 2s ease-in-out infinite;
+  }
+
+  .animate-pulse-scale {
+    animation: pulse-scale 2s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, calc(-50% - 3px));
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes pulse-scale {
+  0% {
+    transform: scale(1.25);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1.25);
   }
 }
 

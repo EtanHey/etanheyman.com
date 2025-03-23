@@ -1,0 +1,75 @@
+# Technical Context: etanheyman.com
+
+## Core Technologies
+
+- **Next.js 15+**: React framework with App Router for routing and server components
+- **React 19+**: UI library for component-based development
+- **TypeScript**: Strongly typed programming language for enhanced developer experience
+- **TailwindCSS v4**: Utility-first CSS framework for styling
+
+## Development Environment
+
+- **Node.js**: JavaScript runtime for development
+- **npm/yarn/pnpm**: Package managers for dependency management
+- **Turbopack**: Used in development mode for faster refresh (via `next dev --turbopack`)
+- **ESLint**: Linting tool for code quality
+- **VS Code / Cursor**: Recommended editors with TypeScript support
+
+## Deployment
+
+- Likely deployed on Vercel (as suggested by Next.js README)
+- Alternative deployment options may include Netlify, GitHub Pages, or custom hosting
+
+## Browser Support
+
+- Modern browsers (Chrome, Firefox, Safari, Edge)
+- Mobile browsers on iOS and Android
+
+## Performance Targets
+
+- First Contentful Paint: < 1.2s
+- Time to Interactive: < 3.5s
+- Lighthouse score: > 90 in all categories
+- Mobile-friendly with responsive design
+
+## Technical Constraints
+
+- Static site generation preferred for optimal performance
+- Avoid unnecessary client-side JavaScript
+- Maintain accessibility compliance
+- Optimize for mobile devices and various screen sizes
+- Minimize external dependencies
+- Prefer vanilla JavaScript solutions for animations when possible
+
+## Dependencies
+
+### Production Dependencies
+
+- next: 15.1.7
+- react: 19.0.0
+- react-dom: 19.0.0
+
+### Development Dependencies
+
+- @tailwindcss/postcss: 4.0.9
+- @types/node: 20.x
+- @types/react: 19.x
+- @types/react-dom: 19.x
+- postcss: 8.x
+- tailwindcss: 4.0.9
+- typescript: 5.x
+
+## Build Process
+
+- Development: `npm run dev` (with Turbopack)
+- Build: `npm run build`
+- Start: `npm run start`
+- Lint: `npm run lint`
+
+## Technical Debt Considerations
+
+- Keep dependencies updated to latest stable versions
+- Address any accessibility issues promptly
+- Refactor components as needed for maintainability
+- Document code appropriately for future maintenance
+- Continue to evaluate and minimize external dependencies
