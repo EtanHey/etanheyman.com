@@ -42,7 +42,6 @@ const TimelineParallax = () => {
   const timelineRef = useRef<HTMLDivElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [timelineStart, setTimelineStart] = useState(0);
   const [timelineEnd, setTimelineEnd] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -113,7 +112,6 @@ const TimelineParallax = () => {
         const scrollY = window.scrollY;
         const viewportHeight = window.innerHeight;
         const timelineHeight = timelineEnd - timelineStart;
-        const items = timelineRef.current.querySelectorAll('[data-timeline-index]');
 
         // Calculate how far we've scrolled through the timeline (as a percentage)
         // Add a small buffer to start the progress a bit earlier and end a bit later
@@ -139,50 +137,21 @@ const TimelineParallax = () => {
           const arrowOffset = arrowY - scrollY;
           arrowRef.current.style.transform = `translateY(${arrowOffset}px)`;
         }
-
-        // Find the active item based on scroll position
-        let newActiveIndex = 0;
-        items.forEach((item, index) => {
-          const rect = item.getBoundingClientRect();
-          const itemTop = rect.top + scrollY - 150; // Offset for earlier activation
-
-          if (scrollY >= itemTop) {
-            newActiveIndex = index;
-          }
-        });
-
-        if (activeIndex !== newActiveIndex) {
-          setActiveIndex(newActiveIndex);
-        }
       });
     };
 
     window.addEventListener('scroll', handleScroll, {passive: true});
-
     // Initial position
     handleScroll();
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [isInitialized, timelineStart, timelineEnd, activeIndex]);
+    
+  }, [isInitialized, timelineStart, timelineEnd]);
 
   return (
     <div ref={timelineRef} className='relative py-8'>
       {/* Fixed Timeline Arrow */}
-      <div
-        ref={arrowRef}
-        className='fixed  left-5 z-50 pointer-events-none'
-        style={{
-          top: 0,
-          opacity: 0,
-          willChange: 'transform',
-          transition: 'opacity 0.3s ease-in'
-        }}>
-        <div className='flex -translate-1/2 items-center justify-center w-5 h-5 bg-blue-500 rounded-full shadow-lg'>
+      <div ref={arrowRef} className='fixed left-5 sm:left-20 z-50 pointer-events-none opacity-0 top-0 transition-opacity duration-300 ease-in will-change-transform'>
+        <div className='flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full shadow-lg -translate-x-1/2 -translate-y-1/2'>
           <SendRightPointer />
         </div>
       </div>
@@ -191,9 +160,6 @@ const TimelineParallax = () => {
       <div className='flex flex-col gap-8 relative border-l-2 border-blue-500'>
         {/* Timeline items */}
         {timelineData.map((item, index) => {
-          const isActive = index === activeIndex;
-          const isPast = index < activeIndex;
-
           return (
             <div key={index} data-timeline-index={index} className='relative pl-4'>
               {/* Item content */}

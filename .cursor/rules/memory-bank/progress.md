@@ -15,6 +15,9 @@ The project is in active development with the basic structure and components in 
 - ✅ Tech icons component implementation
 - ✅ Basic routing with Next.js App Router
 - ✅ Client-side hydration handling for dynamic components
+- ✅ Removed external animation library dependencies in favor of custom solutions
+- ✅ Clean timeline implementation with only an arrow indicator
+- ✅ Converted all inline styles to Tailwind CSS v4 classes
 
 ## In Progress
 
@@ -24,6 +27,7 @@ The project is in active development with the basic structure and components in 
 - 🔄 Animation and transition effects
 - 🔄 Content population
 - 🔄 Performance optimization for scroll-based animations
+- 🔄 Research for simpler timeline code implementation
 
 ## Not Yet Started
 
@@ -64,6 +68,8 @@ The project is in active development with the basic structure and components in 
 - Implement contact functionality
 - Optimize performance and animations
   - ✅ Replace react-scroll-parallax with custom scroll solution for timeline
+  - ✅ Remove unnecessary animation libraries
+  - ✅ Convert inline styles to Tailwind CSS v4 classes
   - ✅ Fix hydration issues with client-side rendering detection
 
 ### Milestone 4: Launch Preparation (Not Started)
@@ -78,4 +84,5 @@ The project is in active development with the basic structure and components in 
 2. Finish about page development
 3. Refine mobile navigation experience
 4. Optimize remaining animations and transitions
-5. Prepare for initial testing
+5. Research potential libraries to simplify timeline code
+6. Prepare for initial testing
