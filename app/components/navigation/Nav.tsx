@@ -4,6 +4,7 @@ import Logo from './Logo';
 import {FacebookIcon, GithubIcon, LinkedinIcon, WhatsappIcon} from './socialIcons';
 import MenuTrigger from './MenuTrigger';
 import PopupMenu from './PopupMenu';
+import Link from 'next/link';
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +27,9 @@ const Nav = () => {
           </a>
         </div>
         <div className='flex items-center justify-between w-full gap-2'>
-          <Logo />
+          <Link href='/' className='flex items-center justify-center'>
+            <Logo />
+          </Link>
           <div className={`flex items-center  px-[6.5px] py-2.5 ${isOpen ? 'bg-blue-900' : 'bg-blue-500'} rounded-full justify-center gap-2 shadow-[0px_2px_1px_0px_#00004326]`}>
             <MenuTrigger isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
             <PopupMenu isOpen={isOpen} setIsOpen={setIsOpen} />

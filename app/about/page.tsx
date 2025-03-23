@@ -3,7 +3,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import LaptopIcon from '../components/navigation/about/LaptopIcon';
 import LocationIcon from '../components/navigation/about/LocationIcon';
-import Timeline from '../components/navigation/about/Timeline';
+import TimelineParallax from '../components/navigation/about/TimelineParallax';
 import {techIconMap, TechIconName, TechIconWrapper} from '../components/tech-icons/TechIconWrapper';
 
 const AboutPage = () => {
@@ -25,35 +25,24 @@ const AboutPage = () => {
   }, []);
 
   useEffect(() => {
-    // Calculate position immediately and after a short delay
+    // Calculate position on initial render
     calculateInitialPosition();
 
-    // Try multiple times to ensure we get an accurate position
-    const timers = [setTimeout(() => calculateInitialPosition(), 100), setTimeout(() => calculateInitialPosition(), 500), setTimeout(() => calculateInitialPosition(), 1000)];
+    // Recalculate on window resize
+    window.addEventListener('resize', calculateInitialPosition);
 
-    // Recalculate on resize
-    const handleResize = () => {
-      positionCalculatedRef.current = false;
-      calculateInitialPosition();
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    // Force recalculation on scroll if not initialized
-    const handleScroll = () => {
-      if (!isInitialized && careerSectionRef.current) {
-        calculateInitialPosition();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, {passive: true});
-
+    // Cleanup
     return () => {
-      timers.forEach((timer) => clearTimeout(timer));
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', calculateInitialPosition);
     };
-  }, [calculateInitialPosition, isInitialized]);
+  }, [calculateInitialPosition]);
+
+  // Debug log for career section position
+  useEffect(() => {
+    if (isInitialized) {
+      console.log(`Career section position: ${careerSectionPosition}px`);
+    }
+  }, [isInitialized, careerSectionPosition]);
 
   return (
     <div className='flex w-full flex-col z-20 items-start justify-items-center min-h-screen px-4.5 pt-8 gap-10.5 sm:p-20 font-[family-name:var(--font-geist-sans)]'>
@@ -81,9 +70,9 @@ const AboutPage = () => {
       </div>
 
       {/* Career Journey Section */}
-      <div className='w-full mt-8 border-t-2 border-blue-500 pt-4' id='career-section'>
+      <div ref={careerSectionRef} className='w-full mt-8 border-t-2 border-blue-500 pt-4' id='career-section'>
         <h2 className='text-2xl font-bold mb-6'>My career journey</h2>
-        <Timeline />
+        <TimelineParallax />
       </div>
     </div>
   );

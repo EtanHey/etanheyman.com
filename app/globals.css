@@ -25,6 +25,10 @@
 
   /* Red */
   --color-red: #e70e0e;
+
+  /* Animation keyframes */
+  --animation-float: float 2s ease-in-out infinite;
+  --animation-pulse-scale: pulse-scale 2s ease-in-out infinite;
 }
 
 /*
@@ -56,6 +60,39 @@
   .scrollbar-none {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  /* Custom animation utilities */
+  .animate-float {
+    animation: float 2s ease-in-out infinite;
+  }
+
+  .animate-pulse-scale {
+    animation: pulse-scale 2s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, calc(-50% - 3px));
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes pulse-scale {
+  0% {
+    transform: scale(1.25);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1.25);
   }
 }
 
