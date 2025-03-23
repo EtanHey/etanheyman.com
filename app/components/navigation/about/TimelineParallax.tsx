@@ -164,7 +164,7 @@ const TimelineParallax = () => {
   }, [isInitialized, timelineStart, timelineEnd]);
 
   return (
-    <div ref={timelineRef} className='relative py-8'>
+    <div ref={timelineRef} className='relative'>
       {/* Fixed Timeline Arrow */}
       <div ref={arrowRef} className='fixed left-5 sm:left-20 z-50 pointer-events-none opacity-0 top-0 transition-opacity duration-300 ease-in will-change-transform'>
         <div className='flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full shadow-lg -translate-x-1/2 -translate-y-1/2'>
@@ -173,7 +173,7 @@ const TimelineParallax = () => {
       </div>
 
       {/* Timeline Items */}
-      <div className='flex flex-col gap-8 relative border-l-2 border-blue-500'>
+      <div className='flex flex-col gap-8 relative border-l-4 border-blue-500'>
         {/* Timeline items */}
         {timelineData.map((item, index) => {
           return (
