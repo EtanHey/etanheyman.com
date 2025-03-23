@@ -4,7 +4,6 @@ import './globals.css';
 import Footer from './components/Footer';
 import {BottomMobileBgCover, TopMobileBgCover} from './components/navigation/mobileBgCover';
 import Nav from './components/navigation/Nav';
-import ParallaxWrapper from './components/ParallaxWrapper';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -22,13 +21,11 @@ export default function RootLayout({
         {/* Top SVGs (fixed to viewport) */}
         <Nav />
         {/* Main content */}
-        <ParallaxWrapper>
-          <div className='relative bg-background flex flex-col items-center justify-center grow h-full overflow-hidden z-0'>
-            <TopMobileBgCover />
-            <BottomMobileBgCover />
-            {children}
-          </div>
-        </ParallaxWrapper>
+        <div className='relative bg-background flex flex-col items-center justify-center grow h-full overflow-hidden z-0'>
+          <TopMobileBgCover />
+          <BottomMobileBgCover />
+          {children}
+        </div>
         <Footer />
       </body>
     </html>
