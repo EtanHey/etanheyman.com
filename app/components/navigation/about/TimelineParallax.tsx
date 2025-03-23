@@ -118,7 +118,11 @@ const TimelineParallax = () => {
         // This makes the arrow and line reach their start/end positions more naturally
         const scrollBuffer = 50; // pixels to buffer at start and end
         const adjustedStart = timelineStart - scrollBuffer - 30; // Pushed up by 10px more (from -20 to -30)
-        const adjustedEnd = timelineEnd + scrollBuffer - 40; // Keep the bottom end the same
+
+        // Add responsive adjustment for desktop
+        const desktopAdjustment = window.innerWidth >= 768 ? 300 : 0; // Increased from 100px to 300px for more noticeable change
+        const adjustedEnd = timelineEnd + scrollBuffer - 40 - desktopAdjustment; // Move endpoint up on desktop
+
         const adjustedHeight = adjustedEnd - adjustedStart;
 
         let scrollProgress = (scrollY - adjustedStart + viewportHeight / 2) / adjustedHeight;
@@ -127,9 +131,23 @@ const TimelineParallax = () => {
         // Calculate new arrow position based on scroll progress
         // Add vertical offset to make arrow start and end a bit lower
         const arrowStartOffset = 20 - 20; // Start offset in pixels, pushed up by 20px
-        const arrowEndOffset = 30 + 20; // End offset in pixels, pushed down by 20px
+
+        // Make arrowEndOffset responsive - 30 for mobile/tablet (767px and below), 50 for desktop
+        const arrowEndOffset = window.innerWidth <= 767 ? 30 + 20 : 20; // End offset in pixels
+
         const totalArrowOffset = arrowStartOffset + (arrowEndOffset - arrowStartOffset) * scrollProgress;
-        const arrowY = timelineStart + timelineHeight * scrollProgress + totalArrowOffset;
+
+        // Calculate base arrow position
+        let arrowY = timelineStart + timelineHeight * scrollProgress + totalArrowOffset;
+
+        // Apply desktop-specific endpoint adjustment that directly affects the final position
+        // This creates a more pronounced effect by capping the endpoint on desktop
+        if (window.innerWidth >= 640 && scrollProgress > 0.85) {
+          // Once we're past 85% of the timeline on desktop, start moving toward the final position more quickly
+          // This effectively caps the endpoint lower on the screen
+          const cappedProgress = 0.85 + (scrollProgress - 0.85) * 0.5; // Slow down the last 15% of movement
+          arrowY = timelineStart + timelineHeight * cappedProgress + totalArrowOffset;
+        }
 
         // Apply position directly to avoid jumps
         if (arrowRef.current) {
@@ -143,8 +161,6 @@ const TimelineParallax = () => {
     window.addEventListener('scroll', handleScroll, {passive: true});
     // Initial position
     handleScroll();
-
-    
   }, [isInitialized, timelineStart, timelineEnd]);
 
   return (
