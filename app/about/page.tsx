@@ -45,7 +45,7 @@ const AboutPage = () => {
   }, [isInitialized, careerSectionPosition]);
 
   return (
-    <div className='flex w-full flex-col z-20 items-start justify-items-center min-h-screen px-4.5 pt-8 gap-10.5 sm:p-20 font-[family-name:var(--font-geist-sans)]'>
+    <div className='flex w-full flex-col z-20 items-start justify-items-center min-h-screen px-4.5 py-8 gap-12 sm:p-20 font-[family-name:var(--font-geist-sans)]'>
       <div className='flex flex-col gap-4'>
         <h1 className='text-[34px] pb-2 leading-5.5 font-bold'>Etan Heyman</h1>
         <div className='flex items-center gap-4'>
@@ -61,7 +61,7 @@ const AboutPage = () => {
       </div>
 
       {/* Tech Icons Section */}
-      <div className='relative rotate-[10deg] max-w-max -left-7 flex justify-center items-center h-fit w-screen my-12'>
+      <div className='relative rotate-[10deg] max-w-max -left-7 flex justify-center items-center h-fit w-screen'>
         <div className='grid grid-cols-6 gap-[23.45px]'>
           {Object.keys(techIconMap).map((techName) => (
             <TechIconWrapper key={techName} name={techName as TechIconName} />
@@ -70,8 +70,8 @@ const AboutPage = () => {
       </div>
 
       {/* Career Journey Section */}
-      <div ref={careerSectionRef} className='w-full mt-8 border-t-2 border-blue-500 pt-4' id='career-section'>
-        <h2 className='text-2xl font-bold mb-6'>My career journey</h2>
+      <div ref={careerSectionRef} className='w-full flex flex-col gap-2 mt-8 pt-4' id='career-section'>
+        <h2 className='text-2xl font-bold'>My career journey</h2>
         <TimelineParallax />
       </div>
     </div>
