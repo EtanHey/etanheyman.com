@@ -6,7 +6,6 @@
 - **React 19+**: UI library for component-based development
 - **TypeScript**: Strongly typed programming language for enhanced developer experience
 - **TailwindCSS v4**: Utility-first CSS framework for styling
-- **react-scroll-parallax**: Library for parallax scrolling effects
 
 ## Development Environment
 
@@ -39,6 +38,8 @@
 - Avoid unnecessary client-side JavaScript
 - Maintain accessibility compliance
 - Optimize for mobile devices and various screen sizes
+- Minimize external dependencies
+- Prefer vanilla JavaScript solutions for animations when possible
 
 ## Dependencies
 
@@ -47,7 +48,6 @@
 - next: 15.1.7
 - react: 19.0.0
 - react-dom: 19.0.0
-- react-scroll-parallax: 3.4.5
 
 ### Development Dependencies
 
@@ -72,3 +72,4 @@
 - Address any accessibility issues promptly
 - Refactor components as needed for maintainability
 - Document code appropriately for future maintenance
+- Continue to evaluate and minimize external dependencies

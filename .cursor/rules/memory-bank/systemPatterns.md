@@ -26,7 +26,7 @@ etanheyman.com/
 - **Layout Components**: Define the structure and shared UI elements across pages
 - **Page Components**: Contain route-specific content and logic
 - **UI Components**: Reusable UI elements that make up the interface
-- **Wrapper Components**: Higher-order components that provide functionality (e.g., ParallaxWrapper)
+- **Custom Animation Components**: Home-grown solutions for interactive elements like the timeline arrow
 
 ## Styling Approach
 
@@ -34,6 +34,7 @@ etanheyman.com/
 - Custom theme variables defined in globals.css
 - Dark/light mode support through CSS variables and media queries
 - Responsive design using Tailwind's breakpoint system
+- No inline styles - all styling through Tailwind utility classes
 
 ## State Management
 
@@ -48,9 +49,14 @@ etanheyman.com/
 
 ## Animation Strategy
 
-- react-scroll-parallax for parallax scrolling effects
+- Custom scroll-based animations using requestAnimationFrame for performance
 - CSS transitions for smooth UI state changes
-- Possibly other animation libraries as needed
+- Vanilla JavaScript for position calculations and element transformations
+- Minimalist approach with subtle animations that enhance UX without being distracting
+- Exploring the potential of CSS Scroll-Driven Animations:
+  - `animation-timeline: scroll()` for scroll-progress-based animations
+  - `animation-timeline: view()` for element visibility animations
+  - Consideration of browser support limitations (Chrome/Firefox support, Safari pending)
 
 ## Performance Considerations
 
@@ -58,6 +64,10 @@ etanheyman.com/
 - Image optimization through Next.js
 - Minimizing client-side JavaScript
 - Efficient rendering with React best practices
+- Using requestAnimationFrame for smooth animations
+- Debouncing scroll and resize events
+- Preferring CSS-only solutions when possible
+- Running animations off the main thread where supported
 
 ## Accessibility Patterns
 
@@ -65,9 +75,11 @@ etanheyman.com/
 - Keyboard navigation support
 - Color contrast compliance
 - Screen reader compatibility
+- Progressive enhancement ensuring core functionality works without animations
 
 ## Testing Strategy
 
 - Component testing with appropriate testing library
 - Accessibility testing
 - Responsive design testing across devices
+- Cross-browser testing for animation fallbacks
