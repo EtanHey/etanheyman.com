@@ -1,0 +1,85 @@
+# System Patterns: etanheyman.com
+
+## Architecture Overview
+
+etanheyman.com follows the Next.js App Router architecture pattern with React components, utilizing modern React patterns and practices.
+
+## Directory Structure
+
+```
+etanheyman.com/
+├── app/                    # Main application directory (Next.js App Router)
+│   ├── components/         # Reusable UI components
+│   │   ├── navigation/     # Navigation-related components
+│   │   └── tech-icons/     # Technology icon components
+│   ├── about/              # About page route
+│   ├── layout.tsx          # Root layout component
+│   ├── page.tsx            # Home page component
+│   └── globals.css         # Global styles
+├── public/                 # Static assets
+├── scripts/                # Utility scripts
+└── memory-bank/           # Documentation and memory storage
+```
+
+## Component Patterns
+
+- **Layout Components**: Define the structure and shared UI elements across pages
+- **Page Components**: Contain route-specific content and logic
+- **UI Components**: Reusable UI elements that make up the interface
+- **Custom Animation Components**: Home-grown solutions for interactive elements like the timeline arrow
+
+## Styling Approach
+
+- TailwindCSS v4 for utility-first CSS
+- Custom theme variables defined in globals.css
+- Dark/light mode support through CSS variables and media queries
+- Responsive design using Tailwind's breakpoint system
+- No inline styles - all styling through Tailwind utility classes
+
+## State Management
+
+- React's built-in hooks (useState, useEffect, useContext) for local state management
+- Next.js data fetching patterns for any server-side data needs
+
+## Navigation
+
+- Next.js App Router for file-based routing
+- Custom navigation components for enhanced user experience
+- Mobile-optimized navigation for smaller screens
+
+## Animation Strategy
+
+- Custom scroll-based animations using requestAnimationFrame for performance
+- CSS transitions for smooth UI state changes
+- Vanilla JavaScript for position calculations and element transformations
+- Minimalist approach with subtle animations that enhance UX without being distracting
+- Exploring the potential of CSS Scroll-Driven Animations:
+  - `animation-timeline: scroll()` for scroll-progress-based animations
+  - `animation-timeline: view()` for element visibility animations
+  - Consideration of browser support limitations (Chrome/Firefox support, Safari pending)
+
+## Performance Considerations
+
+- Component code splitting for optimized loading
+- Image optimization through Next.js
+- Minimizing client-side JavaScript
+- Efficient rendering with React best practices
+- Using requestAnimationFrame for smooth animations
+- Debouncing scroll and resize events
+- Preferring CSS-only solutions when possible
+- Running animations off the main thread where supported
+
+## Accessibility Patterns
+
+- Semantic HTML structure
+- Keyboard navigation support
+- Color contrast compliance
+- Screen reader compatibility
+- Progressive enhancement ensuring core functionality works without animations
+
+## Testing Strategy
+
+- Component testing with appropriate testing library
+- Accessibility testing
+- Responsive design testing across devices
+- Cross-browser testing for animation fallbacks
