@@ -5,6 +5,7 @@ import LaptopIcon from '../components/navigation/about/LaptopIcon';
 import LocationIcon from '../components/navigation/about/LocationIcon';
 import TimelineParallax from '../components/navigation/about/TimelineParallax';
 import {techIconMap, TechIconName, TechIconWrapper} from '../components/tech-icons/TechIconWrapper';
+import SendIcon from '../components/navigation/about/sendIcon';
 
 const AboutPage = () => {
   const careerSectionRef = useRef<HTMLDivElement>(null);
@@ -71,8 +72,17 @@ const AboutPage = () => {
 
       {/* Career Journey Section */}
       <div ref={careerSectionRef} className='w-full flex flex-col gap-2 mt-8 pt-4' id='career-section'>
-        <h2 className='text-2xl font-bold'>My career journey</h2>
+        <h2 className='text-2xl text-blue-200 font-bold'>My career journey</h2>
         <TimelineParallax />
+      </div>
+      <div className='flex flex-col pb-20 gap-6'>
+        <div className='flex flex-col gap-2'>
+          <h2 className='text-2xl text-blue-200 font-bold'>Like what you see?</h2>
+          <p className='text-[22px] pr-5 leading-5.5 font-light'>Don’t hesitate to contact me right away!</p>
+        </div>
+        <button className='bg-blue-500 text-white w-full py-4 flex items-center justify-center gap-2 rounded-[80px] text-xl'>
+          Let's talk now! <SendIcon />
+        </button>
       </div>
     </div>
   );
