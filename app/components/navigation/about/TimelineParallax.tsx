@@ -63,7 +63,9 @@ const TimelineParallax = () => {
       const lastItem = items[items.length - 1].getBoundingClientRect();
 
       const start = firstItem.top + window.scrollY;
-      const end = lastItem.bottom + window.scrollY;
+      // Apply the 100px reduction only on mobile screens (up to 640px width)
+      const mobileOffset = window.innerWidth < 640 ? 100 : 0;
+      const end = lastItem.bottom + window.scrollY - mobileOffset;
 
       setTimelineStart(start);
       setTimelineEnd(end);
@@ -161,6 +163,13 @@ const TimelineParallax = () => {
     window.addEventListener('scroll', handleScroll, {passive: true});
     // Initial position
     handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, [isInitialized, timelineStart, timelineEnd]);
 
   return (
