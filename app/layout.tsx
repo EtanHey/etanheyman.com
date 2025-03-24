@@ -62,7 +62,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`h-full *:text-white flex flex-col justify-center overscroll-none -z-20 bg-background antialiased min-h-screen relative`}>
+      <body className={`h-full *:text-white flex flex-col justify-center overscroll-none -z-20 antialiased min-h-screen relative`}>
         {/* Top SVGs (fixed to viewport) */}
         <Nav />
         {/* Main content */}
