@@ -60,7 +60,7 @@ const AboutPage = () => {
             <h3 className='text-2xl xl:text-[32px] font-light'>Denver, CO</h3>
           </div>
           <p className='text-sm xl:text-xl font-light'>Highly motivated front-end developer with a strong work ethic and a proven ability to quickly learn new technologies. Experienced in developing dynamic web applications using Next.js and Tailwind CSS, as well as React.js with plain CSS and Node.js backend. Adept at leading teams and managing projects to successful completion.</p>
-          <Link download='Etan Heyman resume.pdf' href='/Etan_Heyman_resume.pdf' target='_blank' className='bg-blue-500 text-white w-full py-4 text-center rounded-[80px] xl:mt-4 text-xl'>
+          <Link download='Etan Heyman resume.pdf' href='/Etan_Heyman_resume.pdf' target='_blank' className='bg-blue-500 text-white xl:text-2xl w-full py-4 text-center rounded-[80px] xl:mt-4 text-xl'>
             Download My CV
           </Link>
         </div>
