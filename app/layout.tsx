@@ -62,11 +62,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`h-full flex flex-col justify-center overscroll-none -z-20 bg-background antialiased min-h-screen relative`}>
+      <body className={`h-full *:text-white flex flex-col justify-center overscroll-none -z-20 bg-background antialiased min-h-screen relative`}>
         {/* Top SVGs (fixed to viewport) */}
         <Nav />
         {/* Main content */}
-        <div className='relative bg-background flex flex-col items-center justify-center grow h-full overflow-hidden z-0'>
+        <div className='relative  bg-background flex flex-col items-center justify-center grow h-full overflow-hidden z-0'>
           <TopMobileBgCover />
           <BottomMobileBgCover />
           {children}
