@@ -181,16 +181,16 @@ export default function Contact() {
           <div className='flex flex-col gap-8'>
             <div className='flex items-center gap-6'>
               <PhoneIcon />
-              <a href='tel:+10123456789' className='text-white'>
-                +1012 3456 789
-              </a>
+              <Link href='tel:+17179629684' className='text-white'>
+                +1 717 962 9684
+              </Link>
             </div>
 
             <div className='flex items-center gap-6'>
               <EmailIcon />
-              <a href='mailto:etan@heyman.com' className='text-white'>
+              <Link href='mailto:etan@heyman.com' className='text-white'>
                 etan@heyman.com
-              </a>
+              </Link>
             </div>
 
             <div className='flex items-center gap-6'>
@@ -202,18 +202,18 @@ export default function Contact() {
           </div>
 
           <div className='flex items-center gap-4 pt-8'>
-            <a href='https://wa.me/+17179629684' target='_blank' className='flex items-center justify-center p-1 rounded-full bg-blue-50'>
+            <Link href='https://wa.me/+17179629684' target='_blank' className='flex items-center justify-center p-1 rounded-full bg-blue-50'>
               <WhatsappIcon />
-            </a>
-            <a href='https://www.facebook.com/etanheyman' target='_blank' className='flex items-center justify-center p-1 rounded-full bg-blue-50'>
+            </Link>
+            <Link href='https://www.facebook.com/etanheyman' target='_blank' className='flex items-center justify-center p-1 rounded-full bg-blue-50'>
               <FacebookIcon />
-            </a>
-            <a href='https://www.linkedin.com/in/etanheyman' target='_blank' className='flex items-center justify-center p-1 rounded-full bg-blue-50'>
+            </Link>
+            <Link href='https://www.linkedin.com/in/etanheyman' target='_blank' className='flex items-center justify-center p-1 rounded-full bg-blue-50'>
               <LinkedinIcon />
-            </a>
-            <a href='https://github.com/etanhey' target='_blank' className='flex items-center justify-center p-1 rounded-full bg-blue-50'>
+            </Link>
+            <Link href='https://github.com/etanhey' target='_blank' className='flex items-center justify-center p-1 rounded-full bg-blue-50'>
               <GithubIcon />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
