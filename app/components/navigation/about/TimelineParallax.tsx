@@ -1,7 +1,7 @@
 'use client';
 
 import {useEffect, useRef, useState} from 'react';
-import SendRightPointer from './send-right-pointer';
+import SendRightPointer from './SendRightPointer';
 import TimelineItem from './TimelineItem';
 
 // Timeline data
