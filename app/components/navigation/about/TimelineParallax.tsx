@@ -1,41 +1,47 @@
-'use client';
+"use client";
 
-import {useEffect, useRef, useState} from 'react';
-import SendRightPointer from './SendRightPointer';
-import TimelineItem from './TimelineItem';
+import { useEffect, useRef, useState } from "react";
+import SendRightPointer from "./SendRightPointer";
+import TimelineItem from "./TimelineItem";
 
 // Timeline data
 const timelineData = [
   {
-    period: '2013-2016',
+    period: "2013-2016",
     title: "Art major, Ironi Alef school of Arts and Sciences, Modi'in, Israel",
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
-    period: '2016-2019',
-    title: 'IDF service',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+    period: "2016-2019",
+    title: "IDF service",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
-    period: '2019-2021',
-    title: 'Service industry',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+    period: "2019-2021",
+    title: "Service industry",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
-    period: '2021-2022',
-    title: 'Logistic manager, Full-Stack student',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+    period: "2021-2022",
+    title: "Logistic manager, Full-Stack student",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
-    period: '2022-2023',
-    title: 'JamsNext internship',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+    period: "2022-2023",
+    title: "JamsNext internship",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
-    period: '2023-TODAY',
-    title: 'Freelance Full-stack developer',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-  }
+    period: "2023-TODAY",
+    title: "Freelance Full-stack developer",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  },
 ];
 
 const TimelineParallax = () => {
@@ -56,7 +62,7 @@ const TimelineParallax = () => {
       const timelineRect = timelineRef.current.getBoundingClientRect();
       if (!timelineRect) return;
 
-      const items = timelineRef.current.querySelectorAll('[data-timeline-index]');
+      const items = timelineRef.current.querySelectorAll("[data-timeline-index]");
       if (items.length === 0) return;
 
       const firstItem = items[0].getBoundingClientRect();
@@ -74,7 +80,7 @@ const TimelineParallax = () => {
       // Position arrow at initial position (at the top with our offset)
       if (arrowRef.current) {
         arrowRef.current.style.transform = `translateY(${firstItem.top}px)`;
-        arrowRef.current.style.opacity = '1';
+        arrowRef.current.style.opacity = "1";
       }
     };
 
@@ -89,10 +95,10 @@ const TimelineParallax = () => {
       calculatePositions();
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
@@ -160,12 +166,12 @@ const TimelineParallax = () => {
       });
     };
 
-    window.addEventListener('scroll', handleScroll, {passive: true});
+    window.addEventListener("scroll", handleScroll, { passive: true });
     // Initial position
     handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
@@ -175,7 +181,9 @@ const TimelineParallax = () => {
   return (
     <div ref={timelineRef} className='relative'>
       {/* Fixed Timeline Arrow */}
-      <div ref={arrowRef} className='fixed left-5 sm:left-20 z-50 pointer-events-none opacity-0 top-0 transition-opacity duration-300 ease-in will-change-transform'>
+      <div
+        ref={arrowRef}
+        className='fixed left-5 sm:left-20 z-50 pointer-events-none opacity-0 top-0 transition-opacity duration-300 ease-in will-change-transform'>
         <div className='flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full shadow-lg -translate-x-1/2 -translate-y-1/2'>
           <SendRightPointer />
         </div>
