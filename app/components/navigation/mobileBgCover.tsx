@@ -93,7 +93,7 @@ const BottomMobileBgCover = () => {
   // Generate random positions on component mount and check for content
   useEffect(() => {
     // Random value between -15.55 and -8.5 for bottom right
-    const randomBottomRight = getRandomPosition(15.55, -8.5);
+    const randomBottomRight = getRandomPosition(-8.5, 15.55);
     setBottomRightPosition(randomBottomRight);
 
     // Random value between 168 and 223 for bottom left
