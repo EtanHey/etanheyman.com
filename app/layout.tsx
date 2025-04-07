@@ -2,14 +2,28 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import Footer from "./components/Footer";
-import { BottomMobileBgCover, TopMobileBgCover } from "./components/navigation/mobileBgCover";
+import {
+  BottomMobileBgCover,
+  TopMobileBgCover,
+} from "./components/navigation/mobileBgCover";
 import Nav from "./components/navigation/Nav";
 
 export const metadata: Metadata = {
   title: "Etan Heyman",
-  description: "Personal website of Etan Heyman | UI/UX Design by Dor Zohar (ProductDZ)",
-  keywords: ["developer", "portfolio", "software engineer", "Dor Zohar", "ProductDZ", "UI/UX design"],
-  authors: [{ name: "Etan Heyman" }, { name: "Dor Zohar", url: "https://www.productdz.com" }],
+  description:
+    "Personal website of Etan Heyman | UI/UX Design by Dor Zohar (ProductDZ)",
+  keywords: [
+    "developer",
+    "portfolio",
+    "software engineer",
+    "Dor Zohar",
+    "ProductDZ",
+    "UI/UX design",
+  ],
+  authors: [
+    { name: "Etan Heyman" },
+    { name: "Dor Zohar", url: "https://www.productdz.com" },
+  ],
   creator: "Etan Heyman",
   publisher: "Etan Heyman",
   metadataBase: new URL("https://etanheyman.com"),
@@ -34,7 +48,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://etanheyman.com",
     title: "Etan Heyman",
-    description: "Personal website of Etan Heyman | UI/UX Design by Dor Zohar (ProductDZ)",
+    description:
+      "Personal website of Etan Heyman | UI/UX Design by Dor Zohar (ProductDZ)",
     siteName: "Etan Heyman's Portfolio | Full-Stack Developer",
     images: [
       {
@@ -48,7 +63,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Etan Heyman",
-    description: "Personal website of Etan Heyman | UI/UX Design by Dor Zohar (ProductDZ)",
+    description:
+      "Personal website of Etan Heyman | UI/UX Design by Dor Zohar (ProductDZ)",
     images: ["/favicon/web-app-manifest-512x512.png"],
   },
   verification: {
@@ -65,12 +81,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body className={`h-full *:text-white flex flex-col justify-center overscroll-none -z-20 antialiased min-h-screen relative`}>
+    <html lang="en">
+      <body
+        className={`relative -z-20 flex h-full min-h-screen flex-col justify-center overscroll-none antialiased *:text-white`}
+      >
         {/* Top SVGs (fixed to viewport) */}
         <Nav />
         {/* Main content */}
-        <div className='relative  bg-background flex flex-col items-center justify-center grow h-full overflow-hidden z-0'>
+        <div className="bg-background relative z-0 flex h-full grow flex-col items-center justify-center overflow-hidden">
           <TopMobileBgCover />
           <BottomMobileBgCover />
           {children}

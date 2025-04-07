@@ -24,7 +24,10 @@ function isValidPhoneNumber(phone: string): boolean {
 
   // Basic check: must start with + and have at least 7 digits after that
   // or must be all digits with at least 7 digits
-  return (cleaned.startsWith("+") && cleaned.length >= 8) || (!cleaned.includes("+") && cleaned.length >= 7);
+  return (
+    (cleaned.startsWith("+") && cleaned.length >= 8) ||
+    (!cleaned.includes("+") && cleaned.length >= 7)
+  );
 }
 
 export async function submitContactForm(formData: ContactFormData) {
@@ -77,12 +80,18 @@ ${formData.message}
     console.log(data);
     if (error) {
       console.error("Error submitting form:", error);
-      return { success: false, error: "Failed to send your message. Please try again later." };
+      return {
+        success: false,
+        error: "Failed to send your message. Please try again later.",
+      };
     }
 
     return { success: true };
   } catch (error) {
     console.error("Error submitting form:", error);
-    return { success: false, error: "An unexpected error occurred. Please try again later." };
+    return {
+      success: false,
+      error: "An unexpected error occurred. Please try again later.",
+    };
   }
 }

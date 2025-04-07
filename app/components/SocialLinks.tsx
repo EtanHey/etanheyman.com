@@ -1,8 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { FacebookIcon, GithubIcon, LinkedinIcon, WhatsappIcon } from "./navigation/socialIcons";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
+import {
+  FacebookIcon,
+  GithubIcon,
+  LinkedinIcon,
+  WhatsappIcon,
+} from "./navigation/socialIcons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../components/ui/tooltip";
 
 type SocialLinksProps = {
   className?: string;
@@ -44,7 +54,12 @@ export function SocialLinks({
         {socialLinks.map((link) => (
           <Tooltip key={link.href}>
             <TooltipTrigger asChild>
-              <Link href={link.href} target='_blank' rel='noopener noreferrer' className={linkClassName}>
+              <Link
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={linkClassName}
+              >
                 <div className={iconContainerClassName}>{link.icon}</div>
               </Link>
             </TooltipTrigger>
