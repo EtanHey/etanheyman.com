@@ -1,27 +1,33 @@
-'use client';
+"use client";
 
-import {useCallback, useEffect, useRef, useState} from 'react';
-import SendRightPointer from './SendRightPointer';
-
+import { useCallback, useEffect, useRef, useState } from "react";
+import SendRightPointer from "./SendRightPointer";
 
 // Using a more generic type definition that works with how React refs are typed
 interface TimelineArrowProps {
-  timelineRef: React.RefObject<HTMLDivElement> | {current: HTMLDivElement | null};
-  timelineItemsRef: React.RefObject<HTMLDivElement> | {current: HTMLDivElement | null};
+  timelineRef:
+    | React.RefObject<HTMLDivElement>
+    | { current: HTMLDivElement | null };
+  timelineItemsRef:
+    | React.RefObject<HTMLDivElement>
+    | { current: HTMLDivElement | null };
 }
 
 // Enable debug mode in development
-const DEBUG_MODE = process.env.NODE_ENV === 'development';
+const DEBUG_MODE = process.env.NODE_ENV === "development";
 
 // How many ms to wait before allowing another position update
 const SCROLL_THROTTLE = 50;
 
-const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
+const TimelineArrow = ({
+  timelineRef,
+  timelineItemsRef,
+}: TimelineArrowProps) => {
   const arrowRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [position, setPosition] = useState({top: 0, left: 0});
+  const [position, setPosition] = useState({ top: 0, left: 0 });
   const [activeItemIndex, setActiveItemIndex] = useState(0);
-  const [timelineRange, setTimelineRange] = useState({start: 0, end: 0});
+  const [timelineRange, setTimelineRange] = useState({ start: 0, end: 0 });
 
   // Refs for performance optimization
   const rafId = useRef<number | null>(null);
@@ -63,9 +69,9 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
       // Only update state if the item changed
       if (closestItem !== currentActiveItem.current) {
         if (DEBUG_MODE) {
-          console.log('🔄 Active item changed:', {
+          console.log("🔄 Active item changed:", {
             previous: currentActiveItem.current,
-            new: closestItem
+            new: closestItem,
           });
         }
         setActiveItemIndex(closestItem);
@@ -87,22 +93,24 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
 
       // Only update position if it changed significantly (reduces renders)
       const currentPos = currentPosition.current;
-      const isSignificantChange = Math.abs(currentPos.top - topPosition) > 3 || Math.abs(currentPos.left - leftPosition) > 3;
+      const isSignificantChange =
+        Math.abs(currentPos.top - topPosition) > 3 ||
+        Math.abs(currentPos.left - leftPosition) > 3;
 
       if (isSignificantChange) {
         setPosition({
           top: topPosition,
-          left: leftPosition
+          left: leftPosition,
         });
       }
     },
-    [timelineRef]
+    [timelineRef],
   );
 
   // Initialize timeline and setup event listeners
   useEffect(() => {
     if (!timelineRef.current || !timelineItemsRef.current) {
-      if (DEBUG_MODE) console.warn('⚠️ Timeline or items refs not available');
+      if (DEBUG_MODE) console.warn("⚠️ Timeline or items refs not available");
       return;
     }
 
@@ -116,15 +124,22 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
       const end = window.scrollY + timelineRect.bottom + 150; // Add buffer after timeline
 
       if (DEBUG_MODE) {
-        console.log('📏 Timeline boundaries:', {start, end, currentScroll: window.scrollY});
+        console.log("📏 Timeline boundaries:", {
+          start,
+          end,
+          currentScroll: window.scrollY,
+        });
       }
-      setTimelineRange({start, end});
+      setTimelineRange({ start, end });
 
       // Force set active item to first item (index 0)
       setActiveItemIndex(0);
 
       // Immediately update arrow position for the first item
-      if (timelineItemsRef.current && timelineItemsRef.current.children.length > 0) {
+      if (
+        timelineItemsRef.current &&
+        timelineItemsRef.current.children.length > 0
+      ) {
         const items = Array.from(timelineItemsRef.current.children);
         // Manually trigger a position update for the first item
         updateArrowPosition(items, window.innerHeight);
@@ -148,10 +163,10 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
       }, 100);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimer);
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
@@ -173,22 +188,30 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
       const isLargeScroll = Math.abs(scrollY - lastScrollY.current) > 50;
 
       // Check if we're in the timeline section
-      const isInTimelineRange = scrollY >= timelineRange.start && scrollY <= timelineRange.end;
+      const isInTimelineRange =
+        scrollY >= timelineRange.start && scrollY <= timelineRange.end;
 
       // Check visibility (even during throttling for large scroll changes)
-      if (isCurrentlyVisible.current !== isInTimelineRange && (!shouldThrottle || isLargeScroll)) {
+      if (
+        isCurrentlyVisible.current !== isInTimelineRange &&
+        (!shouldThrottle || isLargeScroll)
+      ) {
         if (DEBUG_MODE) {
-          console.log('👁️ Arrow visibility changing:', {
+          console.log("👁️ Arrow visibility changing:", {
             visible: isInTimelineRange,
             scrollY,
             timelineStart: timelineRange.start,
-            timelineEnd: timelineRange.end
+            timelineEnd: timelineRange.end,
           });
         }
         setIsVisible(isInTimelineRange);
 
         // If becoming visible, ensure the first item is selected initially
-        if (isInTimelineRange && !isCurrentlyVisible.current && timelineItemsRef.current) {
+        if (
+          isInTimelineRange &&
+          !isCurrentlyVisible.current &&
+          timelineItemsRef.current
+        ) {
           // When first becoming visible, prioritize the first item
           setActiveItemIndex(0);
 
@@ -202,7 +225,7 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
               const timelineRect = timelineRef.current.getBoundingClientRect();
               setPosition({
                 top: firstItemRect.top + firstItemRect.height / 2,
-                left: timelineRect.left
+                left: timelineRect.left,
               });
             }
           }
@@ -235,13 +258,13 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
       }
     };
 
-    window.addEventListener('scroll', scrollListener, {passive: true});
+    window.addEventListener("scroll", scrollListener, { passive: true });
 
     // Initial check
     handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', scrollListener);
+      window.removeEventListener("scroll", scrollListener);
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
   }, [timelineRef, timelineItemsRef, timelineRange, updateArrowPosition]);
@@ -250,26 +273,30 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
   const handleClick = useCallback(() => {
     if (!timelineRef.current) return;
 
-    const timelineTop = timelineRef.current.getBoundingClientRect().top + window.scrollY;
+    const timelineTop =
+      timelineRef.current.getBoundingClientRect().top + window.scrollY;
     if (DEBUG_MODE) {
-      console.log('🖱️ Arrow clicked - scrolling to timeline', {targetY: timelineTop - 50});
+      console.log("🖱️ Arrow clicked - scrolling to timeline", {
+        targetY: timelineTop - 50,
+      });
     }
 
     window.scrollTo({
       top: timelineTop - 50,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   }, [timelineRef]);
 
   if (!isVisible) {
-    if (DEBUG_MODE) console.log('🚫 Arrow not rendered - visibility check failed');
+    if (DEBUG_MODE)
+      console.log("🚫 Arrow not rendered - visibility check failed");
     return null;
   }
 
   if (DEBUG_MODE) {
-    console.log('🖌️ Rendering arrow:', {
+    console.log("🖌️ Rendering arrow:", {
       position,
-      activeItemIndex
+      activeItemIndex,
     });
   }
 
@@ -277,21 +304,20 @@ const TimelineArrow = ({timelineRef, timelineItemsRef}: TimelineArrowProps) => {
     <div
       ref={arrowRef}
       onClick={handleClick}
-      className='z-[100] flex items-center justify-center fixed
-        w-5.5 h-5.5 bg-blue-500 rounded-full shadow-lg cursor-pointer 
-        hover:scale-110 transition-all duration-300'
+      className="fixed z-[100] flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-full bg-blue-500 shadow-lg transition-all duration-300 hover:scale-110"
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
-        transform: 'translate(-50%, -50%)',
-        transition: 'top 0.3s ease-out, left 0.3s ease-out',
-        willChange: 'transform, top, left',
-        pointerEvents: 'auto'
+        transform: "translate(-50%, -50%)",
+        transition: "top 0.3s ease-out, left 0.3s ease-out",
+        willChange: "transform, top, left",
+        pointerEvents: "auto",
       }}
-      title='Navigate timeline'
-      aria-label='Timeline navigation arrow'
-      role='button'
-      tabIndex={0}>
+      title="Navigate timeline"
+      aria-label="Timeline navigation arrow"
+      role="button"
+      tabIndex={0}
+    >
       <SendRightPointer />
     </div>
   );
