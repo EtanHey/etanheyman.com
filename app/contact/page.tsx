@@ -74,9 +74,9 @@ export default function Contact() {
 
   return (
     <div className='w-full z-20 min-h-screen px-4.5 py-8 pb-20'>
-      <div className='w-full max-w-3xl p-4 bg-white rounded-[20px] overflow-hidden shadow-lg'>
+      <div className='w-full max-w-3xl p-4 bg-white rounded-[20px] flex flex-col gap-10 overflow-hidden shadow-lg'>
         {/* Contact Form */}
-        <form onSubmit={handleSubmit} className='p-8 text-blue-900'>
+        <form onSubmit={handleSubmit} className='text-blue-900'>
           <div className='flex flex-col gap-6'>
             <div className='flex flex-col focus-within:[&>label]:text-primary gap-1.5'>
               <label htmlFor='fullName' className='font-semibold'>
@@ -89,7 +89,7 @@ export default function Contact() {
                 required
                 value={formValues.fullName}
                 onChange={handleChange}
-                className='w-full border-b border-gray-300 focus:outline-none focus:border-primary '
+                className='w-full border-b border-blue-900 focus:outline-none focus:border-primary '
                 placeholder=''
               />
             </div>
@@ -105,7 +105,7 @@ export default function Contact() {
                 required
                 value={formValues.email}
                 onChange={handleChange}
-                className='w-full border-b border-gray-300 focus:outline-none focus:border-primary '
+                className='w-full border-b border-blue-900 focus:outline-none focus:border-primary '
                 placeholder=''
               />
             </div>
@@ -114,7 +114,7 @@ export default function Contact() {
               <label htmlFor='phone' className='font-semibold'>
                 Phone Number
               </label>
-              <div className='border-b border-gray-300 focus-within:border-primary'>
+              <div className='border-b border-blue-900 focus-within:border-primary'>
                 <PhoneInput
                   international
                   defaultCountry='US'
@@ -135,7 +135,7 @@ export default function Contact() {
                 required
                 value={formValues.message}
                 onChange={handleChange}
-                className='w-full border-b border-gray-300 py-2 h-20 focus:outline-none focus:border-primary '
+                className='w-full border-b border-blue-900 py-2 h-20 focus:outline-none focus:border-primary '
                 placeholder='Write your message.'
               />
             </div>
@@ -174,34 +174,45 @@ export default function Contact() {
         </form>
 
         {/* Contact Information */}
-        <div className='bg-blue-900 rounded-xl text-white p-8 flex flex-col'>
-          <h2 className='text-xl font-bold'>Contact Information</h2>
-          <p className='text-sm pt-2 pb-6'>Say something to start a live chat!</p>
-
-          <div className='flex flex-col gap-8'>
-            <div className='flex items-center gap-6'>
-              <PhoneIcon />
-              <Link href='tel:+17179629684' className='text-white'>
-                +1 717 962 9684
-              </Link>
+        <div className='bg-blue-900 rounded-xl text-white py-8 gap-22.5 px-6 flex flex-col'>
+          <div className='flex flex-col gap-16'>
+            <div className='flex flex-col gap-1.5'>
+              <h2 className='text-xl font-semibold text-blue-200'>Contact Information</h2>
+              <p className='text-sm font-[260]'>Reach out directly using the information below!</p>
             </div>
 
-            <div className='flex items-center gap-6'>
-              <EmailIcon />
-              <Link href='mailto:etan@heyman.com' className='text-white'>
-                etan@heyman.com
-              </Link>
-            </div>
+            <div className='flex flex-col gap-8'>
+              <div className='flex items-center gap-6'>
+                <PhoneIcon />
+                <Link
+                  href='tel:+17179629684'
+                  className='text-white hover:text-blue-200 transition-colors underline-offset-1 hover:underline-offset-2 underline hover:decoration-2'>
+                  +1 717 962 9684
+                </Link>
+              </div>
 
-            <div className='flex items-center gap-6'>
-              <LocationIcon />
-              <Link href='https://www.google.com/maps/place/Highland,+denver,+CO' target='_blank' className='text-white hover:text-blue-200 transition-colors'>
-                Denver, Colorado, USA
-              </Link>
+              <div className='flex items-center gap-6'>
+                <EmailIcon />
+                <Link
+                  href='mailto:etan@heyman.net'
+                  className='text-white hover:text-blue-200 transition-colors underline-offset-1 hover:underline-offset-2 underline hover:decoration-2    '>
+                  etan@heyman.net
+                </Link>
+              </div>
+
+              <div className='flex items-center gap-6'>
+                <LocationIcon />
+                <Link
+                  href='https://www.google.com/maps/place/Highland,+denver,+CO'
+                  target='_blank'
+                  className='text-white hover:text-blue-200 transition-colors underline-offset-1 hover:underline-offset-2 underline hover:decoration-2'>
+                  Denver, Colorado, USA
+                </Link>
+              </div>
             </div>
           </div>
 
-          <div className='flex items-center gap-4 pt-8'>
+          <div className='flex items-center gap-2 w-full justify-center'>
             <Link href='https://wa.me/+17179629684' target='_blank' className='flex items-center justify-center p-1 rounded-full bg-blue-50'>
               <WhatsappIcon />
             </Link>
