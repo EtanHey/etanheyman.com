@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface GithubIconProps {
   width?: number;
@@ -6,7 +6,7 @@ interface GithubIconProps {
   className?: string;
 }
 
-const GithubIcon: React.FC<GithubIconProps> = ({width = 16, height = 16, className = ''}) => {
+const GithubIcon: React.FC<GithubIconProps> = ({ width = 16, height = 16, className = "" }) => {
   return (
     <svg width={width} height={height} viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
       <path

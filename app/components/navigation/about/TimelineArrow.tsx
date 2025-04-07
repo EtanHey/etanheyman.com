@@ -1,7 +1,8 @@
 'use client';
 
 import {useCallback, useEffect, useRef, useState} from 'react';
-import SendRightPointer from './send-right-pointer';
+import SendRightPointer from './SendRightPointer';
+
 
 // Using a more generic type definition that works with how React refs are typed
 interface TimelineArrowProps {
