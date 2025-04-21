@@ -17,12 +17,21 @@ export default async function ProjectPage() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <Link
-        href="/projects"
-        className="text-primary mb-8 inline-block hover:underline"
-      >
-        ← Back to Projects
-      </Link>
+      <div className="mb-8 flex items-center justify-between">
+        <Link
+          href="/projects"
+          className="text-primary inline-block hover:underline"
+        >
+          ← Back to Projects
+        </Link>
+
+        <Link
+          href={`/projects/${id}/edit`}
+          className="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-md px-4 py-2"
+        >
+          Edit Project
+        </Link>
+      </div>
 
       <div className="mb-8 flex items-center">
         <Image
