@@ -29,6 +29,12 @@ const PopupMenu = ({
           About
         </Link>
         <Link
+          href="/projects"
+          className={`${pathname.startsWith("/projects") ? "font-bold text-[#0f82eb]" : "text-[#171717]"}`}
+        >
+          Projects
+        </Link>
+        <Link
           href="/contact"
           className={`${pathname === "/contact" ? "font-bold text-[#0f82eb]" : "text-[#171717]"}`}
         >

@@ -8,10 +8,17 @@ export interface TechIconProps {
   title?: string;
   onClick?: () => void;
 }
-
-export const TechIcon: React.FC<
-  TechIconProps & { children: React.ReactNode }
-> = ({ width = 47, height = 47, className = "", title, onClick, children }) => {
+interface TechIconWrapperProps extends TechIconProps {
+  children: React.ReactNode;
+}
+export const TechIcon = ({
+  width = 47,
+  height = 47,
+  className = "",
+  title,
+  onClick,
+  children,
+}: TechIconWrapperProps) => {
   return (
     <svg
       width={width}
