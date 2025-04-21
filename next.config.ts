@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     ppr: true,
     dynamicIO: true,
   },
+  images: {
+    remotePatterns: [{ hostname: "utfs.io" }],
+  },
 };
 
 export default nextConfig;

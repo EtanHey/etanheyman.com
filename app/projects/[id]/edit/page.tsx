@@ -1,8 +1,8 @@
 "use client";
 import ImageUploader from "@/app/components/ImageUploader";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type ProjectJourneyStep = {
@@ -12,10 +12,32 @@ type ProjectJourneyStep = {
   fileKey?: string;
 };
 
-export default function AddProjectPage() {
+type ProjectData = {
+  id: string;
+  title: string;
+  shortDescription: string;
+  description: string;
+  logoPath: string;
+  logoFileKey?: string;
+  gitUrl: string;
+  liveUrl: string;
+  projectJourney: ProjectJourneyStep[];
+};
+
+export default function EditProjectPage() {
   const router = useRouter();
+  const params = useParams();
+  const projectId = params.id as string;
+
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
+  const [originalImages, setOriginalImages] = useState<{
+    logo?: string;
+    journeyImages: string[];
+  }>({ logo: "", journeyImages: [] });
+
+  const [formData, setFormData] = useState<ProjectData>({
+    id: "",
     title: "",
     shortDescription: "",
     description: "",
@@ -23,15 +45,41 @@ export default function AddProjectPage() {
     logoFileKey: "",
     gitUrl: "",
     liveUrl: "",
-    projectJourney: [
-      {
-        title: "Planning",
-        description: "Initial project planning and requirements gathering.",
-        imgUrl: "",
-        fileKey: "",
-      },
-    ] as ProjectJourneyStep[],
+    projectJourney: [] as ProjectJourneyStep[],
   });
+
+  // Track images that have been changed during editing (to be deleted on save)
+  const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
+
+  // Fetch project data on page load
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        const response = await fetch(`/api/projects/${projectId}`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch project");
+        }
+
+        const data = await response.json();
+        setFormData(data);
+
+        // Store original image paths for comparison on save
+        setOriginalImages({
+          logo: data.logoPath,
+          journeyImages: data.projectJourney.map((step: any) => step.imgUrl),
+        });
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching project:", error);
+        toast.error("Failed to load project. Please try again.");
+        router.push("/projects");
+      }
+    }
+
+    fetchProject();
+  }, [projectId, router]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -49,6 +97,15 @@ export default function AddProjectPage() {
   };
 
   const handleLogoChange = (url: string, fileKey?: string) => {
+    // If replacing an existing image, add the old one to delete list
+    if (
+      formData.logoPath &&
+      formData.logoPath !== url &&
+      formData.logoPath.includes("uploadthing")
+    ) {
+      setImagesToDelete((prev) => [...prev, formData.logoPath]);
+    }
+
     setFormData((prev) => ({
       ...prev,
       logoPath: url,
@@ -61,6 +118,16 @@ export default function AddProjectPage() {
     url: string,
     fileKey?: string,
   ) => {
+    // If replacing an existing image, add the old one to delete list
+    const currentImgUrl = formData.projectJourney[index]?.imgUrl;
+    if (
+      currentImgUrl &&
+      currentImgUrl !== url &&
+      currentImgUrl.includes("uploadthing")
+    ) {
+      setImagesToDelete((prev) => [...prev, currentImgUrl]);
+    }
+
     setFormData((prev) => {
       const updatedJourney = [...prev.projectJourney];
       updatedJourney[index] = {
@@ -88,10 +155,37 @@ export default function AddProjectPage() {
   };
 
   const removeJourneyStep = (index: number) => {
+    // If removing a step with an image, add it to delete list
+    const stepToRemove = formData.projectJourney[index];
+    if (stepToRemove?.imgUrl && stepToRemove.imgUrl.includes("uploadthing")) {
+      setImagesToDelete((prev) => [...prev, stepToRemove.imgUrl]);
+    }
+
     setFormData((prev) => ({
       ...prev,
       projectJourney: prev.projectJourney.filter((_, i) => i !== index),
     }));
+  };
+
+  // Delete all images in the deletionQueue
+  const deleteRemovedImages = async () => {
+    if (imagesToDelete.length === 0) return;
+
+    for (const imageUrl of imagesToDelete) {
+      const fileKey = imageUrl.split("/").pop();
+      if (fileKey) {
+        try {
+          await fetch("/api/uploadthing/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fileKey }),
+          });
+        } catch (error) {
+          console.error("Error deleting image:", error);
+          // Continue with other deletions even if one fails
+        }
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -99,38 +193,51 @@ export default function AddProjectPage() {
 
     try {
       setIsSubmitting(true);
-      const response = await fetch("/api/projects", {
-        method: "POST",
+
+      const response = await fetch(`/api/projects/${projectId}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create project");
+        throw new Error("Failed to update project");
       }
 
-      const data = await response.json();
-      toast.success("Project created successfully!");
-      router.push(`/projects/${data.id}`);
+      // Delete any images that were replaced during editing
+      await deleteRemovedImages();
+
+      toast.success("Project updated successfully!");
+      router.push(`/projects/${projectId}`);
       router.refresh();
     } catch (error) {
-      console.error("Error creating project:", error);
-      toast.error("Failed to create project. Please try again.");
+      console.error("Error updating project:", error);
+      toast.error("Failed to update project. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (isLoading) {
+    return (
+      <main className="container mx-auto px-4 py-8">
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <p className="text-xl">Loading project...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="container mx-auto px-4 py-8">
       <Link
-        href="/projects"
+        href={`/projects/${projectId}`}
         className="text-primary mb-8 inline-block hover:underline"
       >
-        ← Back to Projects
+        ← Back to Project
       </Link>
 
-      <h1 className="mb-8 text-3xl font-bold">Add New Project</h1>
+      <h1 className="mb-8 text-3xl font-bold">Edit Project</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-4">
@@ -302,10 +409,10 @@ export default function AddProjectPage() {
             disabled={isSubmitting}
             className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-6 py-2"
           >
-            {isSubmitting ? "Creating..." : "Create Project"}
+            {isSubmitting ? "Saving..." : "Save Changes"}
           </button>
 
-          <Link href="/projects">
+          <Link href={`/projects/${projectId}`}>
             <button
               type="button"
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-md px-6 py-2"

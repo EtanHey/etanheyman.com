@@ -6,7 +6,7 @@ const Me = () => {
     <div className="relative self-start">
       <Image
         className="rounded-r-full rounded-b-full border-4 border-white bg-blue-200"
-        src="images/me/Me2.png"
+        src="/images/me/Me2.png"
         alt="Me"
         width={100}
         height={100}
