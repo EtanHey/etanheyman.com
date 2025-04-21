@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "atlas": {
+      "command": "npx",
+      "args": ["mcp-mongodb-atlas"],
+      "env": {
+        "ATLAS_PUBLIC_KEY": "hmdgyriv",
+        "ATLAS_PRIVATE_KEY": "2c3fd41a-d8a9-4e92-82d7-bc056c132f30"
+      },
+      "disabled": false,
+      "autoApprove": []
+    },
+    "Prisma": {
+      "command": "npx",
+      "args": ["-y", "prisma", "mcp"]
+    }
+  }
+}

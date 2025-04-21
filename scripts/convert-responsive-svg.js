@@ -1,13 +1,15 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // Directories containing SVG files
-const TECH_ICONS_DIR = path.join(__dirname, '../app/components/tech-icons');
-const DESKTOP_SVG_DIR = path.join(TECH_ICONS_DIR, 'desktop-svgs');
-const MOBILE_SVG_DIR = path.join(TECH_ICONS_DIR, 'mobile-svgs');
+const TECH_ICONS_DIR = path.join(__dirname, "../app/components/tech-icons");
+const DESKTOP_SVG_DIR = path.join(TECH_ICONS_DIR, "desktop-svgs");
+const MOBILE_SVG_DIR = path.join(TECH_ICONS_DIR, "mobile-svgs");
 
 // Get all SVG files from mobile directory
-const mobileSvgFiles = fs.readdirSync(MOBILE_SVG_DIR).filter((file) => file.endsWith('.svg'));
+const mobileSvgFiles = fs
+  .readdirSync(MOBILE_SVG_DIR)
+  .filter((file) => file.endsWith(".svg"));
 
 // Process each SVG file
 mobileSvgFiles.forEach((svgFile) => {
@@ -20,22 +22,26 @@ mobileSvgFiles.forEach((svgFile) => {
     return;
   }
 
-  const mobileSvgContent = fs.readFileSync(mobileSvgPath, 'utf8');
-  const desktopSvgContent = fs.readFileSync(desktopSvgPath, 'utf8');
+  const mobileSvgContent = fs.readFileSync(mobileSvgPath, "utf8");
+  const desktopSvgContent = fs.readFileSync(desktopSvgPath, "utf8");
 
   // Extract the name without extension
-  const baseName = path.basename(svgFile, '.svg');
-  const componentName = baseName.replace(/-ico/i, '') + 'Icon';
+  const baseName = path.basename(svgFile, ".svg");
+  const componentName = baseName.replace(/-ico/i, "") + "Icon";
 
   // Extract SVG attributes and content for mobile
-  const mobileSvgMatch = mobileSvgContent.match(/<svg([^>]*)>([\s\S]*?)<\/svg>/i);
+  const mobileSvgMatch = mobileSvgContent.match(
+    /<svg([^>]*)>([\s\S]*?)<\/svg>/i,
+  );
   if (!mobileSvgMatch) {
     console.error(`Could not extract SVG content from mobile ${svgFile}`);
     return;
   }
 
   // Extract SVG attributes and content for desktop
-  const desktopSvgMatch = desktopSvgContent.match(/<svg([^>]*)>([\s\S]*?)<\/svg>/i);
+  const desktopSvgMatch = desktopSvgContent.match(
+    /<svg([^>]*)>([\s\S]*?)<\/svg>/i,
+  );
   if (!desktopSvgMatch) {
     console.error(`Could not extract SVG content from desktop ${svgFile}`);
     return;
@@ -56,13 +62,17 @@ mobileSvgFiles.forEach((svgFile) => {
   const desktopHeightMatch = desktopSvgAttributes.match(/height="([^"]*)"/);
   const desktopViewBoxMatch = desktopSvgAttributes.match(/viewBox="([^"]*)"/);
 
-  const mobileWidth = mobileWidthMatch ? mobileWidthMatch[1] : '47';
-  const mobileHeight = mobileHeightMatch ? mobileHeightMatch[1] : '47';
-  const mobileViewBox = mobileViewBoxMatch ? mobileViewBoxMatch[1] : '0 0 47 47';
+  const mobileWidth = mobileWidthMatch ? mobileWidthMatch[1] : "47";
+  const mobileHeight = mobileHeightMatch ? mobileHeightMatch[1] : "47";
+  const mobileViewBox = mobileViewBoxMatch
+    ? mobileViewBoxMatch[1]
+    : "0 0 47 47";
 
-  const desktopWidth = desktopWidthMatch ? desktopWidthMatch[1] : '47';
-  const desktopHeight = desktopHeightMatch ? desktopHeightMatch[1] : '47';
-  const desktopViewBox = desktopViewBoxMatch ? desktopViewBoxMatch[1] : '0 0 47 47';
+  const desktopWidth = desktopWidthMatch ? desktopWidthMatch[1] : "47";
+  const desktopHeight = desktopHeightMatch ? desktopHeightMatch[1] : "47";
+  const desktopViewBox = desktopViewBoxMatch
+    ? desktopViewBoxMatch[1]
+    : "0 0 47 47";
 
   // Create the component file content
   const componentContent = `import React from 'react';
@@ -111,22 +121,22 @@ export default ${componentName};
 });
 
 // Create index.ts file to export all components
-const indexPath = path.join(TECH_ICONS_DIR, 'index.ts');
+const indexPath = path.join(TECH_ICONS_DIR, "index.ts");
 const componentNames = mobileSvgFiles.map((file) => {
-  const baseName = path.basename(file, '.svg');
-  return baseName.replace(/-ico/i, '') + 'Icon';
+  const baseName = path.basename(file, ".svg");
+  return baseName.replace(/-ico/i, "") + "Icon";
 });
 
 // Add TechIcon to the exports
-componentNames.push('TechIcon');
-componentNames.push('TechIconWrapper');
+componentNames.push("TechIcon");
+componentNames.push("TechIconWrapper");
 
-const indexContent = `${componentNames.map((name) => `export { default as ${name} } from './${name}';`).join('\n')}
+const indexContent = `${componentNames.map((name) => `export { default as ${name} } from './${name}';`).join("\n")}
 export * from './TechIcon';
 export * from './TechIconWrapper';
 `;
 
 fs.writeFileSync(indexPath, indexContent);
-console.log('Created index.ts');
+console.log("Created index.ts");
 
-console.log('Conversion complete!');
+console.log("Conversion complete!");

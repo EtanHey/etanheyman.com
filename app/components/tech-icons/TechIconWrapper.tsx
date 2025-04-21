@@ -1,12 +1,47 @@
-import React from 'react';
-import TechWrapper from '../TechWrapper';
-import * as TechIcons from './index';
-import {TechIconProps} from './TechIcon';
+import React from "react";
+import TechWrapper from "../TechWrapper";
+import * as TechIcons from "./index";
+import { TechIconProps } from "./TechIcon";
 
 // Define all available tech icons
-export type TechIconName = 'AWS' | 'Axios' | 'Bubble' | 'CSS3' | 'Cloudinary' | 'Cypress' | 'Dart' | 'Dndkit' | 'Expo' | 'Figma' | 'Github' | 'Go' | 'Google' | 'HTML5' | 'Jest' | 'Jira' | 'Make' | 'MaterialUI' | 'MongoDB' | 'Mongoose' | 'Motion' | 'NPM' | 'NextJS' | 'Node' | 'Postman' | 'Prettier' | 'React' | 'ReactLeaflet' | 'Redux' | 'Socket' | 'Svelte' | 'Tailwind' | 'VanillaJS' | 'Vue' | 'Yarn';
+export type TechIconName =
+  | "AWS"
+  | "Axios"
+  | "Bubble"
+  | "CSS3"
+  | "Cloudinary"
+  | "Cypress"
+  | "Dart"
+  | "Dndkit"
+  | "Expo"
+  | "Figma"
+  | "Github"
+  | "Go"
+  | "Google"
+  | "HTML5"
+  | "Jest"
+  | "Jira"
+  | "Make"
+  | "MaterialUI"
+  | "MongoDB"
+  | "Mongoose"
+  | "Motion"
+  | "NPM"
+  | "NextJS"
+  | "Node"
+  | "Postman"
+  | "Prettier"
+  | "React"
+  | "ReactLeaflet"
+  | "Redux"
+  | "Socket"
+  | "Svelte"
+  | "Tailwind"
+  | "VanillaJS"
+  | "Vue"
+  | "Yarn";
 
-interface TechIconWrapperProps extends Omit<TechIconProps, 'className'> {
+interface TechIconWrapperProps extends Omit<TechIconProps, "className"> {
   name: TechIconName;
   wrapperClassName?: string;
   iconClassName?: string;
@@ -48,10 +83,15 @@ export const techIconMap: Record<TechIconName, React.FC<TechIconProps>> = {
   MaterialUI: TechIcons.MaterialUIIcon,
   Motion: TechIcons.MotionIcon,
   MongoDB: TechIcons.MongoDBIcon,
-  Cloudinary: TechIcons.CloudinaryIcon
+  Cloudinary: TechIcons.CloudinaryIcon,
 };
 
-export const TechIconWrapper: React.FC<TechIconWrapperProps> = ({name, wrapperClassName = '', iconClassName = '', ...iconProps}) => {
+export const TechIconWrapper: React.FC<TechIconWrapperProps> = ({
+  name,
+  wrapperClassName = "",
+  iconClassName = "",
+  ...iconProps
+}) => {
   const IconComponent = techIconMap[name];
 
   if (!IconComponent) {
