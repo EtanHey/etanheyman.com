@@ -29,15 +29,17 @@ function Command({
   );
 }
 
+interface CommandDialogProps extends React.ComponentProps<typeof Dialog> {
+  title?: string;
+  description?: string;
+}
+
 function CommandDialog({
   title = "Command Palette",
   description = "Search for a command to run...",
   children,
   ...props
-}: React.ComponentProps<typeof Dialog> & {
-  title?: string;
-  description?: string;
-}) {
+}: CommandDialogProps) {
   return (
     <Dialog {...props}>
       <DialogHeader className="sr-only">
