@@ -1,0 +1,197 @@
+---
+description: Code patterns, conventions, and architectural decisions for the portfolio
+globs:
+  - "app/**/*.tsx"
+  - "app/**/*.ts"
+  - "lib/**/*.ts"
+  - "components/**/*.tsx"
+alwaysApply: true
+---
+
+## System Architecture Patterns
+
+### Directory Organization
+```
+app/
+├── (routes)/          # Grouped routes
+├── api/              # API endpoints
+├── components/       # Shared UI components
+└── lib/             # Utilities and helpers
+```
+
+### Component Patterns
+
+**Server Components (Default)**
+```typescript
+// No 'use client' directive
+export default async function ProjectsPage() {
+  const projects = await db.project.findMany();
+  return <ProjectGrid projects={projects} />;
+}
+```
+
+**Client Components (When Needed)**
+```typescript
+'use client';
+// Only for interactivity, forms, browser APIs
+export function ContactForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // ...
+}
+```
+
+### Database Patterns
+
+**Singleton Connection**
+```typescript
+// lib/db.ts
+const globalForPrisma = global as { prisma?: PrismaClient };
+export const db = globalForPrisma.prisma || new PrismaClient();
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
+```
+
+**Query Patterns**
+```typescript
+// Always handle errors
+try {
+  const projects = await db.project.findMany({
+    orderBy: [
+      { featured: 'desc' },
+      { orderIndex: 'asc' }
+    ]
+  });
+} catch (error) {
+  console.error('Failed to fetch projects:', error);
+  return [];
+}
+```
+
+### API Route Patterns
+
+**Standard REST Pattern**
+```typescript
+// GET /api/projects
+export async function GET() {
+  const projects = await db.project.findMany();
+  return NextResponse.json(projects);
+}
+
+// POST with validation
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+  const validated = projectSchema.parse(body);
+  const project = await db.project.create({ data: validated });
+  return NextResponse.json(project, { status: 201 });
+}
+```
+
+### Server Action Patterns
+
+```typescript
+'use server';
+
+export async function sendContactEmail(formData: FormData) {
+  // Direct form handling
+  const data = Object.fromEntries(formData);
+  const validated = contactSchema.parse(data);
+  
+  // Server-side operations
+  await resend.emails.send({...});
+  
+  // Return serializable data
+  return { success: true };
+}
+```
+
+### Error Handling
+
+**Page Level Errors**
+```typescript
+// app/error.tsx
+export default function Error({ error, reset }) {
+  return (
+    <div className="error-container">
+      <h2>Something went wrong!</h2>
+      <button onClick={reset}>Try again</button>
+    </div>
+  );
+}
+```
+
+**API Errors**
+```typescript
+if (error instanceof ZodError) {
+  return NextResponse.json(
+    { error: 'Validation failed', details: error.errors },
+    { status: 400 }
+  );
+}
+```
+
+### Type Patterns
+
+**Co-located Types**
+```typescript
+// Define near usage
+interface ProjectCardProps {
+  project: Project;
+  variant?: 'default' | 'featured';
+}
+```
+
+**Shared Types**
+```typescript
+// lib/types.ts for cross-component types
+export interface ApiResponse<T> {
+  data?: T;
+  error?: string;
+}
+```
+
+### Styling Patterns
+
+**Component Classes**
+```typescript
+// Tailwind with conditional styling
+<div className={cn(
+  "rounded-lg border p-4",
+  variant === 'featured' && "border-primary bg-primary/5"
+)}>
+```
+
+**Responsive Design**
+```typescript
+// Mobile-first
+<div className="px-4 md:px-6 lg:px-8">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+```
+
+### Performance Patterns
+
+**Image Optimization**
+```typescript
+<Image
+  src={project.logoUrl}
+  alt={project.name}
+  width={400}
+  height={300}
+  sizes="(max-width: 768px) 100vw, 50vw"
+  priority={featured}
+/>
+```
+
+**Dynamic Imports**
+```typescript
+const ProjectEditor = dynamic(
+  () => import('./ProjectEditor'),
+  { ssr: false }
+);
+```
+
+### Security Patterns
+
+- Never expose API keys in client code
+- Validate all inputs with Zod
+- Use server actions for sensitive operations
+- Sanitize user content before display
+- Environment variables for all secrets

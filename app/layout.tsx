@@ -8,6 +8,8 @@ import {
   TopMobileBgCover,
 } from "./components/navigation/mobileBgCover";
 import Nav from "./components/navigation/Nav";
+import AuthSessionProvider from "./providers/SessionProvider";
+import AdminFloatingMenu from "./components/AdminFloatingMenu";
 
 export const metadata: Metadata = {
   title: "Etan Heyman",
@@ -82,20 +84,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
         className={`relative -z-20 flex h-full min-h-screen flex-col justify-center overscroll-none antialiased *:text-white`}
       >
-        {/* Top SVGs (fixed to viewport) */}
-        <Nav />
-        {/* Main content */}
-        <div className="bg-background relative z-0 flex h-full grow flex-col items-center justify-center overflow-hidden">
-          <TopMobileBgCover />
-          <BottomMobileBgCover />
-          {children}
-        </div>
-        <Footer />
-        <Toaster />
+        <AuthSessionProvider>
+          {/* Top SVGs (fixed to viewport) */}
+          <Nav />
+          {/* Main content */}
+          <div className="bg-background relative z-0 flex h-full grow flex-col items-center justify-center overflow-hidden">
+            <TopMobileBgCover />
+            <BottomMobileBgCover />
+            {children}
+          </div>
+          <Footer />
+          <Toaster />
+          <AdminFloatingMenu />
+        </AuthSessionProvider>
       </body>
     </html>
   );

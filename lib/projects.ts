@@ -10,7 +10,7 @@ export async function getAllProjects() {
   }
 }
 
-export async function getProjectById(id: string) {
+export async function getProjectById(id: string): Promise<Project | null> {
   try {
     return await prisma.project.findUnique({
       where: { id },
