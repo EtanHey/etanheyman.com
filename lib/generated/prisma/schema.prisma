@@ -11,7 +11,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("NEXT_PUBLIC_MONGODB_URL")
+  url      = env("DATABASE_URL")
 }
 
 model Project {
@@ -20,9 +20,13 @@ model Project {
   description      String
   shortDescription String
   logoPath         String
+  logoUrl          String?
+  previewImage     String?
+  technologies     String[]
   projectJourney   ProjectJourney[]
   gitUrl           String
   liveUrl          String?
+  framework        String? // e.g., "Webby", "Freelance", etc.
 }
 
 type ProjectJourney {

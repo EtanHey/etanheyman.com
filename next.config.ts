@@ -2,10 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  experimental: {
-    ppr: true,
-    dynamicIO: true,
-  },
+  // Temporarily disable experimental features that might cause issues
+  // experimental: {
+  //   ppr: true,
+  //   dynamicIO: true,
+  // },
   images: {
     remotePatterns: [{ hostname: "utfs.io" }],
   },

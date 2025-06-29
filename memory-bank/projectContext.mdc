@@ -1,0 +1,77 @@
+---
+description: Business context and product overview for Etan Heyman's portfolio website
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+## Product Overview
+
+Etan Heyman's professional portfolio website - a showcase of technical projects and engineering capabilities.
+
+### Core Value Proposition
+- Demonstrate technical expertise through real projects
+- Provide easy contact channel for opportunities
+- Showcase modern web development skills
+- Living example of code quality and best practices
+
+### Target Audience
+- Potential employers
+- Clients seeking development services
+- Technical recruiters
+- Fellow developers
+
+### Key User Flows
+
+**Visitor Journey**
+1. Land on homepage → See featured projects
+2. Browse project gallery → Click for details
+3. View project journey/milestones
+4. Navigate to contact → Send inquiry
+
+**Project Discovery**
+- Visual project cards with logos
+- Technology stack badges
+- Quick project descriptions
+- Links to live demos and GitHub
+
+**Contact Flow**
+- Simple contact form
+- Server-side validation
+- Email notification via Resend
+- Success confirmation
+
+### Content Types
+
+**Projects**
+- Name and description
+- Technology stack
+- Logo/branding
+- External links (demo, GitHub)
+- Project journey with milestones
+- Featured status for highlighting
+
+**About Section**
+- Professional background
+- Technical skills
+- Personal interests
+- Career highlights
+
+**Contact**
+- Name, email, message fields
+- Professional email handling
+- Anti-spam measures
+
+### Business Rules
+- Featured projects appear first
+- Projects sortable by custom order
+- All projects must have at least name and description
+- Contact form requires all fields
+- Uploaded images optimized automatically
+
+### Success Metrics
+- Page load performance (Core Web Vitals)
+- Contact form submissions
+- Project view engagement
+- Mobile responsiveness
+- SEO visibility

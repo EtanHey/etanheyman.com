@@ -20,7 +20,11 @@ export default function AddProjectPage() {
     shortDescription: "",
     description: "",
     logoPath: "",
+    logoUrl: "",
     logoFileKey: "",
+    previewImage: "",
+    previewImageFileKey: "",
+    technologies: [] as string[],
     gitUrl: "",
     liveUrl: "",
     projectJourney: [
@@ -52,8 +56,22 @@ export default function AddProjectPage() {
     setFormData((prev) => ({
       ...prev,
       logoPath: url,
+      logoUrl: url,
       logoFileKey: fileKey || "",
     }));
+  };
+
+  const handlePreviewImageChange = (url: string, fileKey?: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      previewImage: url,
+      previewImageFileKey: fileKey || "",
+    }));
+  };
+
+  const handleTechnologiesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const techs = e.target.value.split(",").map((tech) => tech.trim());
+    setFormData((prev) => ({ ...prev, technologies: techs }));
   };
 
   const handleJourneyImageChange = (
@@ -99,10 +117,28 @@ export default function AddProjectPage() {
 
     try {
       setIsSubmitting(true);
+      // Prepare data matching Prisma schema
+      const projectData = {
+        title: formData.title,
+        shortDescription: formData.shortDescription,
+        description: formData.description,
+        logoPath: formData.logoPath,
+        logoUrl: formData.logoUrl,
+        previewImage: formData.previewImage,
+        technologies: formData.technologies,
+        gitUrl: formData.gitUrl,
+        liveUrl: formData.liveUrl,
+        projectJourney: formData.projectJourney.map(step => ({
+          title: step.title,
+          description: step.description,
+          imgUrl: step.imgUrl
+        }))
+      };
+      
       const response = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(projectData),
       });
 
       if (!response.ok) {
@@ -124,10 +160,10 @@ export default function AddProjectPage() {
   return (
     <main className="container mx-auto px-4 py-8">
       <Link
-        href="/projects"
+        href="/"
         className="text-primary mb-8 inline-block hover:underline"
       >
-        ← Back to Projects
+        ← Back to Home
       </Link>
 
       <h1 className="mb-8 text-3xl font-bold">Add New Project</h1>
@@ -190,6 +226,32 @@ export default function AddProjectPage() {
               endpoint="projectLogo"
               value={formData.logoPath}
               onChange={handleLogoChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="previewImage" className="mb-1 block font-medium">
+              Preview Image (for homepage)
+            </label>
+            <ImageUploader
+              endpoint="journeyImage"
+              value={formData.previewImage}
+              onChange={handlePreviewImageChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="technologies" className="mb-1 block font-medium">
+              Technologies (comma-separated)
+            </label>
+            <input
+              type="text"
+              id="technologies"
+              name="technologies"
+              placeholder="React, Next.js, TypeScript, Tailwind CSS"
+              value={formData.technologies.join(", ")}
+              onChange={handleTechnologiesChange}
+              className="border-border w-full rounded-md border p-2"
             />
           </div>
 
@@ -305,7 +367,7 @@ export default function AddProjectPage() {
             {isSubmitting ? "Creating..." : "Create Project"}
           </button>
 
-          <Link href="/projects">
+          <Link href="/">
             <button
               type="button"
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-md px-6 py-2"
