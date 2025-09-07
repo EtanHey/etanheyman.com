@@ -27,7 +27,6 @@ const MenuTrigger: React.FC<MenuTriggerProps> = ({
           viewBox="0 0 24 16"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          onClick={onClick}
           className={className}
         >
           <path

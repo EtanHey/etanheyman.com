@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { EmailIcon } from "../components/contact/EmailIcon";
 import { LocationIcon } from "../components/contact/LocationIcon";
 import { PhoneIcon } from "../components/contact/PhoneIcon";
-import SendIcon from "../components/navigation/about/sendIcon";
+import SendIcon from "../components/navigation/about/SendIcon";
 import { PhoneInput } from "../components/ui/phone-input";
 import { ContactFormData, submitContactForm } from "./actions";
 import { SocialLinks } from "../components/SocialLinks";
