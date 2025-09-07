@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import GitHubProvider from "next-auth/providers/github"
 import type { NextAuthOptions } from "next-auth"
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
           return true
         }
         // Check if GitHub username is in allowed list
-        if (allowedUsernames.length > 0 && profile?.login && allowedUsernames.includes(profile.login as string)) {
+        if (allowedUsernames.length > 0 && (profile as any)?.login && allowedUsernames.includes((profile as any).login as string)) {
           return true
         }
         // If no restrictions are set, allow all GitHub users (not recommended for production)
@@ -45,16 +45,16 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         if (account?.provider === 'github' && profile) {
-          token.githubUsername = profile.login
+          token.githubUsername = (profile as any).login
         }
       }
       return token
     },
     async session({ session, token }) {
       if (session?.user) {
-        session.user.id = token.id as string
+        (session.user as any).id = token.id as string
         if (token.githubUsername) {
-          session.user.githubUsername = token.githubUsername as string
+          (session.user as any).githubUsername = token.githubUsername as string
         }
       }
       return session

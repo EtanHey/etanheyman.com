@@ -74,7 +74,7 @@ export default function EditProjectPage() {
       } catch (error) {
         console.error("Error fetching project:", error);
         toast.error("Failed to load project. Please try again.");
-        router.push("/projects");
+        router.push("/");
       }
     }
 

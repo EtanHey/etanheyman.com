@@ -24,6 +24,13 @@ export async function POST(request: NextRequest) {
     // Upload file
     const uploadedFile = await utapi.uploadFiles(file);
 
+    if (!uploadedFile.data) {
+      return NextResponse.json(
+        { error: "Failed to upload file" },
+        { status: 500 },
+      );
+    }
+
     return NextResponse.json({
       url: uploadedFile.data.url,
       key: uploadedFile.data.key,

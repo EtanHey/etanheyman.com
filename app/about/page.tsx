@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import LaptopIcon from "../components/navigation/about/LaptopIcon";
 import LocationIcon from "../components/navigation/about/LocationIcon";
-import SendIcon from "../components/navigation/about/sendIcon";
+import SendIcon from "../components/navigation/about/SendIcon";
 import TimelineParallax from "../components/navigation/about/TimelineParallax";
 import {
   techIconMap,
