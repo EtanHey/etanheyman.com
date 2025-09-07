@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Product Context
+
+## Product Overview
+Cantaloupe AI is an innovative Applicant Tracking System (ATS) that leverages audio conversational interviews to provide deep insights into job candidates. The system uses AI to analyze personality traits, assess compatibility with job roles, and predict turnover risk.
+
+## Key Workflows
+- Businesses create job listings with detailed requirements
+- Candidates apply and submit resumes
+- System parses and structures resume data
+- Candidates complete audio interviews
+- AI analyzes responses for personality traits and fit
+- Hiring managers review candidate insights and summaries
+- Teams collaborate on hiring decisions through messaging
+
+## User Experience Goals
+- Type-safe operations for data integrity
+- Efficient data handling for quick processing
+- Consistent API patterns across the application
+- Intuitive interface for reviewing candidate insights
+- Collaborative tools for hiring team communication
+- Accurate AI-powered candidate analysis
+- Streamlined application management workflow
+
+## Business Value Proposition
+- Reduce hiring time through AI-assisted candidate evaluation
+- Improve candidate quality through personality and compatibility insights
+- Decrease turnover by identifying high-risk candidates early
+- Enhance collaboration among hiring teams
+- Provide data-driven hiring decision support
+- Standardize the evaluation process across all candidates

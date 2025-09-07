@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { EmailIcon } from "../components/contact/EmailIcon";
 import { LocationIcon } from "../components/contact/LocationIcon";
 import { PhoneIcon } from "../components/contact/PhoneIcon";
-import SendIcon from "../components/navigation/about/sendIcon";
+import SendIcon from "../components/navigation/about/SendIcon";
 import { PhoneInput } from "../components/ui/phone-input";
 import { ContactFormData, submitContactForm } from "./actions";
 import { SocialLinks } from "../components/SocialLinks";
@@ -25,7 +25,9 @@ export default function Contact() {
     setPhoneValue(value);
   }).current;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({
       ...prev,
@@ -62,7 +64,9 @@ export default function Contact() {
         // Reset phone input
         setPhoneValue("");
       } else {
-        setError(result.error || "Failed to send your message. Please try again.");
+        setError(
+          result.error || "Failed to send your message. Please try again.",
+        );
       }
     } catch (err) {
       setError("An unexpected error occurred. Please try again later.");
@@ -73,108 +77,156 @@ export default function Contact() {
   };
 
   return (
-    <main className='w-full flex flex-col justify-center items-center z-20 min-h-screen px-4.5 py-8 pb-20'>
-      <h1 className='sr-only'>Contact Etan Heyman</h1>
-      <div className='w-full max-w-3xl p-4 bg-white rounded-[20px] flex flex-col gap-10 overflow-hidden shadow-lg'>
+    <main className="z-20 flex min-h-screen w-full flex-col items-center justify-center px-4.5 py-8 pb-20">
+      <h1 className="sr-only">Contact Etan Heyman</h1>
+      <div className="flex w-full max-w-3xl flex-col gap-10 overflow-hidden rounded-[20px] bg-white p-4 shadow-lg">
         {/* Contact Form */}
-        <section aria-labelledby='contact-form-heading'>
-          <h2 id='contact-form-heading' className='sr-only'>
+        <section aria-labelledby="contact-form-heading">
+          <h2 id="contact-form-heading" className="sr-only">
             Contact Form
           </h2>
-          <form onSubmit={handleSubmit} className='text-blue-900' aria-describedby={error ? "form-error" : undefined}>
-            <div className='flex flex-col gap-6'>
-              <div className='flex flex-col focus-within:[&>label]:text-primary gap-1.5'>
-                <label htmlFor='fullName' className='font-semibold'>
+          <form
+            onSubmit={handleSubmit}
+            className="text-blue-900"
+            aria-describedby={error ? "form-error" : undefined}
+          >
+            <div className="flex flex-col gap-6">
+              <div className="focus-within:[&>label]:text-primary flex flex-col gap-1.5">
+                <label htmlFor="fullName" className="font-semibold">
                   Full name
                 </label>
                 <input
-                  type='text'
-                  id='fullName'
-                  name='fullName'
+                  type="text"
+                  id="fullName"
+                  name="fullName"
                   required
                   value={formValues.fullName}
                   onChange={handleChange}
-                  className='w-full border-b border-blue-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 p-2'
-                  placeholder='Your full name'
-                  aria-required='true'
+                  className="focus:border-primary focus:ring-primary/20 w-full border-b border-blue-900 p-2 focus:ring-2 focus:outline-none"
+                  placeholder="Your full name"
+                  aria-required="true"
                 />
               </div>
 
-              <div className='flex flex-col focus-within:[&>label]:text-primary gap-1.5'>
-                <label htmlFor='email' className='font-semibold'>
+              <div className="focus-within:[&>label]:text-primary flex flex-col gap-1.5">
+                <label htmlFor="email" className="font-semibold">
                   Email
                 </label>
                 <input
-                  type='email'
-                  id='email'
-                  name='email'
+                  type="email"
+                  id="email"
+                  name="email"
                   required
                   value={formValues.email}
                   onChange={handleChange}
-                  className='w-full border-b border-blue-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 p-2'
-                  placeholder='Your email address'
-                  aria-required='true'
+                  className="focus:border-primary focus:ring-primary/20 w-full border-b border-blue-900 p-2 focus:ring-2 focus:outline-none"
+                  placeholder="Your email address"
+                  aria-required="true"
                 />
               </div>
 
-              <div className='flex flex-col focus-within:[&>label]:text-primary gap-1.5'>
-                <label htmlFor='phone' className='font-semibold'>
+              <div className="focus-within:[&>label]:text-primary flex flex-col gap-1.5">
+                <label htmlFor="phone" className="font-semibold">
                   Phone Number
                 </label>
-                <div className='border-b border-blue-900 focus-within:border-primary'>
+                <div className="focus-within:border-primary border-b border-blue-900">
                   <PhoneInput
                     international
-                    defaultCountry='US'
+                    defaultCountry="US"
                     value={phoneValue}
                     onChange={handlePhoneChange}
-                    className='border-none focus-within:outline-none [&_.rounded-e-lg]:bg-transparent [&_.rounded-e-lg]:border-none [&_.rounded-e-lg]:shadow-none [&_.rounded-e-lg]:focus:outline-none [&_.rounded-e-lg]:rounded-none'
-                    aria-label='Phone number'
+                    className="border-none focus-within:outline-none [&_.rounded-e-lg]:rounded-none [&_.rounded-e-lg]:border-none [&_.rounded-e-lg]:bg-transparent [&_.rounded-e-lg]:shadow-none [&_.rounded-e-lg]:focus:outline-none"
+                    aria-label="Phone number"
                   />
                 </div>
               </div>
 
-              <div className='flex flex-col focus-within:[&>label]:text-primary gap-1.5'>
-                <label htmlFor='message' className='font-semibold'>
+              <div className="focus-within:[&>label]:text-primary flex flex-col gap-1.5">
+                <label htmlFor="message" className="font-semibold">
                   Message
                 </label>
                 <textarea
-                  id='message'
-                  name='message'
+                  id="message"
+                  name="message"
                   required
                   value={formValues.message}
                   onChange={handleChange}
-                  className='w-full border-b border-blue-900 py-2 h-20 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 p-2'
-                  placeholder='Write your message here'
-                  aria-required='true'
+                  className="focus:border-primary focus:ring-primary/20 h-20 w-full border-b border-blue-900 p-2 py-2 focus:ring-2 focus:outline-none"
+                  placeholder="Write your message here"
+                  aria-required="true"
                 />
               </div>
 
               {error && (
-                <div className='flex items-start gap-2 text-red-500' id='form-error' role='alert'>
-                  <svg className='w-6 h-6' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'>
-                    <circle cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='2' />
-                    <path d='M12 7v6M12 17.01V17' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
+                <div
+                  className="flex items-start gap-2 text-red-500"
+                  id="form-error"
+                  role="alert"
+                >
+                  <svg
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    />
+                    <path
+                      d="M12 7v6M12 17.01V17"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                   <span>{error}</span>
                 </div>
               )}
 
               <button
-                type='submit'
+                type="submit"
                 disabled={isSubmitting}
-                className='w-full bg-primary text-white rounded-full py-4 font-bold flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary'>
+                className="bg-primary focus:ring-primary flex w-full items-center justify-center gap-2 rounded-full py-4 font-bold text-white transition-colors hover:bg-blue-600 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70"
+              >
                 {isSubmitting ? "Sending..." : "Send message"}
-                {!isSubmitting && <SendIcon aria-hidden='true' />}
+                {!isSubmitting && <SendIcon aria-hidden="true" />}
               </button>
             </div>
 
             {isSubmitted && !isSubmitting && !error && (
-              <div className='flex items-start gap-2 text-primary pt-6' role='status' aria-live='polite'>
-                <svg className='w-6 h-6' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'>
-                  <circle cx='12' cy='12' r='10' stroke='#0f82eb' strokeWidth='2' />
-                  <path d='M8 12L11 15L16 9' stroke='#0f82eb' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+              <div
+                className="text-primary flex items-start gap-2 pt-6"
+                role="status"
+                aria-live="polite"
+              >
+                <svg
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="#0f82eb"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M8 12L11 15L16 9"
+                    stroke="#0f82eb"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
-                <div className='flex flex-col text-primary'>
+                <div className="text-primary flex flex-col">
                   <p>Your message has been sent.</p>
                   <p>I will get back to you as soon as possible, promise!</p>
                 </div>
@@ -184,51 +236,65 @@ export default function Contact() {
         </section>
 
         {/* Contact Information */}
-        <section aria-labelledby='contact-info-heading' className='bg-blue-900 rounded-xl text-white py-8 gap-22.5 px-6 flex flex-col'>
-          <div className='flex flex-col gap-16'>
-            <div className='flex flex-col gap-1.5'>
-              <h2 id='contact-info-heading' className='text-xl font-semibold text-blue-200'>
+        <section
+          aria-labelledby="contact-info-heading"
+          className="flex flex-col gap-22.5 rounded-xl bg-blue-900 px-6 py-8 text-white"
+        >
+          <div className="flex flex-col gap-16">
+            <div className="flex flex-col gap-1.5">
+              <h2
+                id="contact-info-heading"
+                className="text-xl font-semibold text-blue-200"
+              >
                 Contact Information
               </h2>
-              <p className='text-sm font-[260]'>Reach out directly using the information below!</p>
+              <p className="text-sm font-[260]">
+                Reach out directly using the information below!
+              </p>
             </div>
 
-            <div className='flex flex-col gap-8'>
-              <div className='flex items-center gap-6'>
-                <PhoneIcon aria-hidden='true' />
+            <div className="flex flex-col gap-8">
+              <div className="flex items-center gap-6">
+                <PhoneIcon aria-hidden="true" />
                 <Link
-                  href='tel:+17179629684'
-                  className='text-white hover:text-blue-200 transition-colors underline-offset-1 hover:underline-offset-2 underline hover:decoration-2 focus:outline-none focus:ring-2 focus:ring-blue-200 rounded-sm'
-                  aria-label='Call me at +1 717 962 9684'>
+                  href="tel:+17179629684"
+                  className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                  aria-label="Call me at +1 717 962 9684"
+                >
                   +1 717 962 9684
                 </Link>
               </div>
 
-              <div className='flex items-center gap-6'>
-                <EmailIcon aria-hidden='true' />
+              <div className="flex items-center gap-6">
+                <EmailIcon aria-hidden="true" />
                 <Link
-                  href='mailto:etan@heyman.net'
-                  className='text-white hover:text-blue-200 transition-colors underline-offset-1 hover:underline-offset-2 underline hover:decoration-2 focus:outline-none focus:ring-2 focus:ring-blue-200 rounded-sm'
-                  aria-label='Email me at etan@heyman.net'>
+                  href="mailto:etan@heyman.net"
+                  className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                  aria-label="Email me at etan@heyman.net"
+                >
                   etan@heyman.net
                 </Link>
               </div>
 
-              <div className='flex items-center gap-6'>
-                <LocationIcon aria-hidden='true' />
+              <div className="flex items-center gap-6">
+                <LocationIcon aria-hidden="true" />
                 <Link
-                  href='https://www.google.com/maps/place/Highland,+denver,+CO'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-white hover:text-blue-200 transition-colors underline-offset-1 hover:underline-offset-2 underline hover:decoration-2 focus:outline-none focus:ring-2 focus:ring-blue-200 rounded-sm'
-                  aria-label='View Denver, Colorado location on Google Maps'>
+                  href="https://www.google.com/maps/place/Highland,+denver,+CO"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                  aria-label="View Denver, Colorado location on Google Maps"
+                >
                   Denver, Colorado, USA
                 </Link>
               </div>
             </div>
           </div>
 
-          <SocialLinks className='w-full justify-center' iconContainerClassName='flex items-center justify-center p-1 rounded-full bg-blue-50' />
+          <SocialLinks
+            className="w-full justify-center"
+            iconContainerClassName="flex items-center justify-center p-1 rounded-full bg-blue-50"
+          />
         </section>
       </div>
     </main>

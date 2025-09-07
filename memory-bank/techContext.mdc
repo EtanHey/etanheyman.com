@@ -1,0 +1,92 @@
+---
+description: Technical architecture and implementation details for the portfolio website
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/package.json"
+  - "**/prisma/**"
+alwaysApply: true
+---
+
+## Technical Stack
+
+### Core Framework
+- **Next.js 15.3.0-canary.40** - App Router with experimental features
+  - Partial Prerendering (PPR) enabled
+  - Dynamic IO for streaming
+  - Turbopack for fast dev builds
+- **TypeScript 5.x** - Strict mode enabled
+- **Node.js 20+** runtime
+
+### Database Layer
+- **MongoDB Atlas** - Cloud-hosted NoSQL
+- **Prisma 6.x** - Type-safe ORM
+  - Singleton connection pattern
+  - MongoDB-specific features (@map, @db.ObjectId)
+
+### Styling System
+- **Tailwind CSS v4** - Utility-first styling
+  - Custom CSS variables for theming
+  - Dark/light mode support
+  - Mobile-first responsive design
+- **shadcn/ui** - Component library
+  - Built on Radix UI primitives
+  - Customizable with Tailwind
+
+### Key Dependencies
+```json
+{
+  "@radix-ui/*": "UI primitives",
+  "react-hook-form": "Form state management",
+  "zod": "Schema validation",
+  "uploadthing": "File upload service",
+  "resend": "Email service",
+  "lucide-react": "Icon library",
+  "date-fns": "Date utilities"
+}
+```
+
+### Development Tools
+- **ESLint** - Code linting with Next.js config
+- **Prettier** - Code formatting
+- **TypeScript** - Type checking
+
+### File Upload Strategy
+- UploadThing for image uploads
+- Automatic optimization
+- CDN delivery
+- Size limits enforced
+
+### Email Infrastructure
+- Resend for transactional emails
+- Server-side sending only
+- Contact form notifications
+
+### Environment Variables
+```
+DATABASE_URL        # MongoDB connection string
+UPLOADTHING_TOKEN   # File upload auth
+UPLOADTHING_SECRET  # File upload secret
+RESEND_API_KEY      # Email service key
+```
+
+### Performance Features
+- Server Components by default
+- Lazy loading for heavy components
+- Image optimization with next/image
+- Suspense boundaries for async data
+- Static generation where possible
+
+### Security Measures
+- Environment variables for secrets
+- Server-side form validation
+- CORS configuration for uploads
+- No client-side database access
+- Input sanitization with Zod
+
+### Deployment
+- **Platform**: Vercel
+- **Region**: Auto-selected
+- **Build**: Next.js optimized
+- **Analytics**: Vercel Analytics (optional)
