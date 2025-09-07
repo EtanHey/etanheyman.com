@@ -6,7 +6,7 @@ const BubbleIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
     <>
       {/* Desktop version */}
       <svg
-        className={`hidden md:block ${className}`}
+        className={`hidden sm:block ${className}`}
         width={43}
         height={47}
         viewBox="0 0 43 47"
@@ -26,7 +26,7 @@ const BubbleIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
 
       {/* Mobile version */}
       <svg
-        className={`md:hidden ${className}`}
+        className={`sm:hidden ${className}`}
         width={26}
         height={28}
         viewBox="0 0 26 28"

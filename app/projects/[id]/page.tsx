@@ -1,10 +1,14 @@
+import AdminEditButton from "@/app/components/AdminEditButton";
 import { getProjectById } from "@/lib/projects";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import AdminEditButton from "@/app/components/AdminEditButton";
 
-export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const project = await getProjectById(id);
 
@@ -15,10 +19,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   return (
     <main className="container mx-auto px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
-        <Link
-          href="/"
-          className="text-primary inline-block hover:underline"
-        >
+        <Link href="/" className="text-primary inline-block hover:underline">
           ← Back to Home
         </Link>
 
@@ -37,7 +38,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
             />
           </div>
         )}
-        
+
         <div className="flex items-center gap-6">
           {project.logoUrl && (
             <Image
@@ -99,13 +100,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           <h2 className="mb-6 text-2xl font-semibold">Project Journey</h2>
           <div className="space-y-12">
             {project.projectJourney.map((journey, index) => (
-              <div key={index} className="grid gap-8 md:grid-cols-2">
-                <div className={`${index % 2 === 1 ? "md:order-2" : ""}`}>
+              <div key={index} className="grid gap-8 sm:grid-cols-2">
+                <div className={`${index % 2 === 1 ? "sm:order-2" : ""}`}>
                   <h3 className="mb-2 text-xl font-medium">{journey.title}</h3>
                   <p className="whitespace-pre-line">{journey.description}</p>
                 </div>
                 {journey.imgUrl && (
-                  <div className={`${index % 2 === 1 ? "md:order-1" : ""}`}>
+                  <div className={`${index % 2 === 1 ? "sm:order-1" : ""}`}>
                     <Image
                       src={journey.imgUrl}
                       alt={journey.title}

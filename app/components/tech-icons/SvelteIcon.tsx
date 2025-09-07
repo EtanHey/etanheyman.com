@@ -6,7 +6,7 @@ const SvelteIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
     <>
       {/* Desktop version */}
       <svg
-        className={`hidden md:block ${className}`}
+        className={`hidden sm:block ${className}`}
         width={39}
         height={47}
         viewBox="0 0 39 47"
@@ -26,7 +26,7 @@ const SvelteIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
 
       {/* Mobile version */}
       <svg
-        className={`md:hidden ${className}`}
+        className={`sm:hidden ${className}`}
         width={24}
         height={27}
         viewBox="0 0 24 27"

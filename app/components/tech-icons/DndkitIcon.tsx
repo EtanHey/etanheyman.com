@@ -6,7 +6,7 @@ const DndkitIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
     <>
       {/* Desktop version */}
       <svg
-        className={`hidden md:block ${className}`}
+        className={`hidden sm:block ${className}`}
         width={54}
         height={21}
         viewBox="0 0 54 21"
@@ -30,7 +30,7 @@ const DndkitIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
 
       {/* Mobile version */}
       <svg
-        className={`md:hidden ${className}`}
+        className={`sm:hidden ${className}`}
         width={32}
         height={12}
         viewBox="0 0 32 12"

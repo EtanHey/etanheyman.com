@@ -6,7 +6,7 @@ const AxiosIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
     <>
       {/* Desktop version */}
       <svg
-        className={`hidden md:block ${className}`}
+        className={`hidden sm:block ${className}`}
         width={54}
         height={14}
         viewBox="0 0 54 14"
@@ -42,7 +42,7 @@ const AxiosIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
 
       {/* Mobile version */}
       <svg
-        className={`md:hidden ${className}`}
+        className={`sm:hidden ${className}`}
         width={32}
         height={9}
         viewBox="0 0 32 9"

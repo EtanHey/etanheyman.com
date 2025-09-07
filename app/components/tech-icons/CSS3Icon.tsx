@@ -6,7 +6,7 @@ const CSS3Icon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
     <>
       {/* Desktop version */}
       <svg
-        className={`hidden md:block ${className}`}
+        className={`hidden sm:block ${className}`}
         width={34}
         height={47}
         viewBox="0 0 34 47"
@@ -54,7 +54,7 @@ const CSS3Icon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
 
       {/* Mobile version */}
       <svg
-        className={`md:hidden ${className}`}
+        className={`sm:hidden ${className}`}
         width={20}
         height={29}
         viewBox="0 0 20 29"

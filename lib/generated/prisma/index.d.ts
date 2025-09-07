@@ -916,6 +916,7 @@ export namespace Prisma {
     gitUrl: string | null
     liveUrl: string | null
     framework: string | null
+    featured: boolean | null
   }
 
   export type ProjectMaxAggregateOutputType = {
@@ -929,6 +930,7 @@ export namespace Prisma {
     gitUrl: string | null
     liveUrl: string | null
     framework: string | null
+    featured: boolean | null
   }
 
   export type ProjectCountAggregateOutputType = {
@@ -943,6 +945,7 @@ export namespace Prisma {
     gitUrl: number
     liveUrl: number
     framework: number
+    featured: number
     _all: number
   }
 
@@ -958,6 +961,7 @@ export namespace Prisma {
     gitUrl?: true
     liveUrl?: true
     framework?: true
+    featured?: true
   }
 
   export type ProjectMaxAggregateInputType = {
@@ -971,6 +975,7 @@ export namespace Prisma {
     gitUrl?: true
     liveUrl?: true
     framework?: true
+    featured?: true
   }
 
   export type ProjectCountAggregateInputType = {
@@ -985,6 +990,7 @@ export namespace Prisma {
     gitUrl?: true
     liveUrl?: true
     framework?: true
+    featured?: true
     _all?: true
   }
 
@@ -1072,6 +1078,7 @@ export namespace Prisma {
     gitUrl: string
     liveUrl: string | null
     framework: string | null
+    featured: boolean
     _count: ProjectCountAggregateOutputType | null
     _min: ProjectMinAggregateOutputType | null
     _max: ProjectMaxAggregateOutputType | null
@@ -1104,6 +1111,7 @@ export namespace Prisma {
     gitUrl?: boolean
     liveUrl?: boolean
     framework?: boolean
+    featured?: boolean
   }, ExtArgs["result"]["project"]>
 
 
@@ -1120,9 +1128,10 @@ export namespace Prisma {
     gitUrl?: boolean
     liveUrl?: boolean
     framework?: boolean
+    featured?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "shortDescription" | "logoPath" | "logoUrl" | "previewImage" | "technologies" | "projectJourney" | "gitUrl" | "liveUrl" | "framework", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "shortDescription" | "logoPath" | "logoUrl" | "previewImage" | "technologies" | "projectJourney" | "gitUrl" | "liveUrl" | "framework" | "featured", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $ProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1140,6 +1149,7 @@ export namespace Prisma {
       gitUrl: string
       liveUrl: string | null
       framework: string | null
+      featured: boolean
     }, ExtArgs["result"]["project"]>
     composites: {
       projectJourney: Prisma.$ProjectJourneyPayload[]
@@ -1545,6 +1555,7 @@ export namespace Prisma {
     readonly gitUrl: FieldRef<"Project", 'String'>
     readonly liveUrl: FieldRef<"Project", 'String'>
     readonly framework: FieldRef<"Project", 'String'>
+    readonly featured: FieldRef<"Project", 'Boolean'>
   }
     
 
@@ -1948,7 +1959,8 @@ export namespace Prisma {
     technologies: 'technologies',
     gitUrl: 'gitUrl',
     liveUrl: 'liveUrl',
-    framework: 'framework'
+    framework: 'framework',
+    featured: 'featured'
   };
 
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
@@ -1990,6 +2002,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2022,6 +2041,7 @@ export namespace Prisma {
     gitUrl?: StringFilter<"Project"> | string
     liveUrl?: StringNullableFilter<"Project"> | string | null
     framework?: StringNullableFilter<"Project"> | string | null
+    featured?: BoolFilter<"Project"> | boolean
   }
 
   export type ProjectOrderByWithRelationInput = {
@@ -2037,6 +2057,7 @@ export namespace Prisma {
     gitUrl?: SortOrder
     liveUrl?: SortOrder
     framework?: SortOrder
+    featured?: SortOrder
   }
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -2055,6 +2076,7 @@ export namespace Prisma {
     gitUrl?: StringFilter<"Project"> | string
     liveUrl?: StringNullableFilter<"Project"> | string | null
     framework?: StringNullableFilter<"Project"> | string | null
+    featured?: BoolFilter<"Project"> | boolean
   }, "id">
 
   export type ProjectOrderByWithAggregationInput = {
@@ -2069,6 +2091,7 @@ export namespace Prisma {
     gitUrl?: SortOrder
     liveUrl?: SortOrder
     framework?: SortOrder
+    featured?: SortOrder
     _count?: ProjectCountOrderByAggregateInput
     _max?: ProjectMaxOrderByAggregateInput
     _min?: ProjectMinOrderByAggregateInput
@@ -2089,6 +2112,7 @@ export namespace Prisma {
     gitUrl?: StringWithAggregatesFilter<"Project"> | string
     liveUrl?: StringNullableWithAggregatesFilter<"Project"> | string | null
     framework?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    featured?: BoolWithAggregatesFilter<"Project"> | boolean
   }
 
   export type ProjectCreateInput = {
@@ -2104,6 +2128,7 @@ export namespace Prisma {
     gitUrl: string
     liveUrl?: string | null
     framework?: string | null
+    featured?: boolean
   }
 
   export type ProjectUncheckedCreateInput = {
@@ -2119,6 +2144,7 @@ export namespace Prisma {
     gitUrl: string
     liveUrl?: string | null
     framework?: string | null
+    featured?: boolean
   }
 
   export type ProjectUpdateInput = {
@@ -2133,6 +2159,7 @@ export namespace Prisma {
     gitUrl?: StringFieldUpdateOperationsInput | string
     liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
     framework?: NullableStringFieldUpdateOperationsInput | string | null
+    featured?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProjectUncheckedUpdateInput = {
@@ -2147,6 +2174,7 @@ export namespace Prisma {
     gitUrl?: StringFieldUpdateOperationsInput | string
     liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
     framework?: NullableStringFieldUpdateOperationsInput | string | null
+    featured?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProjectCreateManyInput = {
@@ -2162,6 +2190,7 @@ export namespace Prisma {
     gitUrl: string
     liveUrl?: string | null
     framework?: string | null
+    featured?: boolean
   }
 
   export type ProjectUpdateManyMutationInput = {
@@ -2176,6 +2205,7 @@ export namespace Prisma {
     gitUrl?: StringFieldUpdateOperationsInput | string
     liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
     framework?: NullableStringFieldUpdateOperationsInput | string | null
+    featured?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProjectUncheckedUpdateManyInput = {
@@ -2190,6 +2220,7 @@ export namespace Prisma {
     gitUrl?: StringFieldUpdateOperationsInput | string
     liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
     framework?: NullableStringFieldUpdateOperationsInput | string | null
+    featured?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -2246,6 +2277,11 @@ export namespace Prisma {
     imgUrl?: string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type ProjectJourneyOrderByCompositeAggregateInput = {
     _count?: SortOrder
   }
@@ -2262,6 +2298,7 @@ export namespace Prisma {
     gitUrl?: SortOrder
     liveUrl?: SortOrder
     framework?: SortOrder
+    featured?: SortOrder
   }
 
   export type ProjectMaxOrderByAggregateInput = {
@@ -2275,6 +2312,7 @@ export namespace Prisma {
     gitUrl?: SortOrder
     liveUrl?: SortOrder
     framework?: SortOrder
+    featured?: SortOrder
   }
 
   export type ProjectMinOrderByAggregateInput = {
@@ -2288,6 +2326,7 @@ export namespace Prisma {
     gitUrl?: SortOrder
     liveUrl?: SortOrder
     framework?: SortOrder
+    featured?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -2327,6 +2366,14 @@ export namespace Prisma {
     isSet?: boolean
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type ProjectCreatetechnologiesInput = {
     set: string[]
   }
@@ -2360,6 +2407,10 @@ export namespace Prisma {
     push?: ProjectJourneyCreateInput | ProjectJourneyCreateInput[]
     updateMany?: ProjectJourneyUpdateManyInput
     deleteMany?: ProjectJourneyDeleteManyInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -2398,6 +2449,11 @@ export namespace Prisma {
     title?: StringFilter<"ProjectJourney"> | string
     description?: StringFilter<"ProjectJourney"> | string
     imgUrl?: StringNullableFilter<"ProjectJourney"> | string | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -2456,6 +2512,14 @@ export namespace Prisma {
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
     isSet?: boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ProjectJourneyUpdateManyInput = {
