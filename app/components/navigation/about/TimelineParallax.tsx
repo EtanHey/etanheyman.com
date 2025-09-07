@@ -62,7 +62,9 @@ const TimelineParallax = () => {
       const timelineRect = timelineRef.current.getBoundingClientRect();
       if (!timelineRect) return;
 
-      const items = timelineRef.current.querySelectorAll("[data-timeline-index]");
+      const items = timelineRef.current.querySelectorAll(
+        "[data-timeline-index]",
+      );
       if (items.length === 0) return;
 
       const firstItem = items[0].getBoundingClientRect();
@@ -115,7 +117,8 @@ const TimelineParallax = () => {
       }
 
       rafRef.current = requestAnimationFrame(() => {
-        if (!timelineRef.current || timelineStart === 0 || timelineEnd === 0) return;
+        if (!timelineRef.current || timelineStart === 0 || timelineEnd === 0)
+          return;
 
         const scrollY = window.scrollY;
         const viewportHeight = window.innerHeight;
@@ -133,7 +136,8 @@ const TimelineParallax = () => {
 
         const adjustedHeight = adjustedEnd - adjustedStart;
 
-        let scrollProgress = (scrollY - adjustedStart + viewportHeight / 2) / adjustedHeight;
+        let scrollProgress =
+          (scrollY - adjustedStart + viewportHeight / 2) / adjustedHeight;
         scrollProgress = Math.max(0, Math.min(1, scrollProgress));
 
         // Calculate new arrow position based on scroll progress
@@ -143,10 +147,13 @@ const TimelineParallax = () => {
         // Make arrowEndOffset responsive - 30 for mobile/tablet (767px and below), 50 for desktop
         const arrowEndOffset = window.innerWidth <= 767 ? 30 + 20 : 20; // End offset in pixels
 
-        const totalArrowOffset = arrowStartOffset + (arrowEndOffset - arrowStartOffset) * scrollProgress;
+        const totalArrowOffset =
+          arrowStartOffset +
+          (arrowEndOffset - arrowStartOffset) * scrollProgress;
 
         // Calculate base arrow position
-        let arrowY = timelineStart + timelineHeight * scrollProgress + totalArrowOffset;
+        let arrowY =
+          timelineStart + timelineHeight * scrollProgress + totalArrowOffset;
 
         // Apply desktop-specific endpoint adjustment that directly affects the final position
         // This creates a more pronounced effect by capping the endpoint on desktop
@@ -154,7 +161,8 @@ const TimelineParallax = () => {
           // Once we're past 85% of the timeline on desktop, start moving toward the final position more quickly
           // This effectively caps the endpoint lower on the screen
           const cappedProgress = 0.85 + (scrollProgress - 0.85) * 0.5; // Slow down the last 15% of movement
-          arrowY = timelineStart + timelineHeight * cappedProgress + totalArrowOffset;
+          arrowY =
+            timelineStart + timelineHeight * cappedProgress + totalArrowOffset;
         }
 
         // Apply position directly to avoid jumps
@@ -179,24 +187,34 @@ const TimelineParallax = () => {
   }, [isInitialized, timelineStart, timelineEnd]);
 
   return (
-    <div ref={timelineRef} className='relative'>
+    <div ref={timelineRef} className="relative">
       {/* Fixed Timeline Arrow */}
       <div
         ref={arrowRef}
-        className='fixed left-5 sm:left-20 z-50 pointer-events-none opacity-0 top-0 transition-opacity duration-300 ease-in will-change-transform'>
-        <div className='flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full shadow-lg -translate-x-1/2 -translate-y-1/2'>
+        className="pointer-events-none fixed top-0 left-5 z-50 opacity-0 transition-opacity duration-300 ease-in will-change-transform sm:left-20"
+      >
+        <div className="flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-blue-500 shadow-lg">
           <SendRightPointer />
         </div>
       </div>
 
       {/* Timeline Items */}
-      <div className='flex flex-col gap-8 relative border-l-4 border-blue-500'>
+      <div className="relative flex flex-col gap-8 border-l-4 border-blue-500">
         {/* Timeline items */}
         {timelineData.map((item, index) => {
           return (
-            <div key={index} data-timeline-index={index} className='relative pl-4'>
+            <div
+              key={index}
+              data-timeline-index={index}
+              className="relative pl-4"
+            >
               {/* Item content */}
-              <TimelineItem index={index} period={item.period} title={item.title} description={item.description} />
+              <TimelineItem
+                index={index}
+                period={item.period}
+                title={item.title}
+                description={item.description}
+              />
             </div>
           );
         })}
