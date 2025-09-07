@@ -6,7 +6,7 @@ const CypressIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
     <>
       {/* Desktop version */}
       <svg
-        className={`hidden md:block ${className}`}
+        className={`hidden sm:block ${className}`}
         width={45}
         height={47}
         viewBox="0 0 45 47"
@@ -62,7 +62,7 @@ const CypressIcon: React.FC<TechIconProps> = ({ className = "", ...props }) => {
 
       {/* Mobile version */}
       <svg
-        className={`md:hidden ${className}`}
+        className={`sm:hidden ${className}`}
         width={27}
         height={28}
         viewBox="0 0 27 28"

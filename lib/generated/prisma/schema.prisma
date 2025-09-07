@@ -27,6 +27,7 @@ model Project {
   gitUrl           String
   liveUrl          String?
   framework        String? // e.g., "Webby", "Freelance", etc.
+  featured         Boolean          @default(false)
 }
 
 type ProjectJourney {

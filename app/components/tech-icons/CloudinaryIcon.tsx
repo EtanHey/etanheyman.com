@@ -9,7 +9,7 @@ const CloudinaryIcon: React.FC<TechIconProps> = ({
     <>
       {/* Desktop version */}
       <svg
-        className={`hidden md:block ${className}`}
+        className={`hidden sm:block ${className}`}
         width={56}
         height={37}
         viewBox="0 0 56 37"
@@ -29,7 +29,7 @@ const CloudinaryIcon: React.FC<TechIconProps> = ({
 
       {/* Mobile version */}
       <svg
-        className={`md:hidden ${className}`}
+        className={`sm:hidden ${className}`}
         width={33}
         height={22}
         viewBox="0 0 33 22"

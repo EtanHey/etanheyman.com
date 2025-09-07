@@ -9,7 +9,7 @@ const PrettierIcon: React.FC<TechIconProps> = ({
     <>
       {/* Desktop version */}
       <svg
-        className={`hidden md:block ${className}`}
+        className={`hidden sm:block ${className}`}
         width={47}
         height={47}
         viewBox="0 0 47 47"
@@ -185,7 +185,7 @@ const PrettierIcon: React.FC<TechIconProps> = ({
 
       {/* Mobile version */}
       <svg
-        className={`md:hidden ${className}`}
+        className={`sm:hidden ${className}`}
         width={28}
         height={28}
         viewBox="0 0 28 28"
