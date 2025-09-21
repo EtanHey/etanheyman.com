@@ -109,9 +109,9 @@ export default async function ProjectPage({
             {project.technologies.map((tech) => (
               <div
                 key={tech}
-                className="relative z-30 flex h-[55px] w-[60px] items-center justify-center rounded-tl-[420px] rounded-br-[420px] rounded-bl-[420px] bg-white/10 shadow-[0px_0px_34px_0px_rgba(15,130,235,1)] md:h-[75px] md:w-[82px]"
+                className="relative z-30 flex h-[55px] min-w-[80px] px-4 items-center justify-center rounded-full bg-white/10 shadow-[0px_0px_34px_0px_rgba(15,130,235,1)] md:h-[65px] md:min-w-[100px]"
               >
-                <span className="text-xs font-medium text-white md:text-sm">
+                <span className="text-xs font-medium text-white whitespace-nowrap md:text-sm">
                   {tech}
                 </span>
               </div>

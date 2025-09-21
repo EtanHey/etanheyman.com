@@ -1,0 +1,184 @@
+{
+  "id": "hand-detection",
+  "title": "Hand Sign Detection Model",
+  "subtitle": "Real-time hand and gesture detection with 96% accuracy",
+  "category": "Machine Learning",
+  "status": "production",
+  "featured": true,
+  "date": "2024-09-14",
+  "duration": "3 months",
+  "tags": [
+    "Computer Vision",
+    "YOLOv8",
+    "Deep Learning",
+    "Real-time Detection",
+    "HuggingFace",
+    "Next.js",
+    "Vercel AI SDK"
+  ],
+  "links": {
+    "demo": "https://huggingface.co/EtanHey/hand-detection-3class",
+    "github": "https://github.com/etanheyman/hand-sign-detection",
+    "model": "https://huggingface.co/EtanHey/hand-detection-3class/resolve/main/model.pt",
+    "api": "https://api.example.com/detect-hand"
+  },
+  "metrics": {
+    "accuracy": "96.3%",
+    "dataset_size": "1,740 images",
+    "training_time": "34 minutes",
+    "inference_speed": "30+ FPS",
+    "model_size": "10.26 MB",
+    "classes": 3,
+    "validation_accuracy": "100%"
+  },
+  "tech_stack": {
+    "ml_framework": ["YOLOv8", "Ultralytics"],
+    "training": ["Python", "PyTorch", "Apple MPS"],
+    "deployment": ["HuggingFace Spaces", "FastAPI"],
+    "frontend": ["Next.js", "React", "TypeScript", "Vercel AI SDK"],
+    "infrastructure": ["RunPod", "Docker"],
+    "tools": ["OpenCV", "Pillow", "NumPy"]
+  },
+  "description": {
+    "short": "A production-ready computer vision model that detects and classifies hands, arms, and non-hand objects in real-time with 96% accuracy.",
+    "long": "This project represents a complete ML engineering journey, evolving from experimental hand detection to a production-ready system. Built on YOLOv8 architecture and trained on a custom dataset of 1,740 manually curated images, the model achieves 96% accuracy in distinguishing between hands, arms, and non-hand objects. The system features real-time inference at 30+ FPS, seamless web integration via Vercel AI SDK, and deployment on HuggingFace Spaces for universal access.",
+    "technical": "The model uses YOLOv8s-cls architecture with hierarchical classification strategy (hand > arm > not_hand). Training employed progressive complexity addition, starting with binary classification before expanding to three classes. The system includes a sophisticated data capture pipeline with continuous camera feed and clean frame extraction, ensuring high-quality training data without UI overlays."
+  },
+  "achievements": [
+    {
+      "title": "96% Accuracy",
+      "description": "Achieved 96.3% validation accuracy on three-class detection",
+      "icon": "🎯"
+    },
+    {
+      "title": "Real-time Performance",
+      "description": "30+ FPS inference on Apple M1, suitable for live applications",
+      "icon": "⚡"
+    },
+    {
+      "title": "Production Deployment",
+      "description": "Deployed on HuggingFace Spaces with public API access",
+      "icon": "🚀"
+    },
+    {
+      "title": "Full-stack Integration",
+      "description": "Complete integration with Next.js and Vercel AI SDK",
+      "icon": "🔗"
+    },
+    {
+      "title": "Custom Dataset",
+      "description": "1,740 manually curated and annotated images",
+      "icon": "📊"
+    }
+  ],
+  "challenges": [
+    {
+      "problem": "YOLO class ordering confusion",
+      "solution": "Discovered YOLO uses alphabetical ordering for classes, not folder discovery order",
+      "impact": "Fixed critical prediction inversion between hand and arm classes"
+    },
+    {
+      "problem": "Camera reopening between captures",
+      "solution": "Implemented continuous capture with clean frame extraction",
+      "impact": "Improved user experience and data quality"
+    },
+    {
+      "problem": "UI overlays in training data",
+      "solution": "Separated display frames from capture frames",
+      "impact": "Eliminated artifacts in training data"
+    },
+    {
+      "problem": "Inconsistent data quality",
+      "solution": "Implemented review workflow before dataset addition",
+      "impact": "Improved model accuracy from 85% to 96%"
+    }
+  ],
+  "timeline": [
+    {
+      "date": "2024-02",
+      "milestone": "ML-Visions Foundation",
+      "description": "Initial hand detection experiments with video-based dataset creation"
+    },
+    {
+      "date": "2024-03",
+      "milestone": "Pipeline Framework Development",
+      "description": "Abstracted learnings into reusable ML training pipeline"
+    },
+    {
+      "date": "2024-09-01",
+      "milestone": "Project Initialization",
+      "description": "Started hand-sign-detection with cleaned ML template"
+    },
+    {
+      "date": "2024-09-05",
+      "milestone": "Dataset Integration",
+      "description": "Integrated 867 images from ml-visions, expanded to 1,344"
+    },
+    {
+      "date": "2024-09-10",
+      "milestone": "Three-Class Evolution",
+      "description": "Added arm detection for better hand distinction"
+    },
+    {
+      "date": "2024-09-14",
+      "milestone": "Production Deployment",
+      "description": "Deployed to HuggingFace with Vercel AI SDK integration"
+    }
+  ],
+  "future_roadmap": [
+    {
+      "phase": "Q4 2024",
+      "title": "Gesture Recognition",
+      "tasks": [
+        "Train on ASL alphabet (A-Z)",
+        "Add dynamic gesture detection",
+        "Implement gesture-to-text pipeline"
+      ]
+    },
+    {
+      "phase": "Q1 2025",
+      "title": "Real-time Translation",
+      "tasks": [
+        "Continuous gesture recognition",
+        "Natural language processing",
+        "Multi-language support"
+      ]
+    },
+    {
+      "phase": "Q2 2025",
+      "title": "Mobile Deployment",
+      "tasks": [
+        "TensorFlow.js browser implementation",
+        "React Native app",
+        "Edge device optimization"
+      ]
+    }
+  ],
+  "code_examples": {
+    "basic_usage": "from ultralytics import YOLO\n\n# Load model from HuggingFace\nmodel = YOLO('https://huggingface.co/EtanHey/hand-detection-3class/resolve/main/model.pt')\n\n# Predict\nresults = model.predict('image.jpg')\nprobs = results[0].probs\n\n# Get class (0=arm, 1=hand, 2=not_hand)\nif probs.top1 == 1:\n    print(f'Hand detected: {probs.top1conf:.1%}')",
+    "api_integration": "const formData = new FormData();\nformData.append('image', file);\n\nconst response = await fetch('/api/detect-hand', {\n  method: 'POST',\n  body: formData\n});\n\nconst result = await response.json();\nconsole.log(`Detected: ${result.class} (${result.confidence * 100}%)`);",
+    "vercel_ai": "import { useChat } from 'ai/react';\n\nconst { messages, handleSubmit } = useChat({\n  api: '/api/chat',\n  initialMessages: [{\n    role: 'system',\n    content: 'Interpret hand gestures and signs'\n  }]\n});"
+  },
+  "lessons_learned": [
+    "Video-based dataset creation is 10x more efficient than manual photos",
+    "YOLO internally sorts classes alphabetically - always verify assumptions",
+    "Progressive training (binary → multi-class) improves final accuracy",
+    "Clean capture without UI overlays is critical for training data quality",
+    "Background training with monitoring enables rapid iteration",
+    "Model versioning with symlinks provides backward compatibility"
+  ],
+  "repository_evolution": {
+    "ml_visions": {
+      "path": "/Users/etanheyman/Desktop/Gits/ml-visions",
+      "contribution": "Video-based dataset creation, cloud GPU training patterns"
+    },
+    "ml_training_pipeline": {
+      "path": "/Users/etanheyman/Desktop/Gits/ml-training-pipeline",
+      "contribution": "Reusable framework, 'Think Before Training' philosophy"
+    },
+    "hand_sign_detection": {
+      "path": "/Users/etanheyman/Desktop/Gits/hand-sign-detection",
+      "contribution": "Production implementation with full-stack deployment"
+    }
+  }
+}
