@@ -1,5 +1,4 @@
-import type { Project } from "@/lib/generated/prisma";
-import { deleteProject, getProjectById, updateProject } from "@/lib/projects";
+import { deleteProject, getProjectById, updateProject, type Project } from "@/lib/projects";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -33,7 +32,7 @@ export async function PATCH(
     const body = await request.json();
     const updatedProject = await updateProject(
       id,
-      body as Partial<Omit<Project, "id">>,
+      body as Partial<Omit<Project, "id" | "created_at" | "updated_at">>,
     );
 
     return NextResponse.json(updatedProject);

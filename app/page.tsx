@@ -1,12 +1,11 @@
-import { prisma as db } from "@/lib/db";
+import { getAllProjects } from "@/lib/projects";
 import Link from "next/link";
 import Me from "./components/Me";
 
 export default async function Home() {
   // Fetch all projects
-  const projects = await db.project.findMany({
-    take: 5,
-  });
+  const allProjects = await getAllProjects();
+  const projects = allProjects.slice(0, 5);
 
   // Find featured project or use first one
   const featuredProject = projects.find((p) => p.featured) || projects[0];
