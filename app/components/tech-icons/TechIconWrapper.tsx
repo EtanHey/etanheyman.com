@@ -74,6 +74,7 @@ export const techIconMap: Record<TechIconName, React.FC<TechIconProps>> = {
   Node: TechIcons.NodeIcon,
   Axios: TechIcons.AxiosIcon,
   NextJS: TechIcons.NextJSIcon,
+  "Next.js": TechIcons.NextJSIcon, // Alias for NextJS
   Python: TechIcons.PythonIcon,
   PyTorch: TechIcons.PyTorchIcon,
   Go: TechIcons.GoIcon,

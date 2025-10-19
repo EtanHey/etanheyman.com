@@ -213,7 +213,9 @@ const TimelineParallax = () => {
               return (
                 <div
                   key={index}
-                  ref={(el) => (itemRefs.current[index] = el)}
+                  ref={(el) => {
+                    itemRefs.current[index] = el;
+                  }}
                   data-timeline-index={index}
                   className="relative pl-8 sm:pl-10 md:pl-12"
                   style={{
