@@ -18,7 +18,7 @@
   ],
   "links": {
     "demo": "https://huggingface.co/EtanHey/hand-detection-3class",
-    "github": "https://github.com/etanheyman/hand-sign-detection",
+    "github": "https://github.com/etanhey/hand-sign-detection",
     "model": "https://huggingface.co/EtanHey/hand-detection-3class/resolve/main/model.pt",
     "api": "https://api.example.com/detect-hand"
   },
