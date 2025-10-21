@@ -1,8 +1,18 @@
 import { UTApi } from "uploadthing/server";
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { createClient } from "@supabase/supabase-js";
 
-const utapi = new UTApi();
+// Check environment variables
+if (!process.env.UPLOADTHING_TOKEN) {
+  console.error("ERROR: UPLOADTHING_TOKEN not found");
+  process.exit(1);
+}
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  console.error("ERROR: Supabase credentials not found");
+  process.exit(1);
+}
+
+const utapi = new UTApi({ token: process.env.UPLOADTHING_TOKEN });
 
 interface ProjectImage {
   projectTitle: string;
@@ -45,6 +55,7 @@ const projectImages: ProjectImage[] = [
 
 async function uploadProjectImages() {
   console.log("Starting upload of project images...\n");
+  console.log(`Found ${projectImages.length} images to upload\n`);
 
   // Initialize Supabase client
   const supabase = createClient(
@@ -54,11 +65,17 @@ async function uploadProjectImages() {
 
   for (const { projectTitle, imagePath, imageType } of projectImages) {
     try {
-      console.log(`Uploading ${imageType} for: ${projectTitle}`);
+      console.log(`[${projectTitle}] Checking file: ${imagePath}`);
+
+      if (!existsSync(imagePath)) {
+        console.error(`✗ File not found: ${imagePath}\n`);
+        continue;
+      }
 
       // Read the file
       const fileBuffer = readFileSync(imagePath);
       const fileName = imagePath.split("/").pop() || "image";
+      console.log(`[${projectTitle}] File size: ${fileBuffer.length} bytes`);
 
       // Create a File object
       const file = new File([fileBuffer], fileName, {
@@ -66,6 +83,8 @@ async function uploadProjectImages() {
               fileName.endsWith(".png") ? "image/png" :
               "image/jpeg",
       });
+
+      console.log(`[${projectTitle}] Uploading to UploadThing...`);
 
       // Upload to UploadThing
       const response = await utapi.uploadFiles([file]);
@@ -76,13 +95,13 @@ async function uploadProjectImages() {
 
         // Update database
         const updateData = imageType === "logo"
-          ? { logo_url: imageUrl, logo_path: imageUrl }
+          ? { logo_url: imageUrl, logo_path: imageUrl, preview_image: imageUrl }
           : { preview_image: imageUrl };
 
         const { error } = await supabase
           .from("projects")
           .update(updateData)
-          .eq("title", projectTitle);
+          .ilike("title", `%${projectTitle}%`);
 
         if (error) {
           console.error(`✗ Database update failed for ${projectTitle}:`, error.message);
@@ -91,13 +110,14 @@ async function uploadProjectImages() {
         }
       } else {
         console.error(`✗ Upload failed for ${projectTitle}:`, response[0].error);
+        console.error(`Full response:`, JSON.stringify(response, null, 2));
       }
     } catch (error) {
       console.error(`✗ Error processing ${projectTitle}:`, error);
     }
   }
 
-  console.log("\nUpload process complete!");
+  console.log("\n=== Upload process complete! ===");
 }
 
 uploadProjectImages();
