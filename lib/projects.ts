@@ -14,6 +14,7 @@ export interface ProjectDB {
   live_url: string | null;
   framework: string | null;
   featured: boolean;
+  order_index: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -42,6 +43,7 @@ export interface Project {
   liveUrl: string | null;
   framework: string | null;
   featured: boolean;
+  orderIndex: number | null;
   createdAt: string;
   updatedAt: string;
   projectJourney?: ProjectJourneyStep[];
@@ -72,6 +74,7 @@ function mapProjectFromDB(dbProject: ProjectDB, journeySteps?: ProjectJourneySte
     liveUrl: dbProject.live_url,
     framework: dbProject.framework,
     featured: dbProject.featured,
+    orderIndex: dbProject.order_index,
     createdAt: dbProject.created_at,
     updatedAt: dbProject.updated_at,
     projectJourney: journeySteps?.map(mapJourneyStepFromDB),
@@ -103,6 +106,7 @@ function mapProjectToDB(project: Partial<Omit<Project, "id" | "createdAt" | "upd
   if (project.liveUrl !== undefined) dbProject.live_url = project.liveUrl;
   if (project.framework !== undefined) dbProject.framework = project.framework;
   if (project.featured !== undefined) dbProject.featured = project.featured;
+  if (project.orderIndex !== undefined) dbProject.order_index = project.orderIndex;
   return dbProject;
 }
 
@@ -112,7 +116,7 @@ export async function getAllProjects(): Promise<Project[]> {
     const { data, error } = await supabase
       .from('projects')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('order_index', { ascending: true });
 
     if (error) throw error;
     return (data || []).map((dbProject: ProjectDB) => mapProjectFromDB(dbProject));

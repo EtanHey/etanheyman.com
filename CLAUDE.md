@@ -146,10 +146,20 @@ CREATE TABLE project_journey_steps (
 **Always use proper migration files** - Never modify database directly via tools
 
 ### Migration Workflow:
-1. **Create migration file** in `/supabase/migrations/` (if using local migrations)
+1. **Create migration file FIRST** in `/supabase/migrations/` with timestamp naming
+   - Format: `YYYYMMDD_descriptive_name.sql`
+   - Example: `20251021_add_missing_technologies_to_enum.sql`
+   - **CRITICAL**: Always save locally BEFORE applying to database!
 2. **Test the migration** thoroughly before applying
 3. **Apply migration** using `mcp__supabase__apply_migration` tool
 4. **Commit the migration file** to git for version control
+
+### Important Rules:
+- ✅ **ALWAYS** create local migration file first
+- ✅ **ALWAYS** version control migrations
+- ✅ Use descriptive names in snake_case
+- ❌ **NEVER** apply migrations without saving locally first
+- ❌ **NEVER** use `mcp__supabase__execute_sql` for schema changes (read-only queries only)
 
 ### Important Rules:
 - ✅ Always review migration SQL before applying
