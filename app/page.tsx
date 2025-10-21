@@ -1,6 +1,7 @@
 import { getAllProjects } from "@/lib/projects";
 import Link from "next/link";
 import Me from "./components/Me";
+import { ArrowRight } from "lucide-react";
 
 export default async function Home() {
   // Fetch all projects
@@ -170,6 +171,16 @@ export default async function Home() {
                 </div>
               </Link>
             ))}
+          </div>
+
+          {/* View All Projects Button */}
+          <div className="flex justify-center pt-4">
+            <Link href="/projects">
+              <button className="bg-primary flex items-center justify-center gap-2 rounded-[80px] py-4 px-8 text-[18px] font-normal text-white transition-all hover:bg-blue-600 active:scale-[0.98] sm:px-12 md:h-[60px] md:px-16 md:text-[20px] whitespace-nowrap">
+                View All Projects
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            </Link>
           </div>
         </div>
       </section>
