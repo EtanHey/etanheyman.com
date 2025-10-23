@@ -13,12 +13,15 @@ export type TechIconName =
   | "Cypress"
   | "Dart"
   | "Dndkit"
+  | "Docker"
   | "Expo"
+  | "FastAPI"
   | "Figma"
   | "Github"
   | "Go"
   | "Google"
   | "HTML5"
+  | "HuggingFace"
   | "Jest"
   | "Jira"
   | "Make"
@@ -28,9 +31,12 @@ export type TechIconName =
   | "Motion"
   | "NPM"
   | "NextJS"
+  | "Next.js"
   | "Node"
   | "Postman"
   | "Prettier"
+  | "Python"
+  | "PyTorch"
   | "React"
   | "ReactLeaflet"
   | "Redux"
@@ -39,7 +45,8 @@ export type TechIconName =
   | "Tailwind"
   | "VanillaJS"
   | "Vue"
-  | "Yarn";
+  | "Yarn"
+  | "YOLOv8";
 
 interface TechIconWrapperProps extends Omit<TechIconProps, "className"> {
   name: TechIconName;
@@ -58,12 +65,18 @@ export const techIconMap: Record<TechIconName, React.FC<TechIconProps>> = {
   Github: TechIcons.GithubIcon,
   Postman: TechIcons.PostmanIcon,
   Cypress: TechIcons.CypressIcon,
+  Docker: TechIcons.DockerIcon,
   Expo: TechIcons.ExpoIcon,
+  FastAPI: TechIcons.FastAPIIcon,
   Bubble: TechIcons.BubbleIcon,
+  HuggingFace: TechIcons.HuggingFaceIcon,
   Make: TechIcons.MakeIcon,
   Node: TechIcons.NodeIcon,
   Axios: TechIcons.AxiosIcon,
   NextJS: TechIcons.NextJSIcon,
+  "Next.js": TechIcons.NextJSIcon, // Alias for NextJS
+  Python: TechIcons.PythonIcon,
+  PyTorch: TechIcons.PyTorchIcon,
   Go: TechIcons.GoIcon,
   Socket: TechIcons.SocketIcon,
   Google: TechIcons.GoogleIcon,
@@ -79,6 +92,7 @@ export const techIconMap: Record<TechIconName, React.FC<TechIconProps>> = {
   Svelte: TechIcons.SvelteIcon,
   Vue: TechIcons.VueIcon,
   Yarn: TechIcons.YarnIcon,
+  YOLOv8: TechIcons.YOLOv8Icon,
   Dart: TechIcons.DartIcon,
   MaterialUI: TechIcons.MaterialUIIcon,
   Motion: TechIcons.MotionIcon,
@@ -92,7 +106,9 @@ export const TechIconWrapper: React.FC<TechIconWrapperProps> = ({
   iconClassName = "",
   ...iconProps
 }) => {
-  const IconComponent = techIconMap[name];
+  // Handle alternative names
+  const mappedName = name === "Next.js" ? "NextJS" : name;
+  const IconComponent = techIconMap[mappedName as TechIconName];
 
   if (!IconComponent) {
     console.warn(`Tech icon "${name}" not found`);

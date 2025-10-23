@@ -1,0 +1,54 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="180" height="180" rx="60" fill="#001440"/>
+
+  <!-- Grid pattern for AI/ML theme -->
+  <g opacity="0.1">
+    <line x1="30" y1="0" x2="30" y2="180" stroke="#0F82EB" stroke-width="1"/>
+    <line x1="60" y1="0" x2="60" y2="180" stroke="#0F82EB" stroke-width="1"/>
+    <line x1="90" y1="0" x2="90" y2="180" stroke="#0F82EB" stroke-width="1"/>
+    <line x1="120" y1="0" x2="120" y2="180" stroke="#0F82EB" stroke-width="1"/>
+    <line x1="150" y1="0" x2="150" y2="180" stroke="#0F82EB" stroke-width="1"/>
+    <line x1="0" y1="30" x2="180" y2="30" stroke="#0F82EB" stroke-width="1"/>
+    <line x1="0" y1="60" x2="180" y2="60" stroke="#0F82EB" stroke-width="1"/>
+    <line x1="0" y1="90" x2="180" y2="90" stroke="#0F82EB" stroke-width="1"/>
+    <line x1="0" y1="120" x2="180" y2="120" stroke="#0F82EB" stroke-width="1"/>
+    <line x1="0" y1="150" x2="180" y2="150" stroke="#0F82EB" stroke-width="1"/>
+  </g>
+
+  <!-- Simplified hand silhouette -->
+  <g transform="translate(90, 90)">
+    <!-- Hand shape -->
+    <path d="M -20 10
+             L -20 -15 Q -20 -20 -15 -20 Q -10 -20 -10 -15
+             L -10 -25 Q -10 -30 -5 -30 Q 0 -30 0 -25
+             L 0 -30 Q 0 -35 5 -35 Q 10 -35 10 -30
+             L 10 -25 Q 10 -30 15 -30 Q 20 -30 20 -25
+             L 20 0
+             L 25 -5 Q 30 -10 35 -5 Q 40 0 35 5
+             L 20 20
+             Q 20 35 5 35
+             L -10 35
+             Q -20 35 -20 25
+             Z"
+          fill="#0F82EB"
+          opacity="0.9"/>
+
+    <!-- Detection nodes -->
+    <circle cx="-15" cy="-17" r="4" fill="#88CFF8"/>
+    <circle cx="-5" cy="-27" r="4" fill="#88CFF8"/>
+    <circle cx="5" cy="-32" r="4" fill="#88CFF8"/>
+    <circle cx="15" cy="-27" r="4" fill="#88CFF8"/>
+    <circle cx="32" cy="0" r="4" fill="#88CFF8"/>
+
+    <!-- Connecting lines for neural network effect -->
+    <line x1="-15" y1="-17" x2="-5" y2="-27" stroke="#59BCF5" stroke-width="1" opacity="0.5"/>
+    <line x1="-5" y1="-27" x2="5" y2="-32" stroke="#59BCF5" stroke-width="1" opacity="0.5"/>
+    <line x1="5" y1="-32" x2="15" y2="-27" stroke="#59BCF5" stroke-width="1" opacity="0.5"/>
+    <line x1="15" y1="-27" x2="32" y2="0" stroke="#59BCF5" stroke-width="1" opacity="0.5"/>
+  </g>
+
+  <!-- Corner accent -->
+  <circle cx="150" cy="30" r="8" fill="#88CFF8" opacity="0.8"/>
+  <circle cx="30" cy="150" r="8" fill="#59BCF5" opacity="0.8"/>
+</svg>

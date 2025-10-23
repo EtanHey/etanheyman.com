@@ -43,3 +43,6 @@ next-env.d.ts
 # claude
 .claude/
 claude.scratchpad.md
+
+# project research
+project-research/
