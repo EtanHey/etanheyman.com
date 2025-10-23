@@ -3,6 +3,10 @@ import { getProjectById } from "@/lib/projects";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import {
+  TechIconWrapper,
+  TechIconName,
+} from "@/app/components/tech-icons/TechIconWrapper";
 
 export default async function ProjectPage({
   params,
@@ -35,13 +39,28 @@ export default async function ProjectPage({
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:gap-8">
             {project.logoUrl && (
-              <div className="relative z-30 h-[120px] w-[120px] overflow-hidden rounded-[40px] bg-white/10 shadow-[0px_0px_80px_0px_rgba(15,130,235,1)] md:h-[180px] md:w-[180px]">
-                <Image
-                  src={project.logoUrl}
-                  alt={`${project.title} logo`}
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative z-30 aspect-square h-[120px] w-[120px] flex-shrink-0 overflow-hidden rounded-[40px] shadow-[0px_0px_80px_0px_rgba(15,130,235,1)] md:h-[180px] md:w-[180px]">
+                {/* Check if logo is SVG or has #svg/#logo marker */}
+                {(project.logoUrl.toLowerCase().endsWith('.svg') ||
+                  project.logoUrl.includes('#svg') ||
+                  project.logoUrl.includes('#logo')) ? (
+                  <>
+                    {/* Add light background for SVG/logo files */}
+                    <div className="absolute inset-0 bg-blue-50" />
+                    <img
+                      src={project.logoUrl.replace('#svg', '').replace('#logo', '')}
+                      alt={`${project.title} logo`}
+                      className="relative h-full w-full object-contain p-4"
+                    />
+                  </>
+                ) : (
+                  <Image
+                    src={project.logoUrl}
+                    alt={`${project.title} logo`}
+                    fill
+                    className="object-contain"
+                  />
+                )}
               </div>
             )}
             <div>
@@ -105,16 +124,9 @@ export default async function ProjectPage({
       {/* Technologies */}
       {project.technologies && project.technologies.length > 0 && (
         <div className="relative z-20 mb-16">
-          <div className="flex flex-wrap justify-center gap-8 md:justify-start md:gap-12">
+          <div className="grid grid-cols-6 gap-[23.45px] md:grid-cols-8 xl:gap-11">
             {project.technologies.map((tech) => (
-              <div
-                key={tech}
-                className="relative z-30 flex h-[55px] w-[60px] items-center justify-center rounded-tl-[420px] rounded-br-[420px] rounded-bl-[420px] bg-white/10 shadow-[0px_0px_34px_0px_rgba(15,130,235,1)] md:h-[75px] md:w-[82px]"
-              >
-                <span className="text-xs font-medium text-white md:text-sm">
-                  {tech}
-                </span>
-              </div>
+              <TechIconWrapper key={tech} name={tech as TechIconName} />
             ))}
           </div>
         </div>

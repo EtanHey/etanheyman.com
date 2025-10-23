@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ReactNode, useMemo, useState } from "react";
 
 interface TechWrapperProps {

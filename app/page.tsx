@@ -1,12 +1,13 @@
-import { prisma as db } from "@/lib/db";
+import { getAllProjects } from "@/lib/projects";
 import Link from "next/link";
 import Me from "./components/Me";
+import { ArrowRight } from "lucide-react";
+import { FeaturedProjectCard, HomeProjectCard } from "@/app/components/ProjectCard";
 
 export default async function Home() {
   // Fetch all projects
-  const projects = await db.project.findMany({
-    take: 5,
-  });
+  const allProjects = await getAllProjects();
+  const projects = allProjects.slice(0, 5);
 
   // Find featured project or use first one
   const featuredProject = projects.find((p) => p.featured) || projects[0];
@@ -77,100 +78,23 @@ export default async function Home() {
       <section id="projects" className="px-[18px] py-10 sm:px-8 md:px-12 lg:px-20 xl:px-40 2xl:px-[323px] md:py-16 lg:py-20 xl:py-[100px] scroll-mt-[80px] sm:scroll-mt-[60px] md:scroll-mt-[40px] lg:scroll-mt-[20px]">
         <div className="mx-auto max-w-[354px] sm:max-w-[500px] md:max-w-none space-y-8 sm:space-y-10 md:space-y-12">
           {/* Featured Project - Full Width */}
-          {featuredProject && (
-            <Link
-              key={featuredProject.id}
-              href={`/projects/${featuredProject.id}`}
-              className="block"
-            >
-              <div className="relative h-[300px] sm:h-[350px] md:h-[380px] lg:h-[394px] overflow-hidden rounded-[40px] border border-white bg-gray-900 shadow-lg transition-all duration-300 hover:scale-[1.02] md:hover:scale-100 md:hover:shadow-[0px_0px_32px_0px_rgba(136,207,248,1)]">
-                {/* Background Image */}
-                {featuredProject.previewImage ? (
-                  <img
-                    src={featuredProject.previewImage}
-                    alt={featuredProject.title}
-                    className="absolute inset-0 h-full w-full object-cover object-center"
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-pink-300 to-orange-300" />
-                )}
-
-                {/* Dark Gradient Overlay - Figma exact gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#00003F] from-[10%] via-[#00003F]/0 via-[55%] to-transparent" />
-
-                {/* Content Container */}
-                <div className="absolute inset-0 flex flex-col justify-between p-6 md:px-12 md:py-10">
-                  {/* Framework Tag - Top Right */}
-                  {featuredProject.framework && (
-                    <div className="flex justify-end">
-                      <span className="inline-block rounded-[40px] bg-[#00003F] px-3 py-2 text-[14px] font-normal text-white sm:px-4 sm:py-2.5 md:px-4 md:py-3 md:text-[16px]">
-                        {featuredProject.framework}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Project Info - Bottom */}
-                  <div className="flex flex-col gap-1 md:gap-4">
-                    <h3 className="font-[Nutmeg] text-[22px] font-semibold text-white sm:text-[26px] md:text-[28px] lg:text-[32px]">
-                      {featuredProject.title}
-                    </h3>
-                    <p className="font-[Nutmeg] line-clamp-2 text-[15px] leading-[1.2] text-white font-light sm:text-[16px] md:max-w-[622px] md:text-[17px] lg:text-[18px]">
-                      {featuredProject.shortDescription ||
-                        featuredProject.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          )}
+          {featuredProject && <FeaturedProjectCard project={featuredProject} />}
 
           {/* Other Projects - Grid */}
           <div className="flex flex-col gap-8 sm:gap-10 md:grid md:grid-cols-2 md:gap-8 lg:gap-10 xl:gap-12">
             {otherProjects.map((project) => (
-              <Link
-                key={project.id}
-                href={`/projects/${project.id}`}
-                className="block"
-              >
-                <div className="relative h-[300px] sm:h-[350px] md:aspect-square md:h-auto overflow-hidden rounded-[40px] border border-white bg-gray-900 shadow-lg transition-all duration-300 hover:scale-[1.02] md:hover:scale-100 md:hover:shadow-[0px_0px_32px_0px_rgba(136,207,248,1)]">
-                  {/* Background Image */}
-                  {project.previewImage ? (
-                    <img
-                      src={project.previewImage}
-                      alt={project.title}
-                      className="absolute inset-0 h-full w-full object-cover object-center"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-pink-300 to-orange-300" />
-                  )}
-
-                  {/* Dark Gradient Overlay - Figma exact gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#00003F] from-[10%] via-[#00003F]/0 via-[55%] to-transparent" />
-
-                  {/* Content Container */}
-                  <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-8 md:p-8 lg:p-10 xl:px-12 xl:py-10">
-                    {/* Framework Tag - Top Right */}
-                    {project.framework && (
-                      <div className="flex justify-end">
-                        <span className="inline-block rounded-[40px] bg-[#00003F] px-3 py-2 text-[14px] font-normal text-white sm:px-4 sm:py-2.5 md:px-4 md:py-3 md:text-[16px]">
-                          {project.framework}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Project Info - Bottom */}
-                    <div className="flex flex-col gap-1 md:gap-2 lg:gap-4">
-                      <h3 className="font-[Nutmeg] text-[22px] font-semibold text-white sm:text-[26px] md:text-[24px] lg:text-[28px] xl:text-[32px]">
-                        {project.title}
-                      </h3>
-                      <p className="font-[Nutmeg] line-clamp-2 text-[15px] leading-[1.2] text-white font-light sm:text-[16px] md:text-[16px] lg:text-[17px] xl:text-[18px]">
-                        {project.shortDescription || project.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
+              <HomeProjectCard key={project.id} project={project} />
             ))}
+          </div>
+
+          {/* View All Projects Button */}
+          <div className="flex justify-center pt-4">
+            <Link href="/projects">
+              <button className="bg-primary flex items-center justify-center gap-2 rounded-[80px] py-4 px-8 text-[18px] font-normal text-white transition-all hover:bg-blue-600 active:scale-[0.98] sm:px-12 md:h-[60px] md:px-16 md:text-[20px] whitespace-nowrap">
+                View All Projects
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            </Link>
           </div>
         </div>
       </section>
