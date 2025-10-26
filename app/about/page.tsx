@@ -14,7 +14,7 @@ import {
 import { useRegion } from "../hooks/useRegion";
 
 const AboutPage = () => {
-  const { contactInfo } = useRegion();
+  const { contactInfo, isLoading } = useRegion();
   const careerSectionRef = useRef<HTMLDivElement>(null);
   const [careerSectionPosition, setCareerSectionPosition] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -68,7 +68,11 @@ const AboutPage = () => {
           <div className="flex items-center gap-4">
             <LocationIcon />
             <h3 className="text-2xl font-light xl:text-[32px]">
-              {contactInfo.location}
+              {isLoading ? (
+                <span className="opacity-50">Loading location...</span>
+              ) : (
+                contactInfo.location
+              )}
             </h3>
           </div>
           <p className="text-sm font-light xl:text-xl">
