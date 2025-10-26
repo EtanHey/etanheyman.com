@@ -4,43 +4,61 @@ import { useEffect, useRef, useState } from "react";
 import SendRightPointer from "./SendRightPointer";
 import TimelineItem from "./TimelineItem";
 
-// Timeline data
+// Timeline data - ordered from newest to oldest
 const timelineData = [
   {
-    period: "2013-2016",
-    title: "Art major, Ironi Alef school of Arts and Sciences, Modi'in, Israel",
+    period: "08/2024-TODAY",
+    title: "Software Engineer • Cantaloupe AI - New Orleans, LA/Denver, CO",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Front-end focused full-stack developer building Cantaloupe AI's hiring platform from the ground up, working across React Native, Svelte, Bubble.io and Next.js. Joined when it was just an early mockup, helped create the MVP and progressed to create a working platform that connects hospitality and construction candidates with employers through AI-powered interviews. Implemented Vapi.ai integration for automated candidate screening (reducing manual work by 80%), designed database schemas, built real-time features, created responsive dashboards, and integrated third-party services including Merge.dev ATS/HRIS systems, Google Maps APIs, Twilio messaging, and a bilingual Spanish/English front end using i18n.",
   },
   {
-    period: "2016-2019",
-    title: "IDF service",
+    period: "11/2023-08/2024",
+    title: "Full Stack Developer & Project Lead • Weby - Remote (Israel)",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Developed as a front-end developer in a team, full-stack developer independently, and team leader for a group of developers at a company founded by INT College graduates. Built projects using Next.js, Tailwind CSS, Cloudinary, and Mongoose. Key projects: CMS system for a photographer using Cloudinary according to Figma designs, two personal trainer landing pages (one with idle timer prompts), and an online candle store with WhatsApp bot integration for organized orders.",
+  },
+  {
+    period: "07/2023-11/2023",
+    title: "Sales Associate • LensCrafters - New Orleans, LA",
+    description:
+      "Ensured exceptional customer experience for vision needs while continuing freelance development work. Utilized optical prescriptions to recommend lenses and coatings, assisted in frame selection, and conducted measurements using optical tools.",
+  },
+  {
+    period: "12/2022-06/2023",
+    title: "Front End Developer • JAMSNext - Remote (California)",
+    description:
+      "Worked as part of a team of 3 junior developers building a job tracking application to bridge the gap between applicants and recruiters. Developed the job tracker, a drag-and-drop board for applicants and recruiters to track job applications and candidates, using Next.js, Redux, dnd-kit, and .NET lambda for the backend.",
+  },
+  {
+    period: "08/2022-10/2022",
+    title: "Full Stack Developer Internship • A.D Knight - Remote",
+    description:
+      "Developed a map platform for technicians and executives to find distances between points, locate businesses, and convert coordinates. Built with Vite, React.js, Redux Thunk, Leaflet map library, and Google Places & Distance Matrix APIs for a startup focused on pedestrian safety and traffic management applications.",
+  },
+  {
+    period: "10/2021-10/2022",
+    title: "Full Stack Developer Training • INT College - Tel-Aviv, Israel",
+    description:
+      "Completed comprehensive full-stack development training at Israel's leading online institute for high-tech professional training. Learned to build full-stack applications with HTML5, CSS, TypeScript, React.js, Node.js, MongoDB, MySQL, REST APIs, Cloudinary, and Socket.io. Capstone project: Collaborated in a 20-student team with UX/UI designers to build a web application for Gold Ventures Investment firm connecting entrepreneurs with mentors and investors.",
   },
   {
     period: "2019-2021",
-    title: "Service industry",
+    title: "Service Industry - Israel/New Orleans, LA",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Worked in customer-facing roles, building strong communication skills and learning to work effectively in fast-paced team environments while developing an interest in technology.",
   },
   {
-    period: "2021-2022",
-    title: "Logistic manager, Full-Stack student",
+    period: "2016-2019",
+    title: "IDF Service - Israel",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Completed mandatory military service in the Israel Defense Forces, developing discipline, teamwork, and problem-solving skills in high-pressure environments.",
   },
   {
-    period: "2022-2023",
-    title: "JamsNext internship",
+    period: "2013-2016",
+    title: "Art Major • Ironi Alef School of Arts and Sciences - Modi'in, Israel",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  },
-  {
-    period: "2023-TODAY",
-    title: "Freelance Full-stack developer",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Studied visual arts and creative design, developing a strong foundation in aesthetics and visual communication that would later inform my approach to frontend development and UI/UX work.",
   },
 ];
 
