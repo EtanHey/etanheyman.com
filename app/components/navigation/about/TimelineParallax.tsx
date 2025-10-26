@@ -10,7 +10,7 @@ const timelineData = [
     period: "08/2024-TODAY",
     title: "Software Engineer • Cantaloupe AI - New Orleans, LA/Denver, CO",
     description:
-      "Front-end focused full-stack developer building Cantaloupe AI's recruitment platform from the ground up: React Native → Svelte → Bubble.io → Svelte → Next.js. Joined when it was just an early mockup, helped create the MVP and progressed to create a working platform that connects hospitality and construction candidates with employers through AI-powered interviews. Implemented Vapi.ai integration for automated candidate screening (reducing manual work by 80%), designed database schemas, built real-time features, created responsive dashboards, and integrated third-party services including Merge.dev ATS/HRIS systems, Google Maps APIs, Twilio messaging, and a bilingual Spanish/English front end using i18n.",
+      "Building recruitment platform from the ground up. Tech stack: React Native → Svelte → Bubble.io → Svelte → Next.js. Implemented Vapi.ai integration for automated candidate screening (reducing manual work by 80%), designed database schemas, built real-time features, created responsive dashboards, and integrated third-party services including Merge.dev ATS/HRIS systems, Google Maps APIs, Twilio messaging, and bilingual i18n support.",
   },
   {
     period: "11/2023-08/2024",
@@ -66,25 +66,22 @@ const timelineData = [
 function TimelineItem({
   item,
   index,
-  isPast
+  isPast,
+  isActive,
+  itemRef
 }: {
   item: typeof timelineData[0];
   index: number;
   isPast: boolean;
+  isActive: boolean;
+  itemRef: (el: HTMLDivElement | null) => void;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, {
-    margin: "-45% 0px -45% 0px", // Centered viewport detection
-    amount: 0.3,
-  });
-
-  // Determine dot state: active (in view), past (arrow passed), or future
-  const isActive = isInView && !isPast;
+  // Determine dot state: active (arrow at this item), past (arrow passed), or future
   const isFilled = isActive || isPast;
 
   return (
     <div
-      ref={ref}
+      ref={itemRef}
       className="relative pl-8 sm:pl-10 md:pl-12"
     >
       {/* Timeline dot */}
@@ -140,6 +137,7 @@ const TimelineParallax = () => {
   const timelineRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Track scroll progress for the timeline section
   // Using "center center" makes it track when timeline is in middle of viewport
@@ -148,15 +146,22 @@ const TimelineParallax = () => {
     offset: ["start center", "end center"],
   });
 
-  // Smooth the progress for better visual effect
+  // Very light smoothing for line progress (visual polish)
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 300,
+    damping: 40,
+    restDelta: 0.001,
+  });
+
+  // Arrow position with minimal smoothing for responsiveness
+  const arrowScrollProgress = useSpring(scrollYProgress, {
+    stiffness: 400,
+    damping: 50,
     restDelta: 0.001,
   });
 
   // Map scroll progress to arrow position - use percentage directly
-  const arrowTop = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const arrowTop = useTransform(arrowScrollProgress, [0, 1], ["0%", "100%"]);
 
   // Arrow opacity - visible throughout most of the timeline
   const arrowOpacity = useTransform(
@@ -165,13 +170,66 @@ const TimelineParallax = () => {
     [0, 1, 1, 0]
   );
 
-  // Track current progress to determine which items are "past"
-  const [currentPastIndex, setCurrentPastIndex] = useState(0);
+  // Track current active and past items
+  const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
 
-  // Update past index as user scrolls
+  // Update active index based on arrow position relative to actual DOM elements
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const pastIndex = Math.floor(latest * timelineData.length);
-    setCurrentPastIndex(pastIndex);
+    if (!timelineRef.current) return;
+
+    // Get timeline container bounds
+    const timelineRect = timelineRef.current.getBoundingClientRect();
+    const timelineHeight = timelineRect.height;
+
+    // Calculate arrow's absolute position within timeline
+    const arrowPosition = latest * timelineHeight;
+
+    // Find which item the arrow is currently at or has passed
+    let activeIndex = 0;
+    let foundMatch = false;
+
+    for (let i = 0; i < itemRefs.current.length; i++) {
+      const itemEl = itemRefs.current[i];
+      if (!itemEl) continue;
+
+      const itemRect = itemEl.getBoundingClientRect();
+      const timelineTop = timelineRect.top;
+      const itemTop = itemRect.top - timelineTop;
+      const itemBottom = itemTop + itemRect.height;
+
+      // Check if arrow is within this item's bounds
+      if (arrowPosition >= itemTop && arrowPosition < itemBottom) {
+        activeIndex = i;
+        foundMatch = true;
+        break;
+      }
+
+      // Check if arrow is between this item and the next item (in the gap)
+      if (i < itemRefs.current.length - 1) {
+        const nextItemEl = itemRefs.current[i + 1];
+        if (nextItemEl) {
+          const nextItemRect = nextItemEl.getBoundingClientRect();
+          const nextItemTop = nextItemRect.top - timelineTop;
+
+          // If arrow is in the gap between items, use the next item as active
+          if (arrowPosition >= itemBottom && arrowPosition < nextItemTop) {
+            activeIndex = i + 1;
+            foundMatch = true;
+            break;
+          }
+        }
+      }
+
+      // If we're past all items, set to last item
+      if (i === itemRefs.current.length - 1 && arrowPosition >= itemBottom) {
+        activeIndex = i;
+        foundMatch = true;
+      }
+    }
+
+    if (foundMatch) {
+      setCurrentActiveIndex(activeIndex);
+    }
   });
 
   return (
@@ -213,7 +271,11 @@ const TimelineParallax = () => {
               key={index}
               item={item}
               index={index}
-              isPast={index < currentPastIndex}
+              isActive={index === currentActiveIndex}
+              isPast={index < currentActiveIndex}
+              itemRef={(el) => {
+                itemRefs.current[index] = el;
+              }}
             />
           ))}
         </div>
