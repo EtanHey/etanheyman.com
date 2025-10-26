@@ -1,9 +1,10 @@
+import { geolocation } from '@vercel/functions';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // Get country from Vercel's geolocation headers
-  const country = request.geo?.country || 'US';
+  // Get country from Vercel's geolocation
+  const { country = 'US' } = geolocation(request);
 
   // Create response
   const response = NextResponse.next();
