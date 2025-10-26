@@ -10,7 +10,7 @@ const timelineData = [
     period: "08/2024-TODAY",
     title: "Software Engineer • Cantaloupe AI - New Orleans, LA/Denver, CO",
     description:
-      "Front-end focused full-stack developer building Cantaloupe AI's hiring platform from the ground up, working across React Native, Svelte, Bubble.io and Next.js. Joined when it was just an early mockup, helped create the MVP and progressed to create a working platform that connects hospitality and construction candidates with employers through AI-powered interviews. Implemented Vapi.ai integration for automated candidate screening (reducing manual work by 80%), designed database schemas, built real-time features, created responsive dashboards, and integrated third-party services including Merge.dev ATS/HRIS systems, Google Maps APIs, Twilio messaging, and a bilingual Spanish/English front end using i18n.",
+      "Front-end focused full-stack developer building Cantaloupe AI's recruitment platform from the ground up: React Native → Svelte → Bubble.io → Svelte → Next.js. Joined when it was just an early mockup, helped create the MVP and progressed to create a working platform that connects hospitality and construction candidates with employers through AI-powered interviews. Implemented Vapi.ai integration for automated candidate screening (reducing manual work by 80%), designed database schemas, built real-time features, created responsive dashboards, and integrated third-party services including Merge.dev ATS/HRIS systems, Google Maps APIs, Twilio messaging, and a bilingual Spanish/English front end using i18n.",
   },
   {
     period: "11/2023-08/2024",

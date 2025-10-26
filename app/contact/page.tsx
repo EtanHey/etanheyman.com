@@ -8,8 +8,10 @@ import SendIcon from "../components/navigation/about/SendIcon";
 import { PhoneInput } from "../components/ui/phone-input";
 import { ContactFormData, submitContactForm } from "./actions";
 import { SocialLinks } from "../components/SocialLinks";
+import { useRegion } from "../hooks/useRegion";
 
 export default function Contact() {
+  const { contactInfo } = useRegion();
   const [formValues, setFormValues] = useState({
     fullName: "",
     email: "",
@@ -132,7 +134,7 @@ export default function Contact() {
                 <div className="focus-within:border-primary border-b border-blue-900">
                   <PhoneInput
                     international
-                    defaultCountry="US"
+                    defaultCountry={contactInfo.defaultCountry as any}
                     value={phoneValue}
                     onChange={handlePhoneChange}
                     className="border-none focus-within:outline-none [&_.rounded-e-lg]:rounded-none [&_.rounded-e-lg]:border-none [&_.rounded-e-lg]:bg-transparent [&_.rounded-e-lg]:shadow-none [&_.rounded-e-lg]:focus:outline-none"
@@ -257,11 +259,11 @@ export default function Contact() {
               <div className="flex items-center gap-6">
                 <PhoneIcon aria-hidden="true" />
                 <Link
-                  href="tel:+17179629684"
+                  href={`tel:${contactInfo.phone}`}
                   className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-                  aria-label="Call me at +1 717 962 9684"
+                  aria-label={`Call me at ${contactInfo.phoneDisplay}`}
                 >
-                  +1 717 962 9684
+                  {contactInfo.phoneDisplay}
                 </Link>
               </div>
 
@@ -279,13 +281,13 @@ export default function Contact() {
               <div className="flex items-center gap-6">
                 <LocationIcon aria-hidden="true" />
                 <Link
-                  href="https://www.google.com/maps/place/Highland,+denver,+CO"
+                  href={contactInfo.locationUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-                  aria-label="View Denver, Colorado location on Google Maps"
+                  aria-label={`View ${contactInfo.location} on Google Maps`}
                 >
-                  Denver, Colorado, USA
+                  {contactInfo.location}
                 </Link>
               </div>
             </div>
