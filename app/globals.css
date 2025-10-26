@@ -230,10 +230,11 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-family-nutmeg);
   }
 
-  /* Apply Nutmeg font to all headers */
-  h1, h2, h3, h4, h5, h6 {
+  /* Ensure all text elements use Nutmeg font */
+  h1, h2, h3, h4, h5, h6, p, a, span, button, input, textarea, label, li, div {
     font-family: var(--font-family-nutmeg);
   }
 }
