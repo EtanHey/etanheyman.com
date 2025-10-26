@@ -54,7 +54,7 @@ const AboutPage = () => {
   }, [isInitialized, careerSectionPosition]);
 
   return (
-    <div className="z-20 flex min-h-screen w-full flex-col items-start justify-items-center gap-20 px-4.5 py-8 font-[family-name:var(--font-geist-sans)] sm:p-20">
+    <div className="z-20 flex min-h-screen w-full flex-col items-start justify-items-center gap-20 px-4.5 py-8 sm:p-20">
       <div className="flex w-full place-content-between gap-20 max-xl:flex-col sm:items-center 2xl:place-content-around">
         <div className="flex max-w-[654px] flex-col gap-4">
           <h1 className="pb-2 text-[34px] leading-5.5 font-bold xl:pb-4 xl:text-[64px] xl:leading-16 xl:text-nowrap">
