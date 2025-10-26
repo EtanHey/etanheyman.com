@@ -12,6 +12,7 @@ import {
   TechIconWrapper,
 } from "../components/tech-icons/TechIconWrapper";
 import { useRegion } from "../hooks/useRegion";
+import { LoadingText } from "../components/ui/LoadingText";
 
 const AboutPage = () => {
   const { contactInfo, isLoading } = useRegion();
@@ -69,7 +70,7 @@ const AboutPage = () => {
             <LocationIcon />
             <h3 className="text-2xl font-light xl:text-[32px]">
               {isLoading ? (
-                <span className="opacity-50">Loading location...</span>
+                <LoadingText>Loading location...</LoadingText>
               ) : (
                 contactInfo.location
               )}

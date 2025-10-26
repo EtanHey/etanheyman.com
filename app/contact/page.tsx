@@ -9,6 +9,7 @@ import { PhoneInput } from "../components/ui/phone-input";
 import { ContactFormData, submitContactForm } from "./actions";
 import { SocialLinks } from "../components/SocialLinks";
 import { useRegion } from "../hooks/useRegion";
+import { LoadingText } from "../components/ui/LoadingText";
 
 export default function Contact() {
   const { contactInfo, isLoading: isRegionLoading } = useRegion();
@@ -259,7 +260,7 @@ export default function Contact() {
               <div className="flex items-center gap-6">
                 <PhoneIcon aria-hidden="true" />
                 {isRegionLoading ? (
-                  <span className="opacity-50">Loading...</span>
+                  <LoadingText />
                 ) : (
                   <Link
                     href={`tel:${contactInfo.phone}`}
@@ -285,7 +286,7 @@ export default function Contact() {
               <div className="flex items-center gap-6">
                 <LocationIcon aria-hidden="true" />
                 {isRegionLoading ? (
-                  <span className="opacity-50">Loading...</span>
+                  <LoadingText />
                 ) : (
                   <Link
                     href={contactInfo.locationUrl}
