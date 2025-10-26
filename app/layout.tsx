@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -10,6 +11,34 @@ import {
 import Nav from "./components/navigation/Nav";
 import AuthSessionProvider from "./providers/SessionProvider";
 import AdminFloatingMenu from "./components/AdminFloatingMenu";
+
+// Configure Nutmeg font for headers (purchased web fonts)
+const nutmeg = localFont({
+  src: [
+    {
+      path: "../fonts/nutmeg/nutmeg-light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../fonts/nutmeg/nutmeg-regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../fonts/nutmeg/nutmeg-book.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../fonts/nutmeg/nutmeg-bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-nutmeg",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Etan Heyman",
@@ -86,7 +115,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`relative -z-20 flex h-full min-h-screen flex-col justify-center overscroll-none antialiased *:text-white`}
+        className={`${nutmeg.variable} relative -z-20 flex h-full min-h-screen flex-col justify-center overscroll-none antialiased *:text-white`}
       >
         <AuthSessionProvider>
           {/* Top SVGs (fixed to viewport) */}

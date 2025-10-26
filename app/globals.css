@@ -4,6 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  /* Font families */
+  --font-family-nutmeg: var(--font-nutmeg), ui-sans-serif, system-ui, sans-serif;
+
   --color-background: #00003f;
   --color-foreground: var(--foreground);
 
@@ -227,5 +230,10 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Apply Nutmeg font to all headers */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-nutmeg), ui-sans-serif, system-ui, sans-serif;
   }
 }
