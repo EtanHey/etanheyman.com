@@ -9,9 +9,10 @@ import { PhoneInput } from "../components/ui/phone-input";
 import { ContactFormData, submitContactForm } from "./actions";
 import { SocialLinks } from "../components/SocialLinks";
 import { useRegion } from "../hooks/useRegion";
+import { LoadingText } from "../components/ui/LoadingText";
 
 export default function Contact() {
-  const { contactInfo } = useRegion();
+  const { contactInfo, isLoading: isRegionLoading } = useRegion();
   const [formValues, setFormValues] = useState({
     fullName: "",
     email: "",
@@ -258,13 +259,17 @@ export default function Contact() {
             <div className="flex flex-col gap-8">
               <div className="flex items-center gap-6">
                 <PhoneIcon aria-hidden="true" />
-                <Link
-                  href={`tel:${contactInfo.phone}`}
-                  className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-                  aria-label={`Call me at ${contactInfo.phoneDisplay}`}
-                >
-                  {contactInfo.phoneDisplay}
-                </Link>
+                {isRegionLoading ? (
+                  <LoadingText />
+                ) : (
+                  <Link
+                    href={`tel:${contactInfo.phone}`}
+                    className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                    aria-label={`Call me at ${contactInfo.phoneDisplay}`}
+                  >
+                    {contactInfo.phoneDisplay}
+                  </Link>
+                )}
               </div>
 
               <div className="flex items-center gap-6">
@@ -280,15 +285,19 @@ export default function Contact() {
 
               <div className="flex items-center gap-6">
                 <LocationIcon aria-hidden="true" />
-                <Link
-                  href={contactInfo.locationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-                  aria-label={`View ${contactInfo.location} on Google Maps`}
-                >
-                  {contactInfo.location}
-                </Link>
+                {isRegionLoading ? (
+                  <LoadingText />
+                ) : (
+                  <Link
+                    href={contactInfo.locationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                    aria-label={`View ${contactInfo.location} on Google Maps`}
+                  >
+                    {contactInfo.location}
+                  </Link>
+                )}
               </div>
             </div>
           </div>
