@@ -173,6 +173,16 @@ const TimelineParallax = () => {
   // Track current active and past items
   const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
 
+  // AIDEV-NOTE: Complex active-index calculation using getBoundingClientRect()
+  // This calculates which timeline item the arrow is currently pointing at by checking
+  // the actual DOM element bounds on every scroll event. Trade-offs:
+  // - Accuracy: Always correct even with dynamic content heights or window resizes
+  // - Performance: getBoundingClientRect() is called on every scroll change
+  // The performance impact is acceptable here because:
+  // 1. Framer Motion already optimizes scroll events
+  // 2. We're only checking ~9 elements (timeline items)
+  // 3. The scroll is smoothed with spring physics (stiffness: 400, damping: 50)
+  // Future optimization: Could throttle or cache rect calculations if needed
   // Update active index based on arrow position relative to actual DOM elements
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (!timelineRef.current) return;
