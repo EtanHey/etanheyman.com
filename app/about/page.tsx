@@ -112,9 +112,12 @@ const AboutPage = () => {
             Don’t hesitate to contact me right away!
           </p>
         </div>
-        <button className="flex w-full items-center justify-center gap-2 rounded-[80px] bg-blue-500 py-4 text-xl text-white">
+        <Link
+          href="/contact"
+          className="flex w-full items-center justify-center gap-2 rounded-[80px] bg-blue-500 py-4 text-xl text-white hover:bg-blue-600 transition-colors"
+        >
           Let's talk now! <SendIcon />
-        </button>
+        </Link>
       </div>
     </div>
   );
