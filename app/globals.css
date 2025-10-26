@@ -234,6 +234,6 @@
 
   /* Apply Nutmeg font to all headers */
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-nutmeg), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-family-nutmeg);
   }
 }
