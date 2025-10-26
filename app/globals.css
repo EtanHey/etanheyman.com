@@ -4,6 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  /* Font families - set Nutmeg as default sans font */
+  --font-sans: var(--font-nutmeg), ui-sans-serif, system-ui, sans-serif;
+  --font-family-nutmeg: var(--font-nutmeg), ui-sans-serif, system-ui, sans-serif;
+
   --color-background: #00003f;
   --color-foreground: var(--foreground);
 
@@ -225,7 +229,18 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    font-family: var(--font-nutmeg), ui-sans-serif, system-ui, sans-serif !important;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-nutmeg), ui-sans-serif, system-ui, sans-serif !important;
+  }
+
+  /* Ensure all text elements use Nutmeg font */
+  * {
+    font-family: var(--font-nutmeg), ui-sans-serif, system-ui, sans-serif !important;
   }
 }
