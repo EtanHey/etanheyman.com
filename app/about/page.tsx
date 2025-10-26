@@ -11,8 +11,10 @@ import {
   TechIconName,
   TechIconWrapper,
 } from "../components/tech-icons/TechIconWrapper";
+import { useRegion } from "../hooks/useRegion";
 
 const AboutPage = () => {
+  const { contactInfo } = useRegion();
   const careerSectionRef = useRef<HTMLDivElement>(null);
   const [careerSectionPosition, setCareerSectionPosition] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -65,7 +67,9 @@ const AboutPage = () => {
           </div>
           <div className="flex items-center gap-4">
             <LocationIcon />
-            <h3 className="text-2xl font-light xl:text-[32px]">Denver, CO</h3>
+            <h3 className="text-2xl font-light xl:text-[32px]">
+              {contactInfo.location}
+            </h3>
           </div>
           <p className="text-sm font-light xl:text-xl">
             Highly motivated front-end developer with a strong work ethic and a

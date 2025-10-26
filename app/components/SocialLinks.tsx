@@ -13,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../components/ui/tooltip";
+import { useRegion } from "../hooks/useRegion";
 
 type SocialLinksProps = {
   className?: string;
@@ -25,9 +26,11 @@ export function SocialLinks({
   linkClassName = "",
   iconContainerClassName = "flex items-center justify-center p-1 rounded-full bg-blue-50",
 }: SocialLinksProps) {
+  const { contactInfo } = useRegion();
+
   const socialLinks = [
     {
-      href: "https://wa.me/+17179629684",
+      href: `https://wa.me/${contactInfo.whatsapp}`,
       icon: <WhatsappIcon />,
       label: "WhatsApp",
     },
