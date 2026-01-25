@@ -11,6 +11,9 @@ export type ContactFormData = {
   email: string;
   phone: string;
   message: string;
+  // Anti-spam fields
+  website?: string; // Honeypot - should always be empty
+  formLoadedAt?: number; // Timestamp when form was loaded
 };
 
 // Simple phone number validation that accepts a variety of formats
@@ -30,8 +33,29 @@ function isValidPhoneNumber(phone: string): boolean {
   );
 }
 
+// Minimum time (in ms) a human would take to fill the form
+const MIN_FORM_TIME_MS = 3000; // 3 seconds
+
 export async function submitContactForm(formData: ContactFormData) {
   try {
+    // SPAM CHECK 1: Honeypot field should be empty
+    // Bots typically fill all fields, including hidden ones
+    if (formData.website) {
+      // Silently reject - don't reveal to bots that we detected them
+      console.log("Spam detected: honeypot field filled");
+      return { success: true }; // Fake success to confuse bots
+    }
+
+    // SPAM CHECK 2: Time-based validation
+    // Real humans take at least a few seconds to fill a form
+    if (formData.formLoadedAt) {
+      const timeSpent = Date.now() - formData.formLoadedAt;
+      if (timeSpent < MIN_FORM_TIME_MS) {
+        console.log(`Spam detected: form submitted too fast (${timeSpent}ms)`);
+        return { success: true }; // Fake success to confuse bots
+      }
+    }
+
     // Validate the form data
     if (!formData.fullName || !formData.email || !formData.message) {
       return { success: false, error: "Please fill out all required fields" };
