@@ -23,13 +23,23 @@ type JobStatus = 'new' | 'viewed' | 'saved' | 'applied' | 'rejected' | 'archived
 
 // Job type imported from server actions
 
-const statusConfig: Record<JobStatus, { label: string; color: string; icon: React.ElementType }> = {
-  new: { label: 'New', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30', icon: Star },
-  viewed: { label: 'Viewed', color: 'bg-gray-500/20 text-gray-400 border-gray-500/30', icon: Eye },
-  saved: { label: 'Saved', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30', icon: Bookmark },
-  applied: { label: 'Applied', color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30', icon: Send },
-  rejected: { label: 'Rejected', color: 'bg-red-500/20 text-red-400 border-red-500/30', icon: X },
-  archived: { label: 'Archived', color: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30', icon: Archive },
+const statusConfig: Record<JobStatus, { label: string; color: string; cardBorder: string; icon: React.ElementType }> = {
+  new: { label: 'New', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30', cardBorder: 'border-l-blue-500', icon: Star },
+  viewed: { label: 'Viewed', color: 'bg-gray-500/20 text-gray-400 border-gray-500/30', cardBorder: 'border-l-gray-500', icon: Eye },
+  saved: { label: 'Saved', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30', cardBorder: 'border-l-amber-500', icon: Bookmark },
+  applied: { label: 'Applied', color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30', cardBorder: 'border-l-emerald-500', icon: Send },
+  rejected: { label: 'Rejected', color: 'bg-red-500/20 text-red-400 border-red-500/30', cardBorder: 'border-l-red-500', icon: X },
+  archived: { label: 'Archived', color: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30', cardBorder: 'border-l-zinc-500', icon: Archive },
+};
+
+// Status priority for sorting (lower = higher priority)
+const statusPriority: Record<JobStatus, number> = {
+  applied: 1,
+  saved: 2,
+  new: 3,
+  viewed: 4,
+  rejected: 5,
+  archived: 6,
 };
 
 const sourceConfig: Record<string, { label: string; color: string }> = {
@@ -73,7 +83,7 @@ export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
-  const [filterStatus, setFilterStatus] = useState<JobStatus | 'all'>('new');
+  const [filterStatus, setFilterStatus] = useState<JobStatus | 'all'>('all');
   const [filterSource, setFilterSource] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
@@ -157,6 +167,7 @@ export default function JobsPage() {
   const JobCard = ({ job }: { job: Job }) => {
     const source = sourceConfig[job.source] || { label: job.source, color: 'text-white/60' };
     const isSelected = selectedJob?.id === job.id;
+    const statusStyle = statusConfig[job.status as JobStatus] || statusConfig.new;
 
     // All cards use consistent LTR layout for visual uniformity
     return (
@@ -167,7 +178,7 @@ export default function JobsPage() {
             updateJobStatus(job.id, 'viewed');
           }
         }}
-        className={`w-full text-left p-4 rounded-lg border transition-all ${
+        className={`w-full text-left p-4 rounded-lg border-l-4 border transition-all ${statusStyle.cardBorder} ${
           isSelected
             ? 'bg-white/10 border-white/30'
             : 'bg-white/5 border-white/10 hover:bg-white/[0.07]'
@@ -302,8 +313,25 @@ export default function JobsPage() {
     );
   };
 
+  // Calculate status counts
+  const statusCounts = jobs.reduce((acc, job) => {
+    acc[job.status as JobStatus] = (acc[job.status as JobStatus] || 0) + 1;
+    return acc;
+  }, {} as Record<JobStatus, number>);
+
   const filteredCount = jobs.length;
-  const newCount = jobs.filter((j) => j.status === 'new').length;
+  const newCount = statusCounts.new || 0;
+  const appliedCount = statusCounts.applied || 0;
+  const savedCount = statusCounts.saved || 0;
+
+  // Sort jobs: applied first, then saved, then new, etc., then by date
+  const sortedJobs = [...jobs].sort((a, b) => {
+    const priorityA = statusPriority[a.status as JobStatus] || 99;
+    const priorityB = statusPriority[b.status as JobStatus] || 99;
+    if (priorityA !== priorityB) return priorityA - priorityB;
+    // Within same status, sort by date (newest first)
+    return new Date(b.scraped_at).getTime() - new Date(a.scraped_at).getTime();
+  });
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
@@ -323,7 +351,7 @@ export default function JobsPage() {
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition-colors ${
-              showFilters || filterStatus !== 'new' || filterSource !== 'all'
+              showFilters || filterSource !== 'all'
                 ? 'border-white/30 bg-white/10 text-white'
                 : 'border-white/10 text-white/60 hover:bg-white/5'
             }`}
@@ -375,11 +403,56 @@ export default function JobsPage() {
           </div>
         )}
 
-        {/* Stats bar */}
-        <div className="flex items-center gap-4 text-sm text-white/60">
-          <span>{filteredCount} jobs</span>
-          {newCount > 0 && filterStatus === 'all' && (
-            <span className="text-blue-400">{newCount} new</span>
+        {/* Quick filter chips */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={() => setFilterStatus('all')}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+              filterStatus === 'all'
+                ? 'bg-white/20 text-white'
+                : 'bg-white/5 text-white/60 hover:bg-white/10'
+            }`}
+          >
+            All ({filteredCount})
+          </button>
+          {newCount > 0 && (
+            <button
+              onClick={() => setFilterStatus('new')}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                filterStatus === 'new'
+                  ? 'bg-blue-500/30 text-blue-300'
+                  : 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20'
+              }`}
+            >
+              <Star className="h-3 w-3 inline mr-1" />
+              New ({newCount})
+            </button>
+          )}
+          {appliedCount > 0 && (
+            <button
+              onClick={() => setFilterStatus('applied')}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                filterStatus === 'applied'
+                  ? 'bg-emerald-500/30 text-emerald-300'
+                  : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
+              }`}
+            >
+              <Send className="h-3 w-3 inline mr-1" />
+              Applied ({appliedCount})
+            </button>
+          )}
+          {savedCount > 0 && (
+            <button
+              onClick={() => setFilterStatus('saved')}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                filterStatus === 'saved'
+                  ? 'bg-amber-500/30 text-amber-300'
+                  : 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20'
+              }`}
+            >
+              <Bookmark className="h-3 w-3 inline mr-1" />
+              Saved ({savedCount})
+            </button>
           )}
         </div>
       </div>
@@ -400,7 +473,7 @@ export default function JobsPage() {
                 <p className="text-sm mt-1">Try adjusting your filters</p>
               </div>
             ) : (
-              jobs.map((job) => <JobCard key={job.id} job={job} />)
+              sortedJobs.map((job) => <JobCard key={job.id} job={job} />)
             )}
           </div>
         </div>
