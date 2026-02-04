@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import MenuTrigger from "./MenuTrigger";
 import PopupMenu from "./PopupMenu";
@@ -8,6 +9,12 @@ import { SocialLinks } from "../SocialLinks";
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Hide nav for golem admin dashboard (has its own nav)
+  if (pathname?.startsWith("/admin/golem")) {
+    return null;
+  }
 
   return (
     <nav className="bg-background sticky top-0 z-10 h-full w-full px-4.5 pt-3 pb-4">
