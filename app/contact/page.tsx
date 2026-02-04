@@ -24,6 +24,11 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Anti-spam: honeypot field (should remain empty)
+  const [honeypot, setHoneypot] = useState("");
+  // Anti-spam: track when form was loaded
+  const [formLoadedAt] = useState(() => Date.now());
+
   const handlePhoneChange = useRef((value: string | undefined) => {
     setPhoneValue(value);
   }).current;
@@ -51,6 +56,9 @@ export default function Contact() {
     const formData: ContactFormData = {
       ...formValues,
       phone,
+      // Anti-spam fields
+      website: honeypot,
+      formLoadedAt,
     };
 
     try {
@@ -157,6 +165,23 @@ export default function Contact() {
                   className="focus:border-primary focus:ring-primary/20 h-20 w-full border-b border-blue-900 p-2 py-2 focus:ring-2 focus:outline-none"
                   placeholder="Write your message here"
                   aria-required="true"
+                />
+              </div>
+
+              {/* Honeypot field - hidden from humans, visible to bots */}
+              <div
+                className="absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+                aria-hidden="true"
+              >
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
                 />
               </div>
 
