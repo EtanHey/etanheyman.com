@@ -23,7 +23,6 @@ import {
   TrendingUp,
   Calendar,
   Building2,
-  Languages,
   SlidersHorizontal,
   XCircle,
   Zap,
@@ -378,22 +377,6 @@ export default function JobsPage() {
     return true;
   }, []);
 
-  // Extract unique locations from jobs
-  const uniqueLocations = useMemo(() => {
-    const locations = new Set<string>();
-    jobs.forEach(job => {
-      if (job.location) {
-        const loc = job.location.toLowerCase();
-        if (loc.includes('remote') || loc.includes('מרחוק')) locations.add('remote');
-        if (loc.includes('tel aviv') || loc.includes('תל אביב') || loc.includes('ramat gan')) locations.add('tel-aviv');
-        if (loc.includes('jerusalem') || loc.includes('ירושלים')) locations.add('jerusalem');
-        if (loc.includes('haifa') || loc.includes('חיפה')) locations.add('haifa');
-        if (loc.includes('center') || loc.includes('מרכז') || loc.includes('rehovot') || loc.includes('ness ziona')) locations.add('center');
-      }
-    });
-    return Array.from(locations);
-  }, [jobs]);
-
   // Apply all client-side filters
   const filteredJobs = useMemo(() => {
     return jobs.filter(job => {
@@ -447,11 +430,12 @@ export default function JobsPage() {
         case 'company':
           return (a.company || '').localeCompare(b.company || '');
         case 'priority':
-        default:
+        default: {
           const priorityA = statusPriority[a.status as JobStatus] || 99;
           const priorityB = statusPriority[b.status as JobStatus] || 99;
           if (priorityA !== priorityB) return priorityA - priorityB;
           return new Date(b.scraped_at).getTime() - new Date(a.scraped_at).getTime();
+        }
       }
     });
   }, [filteredJobs, sortBy]);
@@ -556,11 +540,12 @@ export default function JobsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Source filter */}
               <div>
-                <label className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
+                <label htmlFor="filter-source" className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
                   <Building2 className="h-3 w-3" />
                   Source
                 </label>
                 <select
+                  id="filter-source"
                   value={filterSource}
                   onChange={(e) => setFilterSource(e.target.value)}
                   className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:border-white/30 transition-colors"
@@ -575,11 +560,12 @@ export default function JobsPage() {
 
               {/* Time filter */}
               <div>
-                <label className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
+                <label htmlFor="filter-time" className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
                   <Clock className="h-3 w-3" />
                   Posted
                 </label>
                 <select
+                  id="filter-time"
                   value={filterTime}
                   onChange={(e) => setFilterTime(e.target.value as TimeFilter)}
                   className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:border-white/30 transition-colors"
@@ -593,11 +579,12 @@ export default function JobsPage() {
 
               {/* Score filter */}
               <div>
-                <label className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
+                <label htmlFor="filter-score" className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
                   <Sparkles className="h-3 w-3" />
                   Match Score
                 </label>
                 <select
+                  id="filter-score"
                   value={filterScore}
                   onChange={(e) => setFilterScore(e.target.value as ScoreFilter)}
                   className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:border-white/30 transition-colors"
@@ -611,11 +598,12 @@ export default function JobsPage() {
 
               {/* Location filter */}
               <div>
-                <label className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
+                <label htmlFor="filter-location" className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
                   <MapPin className="h-3 w-3" />
                   Location
                 </label>
                 <select
+                  id="filter-location"
                   value={filterLocation}
                   onChange={(e) => setFilterLocation(e.target.value)}
                   className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:border-white/30 transition-colors"
@@ -632,10 +620,10 @@ export default function JobsPage() {
 
             {/* Sort options */}
             <div className="pt-3 border-t border-white/10">
-              <label className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
+              <span className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
                 <TrendingUp className="h-3 w-3" />
                 Sort by
-              </label>
+              </span>
               <div className="flex flex-wrap gap-2">
                 <FilterChip
                   active={sortBy === 'priority'}
@@ -780,7 +768,7 @@ export default function JobsPage() {
               <div className="flex items-center justify-center py-12">
                 <RefreshCw className="h-6 w-6 text-white/40 animate-spin" />
               </div>
-            ) : jobs.length === 0 ? (
+            ) : sortedJobs.length === 0 ? (
               <div className="text-center py-12 text-white/50">
                 <Briefcase className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p>No jobs found</p>
