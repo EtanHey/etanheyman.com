@@ -86,13 +86,20 @@ export async function getJobs(filters?: {
   }
 }
 
+const VALID_STATUSES = ['new', 'viewed', 'saved', 'applied', 'rejected', 'archived'] as const;
+type ValidStatus = (typeof VALID_STATUSES)[number];
+
 export async function updateJobStatus(
   jobId: string,
-  status: string
+  status: ValidStatus
 ): Promise<{ success: boolean; error: string | null }> {
   try {
     await requireAuth();
-    
+
+    if (!VALID_STATUSES.includes(status)) {
+      return { success: false, error: `Invalid status: ${status}` };
+    }
+
     const supabase = await createClient();
     
     const { error } = await supabase
