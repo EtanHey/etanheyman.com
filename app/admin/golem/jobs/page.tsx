@@ -161,7 +161,7 @@ export default function JobsPage() {
       >
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3 className="font-medium text-white line-clamp-2">{job.title}</h3>
-          <StatusBadge status={job.status} />
+          <StatusBadge status={job.status as JobStatus} />
         </div>
         <p className="text-sm text-white/70 mb-2">{job.company}</p>
         <div className="flex items-center gap-3 text-xs text-white/50 flex-wrap">
@@ -191,7 +191,7 @@ export default function JobsPage() {
         <div className="shrink-0 border-b border-white/10 pb-4 mb-4">
           <div className="flex items-start justify-between gap-4 mb-2">
             <h2 className="text-xl font-semibold text-white">{job.title}</h2>
-            <StatusBadge status={job.status} />
+            <StatusBadge status={job.status as JobStatus} />
           </div>
           <p className="text-lg text-white/80 mb-2">{job.company}</p>
           <div className="flex flex-wrap items-center gap-3 text-sm text-white/60">
