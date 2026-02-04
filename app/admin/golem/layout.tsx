@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Briefcase, Bell, Moon, FileText, ArrowLeft, Bot } from 'lucide-react';
+import { Briefcase, Bell, Moon, FileText, ArrowLeft, Bot, Settings } from 'lucide-react';
 import { useEffect } from 'react';
 
 const navItems = [
@@ -99,6 +99,15 @@ export default function GolemLayout({
           {children}
         </div>
       </main>
+
+      {/* Admin settings button */}
+      <Link
+        href="/admin"
+        className="fixed bottom-6 right-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 border border-white/20 text-white/60 hover:bg-white/20 hover:text-white transition-colors shadow-lg"
+        title="Admin Settings"
+      >
+        <Settings className="h-5 w-5" />
+      </Link>
     </div>
   );
 }
