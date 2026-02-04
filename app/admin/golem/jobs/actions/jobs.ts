@@ -3,6 +3,7 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/auth';
 import { createClient } from '@/lib/supabase/server';
+import { escapePostgrestSearch } from './utils';
 
 // Verify session before any operation
 async function requireAuth() {
@@ -51,9 +52,9 @@ export async function getJobs(filters?: {
 }): Promise<{ jobs: Job[]; error: string | null }> {
   try {
     await requireAuth();
-    
+
     const supabase = await createClient();
-    
+
     let query = supabase
       .from('golem_jobs')
       .select('*')
@@ -67,7 +68,8 @@ export async function getJobs(filters?: {
       query = query.eq('source', filters.source);
     }
     if (filters?.search) {
-      query = query.or(`title.ilike.%${filters.search}%,company.ilike.%${filters.search}%`);
+      const escaped = escapePostgrestSearch(filters.search);
+      query = query.or(`title.ilike.%${escaped}%,company.ilike.%${escaped}%`);
     }
 
     const { data, error } = await query;

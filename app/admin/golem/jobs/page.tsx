@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { getJobs, updateJobStatus as updateJobStatusAction, type Job } from './actions/jobs';
 import {
   Search,
@@ -78,13 +78,23 @@ export default function JobsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
+  // Track request version to prevent race conditions with stale responses
+  const requestIdRef = useRef(0);
+
   const fetchJobs = useCallback(async () => {
+    const currentRequestId = ++requestIdRef.current;
     setLoading(true);
+
     const { jobs: data, error } = await getJobs({
       status: filterStatus !== 'all' ? filterStatus : undefined,
       source: filterSource !== 'all' ? filterSource : undefined,
       search: searchQuery || undefined,
     });
+
+    // Ignore stale responses from earlier requests
+    if (currentRequestId !== requestIdRef.current) {
+      return;
+    }
 
     if (error) {
       console.error('Error fetching jobs:', error);
@@ -129,8 +139,12 @@ export default function JobsPage() {
     return d.toLocaleDateString();
   };
 
-  const StatusBadge = ({ status }: { status: JobStatus }) => {
-    const config = statusConfig[status];
+  const StatusBadge = ({ status }: { status: string }) => {
+    const config = statusConfig[status as JobStatus] || {
+      label: status,
+      color: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+      icon: Briefcase,
+    };
     const Icon = config.icon;
     return (
       <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium ${config.color}`}>
@@ -161,7 +175,7 @@ export default function JobsPage() {
       >
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3 className="font-medium text-white line-clamp-2">{job.title}</h3>
-          <StatusBadge status={job.status as JobStatus} />
+          <StatusBadge status={job.status} />
         </div>
         <p className="text-sm text-white/70 mb-2">{job.company}</p>
         <div className="flex items-center gap-3 text-xs text-white/50 flex-wrap">
@@ -191,7 +205,7 @@ export default function JobsPage() {
         <div className="shrink-0 border-b border-white/10 pb-4 mb-4">
           <div className="flex items-start justify-between gap-4 mb-2">
             <h2 className="text-xl font-semibold text-white">{job.title}</h2>
-            <StatusBadge status={job.status as JobStatus} />
+            <StatusBadge status={job.status} />
           </div>
           <p className="text-lg text-white/80 mb-2">{job.company}</p>
           <div className="flex flex-wrap items-center gap-3 text-sm text-white/60">
