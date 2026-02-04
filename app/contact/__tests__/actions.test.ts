@@ -73,6 +73,40 @@ describe("submitContactForm spam protection", () => {
 
       expect(result.success).toBe(true);
     });
+
+    it("should silently reject when formLoadedAt is missing", async () => {
+      const missingTimestampData: ContactFormData = {
+        ...validFormData,
+        formLoadedAt: undefined,
+      };
+
+      const result = await submitContactForm(missingTimestampData);
+
+      // Returns fake success - bots bypassing client code won't have this field
+      expect(result.success).toBe(true);
+    });
+
+    it("should silently reject when formLoadedAt is zero", async () => {
+      const zeroTimestampData: ContactFormData = {
+        ...validFormData,
+        formLoadedAt: 0,
+      };
+
+      const result = await submitContactForm(zeroTimestampData);
+
+      expect(result.success).toBe(true);
+    });
+
+    it("should silently reject when formLoadedAt is NaN", async () => {
+      const nanTimestampData: ContactFormData = {
+        ...validFormData,
+        formLoadedAt: NaN,
+      };
+
+      const result = await submitContactForm(nanTimestampData);
+
+      expect(result.success).toBe(true);
+    });
   });
 
   describe("combined spam checks", () => {
