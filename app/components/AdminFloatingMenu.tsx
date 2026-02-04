@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Settings, LogOut, Plus, Home } from 'lucide-react';
+import { Settings, LogOut, Plus, Home, Bot } from 'lucide-react';
 
 export default function AdminFloatingMenu() {
   const { data: session } = useSession();
@@ -54,7 +54,16 @@ export default function AdminFloatingMenu() {
                 <Home className="h-4 w-4" />
                 Admin Dashboard
               </Link>
-              
+
+              <Link
+                href="/admin/golem"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 rounded px-3 py-2 text-sm text-emerald-400 transition-colors hover:bg-gray-800"
+              >
+                <Bot className="h-4 w-4" />
+                ClaudeGolem
+              </Link>
+
               <Link
                 href="/projects/add"
                 onClick={() => setIsOpen(false)}

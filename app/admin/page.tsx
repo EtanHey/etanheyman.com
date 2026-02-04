@@ -42,6 +42,13 @@ export default function AdminPage() {
                 <p className="text-sm text-white/60">Autonomous agent dashboard</p>
               </div>
             </div>
+            <Link
+              href="/admin/golem"
+              className="flex items-center justify-center gap-2 w-full p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors mb-3"
+            >
+              <Bot className="h-4 w-4 text-emerald-400" />
+              <span className="text-sm font-medium text-emerald-400">Open Dashboard</span>
+            </Link>
             <div className="grid grid-cols-2 gap-3">
               <Link
                 href="/admin/golem/jobs"
