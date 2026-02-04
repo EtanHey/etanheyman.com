@@ -48,12 +48,16 @@ export async function submitContactForm(formData: ContactFormData) {
 
     // SPAM CHECK 2: Time-based validation
     // Real humans take at least a few seconds to fill a form
-    if (formData.formLoadedAt) {
-      const timeSpent = Date.now() - formData.formLoadedAt;
-      if (timeSpent < MIN_FORM_TIME_MS) {
-        console.log(`Spam detected: form submitted too fast (${timeSpent}ms)`);
-        return { success: true }; // Fake success to confuse bots
-      }
+    const loadedAt = Number(formData.formLoadedAt);
+    if (!Number.isFinite(loadedAt) || loadedAt <= 0) {
+      // Missing or invalid timestamp = likely bot bypassing client-side code
+      console.log("Spam detected: missing or invalid formLoadedAt");
+      return { success: true }; // Fake success to confuse bots
+    }
+    const timeSpent = Date.now() - loadedAt;
+    if (timeSpent < MIN_FORM_TIME_MS) {
+      console.log(`Spam detected: form submitted too fast (${timeSpent}ms)`);
+      return { success: true }; // Fake success to confuse bots
     }
 
     // Validate the form data
