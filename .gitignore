@@ -46,3 +46,7 @@ claude.scratchpad.md
 
 # project research
 project-research/
+
+# Local docs and temp files
+docs.local/
+supabase/.temp/
