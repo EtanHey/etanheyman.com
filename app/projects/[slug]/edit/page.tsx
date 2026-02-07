@@ -27,7 +27,7 @@ type ProjectData = {
 export default function EditProjectPage() {
   const router = useRouter();
   const params = useParams();
-  const projectId = params.id as string;
+  const projectId = (params.slug || params.id) as string;
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
