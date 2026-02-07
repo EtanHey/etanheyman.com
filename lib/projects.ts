@@ -3,6 +3,7 @@ import { createClient } from "./supabase/server";
 // Database types (snake_case from Supabase)
 export interface ProjectDB {
   id: string;
+  slug: string | null;
   title: string;
   description: string;
   short_description: string;
@@ -12,6 +13,7 @@ export interface ProjectDB {
   technologies: string[];
   git_url: string;
   live_url: string | null;
+  docs_url: string | null;
   framework: string | null;
   featured: boolean;
   order_index: number | null;
@@ -32,6 +34,7 @@ export interface ProjectJourneyStepDB {
 // Frontend types (camelCase for TypeScript)
 export interface Project {
   id: string;
+  slug: string | null;
   title: string;
   description: string;
   shortDescription: string;
@@ -41,6 +44,7 @@ export interface Project {
   technologies: string[];
   gitUrl: string;
   liveUrl: string | null;
+  docsUrl: string | null;
   framework: string | null;
   featured: boolean;
   orderIndex: number | null;
@@ -63,6 +67,7 @@ export interface ProjectJourneyStep {
 function mapProjectFromDB(dbProject: ProjectDB, journeySteps?: ProjectJourneyStepDB[]): Project {
   return {
     id: dbProject.id,
+    slug: dbProject.slug,
     title: dbProject.title,
     description: dbProject.description,
     shortDescription: dbProject.short_description,
@@ -72,6 +77,7 @@ function mapProjectFromDB(dbProject: ProjectDB, journeySteps?: ProjectJourneySte
     technologies: dbProject.technologies,
     gitUrl: dbProject.git_url,
     liveUrl: dbProject.live_url,
+    docsUrl: dbProject.docs_url,
     framework: dbProject.framework,
     featured: dbProject.featured,
     orderIndex: dbProject.order_index,
@@ -104,6 +110,7 @@ function mapProjectToDB(project: Partial<Omit<Project, "id" | "createdAt" | "upd
   if (project.technologies !== undefined) dbProject.technologies = project.technologies;
   if (project.gitUrl !== undefined) dbProject.git_url = project.gitUrl;
   if (project.liveUrl !== undefined) dbProject.live_url = project.liveUrl;
+  if (project.docsUrl !== undefined) dbProject.docs_url = project.docsUrl;
   if (project.framework !== undefined) dbProject.framework = project.framework;
   if (project.featured !== undefined) dbProject.featured = project.featured;
   if (project.orderIndex !== undefined) dbProject.order_index = project.orderIndex;
@@ -123,6 +130,41 @@ export async function getAllProjects(): Promise<Project[]> {
   } catch (error) {
     console.error("Error fetching projects:", error);
     throw error;
+  }
+}
+
+export async function getProjectBySlugOrId(slugOrId: string): Promise<Project | null> {
+  // Try slug first, fall back to id
+  const project = await getProjectBySlug(slugOrId);
+  if (project) return project;
+  return getProjectById(slugOrId);
+}
+
+export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  try {
+    const supabase = await createClient();
+    const { data: projectData, error: projectError } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (projectError) {
+      if (projectError.code === 'PGRST116') return null;
+      throw projectError;
+    }
+
+    const { data: journeyData, error: journeyError } = await supabase
+      .from('project_journey_steps')
+      .select('*')
+      .eq('project_id', projectData.id)
+      .order('step_order', { ascending: true });
+
+    if (journeyError) throw journeyError;
+    return mapProjectFromDB(projectData as ProjectDB, journeyData as ProjectJourneyStepDB[]);
+  } catch (error) {
+    console.error(`Error fetching project with slug ${slug}:`, error);
+    return null;
   }
 }
 

@@ -24,7 +24,7 @@ export function ProjectCard({
 
   return (
     <Link
-      href={`/projects/${project.id}`}
+      href={`/projects/${project.slug || project.id}`}
       className="block"
     >
       <div className={`relative overflow-hidden rounded-[40px] border border-white bg-gray-900 shadow-lg transition-all duration-300 hover:scale-[1.02] md:hover:scale-100 md:hover:shadow-[0px_0px_32px_0px_rgba(136,207,248,1)] ${className}`}>
@@ -107,7 +107,7 @@ export function FeaturedProjectCard({
 
   return (
     <Link
-      href={`/projects/${project.id}`}
+      href={`/projects/${project.slug || project.id}`}
       className="block"
     >
       <div className="relative h-[300px] sm:h-[350px] md:h-[380px] lg:h-[394px] overflow-hidden rounded-[40px] border border-white bg-gray-900 shadow-lg transition-all duration-300 hover:scale-[1.02] md:hover:scale-100 md:hover:shadow-[0px_0px_32px_0px_rgba(136,207,248,1)]">
@@ -189,7 +189,7 @@ export function HomeProjectCard({
 
   return (
     <Link
-      href={`/projects/${project.id}`}
+      href={`/projects/${project.slug || project.id}`}
       className="block"
     >
       <div className="relative h-[300px] sm:h-[350px] md:aspect-square md:h-auto overflow-hidden rounded-[40px] border border-white bg-gray-900 shadow-lg transition-all duration-300 hover:scale-[1.02] md:hover:scale-100 md:hover:shadow-[0px_0px_32px_0px_rgba(136,207,248,1)]">
