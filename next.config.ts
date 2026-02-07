@@ -1,14 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // Temporarily disable experimental features that might cause issues
-  // experimental: {
-  //   ppr: true,
-  //   dynamicIO: true,
-  // },
   images: {
     remotePatterns: [{ hostname: "utfs.io" }],
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/projects/golems/docs",
+        destination: "https://etanhey.github.io/golems/",
+      },
+      {
+        source: "/projects/golems/docs/:path*",
+        destination: "https://etanhey.github.io/golems/:path*",
+      },
+    ];
   },
 };
 

@@ -1,9 +1,9 @@
 import AdminEditButton from "@/app/components/AdminEditButton";
-import { getProjectById } from "@/lib/projects";
+import { getProjectBySlugOrId } from "@/lib/projects";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Github } from "lucide-react";
+import { Github, BookOpen } from "lucide-react";
 import {
   TechIconWrapper,
   TechIconName,
@@ -12,10 +12,10 @@ import {
 export default async function ProjectPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
-  const project = await getProjectById(id);
+  const { slug } = await params;
+  const project = await getProjectBySlugOrId(slug);
 
   if (!project) {
     notFound();
@@ -35,7 +35,7 @@ export default async function ProjectPage({
           ← Back to Home
         </Link>
 
-        <AdminEditButton projectId={id} />
+        <AdminEditButton projectId={project.id} />
       </div>
 
       {/* Hero Section */}
@@ -134,6 +134,17 @@ export default async function ProjectPage({
             </>
           )}
         </GitEl>
+        {project.docsUrl && (
+          <a
+            href={project.docsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-4 rounded-[80px] border-2 border-emerald-400 px-8 py-5 font-[Nutmeg] text-[20px] text-emerald-400 transition-colors hover:bg-emerald-400 hover:text-white md:text-[24px]"
+          >
+            Docs
+            <BookOpen aria-hidden="true" className="h-5 w-5" />
+          </a>
+        )}
       </div>
 
       {/* Technologies */}
