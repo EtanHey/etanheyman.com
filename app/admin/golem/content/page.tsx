@@ -3,18 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getGolemState, getEvents, type GolemState, type GolemEvent } from '../actions/data';
 import { FileText, RefreshCw, PenTool, ThumbsUp, ThumbsDown, BarChart3, Hash } from 'lucide-react';
-
-function formatDate(date: string): string {
-  const d = new Date(date);
-  const now = new Date();
-  const diffMs = now.getTime() - d.getTime();
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  if (diffHours < 1) return 'Just now';
-  if (diffHours < 24) return `${diffHours}h ago`;
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return d.toLocaleDateString();
-}
+import { formatRelativeTime } from '../lib/format';
 
 const contentEventTypes = new Set([
   'soltome_post', 'draft_approved', 'draft_rejected',
@@ -40,8 +29,8 @@ export default function ContentPage() {
       getGolemState(),
       getEvents(100),
     ]);
-    setState(stateRes.state);
-    setContentEvents(eventsRes.events.filter((e) => contentEventTypes.has(e.type)));
+    if (!stateRes.error) setState(stateRes.state);
+    if (!eventsRes.error) setContentEvents(eventsRes.events.filter((e) => contentEventTypes.has(e.type)));
     setLoading(false);
   };
 
@@ -70,6 +59,7 @@ export default function ContentPage() {
           Content Pipeline
         </h1>
         <button
+          type="button"
           onClick={refresh}
           disabled={loading}
           className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-white/60 hover:bg-white/5"
@@ -191,7 +181,7 @@ export default function ContentPage() {
                         )}
                       </div>
                       <span className="text-xs text-white/30 shrink-0">
-                        {formatDate(event.created_at)}
+                        {formatRelativeTime(event.created_at)}
                       </span>
                     </div>
                   );

@@ -3,18 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getGolemState, getEvents, type GolemState, type GolemEvent } from '../actions/data';
 import { Moon, RefreshCw, GitPullRequest, Clock, Target, Calendar } from 'lucide-react';
-
-function formatDate(date: string): string {
-  const d = new Date(date);
-  const now = new Date();
-  const diffMs = now.getTime() - d.getTime();
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  if (diffHours < 1) return 'Just now';
-  if (diffHours < 24) return `${diffHours}h ago`;
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return d.toLocaleDateString();
-}
+import { formatRelativeTime } from '../lib/format';
 
 const rotationDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const defaultRotation = [
@@ -38,8 +27,8 @@ export default function NightShiftPage() {
       getGolemState(),
       getEvents(100),
     ]);
-    setState(stateRes.state);
-    setNightEvents(eventsRes.events.filter((e) => e.actor === 'nightshift'));
+    if (!stateRes.error) setState(stateRes.state);
+    if (!eventsRes.error) setNightEvents(eventsRes.events.filter((e) => e.actor === 'nightshift'));
     setLoading(false);
   };
 
@@ -66,6 +55,7 @@ export default function NightShiftPage() {
           Night Shift
         </h1>
         <button
+          type="button"
           onClick={refresh}
           disabled={loading}
           className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-white/60 hover:bg-white/5"
@@ -100,7 +90,7 @@ export default function NightShiftPage() {
                 Last Run
               </div>
               <p className="text-lg font-semibold text-white">
-                {lastRun ? formatDate(lastRun as string) : 'Never'}
+                {lastRun ? formatRelativeTime(lastRun as string) : 'Never'}
               </p>
             </div>
 
@@ -122,7 +112,7 @@ export default function NightShiftPage() {
               <Calendar className="h-4 w-4" />
               Weekly Rotation
             </h3>
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-4 md:grid-cols-7 gap-2">
               {defaultRotation.map((item, idx) => {
                 const dayIdx = rotationDays.indexOf(item.day);
                 const isToday = dayIdx === todayIdx;
@@ -168,7 +158,7 @@ export default function NightShiftPage() {
                       <span className="text-sm text-white">{pr.repo}</span>
                     </div>
                     <span className="text-xs text-white/30">
-                      {pr.createdAt ? formatDate(pr.createdAt) : ''}
+                      {pr.createdAt ? formatRelativeTime(pr.createdAt) : ''}
                     </span>
                   </a>
                 ))}
@@ -200,7 +190,7 @@ export default function NightShiftPage() {
                         <span className="text-xs text-emerald-400 ml-2">#{String(event.data.prNumber)}</span>
                       )}
                     </div>
-                    <span className="text-xs text-white/30">{formatDate(event.created_at)}</span>
+                    <span className="text-xs text-white/30">{formatRelativeTime(event.created_at)}</span>
                   </div>
                 ))}
               </div>

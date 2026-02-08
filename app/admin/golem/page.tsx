@@ -60,8 +60,12 @@ export default function GolemOverview() {
   const refresh = async () => {
     setLoading(true);
     const result = await getOverviewStats();
-    if (result.error) setError(result.error);
-    else setStats(result.data);
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setError(null);
+      setStats(result.data);
+    }
     setLoading(false);
   };
 
@@ -86,6 +90,7 @@ export default function GolemOverview() {
   if (!stats) return null;
 
   const railwayUp = stats.railwayHealth?.status === 'ok';
+  const maxEmailCategoryCount = Math.max(...stats.emailsByCategory.map(c => c.count), 1);
 
   return (
     <div className="h-full overflow-y-auto space-y-6 pb-8">
@@ -96,6 +101,7 @@ export default function GolemOverview() {
           <p className="text-sm text-white/50 mt-1">Real-time overview of all autonomous agents</p>
         </div>
         <button
+          type="button"
           onClick={refresh}
           disabled={loading}
           className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-white/60 hover:bg-white/5 transition-colors"
@@ -239,8 +245,7 @@ export default function GolemOverview() {
           </div>
           <div className="space-y-2">
             {stats.emailsByCategory.map((cat) => {
-              const maxCount = Math.max(...stats.emailsByCategory.map(c => c.count));
-              const pct = (cat.count / maxCount) * 100;
+              const pct = (cat.count / maxEmailCategoryCount) * 100;
               return (
                 <div key={cat.category} className="group">
                   <div className="flex items-center justify-between text-xs mb-1">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { getEmails, type Email } from '../actions/data';
 import {
   Mail,
@@ -23,25 +23,14 @@ const categoryColors: Record<string, string> = {
   other: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30',
 };
 
+import { formatRelativeTime } from '../lib/format';
+
 function scoreColor(score: number | null): string {
-  if (!score) return 'text-white/30';
+  if (score === null || score === undefined) return 'text-white/30';
   if (score >= 8) return 'text-red-400';
   if (score >= 6) return 'text-amber-400';
   if (score >= 4) return 'text-white/60';
   return 'text-white/30';
-}
-
-function formatDate(date: string | null): string {
-  if (!date) return '';
-  const d = new Date(date);
-  const now = new Date();
-  const diffMs = now.getTime() - d.getTime();
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  if (diffHours < 1) return 'Just now';
-  if (diffHours < 24) return `${diffHours}h ago`;
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return d.toLocaleDateString();
 }
 
 export default function EmailsPage() {
@@ -51,7 +40,14 @@ export default function EmailsPage() {
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterMinScore, setFilterMinScore] = useState<number>(0);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const requestIdRef = useRef(0);
+
+  // Debounce search input by 300ms
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchQuery), 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const fetchEmails = useCallback(async () => {
     const currentRequestId = ++requestIdRef.current;
@@ -59,12 +55,12 @@ export default function EmailsPage() {
     const { emails: data, error } = await getEmails({
       category: filterCategory !== 'all' ? filterCategory : undefined,
       minScore: filterMinScore > 0 ? filterMinScore : undefined,
-      search: searchQuery || undefined,
+      search: debouncedSearch || undefined,
     });
     if (currentRequestId !== requestIdRef.current) return;
     if (!error) setEmails(data);
     setLoading(false);
-  }, [filterCategory, filterMinScore, searchQuery]);
+  }, [filterCategory, filterMinScore, debouncedSearch]);
 
   useEffect(() => { fetchEmails(); }, [fetchEmails]);
 
@@ -81,6 +77,7 @@ export default function EmailsPage() {
             <span className="text-sm font-normal text-white/40">({emails.length})</span>
           </h1>
           <button
+            type="button"
             onClick={fetchEmails}
             disabled={loading}
             className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-white/60 hover:bg-white/5 transition-colors"
@@ -98,12 +95,14 @@ export default function EmailsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search emails..."
+              aria-label="Search emails"
               className="w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-2 text-white placeholder:text-white/40 focus:border-white/30 focus:outline-none"
             />
           </div>
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
+            aria-label="Filter by category"
             className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none"
           >
             {categories.map((c) => (
@@ -113,6 +112,7 @@ export default function EmailsPage() {
           <select
             value={filterMinScore}
             onChange={(e) => setFilterMinScore(Number(e.target.value))}
+            aria-label="Filter by minimum score"
             className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none"
           >
             <option value={0}>Any Score</option>
@@ -153,7 +153,7 @@ export default function EmailsPage() {
                     <div className="flex items-start justify-between gap-2 mb-1">
                       <p className="text-sm text-white line-clamp-1 flex-1">{email.subject || '(no subject)'}</p>
                       <span className={`text-xs font-bold ${scoreColor(email.score)}`}>
-                        {email.score || '-'}
+                        {email.score ?? '-'}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-xs text-white/50">
@@ -161,7 +161,7 @@ export default function EmailsPage() {
                       <span className={`inline-flex rounded-full border px-1.5 py-0.5 text-[10px] ${catColor}`}>
                         {email.category || 'other'}
                       </span>
-                      <span className="ml-auto whitespace-nowrap">{formatDate(email.received_at)}</span>
+                      <span className="ml-auto whitespace-nowrap">{formatRelativeTime(email.received_at)}</span>
                     </div>
                   </button>
                 );
@@ -191,9 +191,9 @@ export default function EmailsPage() {
                     {selectedEmail.category}
                   </span>
                   <span className={`font-bold ${scoreColor(selectedEmail.score)}`}>
-                    Score: {selectedEmail.score || '-'}/10
+                    Score: {selectedEmail.score ?? '-'}/10
                   </span>
-                  <span className="text-white/40">{formatDate(selectedEmail.received_at)}</span>
+                  <span className="text-white/40">{formatRelativeTime(selectedEmail.received_at)}</span>
                   {selectedEmail.notified && (
                     <span className="text-amber-400 flex items-center gap-1">
                       <AlertTriangle className="h-3 w-3" /> Notified
