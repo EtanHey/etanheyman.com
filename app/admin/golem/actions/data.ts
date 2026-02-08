@@ -70,6 +70,14 @@ export interface OutreachMessage {
 
 // ─── Overview Stats ──────────────────────────────────
 
+export interface ServiceStatus {
+  name: string;
+  schedule: string;
+  lastRun: string | null;
+  status: 'ok' | 'stale' | 'unknown';
+  staleThresholdHours: number;
+}
+
 export interface OverviewStats {
   totalEmails: number;
   totalJobs: number;
@@ -79,6 +87,7 @@ export interface OverviewStats {
   emailsByCategory: { category: string; count: number; avg_score: number }[];
   jobsByStatus: { status: string; count: number }[];
   railwayHealth: { status: string; golemStatus?: string; uptime?: number } | null;
+  serviceStatuses: ServiceStatus[];
 }
 
 export async function getOverviewStats(): Promise<{ data: OverviewStats | null; error: string | null }> {
@@ -86,7 +95,7 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
     await requireAuth();
     const supabase = await createClient();
 
-    const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, allEmailsRes, allJobsRes] = await Promise.all([
+    const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, allEmailsRes, allJobsRes, stateRes] = await Promise.all([
       supabase.from('emails').select('id', { count: 'exact', head: true }),
       supabase.from('golem_jobs').select('id', { count: 'exact', head: true }),
       supabase.from('golem_events').select('id', { count: 'exact', head: true }),
@@ -94,6 +103,7 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
       supabase.from('outreach_contacts').select('id', { count: 'exact', head: true }),
       supabase.from('emails').select('category, score'),
       supabase.from('golem_jobs').select('status'),
+      supabase.from('golem_state').select('key, value, updated_at'),
     ]);
 
     // Aggregate email categories
@@ -143,6 +153,42 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
       railwayHealth = { status: 'unreachable' };
     }
 
+    // Build service statuses from golem_state
+    const stateMap = new Map<string, { value: unknown; updated_at: string }>();
+    if (stateRes.data) {
+      for (const row of stateRes.data) {
+        stateMap.set(row.key, { value: row.value, updated_at: row.updated_at });
+      }
+    }
+
+    function getServiceStatus(
+      name: string,
+      schedule: string,
+      stateKey: string,
+      staleThresholdHours: number,
+    ): ServiceStatus {
+      const entry = stateMap.get(stateKey);
+      if (!entry || !entry.value) {
+        return { name, schedule, lastRun: null, status: 'unknown', staleThresholdHours };
+      }
+      const lastRun = typeof entry.value === 'string' ? entry.value : entry.updated_at;
+      const hoursSince = (Date.now() - new Date(lastRun).getTime()) / (1000 * 60 * 60);
+      return {
+        name,
+        schedule,
+        lastRun,
+        status: hoursSince <= staleThresholdHours ? 'ok' : 'stale',
+        staleThresholdHours,
+      };
+    }
+
+    const serviceStatuses: ServiceStatus[] = [
+      getServiceStatus('Email Golem', 'Hourly 6am-7pm, 10pm check', 'lastEmailCheck', 3),
+      getServiceStatus('Job Golem', '6am, 9am, 1pm Sun-Thu', 'lastJobRun', 24),
+      getServiceStatus('Night Shift', '4am daily (local)', 'lastNightShift', 36),
+      getServiceStatus('Morning Briefing', '8am daily', 'lastBriefing', 36),
+    ];
+
     return {
       data: {
         totalEmails: emailsRes.count || 0,
@@ -153,6 +199,7 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
         emailsByCategory,
         jobsByStatus,
         railwayHealth,
+        serviceStatuses,
       },
       error: null,
     };
