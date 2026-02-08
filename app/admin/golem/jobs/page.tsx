@@ -231,13 +231,16 @@ export default function JobsPage() {
 
     const handleRelevance = async (relevant: boolean) => {
       setSaving(true);
-      const { success } = await correctJobRelevance(job.id, relevant);
-      if (success) {
-        const updated = { ...job, human_relevant: relevant, corrected_at: new Date().toISOString() };
-        setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
-        setSelectedJob(updated);
+      try {
+        const { success } = await correctJobRelevance(job.id, relevant);
+        if (success) {
+          const updated = { ...job, human_relevant: relevant, corrected_at: new Date().toISOString() };
+          setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
+          setSelectedJob(updated);
+        }
+      } finally {
+        setSaving(false);
       }
-      setSaving(false);
     };
 
     return (

@@ -118,11 +118,13 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
       if (row.score != null) entry.totalScore += row.score;
       catMap.set(cat, entry);
     }
-    const emailsByCategory = Array.from(catMap.entries()).map(([category, { count, totalScore }]) => ({
-      category,
-      count,
-      avg_score: count > 0 ? Math.round((totalScore / count) * 10) / 10 : 0,
-    }));
+    const emailsByCategory = Array.from(catMap.entries())
+      .map(([category, { count, totalScore }]) => ({
+        category,
+        count,
+        avg_score: count > 0 ? Math.round((totalScore / count) * 10) / 10 : 0,
+      }))
+      .sort((a, b) => b.count - a.count);
 
     // Client-side aggregation: job statuses
     const statusMap = new Map<string, number>();
@@ -130,7 +132,9 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
       const status = row.status || 'unknown';
       statusMap.set(status, (statusMap.get(status) || 0) + 1);
     }
-    const jobsByStatus = Array.from(statusMap.entries()).map(([status, count]) => ({ status, count }));
+    const jobsByStatus = Array.from(statusMap.entries())
+      .map(([status, count]) => ({ status, count }))
+      .sort((a, b) => b.count - a.count);
 
     // Railway health check
     let railwayHealth: OverviewStats['railwayHealth'] = null;
