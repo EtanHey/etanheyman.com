@@ -1,9 +1,13 @@
 import type { LucideIcon } from 'lucide-react';
-import { Archive, Bookmark, Eye, Send, Star, X } from 'lucide-react';
+import { Archive, Bookmark, Eye, Send, Star } from 'lucide-react';
 
 // --- Email ---
 
-export const categoryColors: Record<string, string> = {
+export type EmailCategory =
+  | 'urgent' | 'tech-update' | 'job' | 'interview' | 'newsletter'
+  | 'promo' | 'subscription' | 'social' | 'github' | 'other';
+
+export const categoryColors: Record<EmailCategory, string> = {
   urgent: 'bg-red-500/20 text-red-400 border-red-500/30',
   'tech-update': 'bg-violet-500/20 text-violet-400 border-violet-500/30',
   job: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
@@ -12,12 +16,13 @@ export const categoryColors: Record<string, string> = {
   promo: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
   subscription: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
   social: 'bg-pink-500/20 text-pink-400 border-pink-500/30',
+  github: 'bg-slate-500/20 text-slate-400 border-slate-500/30',
   other: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30',
 };
 
-export const EMAIL_CATEGORIES = [
+export const EMAIL_CATEGORIES: EmailCategory[] = [
   'urgent', 'tech-update', 'job', 'interview', 'newsletter',
-  'promo', 'subscription', 'social', 'other',
+  'promo', 'subscription', 'social', 'github', 'other',
 ];
 
 export function scoreColor(score: number | null): string {
@@ -30,14 +35,13 @@ export function scoreColor(score: number | null): string {
 
 // --- Jobs ---
 
-export type JobStatus = 'new' | 'viewed' | 'saved' | 'applied' | 'rejected' | 'archived';
+export type JobStatus = 'new' | 'viewed' | 'saved' | 'applied' | 'archived';
 
 export const statusConfig: Record<JobStatus, { label: string; color: string; cardBorder: string; icon: LucideIcon }> = {
   new: { label: 'New', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30', cardBorder: 'border-l-blue-500', icon: Star },
   viewed: { label: 'Viewed', color: 'bg-gray-500/20 text-gray-400 border-gray-500/30', cardBorder: 'border-l-gray-500', icon: Eye },
   saved: { label: 'Saved', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30', cardBorder: 'border-l-amber-500', icon: Bookmark },
   applied: { label: 'Applied', color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30', cardBorder: 'border-l-emerald-500', icon: Send },
-  rejected: { label: 'Rejected', color: 'bg-red-500/20 text-red-400 border-red-500/30', cardBorder: 'border-l-red-500', icon: X },
   archived: { label: 'Archived', color: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30', cardBorder: 'border-l-zinc-500', icon: Archive },
 };
 
@@ -46,8 +50,32 @@ export const statusPriority: Record<JobStatus, number> = {
   saved: 2,
   new: 3,
   viewed: 4,
-  rejected: 5,
-  archived: 6,
+  archived: 5,
+};
+
+// Rejection reason tags for bad match feedback
+export const REJECTION_TAGS = [
+  'wrong-stack',
+  'too-senior',
+  'too-junior',
+  'wrong-location',
+  'low-salary',
+  'not-relevant',
+  'bad-company',
+  'other',
+] as const;
+
+export type RejectionTag = (typeof REJECTION_TAGS)[number];
+
+export const rejectionTagLabels: Record<RejectionTag, string> = {
+  'wrong-stack': 'Wrong Tech Stack',
+  'too-senior': 'Too Senior',
+  'too-junior': 'Too Junior',
+  'wrong-location': 'Wrong Location',
+  'low-salary': 'Low Salary',
+  'not-relevant': 'Not Relevant',
+  'bad-company': 'Bad Company',
+  'other': 'Other',
 };
 
 export const sourceConfig: Record<string, { label: string; color: string }> = {
