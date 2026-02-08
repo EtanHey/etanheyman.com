@@ -2,59 +2,69 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { getEmails, correctEmailScore, correctEmailCategory, type Email } from '../actions/data';
-import { Mail, AlertTriangle, Check } from 'lucide-react';
+import { Mail, AlertTriangle, Check, RefreshCw } from 'lucide-react';
 import { formatRelativeTime } from '../lib/format';
-import { categoryColors, scoreColor, EMAIL_CATEGORIES } from '../lib/constants';
+import { categoryColors, scoreColor } from '../lib/constants';
 import {
   ScoreEditor,
   CategoryBadge,
   CorrectionBanner,
   PageHeader,
   ListDetailLayout,
+  SearchFilterBar,
 } from '../components';
+
+const EMAIL_CATEGORIES = ['urgent', 'tech-update', 'job', 'interview', 'newsletter', 'promo', 'subscription', 'social', 'other'];
 
 function EmailDetail({
   email,
-  onBack,
   onUpdate,
 }: {
   email: Email;
-  onBack: () => void;
   onUpdate: (updated: Email) => void;
 }) {
   const effectiveScore = email.human_score ?? email.score;
-  const effectiveCategory = email.human_category ?? email.category;
+  const effectiveCategory = email.human_category ?? email.category ?? 'other';
+  const hasCorrectedScore = email.human_score !== null;
+  const hasCorrectedCategory = email.human_category !== null;
+
+  const saveCategory = async (category: string) => {
+    const { success } = await correctEmailCategory(email.id, category);
+    if (success) {
+      onUpdate({ ...email, human_category: category, corrected_at: new Date().toISOString() });
+    }
+  };
+
+  const saveScore = async (score: number) => {
+    const { success } = await correctEmailScore(email.id, score);
+    if (success) {
+      onUpdate({ ...email, human_score: score, corrected_at: new Date().toISOString() });
+    }
+  };
+
+  const corrections = [
+    hasCorrectedScore ? { label: 'Score', aiValue: email.score, humanValue: email.human_score } : null,
+    hasCorrectedCategory ? { label: 'Category', aiValue: email.category, humanValue: email.human_category } : null,
+  ].filter(Boolean) as Array<{ label: string; aiValue: string | number | null; humanValue: string | number | null }>;
 
   return (
-    <div className="h-full flex flex-col bg-white/5 rounded-lg border border-white/10 p-5 overflow-hidden">
-      <button
-        type="button"
-        onClick={onBack}
-        className="md:hidden shrink-0 text-white/60 mb-3 text-sm"
-      >
-        &larr; Back
-      </button>
+    <div className="h-full flex flex-col overflow-hidden">
       <div className="shrink-0 border-b border-white/10 pb-4 mb-4">
         <h2 className="text-lg font-semibold text-white mb-1">{email.subject || '(no subject)'}</h2>
         <p className="text-sm text-white/60 mb-2">{email.from_address}</p>
         <div className="flex items-center gap-3 text-xs flex-wrap">
           <CategoryBadge
-            value={effectiveCategory || 'other'}
+            value={effectiveCategory}
             options={EMAIL_CATEGORIES}
             colors={categoryColors}
-            onSave={async (cat) => {
-              const { success } = await correctEmailCategory(email.id, cat);
-              if (success) onUpdate({ ...email, human_category: cat, corrected_at: new Date().toISOString() });
-            }}
-            hasCorrected={email.human_category !== null}
+            onSave={saveCategory}
+            hasCorrected={hasCorrectedCategory}
           />
           <ScoreEditor
             value={effectiveScore}
-            onSave={async (score) => {
-              const { success } = await correctEmailScore(email.id, score);
-              if (success) onUpdate({ ...email, human_score: score, corrected_at: new Date().toISOString() });
-            }}
-            hasCorrected={email.human_score !== null}
+            onSave={saveScore}
+            label="Score"
+            hasCorrected={hasCorrectedScore}
           />
           <span className="text-white/40">{formatRelativeTime(email.received_at)}</span>
           {email.notified && (
@@ -63,12 +73,7 @@ function EmailDetail({
             </span>
           )}
         </div>
-        <CorrectionBanner
-          corrections={[
-            { label: 'Score', aiValue: email.score, humanValue: email.human_score },
-            { label: 'Category', aiValue: email.category, humanValue: email.human_category },
-          ]}
-        />
+        <CorrectionBanner corrections={corrections} />
       </div>
       <div className="flex-1 overflow-y-auto">
         <p className="text-sm text-white/60 leading-relaxed whitespace-pre-wrap">
@@ -111,7 +116,11 @@ export default function EmailsPage() {
 
   const categories = ['all', ...EMAIL_CATEGORIES];
 
-  const emailList = emails.length === 0 ? (
+  const emailList = loading ? (
+    <div className="flex items-center justify-center py-12">
+      <RefreshCw className="h-6 w-6 text-white/40 animate-spin" />
+    </div>
+  ) : emails.length === 0 ? (
     <div className="text-center py-12 text-white/50">
       <Mail className="h-12 w-12 mx-auto mb-3 opacity-50" />
       <p>No emails found</p>
@@ -163,50 +172,39 @@ export default function EmailsPage() {
           onRefresh={fetchEmails}
           loading={loading}
         />
-        <div className="flex gap-2">
-          <div className="relative flex-1">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search emails..."
-              aria-label="Search emails"
-              className="w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-2 text-white placeholder:text-white/40 focus:border-white/30 focus:outline-none"
-            />
-          </div>
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            aria-label="Filter by category"
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none"
-          >
-            {categories.map((c) => (
-              <option key={c} value={c}>{c === 'all' ? 'All Categories' : c}</option>
-            ))}
-          </select>
-          <select
-            value={filterMinScore}
-            onChange={(e) => setFilterMinScore(Number(e.target.value))}
-            aria-label="Filter by minimum score"
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none"
-          >
-            <option value={0}>Any Score</option>
-            <option value={7}>7+ (Important)</option>
-            <option value={9}>9+ (Urgent)</option>
-          </select>
-        </div>
+        <SearchFilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          placeholder="Search emails..."
+          filters={[
+            {
+              value: filterCategory,
+              onChange: setFilterCategory,
+              options: categories.map((category) => ({
+                value: category,
+                label: category === 'all' ? 'All Categories' : category,
+              })),
+            },
+            {
+              value: filterMinScore,
+              onChange: (value) => setFilterMinScore(Number(value)),
+              options: [
+                { value: 0, label: 'Any Score' },
+                { value: 7, label: '7+ (Important)' },
+                { value: 9, label: '9+ (Urgent)' },
+              ],
+            },
+          ]}
+        />
       </div>
 
       <ListDetailLayout
-        hasSelection={!!selectedEmail}
-        loading={loading}
-        list={emailList}
+        selected={Boolean(selectedEmail)}
+        list={<div className="flex-1 overflow-y-auto space-y-2">{emailList}</div>}
         detail={
           selectedEmail ? (
             <EmailDetail
               email={selectedEmail}
-              onBack={() => setSelectedEmail(null)}
               onUpdate={(updated) => {
                 setSelectedEmail(updated);
                 setEmails(prev => prev.map(e => e.id === updated.id ? updated : e));
@@ -216,6 +214,7 @@ export default function EmailsPage() {
         }
         emptyIcon={Mail}
         emptyText="Select an email"
+        onBack={() => setSelectedEmail(null)}
       />
     </div>
   );
