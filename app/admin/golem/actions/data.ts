@@ -4,6 +4,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 
+const RAILWAY_HEALTH_URL = process.env.RAILWAY_HEALTH_URL || 'https://golems-production.up.railway.app/health';
+
 async function requireAuth() {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error('Unauthorized');
@@ -129,7 +131,7 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
     // Railway health check
     let railwayHealth: OverviewStats['railwayHealth'] = null;
     try {
-      const res = await fetch('https://golems-production.up.railway.app/health', {
+      const res = await fetch(RAILWAY_HEALTH_URL, {
         signal: AbortSignal.timeout(5000),
       });
       if (res.ok) {
@@ -199,9 +201,11 @@ export async function getEmails(filters?: {
     if (filters?.category) query = query.eq('category', filters.category);
     if (filters?.minScore) query = query.gte('score', filters.minScore);
     if (filters?.search) {
-      // Escape special PostgREST characters to prevent injection
-      const escaped = filters.search.replace(/[%_\\,()]/g, (c) => `\\${c}`);
-      query = query.or(`subject.ilike.%${escaped}%,from_address.ilike.%${escaped}%`);
+      // Strip characters that could break PostgREST .or() parsing
+      const sanitized = filters.search.replace(/[^a-zA-Z0-9@.\-_ ]/g, '');
+      if (sanitized) {
+        query = query.or(`subject.ilike.%${sanitized}%,from_address.ilike.%${sanitized}%`);
+      }
     }
 
     const { data, error } = await query;
@@ -249,7 +253,7 @@ export async function getOutreachData(): Promise<{
     return {
       contacts: (contactsRes.data || []) as OutreachContact[],
       messages: (messagesRes.data || []) as OutreachMessage[],
-      error: contactsRes.error?.message || messagesRes.error?.message || null,
+      error: [contactsRes.error?.message, messagesRes.error?.message].filter(Boolean).join('; ') || null,
     };
   } catch (err) {
     return { contacts: [], messages: [], error: err instanceof Error ? err.message : 'Unknown error' };

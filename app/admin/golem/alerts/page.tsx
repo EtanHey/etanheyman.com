@@ -59,8 +59,8 @@ export default function AlertsPage() {
 
   const refresh = async () => {
     setLoading(true);
-    const { events: data } = await getEvents(100);
-    setEvents(data);
+    const { events: data, error } = await getEvents(100);
+    if (!error) setEvents(data);
     setLoading(false);
   };
 
@@ -82,6 +82,7 @@ export default function AlertsPage() {
           <select
             value={filterActor}
             onChange={(e) => setFilterActor(e.target.value)}
+            aria-label="Filter by actor"
             className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none"
           >
             {actors.map((a) => (
@@ -89,6 +90,7 @@ export default function AlertsPage() {
             ))}
           </select>
           <button
+            type="button"
             onClick={refresh}
             disabled={loading}
             className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-white/60 hover:bg-white/5"
