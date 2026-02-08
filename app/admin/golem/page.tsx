@@ -30,7 +30,7 @@ const actorColors: Record<string, string> = {
 const eventTypeLabels: Record<string, string> = {
   email_routed: 'Email routed',
   job_match: 'Job match',
-  soltome_post: 'Soltome post',
+  soltome_post: 'Content post',
   draft_approved: 'Draft approved',
   draft_rejected: 'Draft rejected',
   draft_scored: 'Drafts scored',
@@ -250,14 +250,15 @@ export default function GolemOverview() {
                 <div key={cat.category} className="group">
                   <div className="flex items-center justify-between text-xs mb-1">
                     <span className="text-white/70 capitalize">{cat.category}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-white/40">{cat.count}</span>
-                      <span className={`font-medium ${
+                    <div className="flex items-center gap-3">
+                      <span className="text-white/50 tabular-nums">{cat.count} emails</span>
+                      <span className={`font-medium tabular-nums ${
                         cat.avg_score >= 7 ? 'text-emerald-400' :
                         cat.avg_score >= 4 ? 'text-amber-400' :
                         'text-white/40'
                       }`}>
-                        {cat.avg_score}/10
+                        {cat.avg_score}
+                        <span className="text-white/20">/10</span>
                       </span>
                     </div>
                   </div>
@@ -327,13 +328,6 @@ export default function GolemOverview() {
                 <span className="text-white/30 hidden sm:inline">{svc.schedule}</span>
               </div>
             ))}
-            {/* Static entry for Soltome (no state key yet) */}
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-white/20 shrink-0" />
-              <span className="text-white/70 flex-1">Soltome Learner</span>
-              <span className="text-white/40 text-right">—</span>
-              <span className="text-white/30 hidden sm:inline">2am daily</span>
-            </div>
           </div>
         </div>
       </div>

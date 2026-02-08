@@ -38,6 +38,9 @@ export interface Email {
   received_at: string | null;
   scored_at: string | null;
   notified: boolean | null;
+  human_score: number | null;
+  human_category: string | null;
+  corrected_at: string | null;
 }
 
 export interface GolemState {
@@ -95,48 +98,31 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
     await requireAuth();
     const supabase = createAdminClient();
 
-    const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, allEmailsRes, allJobsRes, stateRes] = await Promise.all([
+    const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, emailCatsRes, jobStatusRes, stateRes] = await Promise.all([
       supabase.from('emails').select('id', { count: 'exact', head: true }),
       supabase.from('golem_jobs').select('id', { count: 'exact', head: true }),
       supabase.from('golem_events').select('id', { count: 'exact', head: true }),
       supabase.from('golem_events').select('*').order('created_at', { ascending: false }).limit(10),
       supabase.from('outreach_contacts').select('id', { count: 'exact', head: true }),
-      supabase.from('emails').select('category, score'),
-      supabase.from('golem_jobs').select('status'),
+      supabase.rpc('get_email_category_stats'),
+      supabase.rpc('get_job_status_counts'),
       supabase.from('golem_state').select('key, value, updated_at'),
     ]);
 
-    // Aggregate email categories
-    let emailsByCategory: { category: string; count: number; avg_score: number }[] = [];
-    if (allEmailsRes.data) {
-      const cats = new Map<string, { count: number; totalScore: number }>();
-      for (const e of allEmailsRes.data) {
-        const cat = e.category || 'unknown';
-        const existing = cats.get(cat) || { count: 0, totalScore: 0 };
-        existing.count++;
-        existing.totalScore += e.score || 0;
-        cats.set(cat, existing);
-      }
-      emailsByCategory = Array.from(cats.entries())
-        .map(([category, { count, totalScore }]) => ({
-          category,
-          count,
-          avg_score: Math.round((totalScore / count) * 10) / 10,
-        }))
-        .sort((a, b) => b.count - a.count);
-    }
+    // SQL-aggregated email categories
+    const emailsByCategory: { category: string; count: number; avg_score: number }[] =
+      (emailCatsRes.data || []).map((r: { category: string; count: number; avg_score: number }) => ({
+        category: r.category,
+        count: Number(r.count),
+        avg_score: Number(r.avg_score),
+      }));
 
-    // Aggregate job statuses
-    let jobsByStatus: { status: string; count: number }[] = [];
-    if (allJobsRes.data) {
-      const stats = new Map<string, number>();
-      for (const j of allJobsRes.data) {
-        stats.set(j.status, (stats.get(j.status) || 0) + 1);
-      }
-      jobsByStatus = Array.from(stats.entries())
-        .map(([status, count]) => ({ status, count }))
-        .sort((a, b) => b.count - a.count);
-    }
+    // SQL-aggregated job statuses
+    const jobsByStatus: { status: string; count: number }[] =
+      (jobStatusRes.data || []).map((r: { status: string; count: number }) => ({
+        status: r.status,
+        count: Number(r.count),
+      }));
 
     // Railway health check
     let railwayHealth: OverviewStats['railwayHealth'] = null;
@@ -304,5 +290,108 @@ export async function getOutreachData(): Promise<{
     };
   } catch (err) {
     return { contacts: [], messages: [], error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
+// ─── Email Corrections (Feedback Loop) ──────────────
+
+export async function correctEmailScore(
+  emailId: string,
+  humanScore: number,
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    await requireAuth();
+    if (humanScore < 1 || humanScore > 10) return { success: false, error: 'Score must be 1-10' };
+    const supabase = createAdminClient();
+    const { error } = await supabase
+      .from('emails')
+      .update({ human_score: humanScore, corrected_at: new Date().toISOString() })
+      .eq('id', emailId);
+    if (error) return { success: false, error: error.message };
+    return { success: true, error: null };
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
+export async function correctEmailCategory(
+  emailId: string,
+  humanCategory: string,
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+    const { error } = await supabase
+      .from('emails')
+      .update({ human_category: humanCategory, corrected_at: new Date().toISOString() })
+      .eq('id', emailId);
+    if (error) return { success: false, error: error.message };
+    return { success: true, error: null };
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
+// ─── Job Corrections (Feedback Loop) ────────────────
+
+export async function correctJobRelevance(
+  jobId: string,
+  relevant: boolean,
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+    const { error } = await supabase
+      .from('golem_jobs')
+      .update({ human_relevant: relevant, corrected_at: new Date().toISOString() })
+      .eq('id', jobId);
+    if (error) return { success: false, error: error.message };
+    return { success: true, error: null };
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
+export async function correctJobScore(
+  jobId: string,
+  humanScore: number,
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    await requireAuth();
+    if (humanScore < 1 || humanScore > 10) return { success: false, error: 'Score must be 1-10' };
+    const supabase = createAdminClient();
+    const { error } = await supabase
+      .from('golem_jobs')
+      .update({ human_match_score: humanScore, corrected_at: new Date().toISOString() })
+      .eq('id', jobId);
+    if (error) return { success: false, error: error.message };
+    return { success: true, error: null };
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
+// ─── Correction Stats ───────────────────────────────
+
+export async function getCorrectionStats(): Promise<{
+  data: {
+    emails_total: number;
+    emails_corrected: number;
+    emails_disagreements: number;
+    jobs_total: number;
+    jobs_corrected: number;
+    jobs_thumbs_up: number;
+    jobs_thumbs_down: number;
+  } | null;
+  error: string | null;
+}> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+    const { data, error } = await supabase.rpc('get_correction_stats');
+    if (error) return { data: null, error: error.message };
+    return { data: data as any, error: null };
+  } catch (err) {
+    return { data: null, error: err instanceof Error ? err.message : 'Unknown error' };
   }
 }

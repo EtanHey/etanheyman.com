@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { getEmails, type Email } from '../actions/data';
+import { getEmails, correctEmailScore, correctEmailCategory, type Email } from '../actions/data';
 import {
   Mail,
   Search,
@@ -10,6 +10,9 @@ import {
   Star,
   Filter,
   ChevronDown,
+  Check,
+  Pencil,
+  X,
 } from 'lucide-react';
 
 const categoryColors: Record<string, string> = {
@@ -31,6 +34,151 @@ function scoreColor(score: number | null): string {
   if (score >= 6) return 'text-amber-400';
   if (score >= 4) return 'text-white/60';
   return 'text-white/30';
+}
+
+const EMAIL_CATEGORIES = ['urgent', 'tech-update', 'job', 'interview', 'newsletter', 'promo', 'subscription', 'social', 'other'];
+
+function EmailDetail({
+  email,
+  onBack,
+  onUpdate,
+}: {
+  email: Email;
+  onBack: () => void;
+  onUpdate: (updated: Email) => void;
+}) {
+  const [editingScore, setEditingScore] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(false);
+  const [pendingScore, setPendingScore] = useState(email.human_score ?? email.score ?? 5);
+  const [saving, setSaving] = useState(false);
+
+  const effectiveScore = email.human_score ?? email.score;
+  const effectiveCategory = email.human_category ?? email.category;
+  const hasCorrectedScore = email.human_score !== null;
+  const hasCorrectedCategory = email.human_category !== null;
+
+  const saveScore = async (score: number) => {
+    setSaving(true);
+    const { success } = await correctEmailScore(email.id, score);
+    if (success) {
+      onUpdate({ ...email, human_score: score, corrected_at: new Date().toISOString() });
+    }
+    setSaving(false);
+    setEditingScore(false);
+  };
+
+  const saveCategory = async (category: string) => {
+    setSaving(true);
+    const { success } = await correctEmailCategory(email.id, category);
+    if (success) {
+      onUpdate({ ...email, human_category: category, corrected_at: new Date().toISOString() });
+    }
+    setSaving(false);
+    setEditingCategory(false);
+  };
+
+  return (
+    <div className="h-full flex flex-col bg-white/5 rounded-lg border border-white/10 p-5 overflow-hidden">
+      <button
+        type="button"
+        onClick={onBack}
+        className="md:hidden shrink-0 text-white/60 mb-3 text-sm"
+      >
+        &larr; Back
+      </button>
+      <div className="shrink-0 border-b border-white/10 pb-4 mb-4">
+        <h2 className="text-lg font-semibold text-white mb-1">{email.subject || '(no subject)'}</h2>
+        <p className="text-sm text-white/60 mb-2">{email.from_address}</p>
+        <div className="flex items-center gap-3 text-xs flex-wrap">
+          {/* Category - editable */}
+          {editingCategory ? (
+            <div className="flex items-center gap-1">
+              <select
+                value={effectiveCategory || 'other'}
+                onChange={(e) => saveCategory(e.target.value)}
+                autoFocus
+                onBlur={() => setEditingCategory(false)}
+                className="rounded-full border border-white/30 bg-white/10 px-2 py-0.5 text-xs text-white focus:outline-none"
+              >
+                {EMAIL_CATEGORIES.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setEditingCategory(true)}
+              className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 transition-all hover:border-white/40 ${
+                categoryColors[effectiveCategory || 'other'] || categoryColors.other
+              }`}
+            >
+              {effectiveCategory}
+              {hasCorrectedCategory && <Check className="h-2.5 w-2.5 text-emerald-400" />}
+              <Pencil className="h-2.5 w-2.5 opacity-40" />
+            </button>
+          )}
+
+          {/* Score - editable */}
+          {editingScore ? (
+            <div className="flex items-center gap-1">
+              {[1,2,3,4,5,6,7,8,9,10].map(s => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => saveScore(s)}
+                  className={`w-6 h-6 rounded text-[10px] font-bold transition-all ${
+                    s === pendingScore
+                      ? 'bg-white/20 text-white border border-white/40'
+                      : 'bg-white/5 text-white/50 hover:bg-white/10'
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+              <button type="button" onClick={() => setEditingScore(false)} className="text-white/40 ml-1">
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setEditingScore(true)}
+              className={`font-bold flex items-center gap-1 transition-all hover:opacity-80 ${scoreColor(effectiveScore)}`}
+            >
+              Score: {effectiveScore ?? '-'}/10
+              {hasCorrectedScore && <Check className="h-2.5 w-2.5 text-emerald-400" />}
+              <Pencil className="h-2.5 w-2.5 opacity-40" />
+            </button>
+          )}
+
+          <span className="text-white/40">{formatRelativeTime(email.received_at)}</span>
+          {email.notified && (
+            <span className="text-amber-400 flex items-center gap-1">
+              <AlertTriangle className="h-3 w-3" /> Notified
+            </span>
+          )}
+        </div>
+
+        {/* Show AI vs Human comparison when corrected */}
+        {(hasCorrectedScore || hasCorrectedCategory) && (
+          <div className="mt-3 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs">
+            <span className="text-emerald-400 font-medium">Corrected</span>
+            <span className="text-white/50 ml-2">
+              {hasCorrectedScore && `AI: ${email.score} → You: ${email.human_score}`}
+              {hasCorrectedScore && hasCorrectedCategory && ' | '}
+              {hasCorrectedCategory && `AI: ${email.category} → You: ${email.human_category}`}
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        <p className="text-sm text-white/60 leading-relaxed whitespace-pre-wrap">
+          {email.snippet || 'No preview available.'}
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default function EmailsPage() {
@@ -138,7 +286,10 @@ export default function EmailsPage() {
               </div>
             ) : (
               emails.map((email) => {
-                const catColor = categoryColors[email.category || 'other'] || categoryColors.other;
+                const displayCategory = email.human_category ?? email.category ?? 'other';
+                const displayScore = email.human_score ?? email.score;
+                const isCorrected = email.human_score !== null || email.human_category !== null;
+                const catColor = categoryColors[displayCategory] || categoryColors.other;
                 return (
                   <button
                     key={email.id}
@@ -152,14 +303,15 @@ export default function EmailsPage() {
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
                       <p className="text-sm text-white line-clamp-1 flex-1">{email.subject || '(no subject)'}</p>
-                      <span className={`text-xs font-bold ${scoreColor(email.score)}`}>
-                        {email.score ?? '-'}
+                      <span className={`text-xs font-bold flex items-center gap-1 ${scoreColor(displayScore)}`}>
+                        {displayScore ?? '-'}
+                        {isCorrected && <Check className="h-2.5 w-2.5 text-emerald-400" />}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-xs text-white/50">
                       <span className="truncate max-w-[180px]">{email.from_address}</span>
                       <span className={`inline-flex rounded-full border px-1.5 py-0.5 text-[10px] ${catColor}`}>
-                        {email.category || 'other'}
+                        {displayCategory}
                       </span>
                       <span className="ml-auto whitespace-nowrap">{formatRelativeTime(email.received_at)}</span>
                     </div>
@@ -173,40 +325,14 @@ export default function EmailsPage() {
         {/* Detail */}
         <div className={`${selectedEmail ? 'flex' : 'hidden md:flex'} flex-1 flex-col min-h-0`}>
           {selectedEmail ? (
-            <div className="h-full flex flex-col bg-white/5 rounded-lg border border-white/10 p-5 overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setSelectedEmail(null)}
-                className="md:hidden shrink-0 text-white/60 mb-3 text-sm"
-              >
-                &larr; Back
-              </button>
-              <div className="shrink-0 border-b border-white/10 pb-4 mb-4">
-                <h2 className="text-lg font-semibold text-white mb-1">{selectedEmail.subject || '(no subject)'}</h2>
-                <p className="text-sm text-white/60 mb-2">{selectedEmail.from_address}</p>
-                <div className="flex items-center gap-3 text-xs">
-                  <span className={`inline-flex rounded-full border px-2 py-0.5 ${
-                    categoryColors[selectedEmail.category || 'other'] || categoryColors.other
-                  }`}>
-                    {selectedEmail.category}
-                  </span>
-                  <span className={`font-bold ${scoreColor(selectedEmail.score)}`}>
-                    Score: {selectedEmail.score ?? '-'}/10
-                  </span>
-                  <span className="text-white/40">{formatRelativeTime(selectedEmail.received_at)}</span>
-                  {selectedEmail.notified && (
-                    <span className="text-amber-400 flex items-center gap-1">
-                      <AlertTriangle className="h-3 w-3" /> Notified
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="flex-1 overflow-y-auto">
-                <p className="text-sm text-white/60 leading-relaxed whitespace-pre-wrap">
-                  {selectedEmail.snippet || 'No preview available.'}
-                </p>
-              </div>
-            </div>
+            <EmailDetail
+              email={selectedEmail}
+              onBack={() => setSelectedEmail(null)}
+              onUpdate={(updated) => {
+                setSelectedEmail(updated);
+                setEmails(prev => prev.map(e => e.id === updated.id ? updated : e));
+              }}
+            />
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-white/40 bg-white/[0.02] rounded-lg border border-white/5">
               <Mail className="h-16 w-16 mb-4 opacity-30" />
