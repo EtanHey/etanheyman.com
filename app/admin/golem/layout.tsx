@@ -3,12 +3,15 @@
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Briefcase, Bell, Moon, FileText, ArrowLeft, Bot } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Bell, Moon, FileText, Mail, Users, ArrowLeft, Bot } from 'lucide-react';
 import { useEffect } from 'react';
 
 const navItems = [
+  { href: '/admin/golem', label: 'Overview', icon: LayoutDashboard, exact: true },
   { href: '/admin/golem/jobs', label: 'Jobs', icon: Briefcase },
-  { href: '/admin/golem/alerts', label: 'Alerts', icon: Bell },
+  { href: '/admin/golem/emails', label: 'Emails', icon: Mail },
+  { href: '/admin/golem/alerts', label: 'Activity', icon: Bell },
+  { href: '/admin/golem/outreach', label: 'Outreach', icon: Users },
   { href: '/admin/golem/nightshift', label: 'Night Shift', icon: Moon },
   { href: '/admin/golem/content', label: 'Content', icon: FileText },
 ];
@@ -72,7 +75,7 @@ export default function GolemLayout({
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex gap-1 overflow-x-auto py-2">
             {navItems.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
               const Icon = item.icon;
               return (
                 <Link
