@@ -84,9 +84,10 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
     await requireAuth();
     const supabase = await createClient();
 
-    const [emailsRes, jobsRes, eventsRes, contactsRes, allEmailsRes, allJobsRes] = await Promise.all([
+    const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, allEmailsRes, allJobsRes] = await Promise.all([
       supabase.from('emails').select('id', { count: 'exact', head: true }),
       supabase.from('golem_jobs').select('id', { count: 'exact', head: true }),
+      supabase.from('golem_events').select('id', { count: 'exact', head: true }),
       supabase.from('golem_events').select('*').order('created_at', { ascending: false }).limit(10),
       supabase.from('outreach_contacts').select('id', { count: 'exact', head: true }),
       supabase.from('emails').select('category, score'),
@@ -144,7 +145,7 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
       data: {
         totalEmails: emailsRes.count || 0,
         totalJobs: jobsRes.count || 0,
-        totalEvents: (eventsRes.data || []).length,
+        totalEvents: eventsCountRes.count || 0,
         totalContacts: contactsRes.count || 0,
         recentEvents: (eventsRes.data || []) as GolemEvent[],
         emailsByCategory,
@@ -198,7 +199,9 @@ export async function getEmails(filters?: {
     if (filters?.category) query = query.eq('category', filters.category);
     if (filters?.minScore) query = query.gte('score', filters.minScore);
     if (filters?.search) {
-      query = query.or(`subject.ilike.%${filters.search}%,from_address.ilike.%${filters.search}%`);
+      // Escape special PostgREST characters to prevent injection
+      const escaped = filters.search.replace(/[%_\\,()]/g, (c) => `\\${c}`);
+      query = query.or(`subject.ilike.%${escaped}%,from_address.ilike.%${escaped}%`);
     }
 
     const { data, error } = await query;
