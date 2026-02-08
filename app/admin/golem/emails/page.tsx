@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { getEmails, correctEmailScore, correctEmailCategory, type Email } from '../actions/data';
 import { Mail, AlertTriangle, Check, RefreshCw } from 'lucide-react';
 import { formatRelativeTime } from '../lib/format';
-import { categoryColors, scoreColor } from '../lib/constants';
+import { categoryColors, scoreColor, EMAIL_CATEGORIES } from '../lib/constants';
 import {
   ScoreEditor,
   CategoryBadge,
@@ -13,8 +13,6 @@ import {
   ListDetailLayout,
   SearchFilterBar,
 } from '../components';
-
-const EMAIL_CATEGORIES = ['urgent', 'tech-update', 'job', 'interview', 'newsletter', 'promo', 'subscription', 'social', 'other'];
 
 function EmailDetail({
   email,
@@ -199,7 +197,8 @@ export default function EmailsPage() {
       </div>
 
       <ListDetailLayout
-        selected={Boolean(selectedEmail)}
+        hasSelection={Boolean(selectedEmail)}
+        loading={loading}
         list={<div className="flex-1 overflow-y-auto space-y-2">{emailList}</div>}
         detail={
           selectedEmail ? (

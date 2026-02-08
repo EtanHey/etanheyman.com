@@ -21,9 +21,12 @@ export function ScoreEditor({ value, onSave, label, hasCorrected }: ScoreEditorP
 
   const handleSave = async (score: number) => {
     setSaving(true);
-    await onSave(score);
-    setSaving(false);
-    setEditing(false);
+    try {
+      await onSave(score);
+      setEditing(false);
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (editing) {
