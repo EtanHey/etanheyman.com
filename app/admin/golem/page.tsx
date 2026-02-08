@@ -306,37 +306,33 @@ export default function GolemOverview() {
           </div>
         </div>
 
-        {/* Bot Schedule */}
+        {/* Bot Schedule — Live Status */}
         <div className="rounded-xl border border-white/10 bg-white/5 p-5">
           <h2 className="text-sm font-semibold text-white/80 flex items-center gap-2 mb-4">
             <Clock className="h-4 w-4 text-indigo-400" />
-            Bot Schedule (Israel Time)
+            Service Status (Israel Time)
           </h2>
           <div className="space-y-3 text-xs">
+            {stats.serviceStatuses.map((svc) => (
+              <div key={svc.name} className="flex items-center gap-3">
+                <span className={`w-2 h-2 rounded-full shrink-0 ${
+                  svc.status === 'ok' ? 'bg-emerald-400' :
+                  svc.status === 'stale' ? 'bg-amber-400 animate-pulse' :
+                  'bg-white/20'
+                }`} />
+                <span className="text-white/70 flex-1">{svc.name}</span>
+                <span className="text-white/40 text-right">
+                  {svc.lastRun ? formatTimeAgo(svc.lastRun) : 'never'}
+                </span>
+                <span className="text-white/30 hidden sm:inline">{svc.schedule}</span>
+              </div>
+            ))}
+            {/* Static entry for Soltome (no state key yet) */}
             <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-blue-400" />
-              <span className="text-white/70 flex-1">Email Golem</span>
-              <span className="text-white/40">Hourly 6am-7pm, 10pm check</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="text-white/70 flex-1">Job Golem</span>
-              <span className="text-white/40">6am, 9am, 1pm Sun-Thu</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-violet-400" />
-              <span className="text-white/70 flex-1">Morning Briefing</span>
-              <span className="text-white/40">8am daily</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-amber-400" />
+              <span className="w-2 h-2 rounded-full bg-white/20 shrink-0" />
               <span className="text-white/70 flex-1">Soltome Learner</span>
-              <span className="text-white/40">2am daily</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-indigo-400" />
-              <span className="text-white/70 flex-1">Night Shift</span>
-              <span className="text-white/40">4am daily (local)</span>
+              <span className="text-white/40 text-right">—</span>
+              <span className="text-white/30 hidden sm:inline">2am daily</span>
             </div>
           </div>
         </div>

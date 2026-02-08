@@ -107,6 +107,9 @@ export default function JobsPage() {
   const [sortBy, setSortBy] = useState<SortOption>('priority');
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [page, setPage] = useState(0);
+  const [totalJobs, setTotalJobs] = useState(0);
+  const pageSize = 100;
 
   // Track request version to prevent race conditions with stale responses
   const requestIdRef = useRef(0);
@@ -115,10 +118,12 @@ export default function JobsPage() {
     const currentRequestId = ++requestIdRef.current;
     setLoading(true);
 
-    const { jobs: data, error } = await getJobs({
+    const { jobs: data, total, error } = await getJobs({
       status: filterStatus !== 'all' ? filterStatus : undefined,
       source: filterSource !== 'all' ? filterSource : undefined,
       search: searchQuery || undefined,
+      page,
+      pageSize,
     });
 
     // Ignore stale responses from earlier requests
@@ -130,13 +135,21 @@ export default function JobsPage() {
       console.error('Error fetching jobs:', error);
     } else {
       setJobs((data || []) as Job[]);
+      setTotalJobs(total);
     }
     setLoading(false);
-  }, [filterStatus, filterSource, searchQuery]);
+  }, [filterStatus, filterSource, searchQuery, page]);
 
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(0);
+  }, [filterStatus, filterSource, searchQuery]);
+
+  const totalPages = Math.ceil(totalJobs / pageSize);
 
   const updateJobStatus = async (jobId: string, status: JobStatus) => {
     const { success, error } = await updateJobStatusAction(jobId, status);
@@ -668,7 +681,7 @@ export default function JobsPage() {
             active={filterStatus === 'all'}
             onClick={() => setFilterStatus('all')}
             label="All"
-            count={filteredCount}
+            count={totalPages > 1 ? totalJobs : filteredCount}
           />
           {newCount > 0 && (
             <FilterChip
@@ -778,6 +791,30 @@ export default function JobsPage() {
               sortedJobs.map((job) => <JobCard key={job.id} job={job} />)
             )}
           </div>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="shrink-0 flex items-center justify-between pt-3 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={page === 0}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium border border-white/10 text-white/60 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              >
+                Prev
+              </button>
+              <span className="text-xs text-white/50">
+                Page {page + 1} of {totalPages} ({totalJobs} total)
+              </span>
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                disabled={page >= totalPages - 1}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium border border-white/10 text-white/60 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Job detail - desktop: always visible, mobile: replaces list */}
