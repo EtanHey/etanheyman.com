@@ -2,9 +2,9 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { getEmails, correctEmailScore, correctEmailCategory, type Email } from '../actions/data';
-import { Mail, AlertTriangle, Check, RefreshCw } from 'lucide-react';
+import { Mail, AlertTriangle, Check, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatRelativeTime } from '../lib/format';
-import { categoryColors, scoreColor, EMAIL_CATEGORIES } from '../lib/constants';
+import { categoryColors, scoreColor, EMAIL_CATEGORIES, type EmailCategory } from '../lib/constants';
 import {
   ScoreEditor,
   CategoryBadge,
@@ -22,7 +22,7 @@ function EmailDetail({
   onUpdate: (updated: Email) => void;
 }) {
   const effectiveScore = email.human_score ?? email.score;
-  const effectiveCategory = email.human_category ?? email.category ?? 'other';
+  const effectiveCategory = (email.human_category ?? email.category ?? 'other') as EmailCategory;
   const hasCorrectedScore = email.human_score !== null;
   const hasCorrectedCategory = email.human_category !== null;
 
@@ -90,6 +90,9 @@ export default function EmailsPage() {
   const [filterMinScore, setFilterMinScore] = useState<number>(0);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [page, setPage] = useState(0);
+  const [totalEmails, setTotalEmails] = useState(0);
+  const pageSize = 100;
   const requestIdRef = useRef(0);
 
   useEffect(() => {
@@ -100,18 +103,29 @@ export default function EmailsPage() {
   const fetchEmails = useCallback(async () => {
     const currentRequestId = ++requestIdRef.current;
     setLoading(true);
-    const { emails: data, error } = await getEmails({
+    const { emails: data, total, error } = await getEmails({
       category: filterCategory !== 'all' ? filterCategory : undefined,
       minScore: filterMinScore > 0 ? filterMinScore : undefined,
       search: debouncedSearch || undefined,
+      page,
+      pageSize,
     });
     if (currentRequestId !== requestIdRef.current) return;
-    if (!error) setEmails(data);
+    if (!error) {
+      setEmails(data);
+      setTotalEmails(total);
+    }
     setLoading(false);
-  }, [filterCategory, filterMinScore, debouncedSearch]);
+  }, [filterCategory, filterMinScore, debouncedSearch, page]);
 
   useEffect(() => { fetchEmails(); }, [fetchEmails]);
 
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(0);
+  }, [filterCategory, filterMinScore, debouncedSearch]);
+
+  const totalPages = Math.ceil(totalEmails / pageSize);
   const categories = ['all', ...EMAIL_CATEGORIES];
 
   const emailList = loading ? (
@@ -124,39 +138,67 @@ export default function EmailsPage() {
       <p>No emails found</p>
     </div>
   ) : (
-    emails.map((email) => {
-      const displayCategory = email.human_category ?? email.category ?? 'other';
-      const displayScore = email.human_score ?? email.score;
-      const isCorrected = email.human_score !== null || email.human_category !== null;
-      const catColor = categoryColors[displayCategory] || categoryColors.other;
-      return (
-        <button
-          key={email.id}
-          type="button"
-          onClick={() => setSelectedEmail(email)}
-          className={`w-full text-left p-3 rounded-lg border transition-all ${
-            selectedEmail?.id === email.id
-              ? 'bg-white/10 border-white/30'
-              : 'bg-white/5 border-white/10 hover:bg-white/[0.07]'
-          }`}
-        >
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <p className="text-sm text-white line-clamp-1 flex-1">{email.subject || '(no subject)'}</p>
-            <span className={`text-xs font-bold flex items-center gap-1 ${scoreColor(displayScore)}`}>
-              {displayScore ?? '-'}
-              {isCorrected && <Check className="h-2.5 w-2.5 text-emerald-400" />}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-xs text-white/50">
-            <span className="truncate max-w-[180px]">{email.from_address}</span>
-            <span className={`inline-flex rounded-full border px-1.5 py-0.5 text-[10px] ${catColor}`}>
-              {displayCategory}
-            </span>
-            <span className="ml-auto whitespace-nowrap">{formatRelativeTime(email.received_at)}</span>
-          </div>
-        </button>
-      );
-    })
+    <>
+      {emails.map((email) => {
+        const displayCategory = (email.human_category ?? email.category ?? 'other') as EmailCategory;
+        const displayScore = email.human_score ?? email.score;
+        const isCorrected = email.human_score !== null || email.human_category !== null;
+        const catColor = categoryColors[displayCategory] || categoryColors.other;
+        return (
+          <button
+            key={email.id}
+            type="button"
+            onClick={() => setSelectedEmail(email)}
+            className={`w-full text-left p-3 rounded-lg border transition-all ${
+              selectedEmail?.id === email.id
+                ? 'bg-white/10 border-white/30'
+                : 'bg-white/5 border-white/10 hover:bg-white/[0.07]'
+            }`}
+          >
+            <div className="flex items-start justify-between gap-2 mb-1">
+              <p className="text-sm text-white line-clamp-1 flex-1">{email.subject || '(no subject)'}</p>
+              <span className={`text-xs font-bold flex items-center gap-1 ${scoreColor(displayScore)}`}>
+                {displayScore ?? '-'}
+                {isCorrected && <Check className="h-2.5 w-2.5 text-emerald-400" />}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-white/50">
+              <span className="truncate max-w-[180px]">{email.from_address}</span>
+              <span className={`inline-flex rounded-full border px-1.5 py-0.5 text-[10px] ${catColor}`}>
+                {displayCategory}
+              </span>
+              <span className="ml-auto whitespace-nowrap">{formatRelativeTime(email.received_at)}</span>
+            </div>
+          </button>
+        );
+      })}
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-2">
+          <button
+            type="button"
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+            disabled={page === 0}
+            className="px-3 py-1.5 rounded-lg text-xs font-medium border border-white/10 text-white/60 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+          >
+            <ChevronLeft className="h-3 w-3" />
+            Prev
+          </button>
+          <span className="text-xs text-white/50">
+            Page {page + 1} of {totalPages} ({totalEmails} total)
+          </span>
+          <button
+            type="button"
+            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+            disabled={page >= totalPages - 1}
+            className="px-3 py-1.5 rounded-lg text-xs font-medium border border-white/10 text-white/60 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+          >
+            Next
+            <ChevronRight className="h-3 w-3" />
+          </button>
+        </div>
+      )}
+    </>
   );
 
   return (
@@ -166,7 +208,7 @@ export default function EmailsPage() {
           icon={Mail}
           iconColor="text-blue-400"
           title="Email Triage"
-          count={emails.length}
+          count={totalEmails}
           onRefresh={fetchEmails}
           loading={loading}
         />

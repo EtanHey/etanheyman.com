@@ -1,3 +1,4 @@
+export { BadMatchModal } from './BadMatchModal';
 export { CategoryBadge } from './CategoryBadge';
 export { CorrectionBanner } from './CorrectionBanner';
 export { ListDetailLayout } from './ListDetailLayout';

@@ -231,17 +231,23 @@ export async function getEmails(filters?: {
   category?: string;
   minScore?: number;
   search?: string;
-  limit?: number;
-}): Promise<{ emails: Email[]; error: string | null }> {
+  page?: number;
+  pageSize?: number;
+}): Promise<{ emails: Email[]; total: number; error: string | null }> {
   try {
     await requireAuth();
     const supabase = createAdminClient();
 
+    const page = filters?.page ?? 0;
+    const pageSize = filters?.pageSize ?? 100;
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
     let query = supabase
       .from('emails')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('received_at', { ascending: false })
-      .limit(filters?.limit || 100);
+      .range(from, to);
 
     if (filters?.category) query = query.eq('category', filters.category);
     if (filters?.minScore) query = query.gte('score', filters.minScore);
@@ -253,11 +259,11 @@ export async function getEmails(filters?: {
       }
     }
 
-    const { data, error } = await query;
-    if (error) return { emails: [], error: error.message };
-    return { emails: (data || []) as Email[], error: null };
+    const { data, count, error } = await query;
+    if (error) return { emails: [], total: 0, error: error.message };
+    return { emails: (data || []) as Email[], total: count ?? 0, error: null };
   } catch (err) {
-    return { emails: [], error: err instanceof Error ? err.message : 'Unknown error' };
+    return { emails: [], total: 0, error: err instanceof Error ? err.message : 'Unknown error' };
   }
 }
 
