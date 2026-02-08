@@ -22,15 +22,17 @@ import {
 
 const mockSession = { user: { githubUsername: 'test-user' } };
 
-function createQueryBuilder(result: { data?: unknown; error?: { message: string } | null }) {
+function createQueryBuilder(result: { data?: unknown; count?: number; error?: { message: string } | null }) {
   const builder: any = {
     select: vi.fn(() => builder),
     order: vi.fn(() => builder),
     limit: vi.fn(() => builder),
+    range: vi.fn(() => builder),
     eq: vi.fn(() => builder),
     gte: vi.fn(() => builder),
     or: vi.fn(() => builder),
     data: result.data ?? null,
+    count: result.count ?? 0,
     error: result.error ?? null,
   };
 
@@ -284,14 +286,14 @@ describe('getEmails', () => {
 
     const result = await getEmails();
 
-    expect(result).toEqual({ emails: [], error: 'Unauthorized' });
+    expect(result).toEqual({ emails: [], total: 0, error: 'Unauthorized' });
     expect(createAdminClient).not.toHaveBeenCalled();
   });
 
-  it('applies filters and returns emails', async () => {
+  it('applies filters and returns emails with pagination', async () => {
     vi.mocked(getServerSession).mockResolvedValue(mockSession as any);
 
-    const query = createQueryBuilder({ data: [{ id: 'email-1' }], error: null });
+    const query = createQueryBuilder({ data: [{ id: 'email-1' }], count: 42, error: null });
     const fromMock = vi.fn(() => query);
     vi.mocked(createAdminClient).mockReturnValue({ from: fromMock } as any);
 
@@ -299,17 +301,19 @@ describe('getEmails', () => {
       category: 'work',
       minScore: 7,
       search: 'dev,ops%test',
-      limit: 25,
+      page: 0,
+      pageSize: 50,
     });
 
     expect(fromMock).toHaveBeenCalledWith('emails');
-    expect(query.limit).toHaveBeenCalledWith(25);
+    expect(query.select).toHaveBeenCalledWith('*', { count: 'exact' });
+    expect(query.range).toHaveBeenCalledWith(0, 49);
     expect(query.eq).toHaveBeenCalledWith('category', 'work');
     expect(query.gte).toHaveBeenCalledWith('score', 7);
     expect(query.or).toHaveBeenCalledWith(
       'subject.ilike.%devopstest%,from_address.ilike.%devopstest%'
     );
-    expect(result).toEqual({ emails: [{ id: 'email-1' }], error: null });
+    expect(result).toEqual({ emails: [{ id: 'email-1' }], total: 42, error: null });
   });
 
   it('returns query errors', async () => {
@@ -321,7 +325,7 @@ describe('getEmails', () => {
 
     const result = await getEmails();
 
-    expect(result).toEqual({ emails: [], error: 'Query failed' });
+    expect(result).toEqual({ emails: [], total: 0, error: 'Query failed' });
   });
 });
 

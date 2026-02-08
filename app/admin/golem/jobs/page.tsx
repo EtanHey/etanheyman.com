@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { getJobs, updateJobStatus as updateJobStatusAction, type Job } from './actions/jobs';
+import { getJobs, updateJobStatus as updateJobStatusAction, saveJobRejection, type Job } from './actions/jobs';
 import { correctJobRelevance, correctJobScore } from '../actions/data';
+import type { RejectionTag } from '../lib/constants';
 import {
   Search,
   Filter,
@@ -28,8 +29,10 @@ import {
   Zap,
   ThumbsUp,
   ThumbsDown,
+  AlertTriangle,
+  Archive,
 } from 'lucide-react';
-import { ScoreEditor, RelevanceButtons, CorrectionBanner } from '../components';
+import { ScoreEditor, RelevanceButtons, CorrectionBanner, BadMatchModal } from '../components';
 import { type JobStatus, statusConfig, statusPriority, sourceConfig } from '../lib/constants';
 
 
@@ -79,11 +82,13 @@ export default function JobsPage() {
   const [filterTime, setFilterTime] = useState<TimeFilter>('all');
   const [filterScore, setFilterScore] = useState<ScoreFilter>('all');
   const [filterLocation, setFilterLocation] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<SortOption>('priority');
+  const [sortBy, setSortBy] = useState<SortOption>('date');
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [page, setPage] = useState(0);
   const [totalJobs, setTotalJobs] = useState(0);
+  const [serverStatusCounts, setServerStatusCounts] = useState<Record<string, number>>({});
+  const [badMatchJob, setBadMatchJob] = useState<Job | null>(null);
   const pageSize = 100;
 
   // Track request version to prevent race conditions with stale responses
@@ -93,12 +98,13 @@ export default function JobsPage() {
     const currentRequestId = ++requestIdRef.current;
     setLoading(true);
 
-    const { jobs: data, total, error } = await getJobs({
+    const { jobs: data, total, statusCounts: counts, error } = await getJobs({
       status: filterStatus !== 'all' ? filterStatus : undefined,
       source: filterSource !== 'all' ? filterSource : undefined,
       search: searchQuery || undefined,
       page,
       pageSize,
+      includeArchived: filterStatus === 'archived',
     });
 
     // Ignore stale responses from earlier requests
@@ -111,6 +117,7 @@ export default function JobsPage() {
     } else {
       setJobs((data || []) as Job[]);
       setTotalJobs(total);
+      setServerStatusCounts(counts);
     }
     setLoading(false);
   }, [filterStatus, filterSource, searchQuery, page]);
@@ -172,10 +179,14 @@ export default function JobsPage() {
     );
   };
 
+  const hasWeakData = (job: Job): boolean =>
+    !job.description || job.description.trim() === '' || /^Job #\d+/.test(job.title);
+
   const JobCard = ({ job }: { job: Job }) => {
     const source = sourceConfig[job.source] || { label: job.source, color: 'text-white/60' };
     const isSelected = selectedJob?.id === job.id;
     const statusStyle = statusConfig[job.status as JobStatus] || statusConfig.new;
+    const weak = hasWeakData(job);
 
     // All cards use consistent LTR layout for visual uniformity
     return (
@@ -194,7 +205,10 @@ export default function JobsPage() {
         }`}
       >
         <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="font-medium text-white line-clamp-2">{job.title}</h3>
+          <div className="flex items-center gap-1.5 flex-1 min-w-0">
+            {weak && <span title="Missing data"><AlertTriangle className="h-3.5 w-3.5 text-amber-400 shrink-0" /></span>}
+            <h3 className="font-medium text-white line-clamp-2">{job.title}</h3>
+          </div>
           <StatusBadge status={job.status} />
         </div>
         <p className="text-sm text-white/70 mb-2">{job.company}</p>
@@ -310,14 +324,14 @@ export default function JobsPage() {
               Applied
             </button>
           )}
-          {job.status !== 'rejected' && (
+          {job.status !== 'archived' && (
             <button
               type="button"
-              onClick={() => updateJobStatus(job.id, 'rejected')}
+              onClick={() => setBadMatchJob(job)}
               className="inline-flex items-center gap-2 rounded-lg border border-red-500/50 text-red-400 px-4 py-2 text-sm font-medium hover:bg-red-500/10 transition-colors"
             >
-              <X className="h-4 w-4" />
-              Reject
+              <ThumbsDown className="h-4 w-4" />
+              Bad Match
             </button>
           )}
         </div>
@@ -419,18 +433,13 @@ export default function JobsPage() {
     });
   }, [jobs, filterTime, filterScore, filterLocation, matchesTimeFilter, matchesScoreFilter, matchesLocationFilter]);
 
-  // Calculate status counts from filtered jobs
-  const statusCounts = filteredJobs.reduce((acc, job) => {
-    acc[job.status as JobStatus] = (acc[job.status as JobStatus] || 0) + 1;
-    return acc;
-  }, {} as Record<JobStatus, number>);
-
   const filteredCount = filteredJobs.length;
-  const newCount = statusCounts.new || 0;
-  const appliedCount = statusCounts.applied || 0;
-  const savedCount = statusCounts.saved || 0;
-  const viewedCount = statusCounts.viewed || 0;
-  const rejectedCount = statusCounts.rejected || 0;
+  // Use server-side counts for accurate totals across all pages
+  const newCount = serverStatusCounts.new || 0;
+  const appliedCount = serverStatusCounts.applied || 0;
+  const savedCount = serverStatusCounts.saved || 0;
+  const viewedCount = serverStatusCounts.viewed || 0;
+  const archivedCount = serverStatusCounts.archived || 0;
 
   // Count active filters
   const activeFilterCount = [
@@ -700,7 +709,7 @@ export default function JobsPage() {
             active={filterStatus === 'all'}
             onClick={() => setFilterStatus('all')}
             label="All"
-            count={totalPages > 1 ? totalJobs : filteredCount}
+            count={totalJobs}
           />
           {newCount > 0 && (
             <FilterChip
@@ -746,15 +755,15 @@ export default function JobsPage() {
               colorClass="bg-gray-500/10 text-gray-400 hover:bg-gray-500/20"
             />
           )}
-          {rejectedCount > 0 && (
+          {archivedCount > 0 && (
             <FilterChip
-              active={filterStatus === 'rejected'}
-              onClick={() => setFilterStatus('rejected')}
-              icon={X}
-              label="Rejected"
-              count={rejectedCount}
-              activeClass="bg-red-500/30 text-red-300"
-              colorClass="bg-red-500/10 text-red-400 hover:bg-red-500/20"
+              active={filterStatus === 'archived'}
+              onClick={() => setFilterStatus('archived')}
+              icon={Archive}
+              label="Archive"
+              count={archivedCount}
+              activeClass="bg-zinc-500/30 text-zinc-300"
+              colorClass="bg-zinc-500/10 text-zinc-400 hover:bg-zinc-500/20"
             />
           )}
         </div>
@@ -861,6 +870,32 @@ export default function JobsPage() {
           )}
         </div>
       </div>
+
+      {/* Bad Match Modal */}
+      <BadMatchModal
+        open={badMatchJob !== null}
+        onClose={() => setBadMatchJob(null)}
+        jobTitle={badMatchJob?.title || ''}
+        onConfirm={async (tags: RejectionTag[], note: string | null) => {
+          if (!badMatchJob) return;
+          const { success } = await saveJobRejection(badMatchJob.id, tags, note);
+          if (success) {
+            const updated = {
+              ...badMatchJob,
+              status: 'archived',
+              rejection_tags: tags,
+              rejection_note: note,
+              human_relevant: false,
+              corrected_at: new Date().toISOString(),
+            };
+            setJobs((prev) => prev.filter((j) => j.id !== badMatchJob.id));
+            if (selectedJob?.id === badMatchJob.id) {
+              setSelectedJob(null);
+            }
+            setBadMatchJob(null);
+          }
+        }}
+      />
     </div>
   );
 }
