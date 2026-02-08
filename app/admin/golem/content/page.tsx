@@ -42,11 +42,10 @@ export default function ContentPage() {
   };
 
   const pendingDrafts = (getStateValue('pendingDraftIds') as string[]) || [];
-  const soltomeUser = getStateValue('soltomeUsername') as string | undefined;
   const topics = (getStateValue('topics') as Record<string, unknown>) || {};
   const topicKeys = Object.keys(topics);
 
-  const postsCount = contentEvents.filter((e) => e.type === 'soltome_post').length;
+  const postsCount = contentEvents.filter((e) => e.type === 'soltome_post' || e.type === 'content_post').length;
   const approvedCount = contentEvents.filter((e) => e.type === 'draft_approved').length;
   const rejectedCount = contentEvents.filter((e) => e.type === 'draft_rejected').length;
 
@@ -91,29 +90,6 @@ export default function ContentPage() {
             <div className="bg-white/5 rounded-lg border border-white/10 p-4">
               <div className="text-xs text-white/50 mb-1">Pending Drafts</div>
               <div className="text-2xl font-bold text-amber-400">{pendingDrafts.length}</div>
-            </div>
-          </div>
-
-          {/* Soltome Account */}
-          <div className="bg-white/5 rounded-lg border border-white/10 p-4">
-            <h3 className="text-sm font-medium text-white/60 mb-3">Soltome Account</h3>
-            <div className="flex items-center gap-4">
-              <div>
-                <div className="text-xs text-white/40">Username</div>
-                <div className="text-sm text-white font-medium">
-                  {soltomeUser || 'Not configured'}
-                </div>
-              </div>
-              {soltomeUser && (
-                <a
-                  href={`https://soltome.com/@${soltomeUser}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-violet-400 hover:text-violet-300"
-                >
-                  View Profile
-                </a>
-              )}
             </div>
           </div>
 

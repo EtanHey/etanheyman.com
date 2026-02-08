@@ -43,6 +43,9 @@ export interface Job {
   viewed_at: string | null;
   applied_at: string | null;
   created_at: string;
+  human_match_score: number | null;
+  human_relevant: boolean | null;
+  corrected_at: string | null;
 }
 
 export async function getJobs(filters?: {

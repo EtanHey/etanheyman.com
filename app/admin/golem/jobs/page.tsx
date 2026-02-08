@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { getJobs, updateJobStatus as updateJobStatusAction, type Job } from './actions/jobs';
+import { correctJobRelevance, correctJobScore } from '../actions/data';
 import {
   Search,
   Filter,
@@ -26,6 +27,9 @@ import {
   SlidersHorizontal,
   XCircle,
   Zap,
+  ThumbsUp,
+  ThumbsDown,
+  Pencil,
 } from 'lucide-react';
 
 type JobStatus = 'new' | 'viewed' | 'saved' | 'applied' | 'rejected' | 'archived';
@@ -228,10 +232,18 @@ export default function JobsPage() {
           {job.location && <span>{job.location}</span>}
           <span>{formatDate(job.scraped_at)}</span>
         </div>
-        {job.match_score && (
-          <div className="mt-2 flex items-center gap-1">
-            <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-            <span className="text-xs text-amber-400">{job.match_score}/10</span>
+        {(job.match_score || job.human_match_score) && (
+          <div className="mt-2 flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
+              <span className="text-xs text-amber-400">{job.human_match_score ?? job.match_score}/10</span>
+              {job.human_match_score !== null && <Check className="h-2.5 w-2.5 text-emerald-400" />}
+            </div>
+            {job.human_relevant !== null && (
+              job.human_relevant
+                ? <ThumbsUp className="h-3 w-3 text-emerald-400 fill-emerald-400" />
+                : <ThumbsDown className="h-3 w-3 text-red-400 fill-red-400" />
+            )}
           </div>
         )}
       </button>
@@ -242,11 +254,37 @@ export default function JobsPage() {
     const source = sourceConfig[job.source] || { label: job.source, color: 'text-white/60' };
     const cleanedDescription = cleanDescription(job.description);
     const descIsHebrew = isHebrew(cleanedDescription);
+    const [editingScore, setEditingScore] = useState(false);
+    const [saving, setSaving] = useState(false);
 
-    // Consistent LTR layout for header, only description uses RTL when Hebrew
+    const effectiveScore = job.human_match_score ?? job.match_score;
+
+    const handleRelevance = async (relevant: boolean) => {
+      setSaving(true);
+      const { success } = await correctJobRelevance(job.id, relevant);
+      if (success) {
+        const updated = { ...job, human_relevant: relevant, corrected_at: new Date().toISOString() };
+        setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
+        setSelectedJob(updated);
+      }
+      setSaving(false);
+    };
+
+    const handleScoreCorrection = async (score: number) => {
+      setSaving(true);
+      const { success } = await correctJobScore(job.id, score);
+      if (success) {
+        const updated = { ...job, human_match_score: score, corrected_at: new Date().toISOString() };
+        setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
+        setSelectedJob(updated);
+      }
+      setSaving(false);
+      setEditingScore(false);
+    };
+
     return (
       <div className="h-full flex flex-col overflow-hidden">
-        {/* Header - fixed, always LTR for consistency */}
+        {/* Header */}
         <div className="shrink-0 border-b border-white/10 pb-4 mb-4">
           <div className="flex items-start justify-between gap-4 mb-2">
             <h2 className="text-xl font-semibold text-white">{job.title}</h2>
@@ -258,17 +296,74 @@ export default function JobsPage() {
             {job.location && <span>{job.location}</span>}
             {job.experience && <span>{job.experience}</span>}
             <span>{formatDate(job.scraped_at)}</span>
-            {job.match_score && (
-              <span className="flex items-center gap-1 text-amber-400">
+            {/* Score - editable */}
+            {editingScore ? (
+              <div className="flex items-center gap-1">
+                {[1,2,3,4,5,6,7,8,9,10].map(s => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => handleScoreCorrection(s)}
+                    disabled={saving}
+                    className={`w-6 h-6 rounded text-[10px] font-bold transition-all ${
+                      s === effectiveScore
+                        ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50'
+                        : 'bg-white/5 text-white/50 hover:bg-white/10'
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+                <button type="button" onClick={() => setEditingScore(false)} className="text-white/40 ml-1">
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ) : effectiveScore ? (
+              <button
+                type="button"
+                onClick={() => setEditingScore(true)}
+                className="flex items-center gap-1 text-amber-400 hover:opacity-80 transition-all"
+              >
                 <Star className="h-3 w-3 fill-amber-400" />
-                {job.match_score}/10
-              </span>
-            )}
+                {effectiveScore}/10
+                {job.human_match_score !== null && <Check className="h-2.5 w-2.5 text-emerald-400" />}
+                <Pencil className="h-2.5 w-2.5 opacity-40" />
+              </button>
+            ) : null}
           </div>
         </div>
 
-        {/* Actions - fixed */}
+        {/* Relevance feedback - thumbs up/down */}
         <div className="shrink-0 flex flex-wrap gap-2 mb-4">
+          <button
+            type="button"
+            onClick={() => handleRelevance(true)}
+            disabled={saving}
+            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+              job.human_relevant === true
+                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400'
+                : 'border-white/10 text-white/60 hover:bg-emerald-500/10 hover:border-emerald-500/30'
+            }`}
+          >
+            <ThumbsUp className={`h-4 w-4 ${job.human_relevant === true ? 'fill-emerald-400' : ''}`} />
+            Good Match
+          </button>
+          <button
+            type="button"
+            onClick={() => handleRelevance(false)}
+            disabled={saving}
+            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+              job.human_relevant === false
+                ? 'bg-red-500/20 border-red-500/50 text-red-400'
+                : 'border-white/10 text-white/60 hover:bg-red-500/10 hover:border-red-500/30'
+            }`}
+          >
+            <ThumbsDown className={`h-4 w-4 ${job.human_relevant === false ? 'fill-red-400' : ''}`} />
+            Bad Match
+          </button>
+
+          <div className="border-l border-white/10 mx-1" />
+
           <a
             href={job.url}
             target="_blank"
@@ -310,7 +405,19 @@ export default function JobsPage() {
           )}
         </div>
 
-        {/* AI Notes (match reason) - fixed */}
+        {/* AI vs Human comparison when corrected */}
+        {(job.human_match_score !== null || job.human_relevant !== null) && (
+          <div className="shrink-0 mb-4 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs">
+            <span className="text-emerald-400 font-medium">Corrected</span>
+            <span className="text-white/50 ml-2">
+              {job.human_match_score !== null && `AI: ${job.match_score ?? '-'} → You: ${job.human_match_score}`}
+              {job.human_match_score !== null && job.human_relevant !== null && ' | '}
+              {job.human_relevant !== null && `Relevance: ${job.human_relevant ? 'Good' : 'Bad'}`}
+            </span>
+          </div>
+        )}
+
+        {/* AI Notes (match reason) */}
         {job.notes && (
           <div className="shrink-0 mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
             <h3 className="text-xs font-medium text-emerald-400 mb-1">AI Match Reason</h3>
@@ -318,7 +425,7 @@ export default function JobsPage() {
           </div>
         )}
 
-        {/* Tags - fixed */}
+        {/* Tags */}
         {job.tags && job.tags.length > 0 && (
           <div className="shrink-0 mb-4">
             <div className="flex flex-wrap gap-2">

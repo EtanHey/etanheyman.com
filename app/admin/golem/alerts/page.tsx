@@ -16,7 +16,7 @@ const actorColors: Record<string, { bg: string; text: string }> = {
 const eventLabels: Record<string, string> = {
   email_routed: 'Routed email',
   job_match: 'Found job match',
-  soltome_post: 'Posted to Soltome',
+  soltome_post: 'Content post',
   draft_approved: 'Approved draft',
   draft_rejected: 'Rejected draft',
   draft_scored: 'Scored drafts',
