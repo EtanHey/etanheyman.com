@@ -4,17 +4,19 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ hostname: "utfs.io" }],
   },
-  async redirects() {
+  async rewrites() {
     return [
       {
         source: "/projects/golems/docs",
         destination: "https://etanhey.github.io/golems/",
-        permanent: false,
       },
       {
         source: "/projects/golems/docs/:path*",
         destination: "https://etanhey.github.io/golems/:path*",
-        permanent: false,
+      },
+      {
+        source: "/golems/:path*",
+        destination: "https://etanhey.github.io/golems/:path*",
       },
     ];
   },
