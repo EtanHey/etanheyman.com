@@ -49,17 +49,23 @@ export async function getJobs(filters?: {
   status?: string;
   source?: string;
   search?: string;
-}): Promise<{ jobs: Job[]; error: string | null }> {
+  page?: number;
+  pageSize?: number;
+}): Promise<{ jobs: Job[]; total: number; error: string | null }> {
   try {
     await requireAuth();
 
     const supabase = await createClient();
+    const page = filters?.page ?? 0;
+    const pageSize = filters?.pageSize ?? 100;
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
 
     let query = supabase
       .from('golem_jobs')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('scraped_at', { ascending: false })
-      .limit(100);
+      .range(from, to);
 
     if (filters?.status && filters.status !== 'all') {
       query = query.eq('status', filters.status);
@@ -72,17 +78,17 @@ export async function getJobs(filters?: {
       query = query.or(`title.ilike.%${escaped}%,company.ilike.%${escaped}%`);
     }
 
-    const { data, error } = await query;
+    const { data, count, error } = await query;
 
     if (error) {
       console.error('Supabase error:', error);
-      return { jobs: [], error: error.message };
+      return { jobs: [], total: 0, error: error.message };
     }
 
-    return { jobs: data || [], error: null };
+    return { jobs: data || [], total: count ?? 0, error: null };
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
-    return { jobs: [], error: message };
+    return { jobs: [], total: 0, error: message };
   }
 }
 
