@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getGolemState, getEvents, type GolemState, type GolemEvent } from '../actions/data';
 import { FileText, RefreshCw, PenTool, ThumbsUp, ThumbsDown, BarChart3, Hash } from 'lucide-react';
 import { formatRelativeTime } from '../lib/format';
+import { PageHeader } from '../components';
 
 const contentEventTypes = new Set([
   'soltome_post', 'draft_approved', 'draft_rejected',
@@ -51,21 +52,13 @@ export default function ContentPage() {
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      {/* Header */}
-      <div className="shrink-0 flex items-center justify-between pb-4">
-        <h1 className="text-lg font-semibold text-white flex items-center gap-2">
-          <FileText className="h-5 w-5 text-violet-400" />
-          Content Pipeline
-        </h1>
-        <button
-          type="button"
-          onClick={refresh}
-          disabled={loading}
-          className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-white/60 hover:bg-white/5"
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-        </button>
-      </div>
+      <PageHeader
+        icon={FileText}
+        iconColor="text-violet-400"
+        title="Content Pipeline"
+        onRefresh={refresh}
+        loading={loading}
+      />
 
       {loading ? (
         <div className="flex items-center justify-center py-12">

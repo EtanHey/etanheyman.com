@@ -10,7 +10,6 @@ import {
   Star,
   Check,
   X,
-  Archive,
   Eye,
   Bookmark,
   Send,
@@ -29,38 +28,10 @@ import {
   Zap,
   ThumbsUp,
   ThumbsDown,
-  Pencil,
 } from 'lucide-react';
+import { ScoreEditor, RelevanceButtons, CorrectionBanner } from '../components';
+import { type JobStatus, statusConfig, statusPriority, sourceConfig } from '../lib/constants';
 
-type JobStatus = 'new' | 'viewed' | 'saved' | 'applied' | 'rejected' | 'archived';
-
-// Job type imported from server actions
-
-const statusConfig: Record<JobStatus, { label: string; color: string; cardBorder: string; icon: React.ElementType }> = {
-  new: { label: 'New', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30', cardBorder: 'border-l-blue-500', icon: Star },
-  viewed: { label: 'Viewed', color: 'bg-gray-500/20 text-gray-400 border-gray-500/30', cardBorder: 'border-l-gray-500', icon: Eye },
-  saved: { label: 'Saved', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30', cardBorder: 'border-l-amber-500', icon: Bookmark },
-  applied: { label: 'Applied', color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30', cardBorder: 'border-l-emerald-500', icon: Send },
-  rejected: { label: 'Rejected', color: 'bg-red-500/20 text-red-400 border-red-500/30', cardBorder: 'border-l-red-500', icon: X },
-  archived: { label: 'Archived', color: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30', cardBorder: 'border-l-zinc-500', icon: Archive },
-};
-
-// Status priority for sorting (lower = higher priority)
-const statusPriority: Record<JobStatus, number> = {
-  applied: 1,
-  saved: 2,
-  new: 3,
-  viewed: 4,
-  rejected: 5,
-  archived: 6,
-};
-
-const sourceConfig: Record<string, { label: string; color: string }> = {
-  secretTLV: { label: 'SecretTLV', color: 'text-purple-400' },
-  indeed: { label: 'Indeed', color: 'text-blue-400' },
-  drushim: { label: 'Drushim', color: 'text-orange-400' },
-  goozali: { label: 'Goozali', color: 'text-green-400' },
-};
 
 // Strip HTML tags and decode entities
 function cleanDescription(html: string | null): string {
@@ -254,7 +225,6 @@ export default function JobsPage() {
     const source = sourceConfig[job.source] || { label: job.source, color: 'text-white/60' };
     const cleanedDescription = cleanDescription(job.description);
     const descIsHebrew = isHebrew(cleanedDescription);
-    const [editingScore, setEditingScore] = useState(false);
     const [saving, setSaving] = useState(false);
 
     const effectiveScore = job.human_match_score ?? job.match_score;
@@ -270,21 +240,8 @@ export default function JobsPage() {
       setSaving(false);
     };
 
-    const handleScoreCorrection = async (score: number) => {
-      setSaving(true);
-      const { success } = await correctJobScore(job.id, score);
-      if (success) {
-        const updated = { ...job, human_match_score: score, corrected_at: new Date().toISOString() };
-        setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
-        setSelectedJob(updated);
-      }
-      setSaving(false);
-      setEditingScore(false);
-    };
-
     return (
       <div className="h-full flex flex-col overflow-hidden">
-        {/* Header */}
         <div className="shrink-0 border-b border-white/10 pb-4 mb-4">
           <div className="flex items-start justify-between gap-4 mb-2">
             <h2 className="text-xl font-semibold text-white">{job.title}</h2>
@@ -296,71 +253,30 @@ export default function JobsPage() {
             {job.location && <span>{job.location}</span>}
             {job.experience && <span>{job.experience}</span>}
             <span>{formatDate(job.scraped_at)}</span>
-            {/* Score - editable */}
-            {editingScore ? (
-              <div className="flex items-center gap-1">
-                {[1,2,3,4,5,6,7,8,9,10].map(s => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => handleScoreCorrection(s)}
-                    disabled={saving}
-                    className={`w-6 h-6 rounded text-[10px] font-bold transition-all ${
-                      s === effectiveScore
-                        ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50'
-                        : 'bg-white/5 text-white/50 hover:bg-white/10'
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-                <button type="button" onClick={() => setEditingScore(false)} className="text-white/40 ml-1">
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-            ) : effectiveScore ? (
-              <button
-                type="button"
-                onClick={() => setEditingScore(true)}
-                className="flex items-center gap-1 text-amber-400 hover:opacity-80 transition-all"
-              >
-                <Star className="h-3 w-3 fill-amber-400" />
-                {effectiveScore}/10
-                {job.human_match_score !== null && <Check className="h-2.5 w-2.5 text-emerald-400" />}
-                <Pencil className="h-2.5 w-2.5 opacity-40" />
-              </button>
-            ) : null}
+            {effectiveScore != null && (
+              <ScoreEditor
+                value={effectiveScore}
+                label="Match"
+                onSave={async (score) => {
+                  const { success } = await correctJobScore(job.id, score);
+                  if (success) {
+                    const updated = { ...job, human_match_score: score, corrected_at: new Date().toISOString() };
+                    setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
+                    setSelectedJob(updated);
+                  }
+                }}
+                hasCorrected={job.human_match_score !== null}
+              />
+            )}
           </div>
         </div>
 
-        {/* Relevance feedback - thumbs up/down */}
         <div className="shrink-0 flex flex-wrap gap-2 mb-4">
-          <button
-            type="button"
-            onClick={() => handleRelevance(true)}
-            disabled={saving}
-            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
-              job.human_relevant === true
-                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400'
-                : 'border-white/10 text-white/60 hover:bg-emerald-500/10 hover:border-emerald-500/30'
-            }`}
-          >
-            <ThumbsUp className={`h-4 w-4 ${job.human_relevant === true ? 'fill-emerald-400' : ''}`} />
-            Good Match
-          </button>
-          <button
-            type="button"
-            onClick={() => handleRelevance(false)}
-            disabled={saving}
-            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
-              job.human_relevant === false
-                ? 'bg-red-500/20 border-red-500/50 text-red-400'
-                : 'border-white/10 text-white/60 hover:bg-red-500/10 hover:border-red-500/30'
-            }`}
-          >
-            <ThumbsDown className={`h-4 w-4 ${job.human_relevant === false ? 'fill-red-400' : ''}`} />
-            Bad Match
-          </button>
+          <RelevanceButtons
+            value={job.human_relevant}
+            onVote={handleRelevance}
+            saving={saving}
+          />
 
           <div className="border-l border-white/10 mx-1" />
 
@@ -405,17 +321,12 @@ export default function JobsPage() {
           )}
         </div>
 
-        {/* AI vs Human comparison when corrected */}
-        {(job.human_match_score !== null || job.human_relevant !== null) && (
-          <div className="shrink-0 mb-4 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs">
-            <span className="text-emerald-400 font-medium">Corrected</span>
-            <span className="text-white/50 ml-2">
-              {job.human_match_score !== null && `AI: ${job.match_score ?? '-'} → You: ${job.human_match_score}`}
-              {job.human_match_score !== null && job.human_relevant !== null && ' | '}
-              {job.human_relevant !== null && `Relevance: ${job.human_relevant ? 'Good' : 'Bad'}`}
-            </span>
-          </div>
-        )}
+        <CorrectionBanner
+          corrections={[
+            { label: 'Score', aiValue: job.match_score, humanValue: job.human_match_score },
+            { label: 'Relevance', aiValue: null, humanValue: job.human_relevant !== null ? (job.human_relevant ? 'Good' : 'Bad') : null },
+          ]}
+        />
 
         {/* AI Notes (match reason) */}
         {job.notes && (

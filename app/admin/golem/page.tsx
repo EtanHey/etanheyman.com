@@ -17,40 +17,8 @@ import {
   Zap,
 } from 'lucide-react';
 import Link from 'next/link';
-
-const actorColors: Record<string, string> = {
-  emailgolem: 'text-blue-400',
-  jobgolem: 'text-emerald-400',
-  claudegolem: 'text-violet-400',
-  recruitergolem: 'text-amber-400',
-  ollamagolem: 'text-rose-400',
-  nightshift: 'text-indigo-400',
-};
-
-const eventTypeLabels: Record<string, string> = {
-  email_routed: 'Email routed',
-  job_match: 'Job match',
-  soltome_post: 'Content post',
-  draft_approved: 'Draft approved',
-  draft_rejected: 'Draft rejected',
-  draft_scored: 'Drafts scored',
-  pattern_extracted: 'Patterns found',
-  email_alert: 'Email alert',
-  nightshift_pr: 'Night Shift PR',
-  outreach_draft: 'Outreach draft',
-  contact_found: 'Contact found',
-};
-
-function formatTimeAgo(date: string) {
-  const diff = Date.now() - new Date(date).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  return `${days}d ago`;
-}
+import { actorColors, eventTypeLabels } from './lib/constants';
+import { formatRelativeTime } from './lib/format';
 
 export default function GolemOverview() {
   const [stats, setStats] = useState<OverviewStats | null>(null);
@@ -224,7 +192,7 @@ export default function GolemOverview() {
                     )}
                   </div>
                   <span className="text-[10px] text-white/30 whitespace-nowrap shrink-0">
-                    {formatTimeAgo(event.created_at)}
+                    {formatRelativeTime(event.created_at)}
                   </span>
                 </div>
               ))
@@ -323,7 +291,7 @@ export default function GolemOverview() {
                 }`} />
                 <span className="text-white/70 flex-1">{svc.name}</span>
                 <span className="text-white/40 text-right">
-                  {svc.lastRun ? formatTimeAgo(svc.lastRun) : 'never'}
+                  {svc.lastRun ? formatRelativeTime(svc.lastRun) : 'never'}
                 </span>
                 <span className="text-white/30 hidden sm:inline">{svc.schedule}</span>
               </div>
