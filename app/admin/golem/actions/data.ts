@@ -98,31 +98,39 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
     await requireAuth();
     const supabase = createAdminClient();
 
-    const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, emailCatsRes, jobStatusRes, stateRes] = await Promise.all([
+    const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, allEmailsRes, allJobsRes, stateRes] = await Promise.all([
       supabase.from('emails').select('id', { count: 'exact', head: true }),
       supabase.from('golem_jobs').select('id', { count: 'exact', head: true }),
       supabase.from('golem_events').select('id', { count: 'exact', head: true }),
       supabase.from('golem_events').select('*').order('created_at', { ascending: false }).limit(10),
       supabase.from('outreach_contacts').select('id', { count: 'exact', head: true }),
-      supabase.rpc('get_email_category_stats'),
-      supabase.rpc('get_job_status_counts'),
+      supabase.from('emails').select('category, score'),
+      supabase.from('golem_jobs').select('status'),
       supabase.from('golem_state').select('key, value, updated_at'),
     ]);
 
-    // SQL-aggregated email categories
-    const emailsByCategory: { category: string; count: number; avg_score: number }[] =
-      (emailCatsRes.data || []).map((r: { category: string; count: number; avg_score: number }) => ({
-        category: r.category,
-        count: Number(r.count),
-        avg_score: Number(r.avg_score),
-      }));
+    // Client-side aggregation: email categories
+    const catMap = new Map<string, { count: number; totalScore: number }>();
+    for (const row of (allEmailsRes.data || []) as { category: string | null; score: number | null }[]) {
+      const cat = row.category || 'other';
+      const entry = catMap.get(cat) || { count: 0, totalScore: 0 };
+      entry.count++;
+      if (row.score != null) entry.totalScore += row.score;
+      catMap.set(cat, entry);
+    }
+    const emailsByCategory = Array.from(catMap.entries()).map(([category, { count, totalScore }]) => ({
+      category,
+      count,
+      avg_score: count > 0 ? Math.round((totalScore / count) * 10) / 10 : 0,
+    }));
 
-    // SQL-aggregated job statuses
-    const jobsByStatus: { status: string; count: number }[] =
-      (jobStatusRes.data || []).map((r: { status: string; count: number }) => ({
-        status: r.status,
-        count: Number(r.count),
-      }));
+    // Client-side aggregation: job statuses
+    const statusMap = new Map<string, number>();
+    for (const row of (allJobsRes.data || []) as { status: string | null }[]) {
+      const status = row.status || 'unknown';
+      statusMap.set(status, (statusMap.get(status) || 0) + 1);
+    }
+    const jobsByStatus = Array.from(statusMap.entries()).map(([status, count]) => ({ status, count }));
 
     // Railway health check
     let railwayHealth: OverviewStats['railwayHealth'] = null;

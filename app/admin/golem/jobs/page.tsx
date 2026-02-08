@@ -203,7 +203,7 @@ export default function JobsPage() {
           {job.location && <span>{job.location}</span>}
           <span>{formatDate(job.scraped_at)}</span>
         </div>
-        {(job.match_score || job.human_match_score) && (
+        {(job.match_score != null || job.human_match_score != null) && (
           <div className="mt-2 flex items-center gap-2">
             <div className="flex items-center gap-1">
               <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
@@ -253,21 +253,19 @@ export default function JobsPage() {
             {job.location && <span>{job.location}</span>}
             {job.experience && <span>{job.experience}</span>}
             <span>{formatDate(job.scraped_at)}</span>
-            {effectiveScore != null && (
-              <ScoreEditor
-                value={effectiveScore}
-                label="Match"
-                onSave={async (score) => {
-                  const { success } = await correctJobScore(job.id, score);
-                  if (success) {
-                    const updated = { ...job, human_match_score: score, corrected_at: new Date().toISOString() };
-                    setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
-                    setSelectedJob(updated);
-                  }
-                }}
-                hasCorrected={job.human_match_score !== null}
-              />
-            )}
+            <ScoreEditor
+              value={effectiveScore}
+              label="Match"
+              onSave={async (score) => {
+                const { success } = await correctJobScore(job.id, score);
+                if (success) {
+                  const updated = { ...job, human_match_score: score, corrected_at: new Date().toISOString() };
+                  setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
+                  setSelectedJob(updated);
+                }
+              }}
+              hasCorrected={job.human_match_score !== null}
+            />
           </div>
         </div>
 

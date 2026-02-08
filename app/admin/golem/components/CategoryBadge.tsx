@@ -20,9 +20,12 @@ export function CategoryBadge({ value, options, colors, onSave, hasCorrected }: 
 
   const handleSave = async (nextValue: string) => {
     setSaving(true);
-    await onSave(nextValue);
-    setSaving(false);
-    setEditing(false);
+    try {
+      await onSave(nextValue);
+      setEditing(false);
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (editing) {
