@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { getJobs, updateJobStatus as updateJobStatusAction, type Job } from './actions/jobs';
+import { correctJobRelevance, correctJobScore } from '../actions/data';
 import {
   Search,
   Filter,
@@ -9,7 +10,6 @@ import {
   Star,
   Check,
   X,
-  Archive,
   Eye,
   Bookmark,
   Send,
@@ -26,37 +26,12 @@ import {
   SlidersHorizontal,
   XCircle,
   Zap,
+  ThumbsUp,
+  ThumbsDown,
 } from 'lucide-react';
+import { ScoreEditor, RelevanceButtons, CorrectionBanner } from '../components';
+import { type JobStatus, statusConfig, statusPriority, sourceConfig } from '../lib/constants';
 
-type JobStatus = 'new' | 'viewed' | 'saved' | 'applied' | 'rejected' | 'archived';
-
-// Job type imported from server actions
-
-const statusConfig: Record<JobStatus, { label: string; color: string; cardBorder: string; icon: React.ElementType }> = {
-  new: { label: 'New', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30', cardBorder: 'border-l-blue-500', icon: Star },
-  viewed: { label: 'Viewed', color: 'bg-gray-500/20 text-gray-400 border-gray-500/30', cardBorder: 'border-l-gray-500', icon: Eye },
-  saved: { label: 'Saved', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30', cardBorder: 'border-l-amber-500', icon: Bookmark },
-  applied: { label: 'Applied', color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30', cardBorder: 'border-l-emerald-500', icon: Send },
-  rejected: { label: 'Rejected', color: 'bg-red-500/20 text-red-400 border-red-500/30', cardBorder: 'border-l-red-500', icon: X },
-  archived: { label: 'Archived', color: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30', cardBorder: 'border-l-zinc-500', icon: Archive },
-};
-
-// Status priority for sorting (lower = higher priority)
-const statusPriority: Record<JobStatus, number> = {
-  applied: 1,
-  saved: 2,
-  new: 3,
-  viewed: 4,
-  rejected: 5,
-  archived: 6,
-};
-
-const sourceConfig: Record<string, { label: string; color: string }> = {
-  secretTLV: { label: 'SecretTLV', color: 'text-purple-400' },
-  indeed: { label: 'Indeed', color: 'text-blue-400' },
-  drushim: { label: 'Drushim', color: 'text-orange-400' },
-  goozali: { label: 'Goozali', color: 'text-green-400' },
-};
 
 // Strip HTML tags and decode entities
 function cleanDescription(html: string | null): string {
@@ -228,10 +203,18 @@ export default function JobsPage() {
           {job.location && <span>{job.location}</span>}
           <span>{formatDate(job.scraped_at)}</span>
         </div>
-        {job.match_score && (
-          <div className="mt-2 flex items-center gap-1">
-            <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-            <span className="text-xs text-amber-400">{job.match_score}/10</span>
+        {(job.match_score != null || job.human_match_score != null) && (
+          <div className="mt-2 flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
+              <span className="text-xs text-amber-400">{job.human_match_score ?? job.match_score}/10</span>
+              {job.human_match_score !== null && <Check className="h-2.5 w-2.5 text-emerald-400" />}
+            </div>
+            {job.human_relevant !== null && (
+              job.human_relevant
+                ? <ThumbsUp className="h-3 w-3 text-emerald-400 fill-emerald-400" />
+                : <ThumbsDown className="h-3 w-3 text-red-400 fill-red-400" />
+            )}
           </div>
         )}
       </button>
@@ -242,11 +225,26 @@ export default function JobsPage() {
     const source = sourceConfig[job.source] || { label: job.source, color: 'text-white/60' };
     const cleanedDescription = cleanDescription(job.description);
     const descIsHebrew = isHebrew(cleanedDescription);
+    const [saving, setSaving] = useState(false);
 
-    // Consistent LTR layout for header, only description uses RTL when Hebrew
+    const effectiveScore = job.human_match_score ?? job.match_score;
+
+    const handleRelevance = async (relevant: boolean) => {
+      setSaving(true);
+      try {
+        const { success } = await correctJobRelevance(job.id, relevant);
+        if (success) {
+          const updated = { ...job, human_relevant: relevant, corrected_at: new Date().toISOString() };
+          setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
+          setSelectedJob(updated);
+        }
+      } finally {
+        setSaving(false);
+      }
+    };
+
     return (
       <div className="h-full flex flex-col overflow-hidden">
-        {/* Header - fixed, always LTR for consistency */}
         <div className="shrink-0 border-b border-white/10 pb-4 mb-4">
           <div className="flex items-start justify-between gap-4 mb-2">
             <h2 className="text-xl font-semibold text-white">{job.title}</h2>
@@ -258,17 +256,31 @@ export default function JobsPage() {
             {job.location && <span>{job.location}</span>}
             {job.experience && <span>{job.experience}</span>}
             <span>{formatDate(job.scraped_at)}</span>
-            {job.match_score && (
-              <span className="flex items-center gap-1 text-amber-400">
-                <Star className="h-3 w-3 fill-amber-400" />
-                {job.match_score}/10
-              </span>
-            )}
+            <ScoreEditor
+              value={effectiveScore}
+              label="Match"
+              onSave={async (score) => {
+                const { success } = await correctJobScore(job.id, score);
+                if (success) {
+                  const updated = { ...job, human_match_score: score, corrected_at: new Date().toISOString() };
+                  setJobs(prev => prev.map(j => j.id === job.id ? updated : j));
+                  setSelectedJob(updated);
+                }
+              }}
+              hasCorrected={job.human_match_score !== null}
+            />
           </div>
         </div>
 
-        {/* Actions - fixed */}
         <div className="shrink-0 flex flex-wrap gap-2 mb-4">
+          <RelevanceButtons
+            value={job.human_relevant}
+            onVote={handleRelevance}
+            saving={saving}
+          />
+
+          <div className="border-l border-white/10 mx-1" />
+
           <a
             href={job.url}
             target="_blank"
@@ -310,7 +322,14 @@ export default function JobsPage() {
           )}
         </div>
 
-        {/* AI Notes (match reason) - fixed */}
+        <CorrectionBanner
+          corrections={[
+            { label: 'Score', aiValue: job.match_score, humanValue: job.human_match_score },
+            { label: 'Relevance', aiValue: null, humanValue: job.human_relevant !== null ? (job.human_relevant ? 'Good' : 'Bad') : null },
+          ]}
+        />
+
+        {/* AI Notes (match reason) */}
         {job.notes && (
           <div className="shrink-0 mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
             <h3 className="text-xs font-medium text-emerald-400 mb-1">AI Match Reason</h3>
@@ -318,7 +337,7 @@ export default function JobsPage() {
           </div>
         )}
 
-        {/* Tags - fixed */}
+        {/* Tags */}
         {job.tags && job.tags.length > 0 && (
           <div className="shrink-0 mb-4">
             <div className="flex flex-wrap gap-2">

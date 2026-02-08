@@ -17,40 +17,8 @@ import {
   Zap,
 } from 'lucide-react';
 import Link from 'next/link';
-
-const actorColors: Record<string, string> = {
-  emailgolem: 'text-blue-400',
-  jobgolem: 'text-emerald-400',
-  claudegolem: 'text-violet-400',
-  recruitergolem: 'text-amber-400',
-  ollamagolem: 'text-rose-400',
-  nightshift: 'text-indigo-400',
-};
-
-const eventTypeLabels: Record<string, string> = {
-  email_routed: 'Email routed',
-  job_match: 'Job match',
-  soltome_post: 'Soltome post',
-  draft_approved: 'Draft approved',
-  draft_rejected: 'Draft rejected',
-  draft_scored: 'Drafts scored',
-  pattern_extracted: 'Patterns found',
-  email_alert: 'Email alert',
-  nightshift_pr: 'Night Shift PR',
-  outreach_draft: 'Outreach draft',
-  contact_found: 'Contact found',
-};
-
-function formatTimeAgo(date: string) {
-  const diff = Date.now() - new Date(date).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  return `${days}d ago`;
-}
+import { actorColors, eventTypeLabels } from './lib/constants';
+import { formatRelativeTime } from './lib/format';
 
 export default function GolemOverview() {
   const [stats, setStats] = useState<OverviewStats | null>(null);
@@ -224,7 +192,7 @@ export default function GolemOverview() {
                     )}
                   </div>
                   <span className="text-[10px] text-white/30 whitespace-nowrap shrink-0">
-                    {formatTimeAgo(event.created_at)}
+                    {formatRelativeTime(event.created_at)}
                   </span>
                 </div>
               ))
@@ -250,14 +218,15 @@ export default function GolemOverview() {
                 <div key={cat.category} className="group">
                   <div className="flex items-center justify-between text-xs mb-1">
                     <span className="text-white/70 capitalize">{cat.category}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-white/40">{cat.count}</span>
-                      <span className={`font-medium ${
+                    <div className="flex items-center gap-3">
+                      <span className="text-white/50 tabular-nums">{cat.count} emails</span>
+                      <span className={`font-medium tabular-nums ${
                         cat.avg_score >= 7 ? 'text-emerald-400' :
                         cat.avg_score >= 4 ? 'text-amber-400' :
                         'text-white/40'
                       }`}>
-                        {cat.avg_score}/10
+                        {cat.avg_score}
+                        <span className="text-white/20">/10</span>
                       </span>
                     </div>
                   </div>
@@ -322,18 +291,11 @@ export default function GolemOverview() {
                 }`} />
                 <span className="text-white/70 flex-1">{svc.name}</span>
                 <span className="text-white/40 text-right">
-                  {svc.lastRun ? formatTimeAgo(svc.lastRun) : 'never'}
+                  {svc.lastRun ? formatRelativeTime(svc.lastRun) : 'never'}
                 </span>
                 <span className="text-white/30 hidden sm:inline">{svc.schedule}</span>
               </div>
             ))}
-            {/* Static entry for Soltome (no state key yet) */}
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-white/20 shrink-0" />
-              <span className="text-white/70 flex-1">Soltome Learner</span>
-              <span className="text-white/40 text-right">—</span>
-              <span className="text-white/30 hidden sm:inline">2am daily</span>
-            </div>
           </div>
         </div>
       </div>

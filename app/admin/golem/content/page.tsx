@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getGolemState, getEvents, type GolemState, type GolemEvent } from '../actions/data';
 import { FileText, RefreshCw, PenTool, ThumbsUp, ThumbsDown, BarChart3, Hash } from 'lucide-react';
 import { formatRelativeTime } from '../lib/format';
+import { PageHeader } from '../components';
 
 const contentEventTypes = new Set([
   'soltome_post', 'draft_approved', 'draft_rejected',
@@ -42,31 +43,22 @@ export default function ContentPage() {
   };
 
   const pendingDrafts = (getStateValue('pendingDraftIds') as string[]) || [];
-  const soltomeUser = getStateValue('soltomeUsername') as string | undefined;
   const topics = (getStateValue('topics') as Record<string, unknown>) || {};
   const topicKeys = Object.keys(topics);
 
-  const postsCount = contentEvents.filter((e) => e.type === 'soltome_post').length;
+  const postsCount = contentEvents.filter((e) => e.type === 'soltome_post' || e.type === 'content_post').length;
   const approvedCount = contentEvents.filter((e) => e.type === 'draft_approved').length;
   const rejectedCount = contentEvents.filter((e) => e.type === 'draft_rejected').length;
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      {/* Header */}
-      <div className="shrink-0 flex items-center justify-between pb-4">
-        <h1 className="text-lg font-semibold text-white flex items-center gap-2">
-          <FileText className="h-5 w-5 text-violet-400" />
-          Content Pipeline
-        </h1>
-        <button
-          type="button"
-          onClick={refresh}
-          disabled={loading}
-          className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-white/60 hover:bg-white/5"
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-        </button>
-      </div>
+      <PageHeader
+        icon={FileText}
+        iconColor="text-violet-400"
+        title="Content Pipeline"
+        onRefresh={refresh}
+        loading={loading}
+      />
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
@@ -91,29 +83,6 @@ export default function ContentPage() {
             <div className="bg-white/5 rounded-lg border border-white/10 p-4">
               <div className="text-xs text-white/50 mb-1">Pending Drafts</div>
               <div className="text-2xl font-bold text-amber-400">{pendingDrafts.length}</div>
-            </div>
-          </div>
-
-          {/* Soltome Account */}
-          <div className="bg-white/5 rounded-lg border border-white/10 p-4">
-            <h3 className="text-sm font-medium text-white/60 mb-3">Soltome Account</h3>
-            <div className="flex items-center gap-4">
-              <div>
-                <div className="text-xs text-white/40">Username</div>
-                <div className="text-sm text-white font-medium">
-                  {soltomeUser || 'Not configured'}
-                </div>
-              </div>
-              {soltomeUser && (
-                <a
-                  href={`https://soltome.com/@${soltomeUser}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-violet-400 hover:text-violet-300"
-                >
-                  View Profile
-                </a>
-              )}
             </div>
           </div>
 
