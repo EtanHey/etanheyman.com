@@ -2,7 +2,7 @@
 
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/auth';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { escapePostgrestSearch } from './utils';
 
 // Verify session before any operation
@@ -55,7 +55,7 @@ export async function getJobs(filters?: {
   try {
     await requireAuth();
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const page = filters?.page ?? 0;
     const pageSize = filters?.pageSize ?? 100;
     const from = page * pageSize;
@@ -106,7 +106,7 @@ export async function updateJobStatus(
       return { success: false, error: `Invalid status: ${status}` };
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     
     const { error } = await supabase
       .from('golem_jobs')

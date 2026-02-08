@@ -2,7 +2,7 @@
 
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/auth';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 const RAILWAY_HEALTH_URL = process.env.RAILWAY_HEALTH_URL || 'https://golems-production.up.railway.app/health';
 
@@ -93,7 +93,7 @@ export interface OverviewStats {
 export async function getOverviewStats(): Promise<{ data: OverviewStats | null; error: string | null }> {
   try {
     await requireAuth();
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, allEmailsRes, allJobsRes, stateRes] = await Promise.all([
       supabase.from('emails').select('id', { count: 'exact', head: true }),
@@ -213,7 +213,7 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
 export async function getEvents(limit = 50): Promise<{ events: GolemEvent[]; error: string | null }> {
   try {
     await requireAuth();
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { data, error } = await supabase
       .from('golem_events')
       .select('*')
@@ -237,7 +237,7 @@ export async function getEmails(filters?: {
 }): Promise<{ emails: Email[]; error: string | null }> {
   try {
     await requireAuth();
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     let query = supabase
       .from('emails')
@@ -268,7 +268,7 @@ export async function getEmails(filters?: {
 export async function getGolemState(): Promise<{ state: GolemState[]; error: string | null }> {
   try {
     await requireAuth();
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { data, error } = await supabase
       .from('golem_state')
       .select('*')
@@ -290,7 +290,7 @@ export async function getOutreachData(): Promise<{
 }> {
   try {
     await requireAuth();
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const [contactsRes, messagesRes] = await Promise.all([
       supabase.from('outreach_contacts').select('*').order('created_at', { ascending: false }),
