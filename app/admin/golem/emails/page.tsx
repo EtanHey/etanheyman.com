@@ -199,7 +199,7 @@ export default function EmailsPage() {
       <ListDetailLayout
         hasSelection={Boolean(selectedEmail)}
         loading={loading}
-        list={<div className="flex-1 overflow-y-auto space-y-2">{emailList}</div>}
+        list={emailList}
         detail={
           selectedEmail ? (
             <EmailDetail
