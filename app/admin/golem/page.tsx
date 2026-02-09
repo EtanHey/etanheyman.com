@@ -181,7 +181,7 @@ export default function GolemOverview() {
             <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
               <div className="text-lg font-bold text-white flex items-center justify-center gap-1">
                 <DollarSign className="h-4 w-4 text-emerald-400" />
-                {(stats.usageStats.totalCostUsd ?? 0).toFixed(4)}
+                {(stats.usageStats.estimatedCostUSD ?? 0).toFixed(4)}
               </div>
               <div className="text-[10px] uppercase tracking-wider text-white/50">Total Cost</div>
             </div>
@@ -205,7 +205,7 @@ export default function GolemOverview() {
                       <td className="py-2 px-3 text-right text-white/60 tabular-nums">{data.calls}</td>
                       <td className="py-2 px-3 text-right text-white/60 tabular-nums">{formatTokens(data.inputTokens)}</td>
                       <td className="py-2 px-3 text-right text-white/60 tabular-nums">{formatTokens(data.outputTokens)}</td>
-                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">${(data.costUsd ?? 0).toFixed(4)}</td>
+                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">${((data.inputTokens * 0.8 + data.outputTokens * 4.0) / 1_000_000).toFixed(4)}</td>
                     </tr>
                   ))}
                 </tbody>

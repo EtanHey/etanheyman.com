@@ -86,14 +86,13 @@ export interface UsageBySource {
   calls: number;
   inputTokens: number;
   outputTokens: number;
-  costUsd: number;
 }
 
 export interface UsageStats {
   totalCalls: number;
   totalInputTokens: number;
   totalOutputTokens: number;
-  totalCostUsd: number;
+  estimatedCostUSD: number;
   bySource: Record<string, UsageBySource>;
 }
 
