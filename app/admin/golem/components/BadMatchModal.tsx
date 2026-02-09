@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { X, AlertTriangle, Loader2 } from 'lucide-react';
 import { REJECTION_TAGS, type RejectionTag, rejectionTagLabels } from '../lib/constants';
 
@@ -15,6 +15,28 @@ export function BadMatchModal({ open, onClose, onConfirm, jobTitle }: BadMatchMo
   const [selectedTags, setSelectedTags] = useState<Set<RejectionTag>>(new Set());
   const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
+
+  // Reset state when modal opens for a new job
+  useEffect(() => {
+    if (open) {
+      setSelectedTags(new Set());
+      setNote('');
+    }
+  }, [open, jobTitle]);
+
+  // Escape key handler
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape' && !saving) {
+      onClose();
+    }
+  }, [onClose, saving]);
+
+  useEffect(() => {
+    if (open) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [open, handleKeyDown]);
 
   if (!open) return null;
 
@@ -37,8 +59,6 @@ export function BadMatchModal({ open, onClose, onConfirm, jobTitle }: BadMatchMo
         Array.from(selectedTags),
         note.trim() || null,
       );
-      setSelectedTags(new Set());
-      setNote('');
     } finally {
       setSaving(false);
     }

@@ -879,21 +879,12 @@ export default function JobsPage() {
         onConfirm={async (tags: RejectionTag[], note: string | null) => {
           if (!badMatchJob) return;
           const { success } = await saveJobRejection(badMatchJob.id, tags, note);
-          if (success) {
-            const updated = {
-              ...badMatchJob,
-              status: 'archived',
-              rejection_tags: tags,
-              rejection_note: note,
-              human_relevant: false,
-              corrected_at: new Date().toISOString(),
-            };
-            setJobs((prev) => prev.filter((j) => j.id !== badMatchJob.id));
-            if (selectedJob?.id === badMatchJob.id) {
-              setSelectedJob(null);
-            }
-            setBadMatchJob(null);
+          if (!success) return;
+          setJobs((prev) => prev.filter((j) => j.id !== badMatchJob.id));
+          if (selectedJob?.id === badMatchJob.id) {
+            setSelectedJob(null);
           }
+          setBadMatchJob(null);
         }}
       />
     </div>

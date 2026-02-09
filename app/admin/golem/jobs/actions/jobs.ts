@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/auth';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { escapePostgrestSearch } from './utils';
-import type { JobStatus, RejectionTag } from '../../lib/constants';
+import { REJECTION_TAGS, type JobStatus, type RejectionTag } from '../../lib/constants';
 
 // Verify session before any operation
 async function requireAuth() {
@@ -168,6 +168,17 @@ export async function saveJobRejection(
 ): Promise<{ success: boolean; error: string | null }> {
   try {
     await requireAuth();
+
+    if (!jobId || typeof jobId !== 'string') {
+      return { success: false, error: 'Invalid job ID' };
+    }
+    if (!Array.isArray(tags) || tags.length === 0) {
+      return { success: false, error: 'At least one rejection tag is required' };
+    }
+    const validTags = new Set<string>(REJECTION_TAGS);
+    if (tags.some((t) => !validTags.has(t))) {
+      return { success: false, error: 'Invalid rejection tag' };
+    }
 
     const supabase = createAdminClient();
 
