@@ -4,7 +4,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/auth';
 import { createAdminClient } from '@/lib/supabase/admin';
 
-const RAILWAY_HEALTH_URL = process.env.RAILWAY_HEALTH_URL || 'https://golems-production.up.railway.app/health';
+const RAILWAY_BASE_URL = process.env.RAILWAY_BASE_URL || 'https://golems-production.up.railway.app';
+const RAILWAY_HEALTH_URL = process.env.RAILWAY_HEALTH_URL || `${RAILWAY_BASE_URL}/health`;
 
 async function requireAuth() {
   const session = await getServerSession(authOptions);
@@ -81,6 +82,21 @@ export interface ServiceStatus {
   staleThresholdHours: number;
 }
 
+export interface UsageBySource {
+  calls: number;
+  inputTokens: number;
+  outputTokens: number;
+  costUsd: number;
+}
+
+export interface UsageStats {
+  totalCalls: number;
+  totalInputTokens: number;
+  totalOutputTokens: number;
+  totalCostUsd: number;
+  bySource: Record<string, UsageBySource>;
+}
+
 export interface OverviewStats {
   totalEmails: number;
   totalJobs: number;
@@ -91,6 +107,7 @@ export interface OverviewStats {
   jobsByStatus: { status: string; count: number }[];
   railwayHealth: { status: string; golemStatus?: string; uptime?: number } | null;
   serviceStatuses: ServiceStatus[];
+  usageStats: UsageStats | null;
 }
 
 export async function getOverviewStats(): Promise<{ data: OverviewStats | null; error: string | null }> {
@@ -151,6 +168,19 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
       railwayHealth = { status: 'unreachable' };
     }
 
+    // Fetch usage stats from cloud worker
+    let usageStats: UsageStats | null = null;
+    try {
+      const usageRes = await fetch(`${RAILWAY_BASE_URL}/usage`, {
+        signal: AbortSignal.timeout(5000),
+      });
+      if (usageRes.ok) {
+        usageStats = await usageRes.json();
+      }
+    } catch {
+      // Usage stats are non-critical, silently fail
+    }
+
     // Build service statuses from golem_state
     const stateMap = new Map<string, { value: unknown; updated_at: string }>();
     if (stateRes.data) {
@@ -198,6 +228,7 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
         jobsByStatus,
         railwayHealth,
         serviceStatuses,
+        usageStats,
       },
       error: null,
     };
@@ -411,5 +442,119 @@ export async function getCorrectionStats(): Promise<{
     return { data: data as any, error: null };
   } catch (err) {
     return { data: null, error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
+// ─── Email Senders ──────────────────────────────────
+
+export interface EmailSender {
+  email_address: string;
+  display_name: string | null;
+  domain: string | null;
+  category: string | null;
+  total_emails: number;
+  last_email_at: string | null;
+  avg_score: number | null;
+  unsubscribe_url: string | null;
+  unsubscribe_email: string | null;
+  unsubscribe_status: string | null;
+  user_action: string | null;
+}
+
+export interface SenderDetails {
+  sender: EmailSender;
+  recentEmails: Array<{
+    id: string;
+    subject: string | null;
+    received_at: string | null;
+    score: number | null;
+  }>;
+}
+
+export async function getSenderDetails(
+  emailAddress: string,
+): Promise<{ data: SenderDetails | null; error: string | null }> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+
+    const [senderRes, emailsRes] = await Promise.all([
+      supabase
+        .from('email_senders')
+        .select('*')
+        .eq('email_address', emailAddress)
+        .single(),
+      supabase
+        .from('emails')
+        .select('id, subject, received_at, score')
+        .eq('from_address', emailAddress)
+        .order('received_at', { ascending: false })
+        .limit(10),
+    ]);
+
+    if (senderRes.error) {
+      return { data: null, error: senderRes.error.message };
+    }
+
+    return {
+      data: {
+        sender: senderRes.data as EmailSender,
+        recentEmails: (emailsRes.data || []) as SenderDetails['recentEmails'],
+      },
+      error: null,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+export async function setSenderAction(
+  emailAddress: string,
+  action: 'keep' | 'unsubscribe' | 'block',
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+
+    const { error } = await supabase
+      .from('email_senders')
+      .update({ user_action: action })
+      .eq('email_address', emailAddress);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true, error: null };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+export async function bulkSetSenderAction(
+  emailAddresses: string[],
+  action: 'keep' | 'unsubscribe' | 'block',
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    await requireAuth();
+    if (emailAddresses.length === 0)
+      return { success: false, error: 'No addresses provided' };
+    const supabase = createAdminClient();
+
+    const { error } = await supabase
+      .from('email_senders')
+      .update({ user_action: action })
+      .in('email_address', emailAddresses);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true, error: null };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
   }
 }
