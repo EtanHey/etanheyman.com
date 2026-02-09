@@ -101,6 +101,7 @@ export interface OverviewStats {
   totalJobs: number;
   totalEvents: number;
   totalContacts: number;
+  totalConnections: number;
   recentEvents: GolemEvent[];
   emailsByCategory: { category: string; count: number; avg_score: number }[];
   jobsByStatus: { status: string; count: number }[];
@@ -114,12 +115,13 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
     await requireAuth();
     const supabase = createAdminClient();
 
-    const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, allEmailsRes, allJobsRes, stateRes] = await Promise.all([
+    const [emailsRes, jobsRes, eventsCountRes, eventsRes, contactsRes, connectionsRes, allEmailsRes, allJobsRes, stateRes] = await Promise.all([
       supabase.from('emails').select('id', { count: 'exact', head: true }),
       supabase.from('golem_jobs').select('id', { count: 'exact', head: true }),
       supabase.from('golem_events').select('id', { count: 'exact', head: true }),
       supabase.from('golem_events').select('*').order('created_at', { ascending: false }).limit(10),
       supabase.from('outreach_contacts').select('id', { count: 'exact', head: true }),
+      supabase.from('linkedin_connections').select('id', { count: 'exact', head: true }),
       supabase.from('emails').select('category, score'),
       supabase.from('golem_jobs').select('status'),
       supabase.from('golem_state').select('key, value, updated_at'),
@@ -222,6 +224,7 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
         totalJobs: jobsRes.count || 0,
         totalEvents: eventsCountRes.count || 0,
         totalContacts: contactsRes.count || 0,
+        totalConnections: connectionsRes.count || 0,
         recentEvents: (eventsRes.data || []) as GolemEvent[],
         emailsByCategory,
         jobsByStatus,
@@ -315,7 +318,7 @@ export async function getGolemState(): Promise<{ state: GolemState[]; error: str
   }
 }
 
-// ─── Outreach ────────────────────────────────────────
+// ─── Outreach (Legacy) ───────────────────────────────
 
 export async function getOutreachData(): Promise<{
   contacts: OutreachContact[];
@@ -338,6 +341,145 @@ export async function getOutreachData(): Promise<{
     };
   } catch (err) {
     return { contacts: [], messages: [], error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
+// ─── LinkedIn Connections ────────────────────────────
+
+export interface LinkedInConnection {
+  id: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  linkedin_url: string | null;
+  email: string | null;
+  company: string | null;
+  company_normalized: string | null;
+  position: string | null;
+  connected_on: string | null;
+  has_messages: boolean;
+  relationship_strength: string | null;
+  created_at: string;
+}
+
+export interface ConnectionMatch {
+  id: string;
+  job_id: string;
+  connection_id: string;
+  company_match_type: string;
+  match_confidence: number;
+  job: {
+    id: string;
+    title: string;
+    company: string;
+    url: string;
+    status: string;
+    match_score: number | null;
+  } | null;
+  connection: {
+    id: string;
+    full_name: string;
+    company: string | null;
+    position: string | null;
+    linkedin_url: string | null;
+  } | null;
+}
+
+export async function getLinkedInConnections(filters?: {
+  search?: string;
+  hasMessages?: boolean;
+  page?: number;
+  pageSize?: number;
+}): Promise<{
+  connections: LinkedInConnection[];
+  total: number;
+  error: string | null;
+}> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+
+    const page = filters?.page ?? 0;
+    const pageSize = filters?.pageSize ?? 50;
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
+    let query = supabase
+      .from('linkedin_connections')
+      .select('*', { count: 'exact' })
+      .order('connected_on', { ascending: false })
+      .range(from, to);
+
+    if (filters?.search) {
+      const escaped = filters.search.replace(/[^a-zA-Z0-9@.\-_ ]/g, '');
+      if (escaped) {
+        query = query.or(
+          `full_name.ilike.%${escaped}%,company.ilike.%${escaped}%,position.ilike.%${escaped}%`
+        );
+      }
+    }
+
+    if (filters?.hasMessages) {
+      query = query.eq('has_messages', true);
+    }
+
+    const { data, count, error } = await query;
+    if (error) return { connections: [], total: 0, error: error.message };
+    return {
+      connections: (data || []) as LinkedInConnection[],
+      total: count ?? 0,
+      error: null,
+    };
+  } catch (err) {
+    return {
+      connections: [],
+      total: 0,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+export async function getConnectionMatches(): Promise<{
+  matches: ConnectionMatch[];
+  error: string | null;
+}> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+
+    // Get matches with joined job and connection data
+    const { data, error } = await supabase
+      .from('job_connections')
+      .select(`
+        id,
+        job_id,
+        connection_id,
+        company_match_type,
+        match_confidence,
+        golem_jobs!job_connections_job_id_fkey (id, title, company, url, status, match_score),
+        linkedin_connections!job_connections_connection_id_fkey (id, full_name, company, position, linkedin_url)
+      `)
+      .order('match_confidence', { ascending: false })
+      .limit(100);
+
+    if (error) return { matches: [], error: error.message };
+
+    const matches = (data || []).map((row: any) => ({
+      id: row.id,
+      job_id: row.job_id,
+      connection_id: row.connection_id,
+      company_match_type: row.company_match_type,
+      match_confidence: row.match_confidence,
+      job: row.golem_jobs,
+      connection: row.linkedin_connections,
+    }));
+
+    return { matches, error: null };
+  } catch (err) {
+    return {
+      matches: [],
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
   }
 }
 
