@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, Briefcase, Bell, Moon, FileText, Mail, Users, ArrowLeft, Bot } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Bell, Moon, Mail, Users, ArrowLeft, Bot } from 'lucide-react';
 import { useEffect } from 'react';
 
 const navItems = [
@@ -11,9 +11,8 @@ const navItems = [
   { href: '/admin/golem/jobs', label: 'Jobs', icon: Briefcase },
   { href: '/admin/golem/emails', label: 'Emails', icon: Mail },
   { href: '/admin/golem/alerts', label: 'Activity', icon: Bell },
-  { href: '/admin/golem/outreach', label: 'Outreach', icon: Users },
+  { href: '/admin/golem/outreach', label: 'Connections', icon: Users },
   { href: '/admin/golem/nightshift', label: 'Night Shift', icon: Moon },
-  { href: '/admin/golem/content', label: 'Content', icon: FileText },
 ];
 
 export default function GolemLayout({
