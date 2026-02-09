@@ -33,6 +33,16 @@ export function scoreColor(score: number | null): string {
   return 'text-white/30';
 }
 
+// --- Sender categories (from email_senders table) ---
+
+export const senderCategoryColors: Record<string, string> = {
+  promo: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+  newsletter: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  normal: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  job: 'bg-violet-500/20 text-violet-400 border-violet-500/30',
+  tech: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
+};
+
 // --- Jobs ---
 
 export type JobStatus = 'new' | 'viewed' | 'saved' | 'applied' | 'archived';

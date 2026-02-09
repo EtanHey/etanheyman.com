@@ -4,7 +4,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/auth';
 import { createAdminClient } from '@/lib/supabase/admin';
 
-const RAILWAY_HEALTH_URL = process.env.RAILWAY_HEALTH_URL || 'https://golems-production.up.railway.app/health';
+const RAILWAY_BASE_URL = process.env.RAILWAY_BASE_URL || 'https://golems-production.up.railway.app';
+const RAILWAY_HEALTH_URL = process.env.RAILWAY_HEALTH_URL || `${RAILWAY_BASE_URL}/health`;
 
 async function requireAuth() {
   const session = await getServerSession(authOptions);
@@ -81,6 +82,21 @@ export interface ServiceStatus {
   staleThresholdHours: number;
 }
 
+export interface UsageBySource {
+  calls: number;
+  inputTokens: number;
+  outputTokens: number;
+  costUsd: number;
+}
+
+export interface UsageStats {
+  totalCalls: number;
+  totalInputTokens: number;
+  totalOutputTokens: number;
+  totalCostUsd: number;
+  bySource: Record<string, UsageBySource>;
+}
+
 export interface OverviewStats {
   totalEmails: number;
   totalJobs: number;
@@ -91,6 +107,7 @@ export interface OverviewStats {
   jobsByStatus: { status: string; count: number }[];
   railwayHealth: { status: string; golemStatus?: string; uptime?: number } | null;
   serviceStatuses: ServiceStatus[];
+  usageStats: UsageStats | null;
 }
 
 export async function getOverviewStats(): Promise<{ data: OverviewStats | null; error: string | null }> {
@@ -151,6 +168,19 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
       railwayHealth = { status: 'unreachable' };
     }
 
+    // Fetch usage stats from cloud worker
+    let usageStats: UsageStats | null = null;
+    try {
+      const usageRes = await fetch(`${RAILWAY_BASE_URL}/usage`, {
+        signal: AbortSignal.timeout(5000),
+      });
+      if (usageRes.ok) {
+        usageStats = await usageRes.json();
+      }
+    } catch {
+      // Usage stats are non-critical, silently fail
+    }
+
     // Build service statuses from golem_state
     const stateMap = new Map<string, { value: unknown; updated_at: string }>();
     if (stateRes.data) {
@@ -198,6 +228,7 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
         jobsByStatus,
         railwayHealth,
         serviceStatuses,
+        usageStats,
       },
       error: null,
     };
@@ -411,5 +442,268 @@ export async function getCorrectionStats(): Promise<{
     return { data: data as any, error: null };
   } catch (err) {
     return { data: null, error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
+// ─── Email Senders ──────────────────────────────────
+
+export interface EmailSender {
+  email_address: string;
+  display_name: string | null;
+  domain: string | null;
+  category: string | null;
+  total_emails: number;
+  last_email_at: string | null;
+  avg_score: number | null;
+  unsubscribe_url: string | null;
+  unsubscribe_email: string | null;
+  unsubscribe_status: string | null;
+  user_action: string | null;
+}
+
+export interface SenderDetails {
+  sender: EmailSender;
+  recentEmails: Array<{
+    id: string;
+    subject: string | null;
+    received_at: string | null;
+    score: number | null;
+  }>;
+}
+
+export async function getSenderDetails(
+  emailAddress: string,
+): Promise<{ data: SenderDetails | null; error: string | null }> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+
+    const [senderRes, emailsRes] = await Promise.all([
+      supabase
+        .from('email_senders')
+        .select('*')
+        .eq('email_address', emailAddress)
+        .single(),
+      supabase
+        .from('emails')
+        .select('id, subject, received_at, score')
+        .eq('from_address', emailAddress)
+        .order('received_at', { ascending: false })
+        .limit(10),
+    ]);
+
+    if (senderRes.error) {
+      return { data: null, error: senderRes.error.message };
+    }
+
+    return {
+      data: {
+        sender: senderRes.data as EmailSender,
+        recentEmails: (emailsRes.data || []) as SenderDetails['recentEmails'],
+      },
+      error: null,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+export async function setSenderAction(
+  emailAddress: string,
+  action: 'keep' | 'unsubscribe' | 'block',
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+
+    const { error } = await supabase
+      .from('email_senders')
+      .update({ user_action: action })
+      .eq('email_address', emailAddress);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true, error: null };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+export async function bulkSetSenderAction(
+  emailAddresses: string[],
+  action: 'keep' | 'unsubscribe' | 'block',
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    await requireAuth();
+    if (emailAddresses.length === 0)
+      return { success: false, error: 'No addresses provided' };
+    const supabase = createAdminClient();
+
+    const { error } = await supabase
+      .from('email_senders')
+      .update({ user_action: action })
+      .in('email_address', emailAddresses);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true, error: null };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+// ─── Scrape Activity ────────────────────────────────
+
+export interface ScrapeActivity {
+  id: string;
+  source: string;
+  run_at: string;
+  total_found: number;
+  new_saved: number;
+  duplicates_skipped: number;
+  errors: number;
+  avg_description_length: number | null;
+  no_description_count: number;
+  id_like_title_count: number;
+  no_company_count: number;
+  duration_ms: number | null;
+  notes: string | null;
+}
+
+export async function getScrapeActivity(
+  limit = 50,
+): Promise<{ data: ScrapeActivity[]; error: string | null }> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('scrape_activity')
+      .select('*')
+      .order('run_at', { ascending: false })
+      .limit(limit);
+
+    if (error) return { data: [], error: error.message };
+    return { data: (data || []) as ScrapeActivity[], error: null };
+  } catch (err) {
+    return {
+      data: [],
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+// ─── Quality Stats ──────────────────────────────────
+
+export interface QualityStats {
+  totalJobs: number;
+  withDescription: number;
+  withoutDescription: number;
+  avgDescriptionLength: number;
+  idLikeTitleCount: number;
+  noCompanyCount: number;
+  bySource: Array<{
+    source: string;
+    total: number;
+    withDescription: number;
+    avgDescLength: number;
+    noCompanyCount: number;
+  }>;
+}
+
+export async function getQualityStats(): Promise<{
+  data: QualityStats | null;
+  error: string | null;
+}> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('golem_jobs')
+      .select('source, description, title, company');
+
+    if (error) return { data: null, error: error.message };
+
+    const jobs = (data || []) as Array<{
+      source: string;
+      description: string | null;
+      title: string;
+      company: string | null;
+    }>;
+
+    const totalJobs = jobs.length;
+    let withDescription = 0;
+    let totalDescLength = 0;
+    let idLikeTitleCount = 0;
+    let noCompanyCount = 0;
+
+    const sourceMap = new Map<
+      string,
+      { total: number; withDesc: number; totalDescLen: number; noCompany: number }
+    >();
+
+    for (const job of jobs) {
+      const hasDesc = !!job.description && job.description.trim().length > 0;
+      const descLen = hasDesc ? job.description!.length : 0;
+      if (hasDesc) {
+        withDescription++;
+        totalDescLength += descLen;
+      }
+      if (/^Job #\d+/.test(job.title)) idLikeTitleCount++;
+      if (!job.company || job.company.trim() === '') noCompanyCount++;
+
+      const src = job.source || 'unknown';
+      const entry = sourceMap.get(src) || {
+        total: 0,
+        withDesc: 0,
+        totalDescLen: 0,
+        noCompany: 0,
+      };
+      entry.total++;
+      if (hasDesc) {
+        entry.withDesc++;
+        entry.totalDescLen += descLen;
+      }
+      if (!job.company || job.company.trim() === '') entry.noCompany++;
+      sourceMap.set(src, entry);
+    }
+
+    const bySource = Array.from(sourceMap.entries())
+      .map(([source, s]) => ({
+        source,
+        total: s.total,
+        withDescription: s.withDesc,
+        avgDescLength:
+          s.withDesc > 0 ? Math.round(s.totalDescLen / s.withDesc) : 0,
+        noCompanyCount: s.noCompany,
+      }))
+      .sort((a, b) => b.total - a.total);
+
+    return {
+      data: {
+        totalJobs,
+        withDescription,
+        withoutDescription: totalJobs - withDescription,
+        avgDescriptionLength:
+          withDescription > 0
+            ? Math.round(totalDescLength / withDescription)
+            : 0,
+        idLikeTitleCount,
+        noCompanyCount,
+        bySource,
+      },
+      error: null,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
   }
 }

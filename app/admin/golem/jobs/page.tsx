@@ -188,6 +188,8 @@ export default function JobsPage() {
     const statusStyle = statusConfig[job.status as JobStatus] || statusConfig.new;
     const weak = hasWeakData(job);
 
+    const descPreview = cleanDescription(job.description)?.slice(0, 100);
+
     // All cards use consistent LTR layout for visual uniformity
     return (
       <button
@@ -204,33 +206,41 @@ export default function JobsPage() {
             : 'bg-white/5 border-white/10 hover:bg-white/[0.07]'
         }`}
       >
-        <div className="flex items-start justify-between gap-2 mb-2">
+        <div className="flex items-start justify-between gap-2 mb-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {weak && <span title="Missing data"><AlertTriangle className="h-3.5 w-3.5 text-amber-400 shrink-0" /></span>}
             <h3 className="font-medium text-white line-clamp-2">{job.title}</h3>
           </div>
           <StatusBadge status={job.status} />
         </div>
-        <p className="text-sm text-white/70 mb-2">{job.company}</p>
+        <div className="flex items-center gap-2 text-sm text-white/70 mb-1">
+          <span className="font-medium">{job.company}</span>
+          {job.location && (
+            <>
+              <span className="text-white/30">·</span>
+              <span className="text-white/50 truncate">{job.location}</span>
+            </>
+          )}
+        </div>
+        {descPreview && (
+          <p className="text-xs text-white/40 line-clamp-1 mb-1">{descPreview}{job.description && cleanDescription(job.description).length > 100 ? '...' : ''}</p>
+        )}
         <div className="flex items-center gap-3 text-xs text-white/50 flex-wrap">
           <span className={source.color}>{source.label}</span>
-          {job.location && <span>{job.location}</span>}
           <span>{formatDate(job.scraped_at)}</span>
-        </div>
-        {(job.match_score != null || job.human_match_score != null) && (
-          <div className="mt-2 flex items-center gap-2">
+          {(job.match_score != null || job.human_match_score != null) && (
             <div className="flex items-center gap-1">
               <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-              <span className="text-xs text-amber-400">{job.human_match_score ?? job.match_score}/10</span>
+              <span className="text-amber-400">{job.human_match_score ?? job.match_score}/10</span>
               {job.human_match_score !== null && <Check className="h-2.5 w-2.5 text-emerald-400" />}
             </div>
-            {job.human_relevant !== null && (
-              job.human_relevant
-                ? <ThumbsUp className="h-3 w-3 text-emerald-400 fill-emerald-400" />
-                : <ThumbsDown className="h-3 w-3 text-red-400 fill-red-400" />
-            )}
-          </div>
-        )}
+          )}
+          {job.human_relevant !== null && (
+            job.human_relevant
+              ? <ThumbsUp className="h-3 w-3 text-emerald-400 fill-emerald-400" />
+              : <ThumbsDown className="h-3 w-3 text-red-400 fill-red-400" />
+          )}
+        </div>
       </button>
     );
   };

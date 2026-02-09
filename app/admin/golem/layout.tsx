@@ -48,7 +48,7 @@ export default function GolemLayout({
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#00003f] text-white">
       {/* Header */}
       <header className="shrink-0 border-b border-white/10 bg-blue-900/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-4 py-3">
+        <div className="px-4 sm:px-6 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link
@@ -72,7 +72,7 @@ export default function GolemLayout({
 
       {/* Nav */}
       <nav className="shrink-0 border-b border-white/10 bg-blue-900/50">
-        <div className="mx-auto max-w-7xl px-4">
+        <div className="px-4 sm:px-6">
           <div className="flex gap-1 overflow-x-auto py-2">
             {navItems.map((item) => {
               const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
@@ -98,7 +98,7 @@ export default function GolemLayout({
 
       {/* Content - fills remaining space */}
       <main className="flex-1 overflow-hidden">
-        <div className="mx-auto h-full max-w-7xl px-4 py-4">
+        <div className="h-full px-4 sm:px-6 py-4">
           {children}
         </div>
       </main>
