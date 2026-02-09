@@ -39,8 +39,14 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Get country from Vercel's geolocation
-  const { country = 'US' } = geolocation(request);
+  // Get country from Vercel's geolocation (safe fallback for local dev)
+  let country = 'US';
+  try {
+    const geo = geolocation(request);
+    country = geo.country ?? 'US';
+  } catch {
+    // geolocation unavailable outside Vercel
+  }
 
   // Create response
   const response = NextResponse.next();
