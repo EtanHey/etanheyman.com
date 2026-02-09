@@ -289,7 +289,8 @@ export default function JobsPage() {
         <div className="shrink-0 flex flex-wrap gap-2 mb-4">
           <RelevanceButtons
             value={job.human_relevant}
-            onVote={handleRelevance}
+            onGoodMatch={() => handleRelevance(true)}
+            onBadMatch={() => setBadMatchJob(job)}
             saving={saving}
           />
 
@@ -322,16 +323,6 @@ export default function JobsPage() {
             >
               <Check className="h-4 w-4" />
               Applied
-            </button>
-          )}
-          {job.status !== 'archived' && (
-            <button
-              type="button"
-              onClick={() => setBadMatchJob(job)}
-              className="inline-flex items-center gap-2 rounded-lg border border-red-500/50 text-red-400 px-4 py-2 text-sm font-medium hover:bg-red-500/10 transition-colors"
-            >
-              <ThumbsDown className="h-4 w-4" />
-              Bad Match
             </button>
           )}
         </div>
