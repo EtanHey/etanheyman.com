@@ -73,8 +73,8 @@ export default function GolemOverview() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Golem Command Center</h1>
-          <p className="text-sm text-white/50 mt-1">Real-time overview of all autonomous agents</p>
+          <h1 className="text-2xl font-bold text-white">Job Search Command Center</h1>
+          <p className="text-sm text-white/50 mt-1">AI-powered job search pipeline</p>
         </div>
         <button
           type="button"
@@ -153,8 +153,8 @@ export default function GolemOverview() {
             <Users className="h-5 w-5 text-amber-400" />
             <ChevronRight className="h-4 w-4 text-white/20 group-hover:text-white/40 transition-colors" />
           </div>
-          <div className="text-2xl font-bold text-white">{stats.totalContacts}</div>
-          <div className="text-xs text-white/50 mt-1">Contacts Found</div>
+          <div className="text-2xl font-bold text-white">{stats.totalConnections}</div>
+          <div className="text-xs text-white/50 mt-1">LinkedIn Connections</div>
         </Link>
       </div>
 
