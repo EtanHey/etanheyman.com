@@ -15,10 +15,18 @@ import {
   Loader2,
   ChevronRight,
   Zap,
+  DollarSign,
+  Cpu,
 } from 'lucide-react';
 import Link from 'next/link';
 import { actorColors, eventTypeLabels } from './lib/constants';
 import { formatRelativeTime } from './lib/format';
+
+function formatTokens(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return String(n);
+}
 
 export default function GolemOverview() {
   const [stats, setStats] = useState<OverviewStats | null>(null);
@@ -149,6 +157,63 @@ export default function GolemOverview() {
           <div className="text-xs text-white/50 mt-1">Contacts Found</div>
         </Link>
       </div>
+
+      {/* LLM Usage Stats */}
+      {stats.usageStats && (
+        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
+          <h2 className="text-sm font-semibold text-white/80 flex items-center gap-2 mb-4">
+            <Cpu className="h-4 w-4 text-cyan-400" />
+            LLM Usage
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
+              <div className="text-lg font-bold text-white">{stats.usageStats.totalCalls}</div>
+              <div className="text-[10px] uppercase tracking-wider text-white/50">API Calls</div>
+            </div>
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
+              <div className="text-lg font-bold text-white">{formatTokens(stats.usageStats.totalInputTokens)}</div>
+              <div className="text-[10px] uppercase tracking-wider text-white/50">Input Tokens</div>
+            </div>
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
+              <div className="text-lg font-bold text-white">{formatTokens(stats.usageStats.totalOutputTokens)}</div>
+              <div className="text-[10px] uppercase tracking-wider text-white/50">Output Tokens</div>
+            </div>
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
+              <div className="text-lg font-bold text-white flex items-center justify-center gap-1">
+                <DollarSign className="h-4 w-4 text-emerald-400" />
+                {stats.usageStats.totalCostUsd.toFixed(4)}
+              </div>
+              <div className="text-[10px] uppercase tracking-wider text-white/50">Total Cost</div>
+            </div>
+          </div>
+          {Object.keys(stats.usageStats.bySource).length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="text-left py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Source</th>
+                    <th className="text-right py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Calls</th>
+                    <th className="text-right py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Input</th>
+                    <th className="text-right py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Output</th>
+                    <th className="text-right py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(stats.usageStats.bySource).map(([source, data]) => (
+                    <tr key={source} className="border-b border-white/5">
+                      <td className="py-2 px-3 text-white/70">{source}</td>
+                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">{data.calls}</td>
+                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">{formatTokens(data.inputTokens)}</td>
+                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">{formatTokens(data.outputTokens)}</td>
+                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">${data.costUsd.toFixed(4)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Two Column: Activity Feed + Email Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

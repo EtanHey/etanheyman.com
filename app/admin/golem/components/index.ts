@@ -6,3 +6,4 @@ export { PageHeader } from './PageHeader';
 export { RelevanceButtons } from './RelevanceButtons';
 export { ScoreEditor } from './ScoreEditor';
 export { SearchFilterBar } from './SearchFilterBar';
+export { SenderModal } from './SenderModal';
