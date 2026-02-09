@@ -558,3 +558,152 @@ export async function bulkSetSenderAction(
     };
   }
 }
+
+// ─── Scrape Activity ────────────────────────────────
+
+export interface ScrapeActivity {
+  id: string;
+  source: string;
+  run_at: string;
+  total_found: number;
+  new_saved: number;
+  duplicates_skipped: number;
+  errors: number;
+  avg_description_length: number | null;
+  no_description_count: number;
+  id_like_title_count: number;
+  no_company_count: number;
+  duration_ms: number | null;
+  notes: string | null;
+}
+
+export async function getScrapeActivity(
+  limit = 50,
+): Promise<{ data: ScrapeActivity[]; error: string | null }> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('scrape_activity')
+      .select('*')
+      .order('run_at', { ascending: false })
+      .limit(limit);
+
+    if (error) return { data: [], error: error.message };
+    return { data: (data || []) as ScrapeActivity[], error: null };
+  } catch (err) {
+    return {
+      data: [],
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+// ─── Quality Stats ──────────────────────────────────
+
+export interface QualityStats {
+  totalJobs: number;
+  withDescription: number;
+  withoutDescription: number;
+  avgDescriptionLength: number;
+  idLikeTitleCount: number;
+  noCompanyCount: number;
+  bySource: Array<{
+    source: string;
+    total: number;
+    withDescription: number;
+    avgDescLength: number;
+    noCompanyCount: number;
+  }>;
+}
+
+export async function getQualityStats(): Promise<{
+  data: QualityStats | null;
+  error: string | null;
+}> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('golem_jobs')
+      .select('source, description, title, company');
+
+    if (error) return { data: null, error: error.message };
+
+    const jobs = (data || []) as Array<{
+      source: string;
+      description: string | null;
+      title: string;
+      company: string | null;
+    }>;
+
+    const totalJobs = jobs.length;
+    let withDescription = 0;
+    let totalDescLength = 0;
+    let idLikeTitleCount = 0;
+    let noCompanyCount = 0;
+
+    const sourceMap = new Map<
+      string,
+      { total: number; withDesc: number; totalDescLen: number; noCompany: number }
+    >();
+
+    for (const job of jobs) {
+      const hasDesc = !!job.description && job.description.trim().length > 0;
+      const descLen = hasDesc ? job.description!.length : 0;
+      if (hasDesc) {
+        withDescription++;
+        totalDescLength += descLen;
+      }
+      if (/^Job #\d+/.test(job.title)) idLikeTitleCount++;
+      if (!job.company || job.company.trim() === '') noCompanyCount++;
+
+      const src = job.source || 'unknown';
+      const entry = sourceMap.get(src) || {
+        total: 0,
+        withDesc: 0,
+        totalDescLen: 0,
+        noCompany: 0,
+      };
+      entry.total++;
+      if (hasDesc) {
+        entry.withDesc++;
+        entry.totalDescLen += descLen;
+      }
+      if (!job.company || job.company.trim() === '') entry.noCompany++;
+      sourceMap.set(src, entry);
+    }
+
+    const bySource = Array.from(sourceMap.entries())
+      .map(([source, s]) => ({
+        source,
+        total: s.total,
+        withDescription: s.withDesc,
+        avgDescLength:
+          s.withDesc > 0 ? Math.round(s.totalDescLen / s.withDesc) : 0,
+        noCompanyCount: s.noCompany,
+      }))
+      .sort((a, b) => b.total - a.total);
+
+    return {
+      data: {
+        totalJobs,
+        withDescription,
+        withoutDescription: totalJobs - withDescription,
+        avgDescriptionLength:
+          withDescription > 0
+            ? Math.round(totalDescLength / withDescription)
+            : 0,
+        idLikeTitleCount,
+        noCompanyCount,
+        bySource,
+      },
+      error: null,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}

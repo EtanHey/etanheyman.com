@@ -3,13 +3,13 @@
 import type { LucideIcon } from 'lucide-react';
 import { RefreshCw } from 'lucide-react';
 
-type PageHeaderProps = {
+export type PageHeaderProps = {
   icon: LucideIcon;
   iconColor: string;
   title: string;
   count?: number;
-  onRefresh: () => void;
-  loading: boolean;
+  onRefresh?: () => void;
+  loading?: boolean;
   children?: React.ReactNode;
 };
 
@@ -25,14 +25,16 @@ export function PageHeader({ icon: Icon, iconColor, title, count, onRefresh, loa
       </h1>
       <div className="flex items-center gap-2">
         {children}
-        <button
-          type="button"
-          onClick={onRefresh}
-          disabled={loading}
-          className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-white/60 hover:bg-white/5 transition-colors"
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-        </button>
+        {onRefresh && (
+          <button
+            type="button"
+            onClick={onRefresh}
+            disabled={loading}
+            className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-white/60 hover:bg-white/5 transition-colors"
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          </button>
+        )}
       </div>
     </div>
   );
