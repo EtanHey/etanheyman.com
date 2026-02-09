@@ -56,14 +56,6 @@ export default function ConnectionsPage() {
   const connectionMatches = (connectionId: string) =>
     matches.filter((m) => m.connection_id === connectionId);
 
-  const matchesByJob = new Map<string, ConnectionMatch[]>();
-  for (const m of matches) {
-    if (!m.job) continue;
-    const existing = matchesByJob.get(m.job_id) || [];
-    existing.push(m);
-    matchesByJob.set(m.job_id, existing);
-  }
-
   return (
     <div className="flex h-full flex-col overflow-hidden">
       {/* Header */}
@@ -256,7 +248,7 @@ export default function ConnectionsPage() {
                             {Math.round(match.match_confidence * 100)}% confidence
                           </span>
                         </div>
-                        {match.job?.match_score && (
+                        {match.job?.match_score != null && (
                           <span className={`text-xs font-medium ${
                             match.job.match_score >= 7 ? 'text-emerald-400' :
                             match.job.match_score >= 4 ? 'text-amber-400' : 'text-white/40'
