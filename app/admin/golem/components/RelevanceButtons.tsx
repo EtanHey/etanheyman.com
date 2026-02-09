@@ -4,16 +4,17 @@ import { ThumbsDown, ThumbsUp } from 'lucide-react';
 
 type RelevanceButtonsProps = {
   value: boolean | null;
-  onVote: (relevant: boolean) => Promise<void>;
+  onGoodMatch: () => Promise<void>;
+  onBadMatch: () => void;
   saving?: boolean;
 };
 
-export function RelevanceButtons({ value, onVote, saving = false }: RelevanceButtonsProps) {
+export function RelevanceButtons({ value, onGoodMatch, onBadMatch, saving = false }: RelevanceButtonsProps) {
   return (
     <>
       <button
         type="button"
-        onClick={() => onVote(true)}
+        onClick={onGoodMatch}
         disabled={saving}
         className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 ${
           value === true
@@ -26,7 +27,7 @@ export function RelevanceButtons({ value, onVote, saving = false }: RelevanceBut
       </button>
       <button
         type="button"
-        onClick={() => onVote(false)}
+        onClick={onBadMatch}
         disabled={saving}
         className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 ${
           value === false
