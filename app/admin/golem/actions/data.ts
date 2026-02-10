@@ -675,6 +675,27 @@ export async function correctEmailCategory(
   }
 }
 
+// ─── Job Status Update ───────────────────────────────
+
+export async function updateJobStatus(
+  jobId: string,
+  status: string,
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    await requireAuth();
+    const validStatuses = ['new', 'viewed', 'saved', 'applied', 'archived'];
+    if (!validStatuses.includes(status)) return { success: false, error: `Invalid status: ${status}` };
+    const supabase = createAdminClient();
+    const updates: Record<string, unknown> = { status, updated_at: new Date().toISOString() };
+    if (status === 'applied') updates.applied_at = new Date().toISOString();
+    const { error } = await supabase.from('golem_jobs').update(updates).eq('id', jobId);
+    if (error) return { success: false, error: error.message };
+    return { success: true, error: null };
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
 // ─── Job Corrections (Feedback Loop) ────────────────
 
 export async function correctJobRelevance(

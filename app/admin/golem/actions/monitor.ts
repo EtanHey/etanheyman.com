@@ -51,7 +51,7 @@ export async function getMonitorDashboard(): Promise<{ data: MonitorDashboard | 
 
     const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
 
-    const [runsRes, eventsRes, usageRes] = await Promise.all([
+    const [runsRes, eventsRes, latestEventsRes, usageRes] = await Promise.all([
       supabase
         .from('service_runs')
         .select('service, started_at, ended_at, duration_ms, status')
@@ -63,6 +63,12 @@ export async function getMonitorDashboard(): Promise<{ data: MonitorDashboard | 
         .gte('created_at', fortyEightHoursAgo)
         .order('created_at', { ascending: false })
         .limit(200),
+      // Separate query for service status derivation (no time limit)
+      supabase
+        .from('golem_events')
+        .select('actor, created_at')
+        .order('created_at', { ascending: false })
+        .limit(500),
       supabase
         .from('llm_usage')
         .select('model, cost_usd, created_at')
@@ -70,7 +76,7 @@ export async function getMonitorDashboard(): Promise<{ data: MonitorDashboard | 
         .limit(1000),
     ]);
 
-    const errors = [runsRes.error, eventsRes.error, usageRes.error]
+    const errors = [runsRes.error, eventsRes.error, latestEventsRes.error, usageRes.error]
       .filter(Boolean)
       .map((err) => err!.message);
     if (errors.length > 0) {
@@ -92,6 +98,35 @@ export async function getMonitorDashboard(): Promise<{ data: MonitorDashboard | 
         duration_ms: row.duration_ms ?? null,
         status: row.status || 'unknown',
       });
+    }
+
+    // Fallback: derive service status from golem_events for services missing from service_runs
+    const actorToService: Record<string, string> = {
+      emailgolem: 'email-golem',
+      jobgolem: 'job-golem',
+      nightshift: 'nightshift',
+      telegram: 'telegram',
+      bedtimeguardian: 'bedtime-guardian',
+      briefing: 'briefing',
+    };
+    const latestEventByActor = new Map<string, string>();
+    for (const event of (latestEventsRes.data || []) as any[]) {
+      if (!latestEventByActor.has(event.actor)) {
+        latestEventByActor.set(event.actor, event.created_at);
+      }
+    }
+    for (const [actor, serviceName] of Object.entries(actorToService)) {
+      const normalized = serviceName.toLowerCase().replace(/[_\s]+/g, '-');
+      if (latestByService.has(normalized)) continue;
+      const lastEvent = latestEventByActor.get(actor);
+      if (lastEvent) {
+        latestByService.set(normalized, {
+          service: serviceName,
+          lastRun: lastEvent,
+          duration_ms: null,
+          status: 'ok',
+        });
+      }
     }
 
     const recentEvents = (eventsRes.data || []) as MonitorDashboard['recentEvents'];
