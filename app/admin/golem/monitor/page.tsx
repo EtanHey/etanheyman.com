@@ -17,7 +17,7 @@ const serviceConfig = [
 ];
 
 function normalizeService(name: string) {
-  return name.toLowerCase().replace(/\s+/g, '-');
+  return name.toLowerCase().replace(/[_\s]+/g, '-');
 }
 
 function getEventDetail(event: MonitorDashboard['recentEvents'][number]): string {
