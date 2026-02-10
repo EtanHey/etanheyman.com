@@ -116,15 +116,27 @@ export const actorBgColors: Record<string, { bg: string; text: string }> = {
 };
 
 export const eventTypeLabels: Record<string, string> = {
+  // Email pipeline
+  email_alert: 'Email alert',
   email_routed: 'Email routed',
+  email_unsubscribe_attempt: 'Unsubscribe attempt',
+  // Job pipeline
   job_match: 'Job match',
-  soltome_post: 'Content post',
+  // Night Shift
+  nightshift_pr: 'Night Shift PR',
+  // Telegram chat
+  telegram_message_in: 'Message received',
+  telegram_message_out: 'Message sent',
+  // Content pipeline
+  pipeline_draft_ready: 'Draft ready',
+  pipeline_draft_rejected: 'Draft rejected',
   draft_approved: 'Draft approved',
   draft_rejected: 'Draft rejected',
   draft_scored: 'Drafts scored',
-  pattern_extracted: 'Patterns found',
-  email_alert: 'Email alert',
-  nightshift_pr: 'Night Shift PR',
+  // Outreach
   outreach_draft: 'Outreach draft',
   contact_found: 'Contact found',
+  // Service lifecycle
+  service_started: 'Service started',
+  service_error: 'Service error',
 };
