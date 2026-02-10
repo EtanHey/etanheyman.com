@@ -85,6 +85,16 @@ export default function RecruiterPage() {
     refresh();
   }, []);
 
+  const statusCounts = dashboard?.jobsByStatus.reduce<Record<string, number>>((acc, item) => {
+    acc[item.status] = item.count;
+    return acc;
+  }, {}) ?? {};
+
+  const filteredJobs = useMemo(() => {
+    if (activeStatus === 'all') return jobs;
+    return jobs.filter((job) => job.status === activeStatus);
+  }, [jobs, activeStatus]);
+
   if (loading && !dashboard) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -102,16 +112,6 @@ export default function RecruiterPage() {
   }
 
   if (!dashboard) return null;
-
-  const statusCounts = dashboard.jobsByStatus.reduce<Record<string, number>>((acc, item) => {
-    acc[item.status] = item.count;
-    return acc;
-  }, {});
-
-  const filteredJobs = useMemo(() => {
-    if (activeStatus === 'all') return jobs;
-    return jobs.filter((job) => job.status === activeStatus);
-  }, [jobs, activeStatus]);
 
   const actionItems = [
     {

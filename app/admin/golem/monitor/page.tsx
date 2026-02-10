@@ -52,6 +52,24 @@ export default function MonitorPage() {
     refresh();
   }, []);
 
+  const serviceMap = useMemo(() => {
+    const map = new Map<string, MonitorDashboard['serviceStatuses'][number]>();
+    dashboard?.serviceStatuses.forEach((svc) => {
+      map.set(normalizeService(svc.service), svc);
+    });
+    return map;
+  }, [dashboard?.serviceStatuses]);
+
+  const actorGroups = useMemo(() => {
+    const grouped = new Map<string, MonitorDashboard['recentEvents']>();
+    dashboard?.recentEvents.forEach((event) => {
+      const list = grouped.get(event.actor) || [];
+      list.push(event);
+      grouped.set(event.actor, list);
+    });
+    return grouped;
+  }, [dashboard?.recentEvents]);
+
   if (loading && !dashboard) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -69,24 +87,6 @@ export default function MonitorPage() {
   }
 
   if (!dashboard) return null;
-
-  const serviceMap = useMemo(() => {
-    const map = new Map<string, MonitorDashboard['serviceStatuses'][number]>();
-    dashboard.serviceStatuses.forEach((svc) => {
-      map.set(normalizeService(svc.service), svc);
-    });
-    return map;
-  }, [dashboard.serviceStatuses]);
-
-  const actorGroups = useMemo(() => {
-    const grouped = new Map<string, MonitorDashboard['recentEvents']>();
-    dashboard.recentEvents.forEach((event) => {
-      const list = grouped.get(event.actor) || [];
-      list.push(event);
-      grouped.set(event.actor, list);
-    });
-    return grouped;
-  }, [dashboard.recentEvents]);
 
   const orderedActors = dashboard.eventsByActor.length > 0
     ? dashboard.eventsByActor.map((item) => item.actor)

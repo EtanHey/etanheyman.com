@@ -65,7 +65,9 @@ export async function getMonitorDashboard(): Promise<{ data: MonitorDashboard | 
         .limit(200),
       supabase
         .from('llm_usage')
-        .select('model, cost_usd, created_at'),
+        .select('model, cost_usd, created_at')
+        .order('created_at', { ascending: false })
+        .limit(1000),
     ]);
 
     const errors = [runsRes.error, eventsRes.error, usageRes.error]
