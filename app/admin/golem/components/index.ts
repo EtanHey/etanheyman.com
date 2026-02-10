@@ -1,9 +1,12 @@
 export { BadMatchModal } from './BadMatchModal';
+export { ActionItem } from './ActionItem';
 export { CategoryBadge } from './CategoryBadge';
 export { CorrectionBanner } from './CorrectionBanner';
+export { GolemCard } from './GolemCard';
 export { ListDetailLayout } from './ListDetailLayout';
 export { PageHeader } from './PageHeader';
 export { RelevanceButtons } from './RelevanceButtons';
 export { ScoreEditor } from './ScoreEditor';
 export { SearchFilterBar } from './SearchFilterBar';
+export { ServiceStatus } from './ServiceStatus';
 export { SenderModal } from './SenderModal';
