@@ -68,9 +68,9 @@ export async function getRecruiterDashboard(): Promise<{ data: RecruiterDashboar
         .order('match_score', { ascending: false })
         .limit(10),
       supabase.from('golem_jobs')
-        .select('id, title, company, applied_at')
-        .eq('status', 'applied')
-        .order('applied_at', { ascending: true }),
+        .select('id, title, company, status, applied_at')
+        .in('status', ['applied', 'saved', 'new'])
+        .order('created_at', { ascending: false }),
       supabase.from('linkedin_connections')
         .select('full_name, position, company, company_normalized'),
     ]);
@@ -92,19 +92,21 @@ export async function getRecruiterDashboard(): Promise<{ data: RecruiterDashboar
       .sort((a, b) => b.count - a.count);
 
     const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
-    const staleApplications = (appliedJobsRes.data || []).filter(
-      (job: any) => job.applied_at && job.applied_at < threeDaysAgo
+    const appliedJobs = (appliedJobsRes.data || []) as any[];
+    const staleApplications = appliedJobs.filter(
+      (job) => job.status === 'applied' && job.applied_at && job.applied_at < threeDaysAgo
     ).length;
 
-    const appliedCompanies = (appliedJobsRes.data || []).map((job: any) => ({
+    const matchableJobs = appliedJobs.map((job: any) => ({
       company: (job.company || '').toLowerCase(),
       title: job.title,
+      status: job.status,
     }));
     const connectionMatches: RecruiterDashboard['connectionMatches'] = [];
     for (const conn of (connectionsRes.data || []) as any[]) {
       const normalized = (conn.company_normalized || conn.company || '').toLowerCase();
       if (!normalized) continue;
-      for (const job of appliedCompanies) {
+      for (const job of matchableJobs) {
         if (!job.company) continue;
         if (normalized.includes(job.company) || job.company.includes(normalized)) {
           connectionMatches.push({
