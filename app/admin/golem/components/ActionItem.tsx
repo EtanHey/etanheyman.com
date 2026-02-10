@@ -11,6 +11,8 @@ type ActionItemProps = {
   description: string;
   priority: ActionPriority;
   href?: string;
+  actionLabel?: string;
+  onAction?: () => void;
 };
 
 const priorityStyles: Record<ActionPriority, { container: string; icon: string; badge: string }> = {
@@ -31,7 +33,7 @@ const priorityStyles: Record<ActionPriority, { container: string; icon: string; 
   },
 };
 
-export function ActionItem({ icon, title, description, priority, href }: ActionItemProps) {
+export function ActionItem({ icon, title, description, priority, href, actionLabel, onAction }: ActionItemProps) {
   const styles = priorityStyles[priority];
   const content = (
     <div className={`rounded-xl border p-4 transition-colors hover:bg-white/5 ${styles.container}`}>
@@ -45,6 +47,15 @@ export function ActionItem({ icon, title, description, priority, href }: ActionI
             </span>
           </div>
           <p className="text-xs text-white/60 mt-1">{description}</p>
+          {actionLabel && onAction && (
+            <button
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onAction(); }}
+              className={`mt-2 inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-xs font-medium transition-colors ${styles.badge} hover:bg-white/10`}
+            >
+              {actionLabel}
+            </button>
+          )}
         </div>
       </div>
     </div>
