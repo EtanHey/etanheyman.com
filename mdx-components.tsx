@@ -3,17 +3,17 @@ import Link from 'next/link';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    h1: ({ children }) => (
-      <h1 className="text-3xl font-bold text-[#f0ebe0] mt-8 mb-4 tracking-tight">{children}</h1>
+    h1: ({ children, id }) => (
+      <h1 id={id} className="text-3xl font-bold text-[#f0ebe0] mt-8 mb-4 tracking-tight">{children}</h1>
     ),
-    h2: ({ children }) => (
-      <h2 className="text-2xl font-bold text-[#f0ebe0] mt-8 mb-3 tracking-tight border-b border-[#e5950026] pb-2">{children}</h2>
+    h2: ({ children, id }) => (
+      <h2 id={id} className="text-2xl font-bold text-[#f0ebe0] mt-8 mb-3 tracking-tight border-b border-[#e5950026] pb-2">{children}</h2>
     ),
-    h3: ({ children }) => (
-      <h3 className="text-xl font-semibold text-[#e8e2d6] mt-6 mb-2">{children}</h3>
+    h3: ({ children, id }) => (
+      <h3 id={id} className="text-xl font-semibold text-[#e8e2d6] mt-6 mb-2">{children}</h3>
     ),
-    h4: ({ children }) => (
-      <h4 className="text-lg font-semibold text-[#e8e2d6] mt-4 mb-2">{children}</h4>
+    h4: ({ children, id }) => (
+      <h4 id={id} className="text-lg font-semibold text-[#e8e2d6] mt-4 mb-2">{children}</h4>
     ),
     p: ({ children }) => (
       <p className="text-[#c0b8a8] leading-relaxed mb-4">{children}</p>
