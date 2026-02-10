@@ -1,15 +1,15 @@
 "use client";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { EmailIcon } from "../components/contact/EmailIcon";
-import { LocationIcon } from "../components/contact/LocationIcon";
-import { PhoneIcon } from "../components/contact/PhoneIcon";
-import SendIcon from "../components/navigation/about/SendIcon";
-import { PhoneInput } from "../components/ui/phone-input";
+import { EmailIcon } from "@/app/components/contact/EmailIcon";
+import { LocationIcon } from "@/app/components/contact/LocationIcon";
+import { PhoneIcon } from "@/app/components/contact/PhoneIcon";
+import SendIcon from "@/app/components/navigation/about/SendIcon";
+import { PhoneInput } from "@/app/components/ui/phone-input";
 import { ContactFormData, submitContactForm } from "./actions";
-import { SocialLinks } from "../components/SocialLinks";
-import { useRegion } from "../hooks/useRegion";
-import { LoadingText } from "../components/ui/LoadingText";
+import { SocialLinks } from "@/app/components/SocialLinks";
+import { useRegion } from "@/app/hooks/useRegion";
+import { LoadingText } from "@/app/components/ui/LoadingText";
 
 export default function Contact() {
   const { contactInfo, isLoading: isRegionLoading } = useRegion();
