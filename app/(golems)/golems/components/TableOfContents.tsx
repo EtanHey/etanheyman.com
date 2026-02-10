@@ -37,6 +37,14 @@ export default function TableOfContents({ headings }: { headings: TocItem[] }) {
           <li key={`${h.id}-${i}`} style={{ paddingLeft: `${(h.level - 2) * 12}px` }}>
             <a
               href={`#${h.id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById(h.id);
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                  history.pushState(null, '', `#${h.id}`);
+                }
+              }}
               className={`block py-1 transition-colors leading-snug ${
                 activeId === h.id
                   ? 'text-[#e59500]'
