@@ -68,7 +68,7 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const nav = (
-    <nav className="flex flex-col gap-6 p-4">
+    <nav className="flex flex-col gap-6 p-4 pt-14 md:pt-4">
       <Link
         href="/"
         className="flex items-center gap-2 text-xs text-[#7c6f5e] hover:text-[#c0b8a8] transition-colors mb-2"
@@ -79,6 +79,7 @@ export default function Sidebar() {
 
       <Link
         href="/golems"
+        onClick={() => setMobileOpen(false)}
         className="text-[#e59500] font-bold text-lg tracking-tight hover:text-[#f0ebe0] transition-colors"
       >
         Golems
