@@ -115,7 +115,7 @@ export default function RecruiterPage() {
 
   const firstConnection = dashboard.connectionMatches[0];
   const connectionDesc = firstConnection
-    ? `${firstConnection.connectionName} at ${firstConnection.company} — applied to ${firstConnection.jobTitle}${dashboard.connectionMatches.length > 1 ? ` (+${dashboard.connectionMatches.length - 1} more)` : ''}`
+    ? `${firstConnection.connectionName} at ${firstConnection.company || 'their company'} — applied to ${firstConnection.jobTitle || 'a role'}${dashboard.connectionMatches.length > 1 ? ` (+${dashboard.connectionMatches.length - 1} more)` : ''}`
     : 'No connection matches found yet.';
 
   const actionItems = [
@@ -126,7 +126,7 @@ export default function RecruiterPage() {
         : 'No new high-score jobs right now.',
       priority: dashboard.newHighScoreJobs > 0 ? 'urgent' : 'info',
       icon: <Sparkles className="h-4 w-4" />,
-      actionLabel: dashboard.newHighScoreJobs > 0 ? 'Show high-score jobs' : undefined,
+      actionLabel: dashboard.newHighScoreJobs > 0 ? 'Filter to new jobs' : undefined,
       onAction: dashboard.newHighScoreJobs > 0 ? () => setActiveStatus('new') : undefined,
     },
     {
@@ -142,7 +142,7 @@ export default function RecruiterPage() {
     {
       title: `${dashboard.connectionMatches.length} connection matches`,
       description: connectionDesc,
-      priority: dashboard.connectionMatches.length > 0 ? 'info' : 'info',
+      priority: 'info',
       icon: <Users className="h-4 w-4" />,
       actionLabel: dashboard.connectionMatches.length > 0 ? 'View connections' : undefined,
       onAction: dashboard.connectionMatches.length > 0 ? () => setShowConnections(true) : undefined,
