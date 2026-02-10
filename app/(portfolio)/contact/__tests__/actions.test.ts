@@ -11,7 +11,7 @@ vi.mock("resend", () => ({
 }));
 
 // Mock the EmailTemplate component
-vi.mock("../../components/contact/EmailTemplate", () => ({
+vi.mock("@/app/components/contact/EmailTemplate", () => ({
   EmailTemplate: () => Promise.resolve("<div>Test Email</div>"),
 }));
 

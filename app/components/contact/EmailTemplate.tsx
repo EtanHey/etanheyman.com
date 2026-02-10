@@ -1,5 +1,5 @@
 import React from "react";
-import { ContactFormData } from "../../contact/actions";
+import { ContactFormData } from "@/app/(portfolio)/contact/actions";
 
 export const EmailTemplate: React.FC<ContactFormData> = ({
   fullName,

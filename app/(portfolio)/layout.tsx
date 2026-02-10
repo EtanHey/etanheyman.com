@@ -1,37 +1,37 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
+import "../globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
-import Footer from "./components/Footer";
+import Footer from "@/app/components/Footer";
 import {
   BottomMobileBgCover,
   TopMobileBgCover,
-} from "./components/navigation/mobileBgCover";
-import Nav from "./components/navigation/Nav";
-import AuthSessionProvider from "./providers/SessionProvider";
-import AdminFloatingMenu from "./components/AdminFloatingMenu";
+} from "@/app/components/navigation/mobileBgCover";
+import Nav from "@/app/components/navigation/Nav";
+import AuthSessionProvider from "@/app/providers/SessionProvider";
+import AdminFloatingMenu from "@/app/components/AdminFloatingMenu";
 
 // Configure Nutmeg font for headers (purchased web fonts)
 const nutmeg = localFont({
   src: [
     {
-      path: "../fonts/nutmeg/nutmeg-light.woff2",
+      path: "../../fonts/nutmeg/nutmeg-light.woff2",
       weight: "300",
       style: "normal",
     },
     {
-      path: "../fonts/nutmeg/nutmeg-regular.woff2",
+      path: "../../fonts/nutmeg/nutmeg-regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../fonts/nutmeg/nutmeg-book.woff2",
+      path: "../../fonts/nutmeg/nutmeg-book.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../fonts/nutmeg/nutmeg-bold.woff2",
+      path: "../../fonts/nutmeg/nutmeg-bold.woff2",
       weight: "700",
       style: "normal",
     },

@@ -1,7 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
-import { EmailTemplate } from "../components/contact/EmailTemplate";
+import { EmailTemplate } from "@/app/components/contact/EmailTemplate";
 
 // Initialize Resend - you'll need to add your API key to your environment variables
 const resend = new Resend(process.env.RESEND_API_KEY);
