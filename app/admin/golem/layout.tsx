@@ -3,15 +3,16 @@
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, Briefcase, Bell, Moon, Mail, Users, ArrowLeft, Bot } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Bell, Moon, Mail, DollarSign, Activity, ArrowLeft, Bot } from 'lucide-react';
 import { useEffect } from 'react';
 
 const navItems = [
   { href: '/admin/golem', label: 'Overview', icon: LayoutDashboard, exact: true },
-  { href: '/admin/golem/jobs', label: 'Jobs', icon: Briefcase },
+  { href: '/admin/golem/recruiter', label: 'Recruiter', icon: Briefcase },
+  { href: '/admin/golem/teller', label: 'Teller', icon: DollarSign },
+  { href: '/admin/golem/monitor', label: 'Monitor', icon: Activity },
   { href: '/admin/golem/emails', label: 'Emails', icon: Mail },
   { href: '/admin/golem/alerts', label: 'Activity', icon: Bell },
-  { href: '/admin/golem/outreach', label: 'Connections', icon: Users },
   { href: '/admin/golem/nightshift', label: 'Night Shift', icon: Moon },
 ];
 

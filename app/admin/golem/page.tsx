@@ -1,53 +1,47 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getOverviewStats, type OverviewStats } from './actions/data';
+import { getGolemOverviewStats, getOverviewStats, type GolemOverviewStats, type OverviewStats } from './actions/data';
 import {
   Activity,
   Mail,
   Briefcase,
-  Users,
   Server,
-  Clock,
   RefreshCw,
   Wifi,
   WifiOff,
   Loader2,
-  ChevronRight,
   Zap,
   DollarSign,
-  Cpu,
 } from 'lucide-react';
 import Link from 'next/link';
-import { actorColors, eventTypeLabels } from './lib/constants';
+import { actorColors, eventTypeLabels, golemCardBorders } from './lib/constants';
 import { formatRelativeTime } from './lib/format';
-
-function formatTokens(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
-  return String(n);
-}
+import { GolemCard } from './components';
 
 export default function GolemOverview() {
   const [stats, setStats] = useState<OverviewStats | null>(null);
+  const [golemStats, setGolemStats] = useState<GolemOverviewStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const refresh = async () => {
     setLoading(true);
-    const result = await getOverviewStats();
-    if (result.error) {
-      setError(result.error);
+    const [overviewRes, golemRes] = await Promise.all([getOverviewStats(), getGolemOverviewStats()]);
+    const errorMessage = [overviewRes.error, golemRes.error].filter(Boolean).join('; ');
+    if (errorMessage) {
+      setError(errorMessage);
     } else {
       setError(null);
-      setStats(result.data);
+      setStats(overviewRes.data);
+      setGolemStats(golemRes.data);
     }
     setLoading(false);
   };
 
   useEffect(() => { refresh(); }, []);
 
-  if (loading && !stats) {
+  if (loading && (!stats || !golemStats)) {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="h-8 w-8 text-white/40 animate-spin" />
@@ -55,7 +49,7 @@ export default function GolemOverview() {
     );
   }
 
-  if (error && !stats) {
+  if (error && (!stats || !golemStats)) {
     return (
       <div className="text-center py-20 text-red-400">
         <p>Failed to load dashboard: {error}</p>
@@ -63,7 +57,7 @@ export default function GolemOverview() {
     );
   }
 
-  if (!stats) return null;
+  if (!stats || !golemStats) return null;
 
   const railwayUp = stats.railwayHealth?.status === 'ok';
   const maxEmailCategoryCount = Math.max(...stats.emailsByCategory.map(c => c.count), 1);
@@ -119,101 +113,39 @@ export default function GolemOverview() {
         <Server className="h-4 w-4 text-white/30" />
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Link href="/admin/golem/emails" className="group rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/[0.07] transition-all">
-          <div className="flex items-center justify-between mb-3">
-            <Mail className="h-5 w-5 text-blue-400" />
-            <ChevronRight className="h-4 w-4 text-white/20 group-hover:text-white/40 transition-colors" />
-          </div>
-          <div className="text-2xl font-bold text-white">{stats.totalEmails}</div>
-          <div className="text-xs text-white/50 mt-1">Emails Triaged</div>
-        </Link>
-
-        <Link href="/admin/golem/jobs" className="group rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/[0.07] transition-all">
-          <div className="flex items-center justify-between mb-3">
-            <Briefcase className="h-5 w-5 text-emerald-400" />
-            <ChevronRight className="h-4 w-4 text-white/20 group-hover:text-white/40 transition-colors" />
-          </div>
-          <div className="text-2xl font-bold text-white">{stats.totalJobs}</div>
-          <div className="text-xs text-white/50 mt-1">Jobs Tracked</div>
-        </Link>
-
-        <Link href="/admin/golem/alerts" className="group rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/[0.07] transition-all">
-          <div className="flex items-center justify-between mb-3">
-            <Activity className="h-5 w-5 text-violet-400" />
-            <ChevronRight className="h-4 w-4 text-white/20 group-hover:text-white/40 transition-colors" />
-          </div>
-          <div className="text-2xl font-bold text-white">{stats.totalEvents}</div>
-          <div className="text-xs text-white/50 mt-1">Recent Events</div>
-        </Link>
-
-        <Link href="/admin/golem/outreach" className="group rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/[0.07] transition-all">
-          <div className="flex items-center justify-between mb-3">
-            <Users className="h-5 w-5 text-amber-400" />
-            <ChevronRight className="h-4 w-4 text-white/20 group-hover:text-white/40 transition-colors" />
-          </div>
-          <div className="text-2xl font-bold text-white">{stats.totalConnections}</div>
-          <div className="text-xs text-white/50 mt-1">LinkedIn Connections</div>
-        </Link>
+      {/* Golem Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <GolemCard
+          icon={Briefcase}
+          title="RecruiterGolem"
+          href="/admin/golem/recruiter"
+          borderColor={golemCardBorders.recruiter}
+          metrics={[
+            { label: 'new jobs to review', value: golemStats.recruiter.newJobs },
+            { label: 'applications out', value: golemStats.recruiter.appliedJobs },
+          ]}
+        />
+        <GolemCard
+          icon={DollarSign}
+          title="TellerGolem"
+          href="/admin/golem/teller"
+          borderColor={golemCardBorders.teller}
+          metrics={[
+            { label: 'subscriptions / mo', value: `$${golemStats.teller.monthlyTotal.toFixed(2)}` },
+            { label: 'payment alerts', value: golemStats.teller.paymentAlerts },
+          ]}
+        />
+        <GolemCard
+          icon={Activity}
+          title="MonitorGolem"
+          href="/admin/golem/monitor"
+          borderColor={golemCardBorders.monitor}
+          metrics={[
+            { label: 'services green', value: `${golemStats.monitor.servicesGreen}/${golemStats.monitor.totalServices}` },
+            { label: 'LLM spent', value: `$${golemStats.monitor.llmSpend.toFixed(2)}` },
+          ]}
+        />
       </div>
-
-      {/* LLM Usage Stats */}
-      {stats.usageStats && (
-        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-          <h2 className="text-sm font-semibold text-white/80 flex items-center gap-2 mb-4">
-            <Cpu className="h-4 w-4 text-cyan-400" />
-            LLM Usage
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
-              <div className="text-lg font-bold text-white">{stats.usageStats.totalCalls ?? 0}</div>
-              <div className="text-[10px] uppercase tracking-wider text-white/50">API Calls</div>
-            </div>
-            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
-              <div className="text-lg font-bold text-white">{formatTokens(stats.usageStats.totalInputTokens ?? 0)}</div>
-              <div className="text-[10px] uppercase tracking-wider text-white/50">Input Tokens</div>
-            </div>
-            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
-              <div className="text-lg font-bold text-white">{formatTokens(stats.usageStats.totalOutputTokens ?? 0)}</div>
-              <div className="text-[10px] uppercase tracking-wider text-white/50">Output Tokens</div>
-            </div>
-            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
-              <div className="text-lg font-bold text-white flex items-center justify-center gap-1">
-                <DollarSign className="h-4 w-4 text-emerald-400" />
-                {(stats.usageStats.estimatedCostUSD ?? 0).toFixed(4)}
-              </div>
-              <div className="text-[10px] uppercase tracking-wider text-white/50">Total Cost</div>
-            </div>
-          </div>
-          {stats.usageStats.bySource && Object.keys(stats.usageStats.bySource).length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Source</th>
-                    <th className="text-right py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Calls</th>
-                    <th className="text-right py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Input</th>
-                    <th className="text-right py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Output</th>
-                    <th className="text-right py-2 px-3 text-xs text-white/50 uppercase tracking-wider">Cost</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(stats.usageStats.bySource).map(([source, data]) => (
-                    <tr key={source} className="border-b border-white/5">
-                      <td className="py-2 px-3 text-white/70">{source}</td>
-                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">{data.calls}</td>
-                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">{formatTokens(data.inputTokens)}</td>
-                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">{formatTokens(data.outputTokens)}</td>
-                      <td className="py-2 px-3 text-right text-white/60 tabular-nums">${((data.inputTokens * 0.8 + data.outputTokens * 4.0) / 1_000_000).toFixed(4)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      )}
 
       {/* Two Column: Activity Feed + Email Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -312,58 +244,6 @@ export default function GolemOverview() {
         </div>
       </div>
 
-      {/* Job Status + Schedule */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Job Pipeline */}
-        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-          <h2 className="text-sm font-semibold text-white/80 flex items-center gap-2 mb-4">
-            <Briefcase className="h-4 w-4 text-emerald-400" />
-            Job Pipeline
-          </h2>
-          <div className="grid grid-cols-3 gap-3">
-            {stats.jobsByStatus.map((s) => {
-              const colors: Record<string, string> = {
-                new: 'border-blue-500/30 bg-blue-500/10 text-blue-300',
-                viewed: 'border-gray-500/30 bg-gray-500/10 text-gray-300',
-                saved: 'border-amber-500/30 bg-amber-500/10 text-amber-300',
-                applied: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
-                rejected: 'border-red-500/30 bg-red-500/10 text-red-300',
-                archived: 'border-zinc-500/30 bg-zinc-500/10 text-zinc-300',
-              };
-              return (
-                <div key={s.status} className={`rounded-lg border p-3 text-center ${colors[s.status] || 'border-white/10 bg-white/5 text-white/60'}`}>
-                  <div className="text-lg font-bold">{s.count}</div>
-                  <div className="text-[10px] uppercase tracking-wider opacity-70">{s.status}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Bot Schedule — Live Status */}
-        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-          <h2 className="text-sm font-semibold text-white/80 flex items-center gap-2 mb-4">
-            <Clock className="h-4 w-4 text-indigo-400" />
-            Service Status (Israel Time)
-          </h2>
-          <div className="space-y-3 text-xs">
-            {stats.serviceStatuses.map((svc) => (
-              <div key={svc.name} className="flex items-center gap-3">
-                <span className={`w-2 h-2 rounded-full shrink-0 ${
-                  svc.status === 'ok' ? 'bg-emerald-400' :
-                  svc.status === 'stale' ? 'bg-amber-400 animate-pulse' :
-                  'bg-white/20'
-                }`} />
-                <span className="text-white/70 flex-1">{svc.name}</span>
-                <span className="text-white/40 text-right">
-                  {svc.lastRun ? formatRelativeTime(svc.lastRun) : 'never'}
-                </span>
-                <span className="text-white/30 hidden sm:inline">{svc.schedule}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
