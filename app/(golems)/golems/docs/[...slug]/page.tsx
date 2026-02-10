@@ -4,12 +4,42 @@ import matter from 'gray-matter';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import remarkGfm from 'remark-gfm';
 import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { useMDXComponents } from '@/mdx-components';
 import MermaidDiagram from '../../components/MermaidDiagram';
 import CopyButton from '../../components/CopyButton';
+import TableOfContents from '../../components/TableOfContents';
 
 const CONTENT_DIR = join(process.cwd(), 'content', 'golems');
+
+// Flat ordered list of all docs for prev/next navigation (matches sidebar order)
+const DOC_ORDER = [
+  'getting-started',
+  'architecture',
+  'golems/email',
+  'golems/recruiter',
+  'golems/claude',
+  'golems/teller',
+  'golems/job-golem',
+  'cloud-worker',
+  'mcp-tools',
+  'llm',
+  'per-repo-sessions',
+  'configuration/env-vars',
+  'configuration/secrets',
+  'deployment/railway',
+  'journey',
+];
+
+function getDocTitle(slug: string): string {
+  const filePath = join(CONTENT_DIR, slug) + '.md';
+  if (!existsSync(filePath)) return slug;
+  const raw = readFileSync(filePath, 'utf-8');
+  const { data, content } = matter(raw);
+  return data.title || content.match(/^#\s+(.+)/m)?.[1] || slug.split('/').pop() || slug;
+}
 
 function getAllDocPaths(dir: string, prefix = ''): string[] {
   const paths: string[] = [];
@@ -24,6 +54,24 @@ function getAllDocPaths(dir: string, prefix = ''): string[] {
     }
   }
   return paths;
+}
+
+function extractHeadings(content: string): { id: string; text: string; level: number }[] {
+  const headingRegex = /^(#{2,4})\s+(.+)$/gm;
+  const headings: { id: string; text: string; level: number }[] = [];
+  let match;
+  while ((match = headingRegex.exec(content)) !== null) {
+    const level = match[1].length;
+    const text = match[2].replace(/\*\*/g, '').replace(/`/g, '').trim();
+    const id = text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+    headings.push({ id, text, level });
+  }
+  return headings;
 }
 
 export async function generateStaticParams() {
@@ -58,11 +106,20 @@ function extractTextContent(node: React.ReactNode): string {
 
 export default async function DocsPage({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
+  const slugStr = slug.join('/');
   const filePath = join(CONTENT_DIR, ...slug) + '.md';
   if (!existsSync(filePath)) notFound();
 
   const raw = readFileSync(filePath, 'utf-8');
   const { content } = matter(raw);
+
+  // Extract headings for TOC
+  const headings = extractHeadings(content);
+
+  // Prev/next navigation
+  const currentIndex = DOC_ORDER.indexOf(slugStr);
+  const prevDoc = currentIndex > 0 ? DOC_ORDER[currentIndex - 1] : null;
+  const nextDoc = currentIndex >= 0 && currentIndex < DOC_ORDER.length - 1 ? DOC_ORDER[currentIndex + 1] : null;
 
   const baseComponents = useMDXComponents({});
   const components = {
@@ -93,8 +150,8 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
-      <article>
+    <div className="max-w-6xl mx-auto px-6 py-12 flex gap-8">
+      <article className="flex-1 min-w-0 max-w-3xl">
         <MDXRemote
           source={content}
           components={components}
@@ -102,6 +159,7 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
             mdxOptions: {
               remarkPlugins: [remarkGfm],
               rehypePlugins: [
+                rehypeSlug,
                 [rehypePrettyCode, {
                   theme: 'github-dark-dimmed',
                   keepBackground: false,
@@ -110,7 +168,38 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
             },
           }}
         />
+
+        {/* Prev/Next Navigation */}
+        {(prevDoc || nextDoc) && (
+          <nav className="flex justify-between items-center mt-12 pt-6 border-t border-[#e5950026]">
+            {prevDoc ? (
+              <Link
+                href={`/golems/docs/${prevDoc}`}
+                className="flex flex-col gap-1 text-left group"
+              >
+                <span className="text-xs text-[#8b7355]">Previous</span>
+                <span className="text-[#c0b8a8] group-hover:text-[#e59500] transition-colors">
+                  &larr; {getDocTitle(prevDoc)}
+                </span>
+              </Link>
+            ) : <div />}
+            {nextDoc ? (
+              <Link
+                href={`/golems/docs/${nextDoc}`}
+                className="flex flex-col gap-1 text-right group"
+              >
+                <span className="text-xs text-[#8b7355]">Next</span>
+                <span className="text-[#c0b8a8] group-hover:text-[#e59500] transition-colors">
+                  {getDocTitle(nextDoc)} &rarr;
+                </span>
+              </Link>
+            ) : <div />}
+          </nav>
+        )}
       </article>
+
+      {/* Table of Contents — only shows on xl screens for pages with 3+ headings */}
+      {headings.length >= 3 && <TableOfContents headings={headings} />}
     </div>
   );
 }

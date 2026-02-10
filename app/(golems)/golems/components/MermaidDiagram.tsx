@@ -16,7 +16,7 @@ mermaid.initialize({
     secondaryColor: '#1a1816',
     tertiaryColor: '#0d0d0d',
     fontFamily: "var(--font-golems-mono), 'JetBrains Mono', monospace",
-    fontSize: '14px',
+    fontSize: '16px',
     noteBkgColor: '#1a1816',
     noteTextColor: '#c0b8a8',
     noteBorderColor: '#e5950033',
