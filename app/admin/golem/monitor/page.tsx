@@ -162,10 +162,10 @@ export default function MonitorPage() {
           </div>
 
           <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-2">
-            {dashboard.recentEvents.length === 0 ? (
-              <p className="text-sm text-white/50 text-center py-6">No recent events</p>
-            ) : (
-              (actorFilter === 'all' ? dashboard.recentEvents : (actorGroups.get(actorFilter) || [])).map((event) => (
+            {(() => {
+              const events = actorFilter === 'all' ? dashboard.recentEvents : (actorGroups.get(actorFilter) || []);
+              if (events.length === 0) return <p className="text-sm text-white/50 text-center py-6">No recent events</p>;
+              return events.map((event) => (
                 <div key={event.id} className="flex items-start gap-3 text-xs text-white/60">
                   <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/20" />
                   <div className="flex-1 min-w-0">
@@ -186,7 +186,7 @@ export default function MonitorPage() {
                   </span>
                 </div>
               ))
-            )}
+            })()}
           </div>
         </div>
 
