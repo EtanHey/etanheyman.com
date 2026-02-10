@@ -26,7 +26,6 @@ flowchart TB
     rail --> DB[(Supabase)]
     mac --> DB
 ```
-```
 
 ## Cloud Worker Schedule
 
