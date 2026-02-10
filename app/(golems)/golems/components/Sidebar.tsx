@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Menu, X, ArrowLeft } from 'lucide-react';
@@ -67,8 +68,10 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const nav = (
-    <nav className="flex flex-col gap-6 p-4 pt-14 md:pt-4">
+  const isDocsPage = pathname.startsWith('/golems/docs');
+
+  const sidebarNav = (
+    <nav className="flex flex-col gap-6 p-4">
       <Link
         href="/"
         className="flex items-center gap-2 text-xs text-[#7c6f5e] hover:text-[#c0b8a8] transition-colors mb-2"
@@ -117,15 +120,31 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile toggle */}
-      <button
-        type="button"
-        onClick={() => setMobileOpen(!mobileOpen)}
-        className="fixed top-4 left-4 z-50 md:hidden bg-[#1a1816] border border-[#e5950026] rounded-lg p-2 text-[#e59500]"
-        aria-label="Toggle navigation"
-      >
-        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </button>
+      {/* Mobile header bar — visible on doc pages below md */}
+      {isDocsPage && (
+        <header className="fixed top-0 left-0 right-0 z-50 md:hidden bg-[#0c0b0a]/95 backdrop-blur-sm border-b border-[#e5950015]">
+          <div className="flex items-center gap-3 px-4 h-12">
+            <button
+              type="button"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="text-[#e59500] p-1 -ml-1"
+              aria-label="Toggle navigation"
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+            <Link href="/golems" onClick={() => setMobileOpen(false)} className="flex items-center gap-2">
+              <Image
+                src="/images/golems-logo.svg"
+                alt="Golems"
+                width={24}
+                height={24}
+                className="shrink-0 drop-shadow-[0_0_8px_rgba(229,149,0,0.3)]"
+              />
+              <span className="font-bold text-[#e59500] text-sm tracking-tight">Golems</span>
+            </Link>
+          </div>
+        </header>
+      )}
 
       {/* Mobile overlay */}
       {mobileOpen && (
@@ -141,7 +160,10 @@ export default function Sidebar() {
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0`}
       >
-        {nav}
+        {/* Push sidebar content below header on mobile */}
+        <div className="pt-12 md:pt-0">
+          {sidebarNav}
+        </div>
       </aside>
     </>
   );
