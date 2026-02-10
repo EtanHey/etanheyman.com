@@ -95,6 +95,14 @@ export const sourceConfig: Record<string, { label: string; color: string }> = {
   goozali: { label: 'Goozali', color: 'text-green-400' },
 };
 
+// --- Golem cards ---
+
+export const golemCardBorders = {
+  recruiter: 'border-l-emerald-500/60',
+  teller: 'border-l-amber-500/60',
+  monitor: 'border-l-violet-500/60',
+};
+
 // --- Activity (golems) ---
 
 export const actorColors: Record<string, string> = {

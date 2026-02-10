@@ -51,11 +51,11 @@ export default function AdminPage() {
             </Link>
             <div className="grid grid-cols-2 gap-3">
               <Link
-                href="/admin/golem/jobs"
+                href="/admin/golem/recruiter"
                 className="flex items-center gap-2 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
               >
                 <Briefcase className="h-4 w-4 text-blue-400" />
-                <span className="text-sm text-white">Jobs</span>
+                <span className="text-sm text-white">Recruiter</span>
               </Link>
               <Link
                 href="/admin/golem/alerts"
