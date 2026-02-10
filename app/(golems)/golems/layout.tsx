@@ -40,7 +40,7 @@ export default function GolemsRootLayout({ children }: { children: ReactNode }) 
       <body className="bg-[#0c0b0a] text-[#c0b8a8] antialiased scrollbar-none">
         <div className="flex min-h-screen">
           <Sidebar />
-          <main className="flex-1 min-w-0 overflow-x-hidden">{children}</main>
+          <main className="flex-1 min-w-0 overflow-x-clip">{children}</main>
         </div>
       </body>
     </html>

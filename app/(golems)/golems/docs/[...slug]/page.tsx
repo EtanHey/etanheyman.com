@@ -7,6 +7,7 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import GithubSlugger from 'github-slugger';
 import { useMDXComponents } from '@/mdx-components';
 import MermaidDiagram from '../../components/MermaidDiagram';
 import CopyButton from '../../components/CopyButton';
@@ -57,18 +58,14 @@ function getAllDocPaths(dir: string, prefix = ''): string[] {
 }
 
 function extractHeadings(content: string): { id: string; text: string; level: number }[] {
+  const slugger = new GithubSlugger();
   const headingRegex = /^(#{2,4})\s+(.+)$/gm;
   const headings: { id: string; text: string; level: number }[] = [];
   let match;
   while ((match = headingRegex.exec(content)) !== null) {
     const level = match[1].length;
     const text = match[2].replace(/\*\*/g, '').replace(/`/g, '').trim();
-    const id = text
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
+    const id = slugger.slug(text);
     headings.push({ id, text, level });
   }
   return headings;
