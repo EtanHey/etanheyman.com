@@ -35,6 +35,7 @@ export default function MonitorPage() {
   const [dashboard, setDashboard] = useState<MonitorDashboard | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actorFilter, setActorFilter] = useState<string>('all');
 
   const refresh = async () => {
     setLoading(true);
@@ -126,45 +127,66 @@ export default function MonitorPage() {
         {/* Section B: Recent Activity */}
         <div className="space-y-3">
           <h2 className="text-sm font-semibold text-white/80">Recent Activity (48h)</h2>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-4">
-            {dashboard.recentEvents.length === 0 ? (
-              <p className="text-sm text-white/50 text-center py-6">No recent events</p>
-            ) : (
-              orderedActors.map((actor) => {
-                const events = actorGroups.get(actor) || [];
-                if (events.length === 0) return null;
-                return (
-                  <div key={actor} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className={`text-xs font-semibold uppercase tracking-wider ${actorColors[actor] || 'text-white/60'}`}>
-                        {actor}
+
+          {/* Actor filter tabs */}
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setActorFilter('all')}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                actorFilter === 'all'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-white/5 text-white/50 hover:bg-white/10'
+              }`}
+            >
+              All ({dashboard.recentEvents.length})
+            </button>
+            {orderedActors.map((actor) => {
+              const count = (actorGroups.get(actor) || []).length;
+              if (count === 0) return null;
+              return (
+                <button
+                  key={actor}
+                  type="button"
+                  onClick={() => setActorFilter(actor)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                    actorFilter === actor
+                      ? 'bg-white/20 text-white'
+                      : 'bg-white/5 text-white/50 hover:bg-white/10'
+                  }`}
+                >
+                  {actor} ({count})
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-2">
+            {(() => {
+              const events = actorFilter === 'all' ? dashboard.recentEvents : (actorGroups.get(actorFilter) || []);
+              if (events.length === 0) return <p className="text-sm text-white/50 text-center py-6">No recent events</p>;
+              return events.map((event) => (
+                <div key={event.id} className="flex items-start gap-3 text-xs text-white/60">
+                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/20" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className={`font-semibold uppercase tracking-wider text-[10px] ${actorColors[event.actor] || 'text-white/60'}`}>
+                        {event.actor}
                       </span>
-                      <span className="text-xs text-white/40">{events.length} events</span>
-                    </div>
-                    <div className="space-y-2">
-                      {events.map((event) => (
-                        <div key={event.id} className="flex items-start gap-3 text-xs text-white/60">
-                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/20" />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className="text-white/70">
-                                {eventTypeLabels[event.type] || event.type}
-                              </span>
-                              <span className="text-white/30">
-                                {getEventDetail(event)}
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-white/30 whitespace-nowrap">
-                            {formatRelativeTime(event.created_at)}
-                          </span>
-                        </div>
-                      ))}
+                      <span className="text-white/70">
+                        {eventTypeLabels[event.type] || event.type}
+                      </span>
+                      <span className="text-white/30 truncate">
+                        {getEventDetail(event)}
+                      </span>
                     </div>
                   </div>
-                );
-              })
-            )}
+                  <span className="text-white/30 whitespace-nowrap">
+                    {formatRelativeTime(event.created_at)}
+                  </span>
+                </div>
+              ))
+            })()}
           </div>
         </div>
 

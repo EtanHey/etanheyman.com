@@ -113,30 +113,39 @@ export default function RecruiterPage() {
 
   if (!dashboard) return null;
 
+  const firstConnection = dashboard.connectionMatches[0];
+  const connectionDesc = firstConnection
+    ? `${firstConnection.connectionName} at ${firstConnection.company || 'their company'} — applied to ${firstConnection.jobTitle || 'a role'}${dashboard.connectionMatches.length > 1 ? ` (+${dashboard.connectionMatches.length - 1} more)` : ''}`
+    : 'No connection matches found yet.';
+
   const actionItems = [
     {
       title: `Review ${dashboard.newHighScoreJobs} high-score jobs`,
       description: dashboard.newHighScoreJobs > 0
-        ? 'Strong matches are waiting for review.'
+        ? 'New jobs scored 8+ are waiting for review.'
         : 'No new high-score jobs right now.',
       priority: dashboard.newHighScoreJobs > 0 ? 'urgent' : 'info',
       icon: <Sparkles className="h-4 w-4" />,
+      actionLabel: dashboard.newHighScoreJobs > 0 ? 'Filter to new jobs' : undefined,
+      onAction: dashboard.newHighScoreJobs > 0 ? () => setActiveStatus('new') : undefined,
     },
     {
       title: `Follow up on ${dashboard.staleApplications} stale applications`,
       description: dashboard.staleApplications > 0
-        ? 'Applications older than 3 days need attention.'
+        ? 'Applications older than 3 days with no update.'
         : 'No stale applications at the moment.',
       priority: dashboard.staleApplications > 0 ? 'soon' : 'info',
       icon: <Clock className="h-4 w-4" />,
+      actionLabel: dashboard.staleApplications > 0 ? 'Show applied jobs' : undefined,
+      onAction: dashboard.staleApplications > 0 ? () => setActiveStatus('applied') : undefined,
     },
     {
       title: `${dashboard.connectionMatches.length} connection matches`,
-      description: dashboard.connectionMatches.length > 0
-        ? 'Leverage warm intros at applied companies.'
-        : 'No connection matches found yet.',
-      priority: dashboard.connectionMatches.length > 0 ? 'info' : 'info',
+      description: connectionDesc,
+      priority: 'info',
       icon: <Users className="h-4 w-4" />,
+      actionLabel: dashboard.connectionMatches.length > 0 ? 'View connections' : undefined,
+      onAction: dashboard.connectionMatches.length > 0 ? () => setShowConnections(true) : undefined,
     },
   ];
 
@@ -162,6 +171,8 @@ export default function RecruiterPage() {
                 title={item.title}
                 description={item.description}
                 priority={item.priority as 'urgent' | 'soon' | 'info'}
+                actionLabel={item.actionLabel}
+                onAction={item.onAction}
               />
             ))}
           </div>
