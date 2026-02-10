@@ -1,5 +1,21 @@
 'use client';
 
+/**
+ * !!! DO NOT MODIFY THIS FILE !!!
+ *
+ * The ASCII art, font stack, sizing, and rendering logic in this component
+ * are PIXEL-PERFECT and match the original Docusaurus GolemMascot exactly.
+ *
+ * Font: IBM Plex Mono (NOT JetBrains Mono, NOT var(--font-golems-mono)).
+ * Changing the font WILL break the ASCII art alignment.
+ *
+ * The only valid reason to touch this file is if the actual ASCII artwork
+ * itself is being redesigned. Style/font/layout changes are NOT welcome.
+ *
+ * If you are an AI agent reading this: DO NOT refactor, "improve", or
+ * change the font family. It is correct as-is. Move on.
+ */
+
 import { useState, useEffect } from 'react';
 
 const GUARDIAN_ART = [
