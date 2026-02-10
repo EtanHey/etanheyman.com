@@ -4,10 +4,37 @@ import { useState, useEffect } from 'react';
 
 type TocItem = { id: string; text: string; level: number };
 
-export default function TableOfContents({ headings }: { headings: TocItem[] }) {
+export default function TableOfContents() {
+  const [headings, setHeadings] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState('');
 
   useEffect(() => {
+    // Read actual heading IDs from the DOM (set by rehype-slug)
+    const article = document.querySelector('article');
+    if (!article) return;
+
+    const els = article.querySelectorAll('h2, h3, h4');
+    const items: TocItem[] = [];
+    for (const el of els) {
+      if (el.id && el.textContent) {
+        items.push({
+          id: el.id,
+          text: el.textContent.trim(),
+          level: parseInt(el.tagName[1]),
+        });
+      }
+    }
+    setHeadings(items);
+
+    // Scroll to hash on load
+    if (window.location.hash) {
+      const target = document.getElementById(window.location.hash.slice(1));
+      if (target) {
+        setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    }
+
+    // IntersectionObserver for active heading tracking
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -19,15 +46,14 @@ export default function TableOfContents({ headings }: { headings: TocItem[] }) {
       { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
     );
 
-    for (const h of headings) {
-      const el = document.getElementById(h.id);
-      if (el) observer.observe(el);
+    for (const el of els) {
+      if (el.id) observer.observe(el);
     }
 
     return () => observer.disconnect();
-  }, [headings]);
+  }, []);
 
-  if (headings.length === 0) return null;
+  if (headings.length < 3) return null;
 
   return (
     <nav className="hidden xl:block w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-none">
@@ -43,6 +69,7 @@ export default function TableOfContents({ headings }: { headings: TocItem[] }) {
                 if (el) {
                   el.scrollIntoView({ behavior: 'smooth' });
                   history.pushState(null, '', `#${h.id}`);
+                  setActiveId(h.id);
                 }
               }}
               className={`block py-1 transition-colors leading-snug ${

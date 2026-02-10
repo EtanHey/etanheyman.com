@@ -7,7 +7,6 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import GithubSlugger from 'github-slugger';
 import { useMDXComponents } from '@/mdx-components';
 import MermaidDiagram from '../../components/MermaidDiagram';
 import CopyButton from '../../components/CopyButton';
@@ -57,20 +56,6 @@ function getAllDocPaths(dir: string, prefix = ''): string[] {
   return paths;
 }
 
-function extractHeadings(content: string): { id: string; text: string; level: number }[] {
-  const slugger = new GithubSlugger();
-  const headingRegex = /^(#{2,4})\s+(.+)$/gm;
-  const headings: { id: string; text: string; level: number }[] = [];
-  let match;
-  while ((match = headingRegex.exec(content)) !== null) {
-    const level = match[1].length;
-    const text = match[2].replace(/\*\*/g, '').replace(/`/g, '').trim();
-    const id = slugger.slug(text);
-    headings.push({ id, text, level });
-  }
-  return headings;
-}
-
 export async function generateStaticParams() {
   const paths = getAllDocPaths(CONTENT_DIR);
   return paths.map((p) => ({ slug: p.split('/') }));
@@ -109,9 +94,6 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
 
   const raw = readFileSync(filePath, 'utf-8');
   const { content } = matter(raw);
-
-  // Extract headings for TOC
-  const headings = extractHeadings(content);
 
   // Prev/next navigation
   const currentIndex = DOC_ORDER.indexOf(slugStr);
@@ -195,8 +177,8 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
         )}
       </article>
 
-      {/* Table of Contents — only shows on xl screens for pages with 3+ headings */}
-      {headings.length >= 3 && <TableOfContents headings={headings} />}
+      {/* Table of Contents — discovers headings from DOM, hides itself if too few */}
+      <TableOfContents />
     </div>
   );
 }
