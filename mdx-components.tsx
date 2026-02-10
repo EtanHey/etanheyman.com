@@ -32,7 +32,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <ol className="list-decimal list-inside text-[#c0b8a8] mb-4 space-y-1 ml-2">{children}</ol>
     ),
     li: ({ children }) => (
-      <li className="text-[#c0b8a8] leading-relaxed">{children}</li>
+      <li className="text-[#c0b8a8] leading-relaxed [&>p]:mb-0 [&>p]:inline">{children}</li>
     ),
     code: ({ children, className }) => {
       // Inline code (no className = not a code block)
