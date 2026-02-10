@@ -33,8 +33,8 @@ export default function TableOfContents({ headings }: { headings: TocItem[] }) {
     <nav className="hidden xl:block w-56 shrink-0 sticky top-8 max-h-[calc(100vh-4rem)] overflow-y-auto scrollbar-none">
       <p className="text-xs font-semibold text-[#e59500] uppercase tracking-wider mb-3">On this page</p>
       <ul className="space-y-1 text-sm">
-        {headings.map((h) => (
-          <li key={h.id} style={{ paddingLeft: `${(h.level - 2) * 12}px` }}>
+        {headings.map((h, i) => (
+          <li key={`${h.id}-${i}`} style={{ paddingLeft: `${(h.level - 2) * 12}px` }}>
             <a
               href={`#${h.id}`}
               className={`block py-1 transition-colors leading-snug ${

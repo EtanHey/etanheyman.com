@@ -50,44 +50,46 @@ type GolemMascotProps = {
   className?: string;
 };
 
+const SIZE_STYLES: Record<string, React.CSSProperties> = {
+  sm: { fontSize: '0.45rem' },
+  md: { fontSize: '0.55rem' },
+  lg: { fontSize: '0.7rem' },
+};
+
 export default function GolemMascot({ size = 'md', animated = true, className }: GolemMascotProps) {
-  const [visibleLines, setVisibleLines] = useState(animated ? 0 : GUARDIAN_ART.length);
+  const [visible, setVisible] = useState(!animated);
 
   useEffect(() => {
-    if (!animated) return;
-    const timer = setInterval(() => {
-      setVisibleLines((prev) => {
-        if (prev >= GUARDIAN_ART.length) {
-          clearInterval(timer);
-          return prev;
-        }
-        return prev + 1;
-      });
-    }, 60);
-    return () => clearInterval(timer);
+    if (animated) {
+      const timer = setTimeout(() => setVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
   }, [animated]);
-
-  const sizeStyles = {
-    sm: { fontSize: '0.45rem', lineHeight: '1.15' },
-    md: { fontSize: '0.55rem', lineHeight: '1.15' },
-    lg: { fontSize: '0.7rem', lineHeight: '1.25' },
-  };
 
   return (
     <pre
-      className={`select-none whitespace-pre overflow-hidden ${className || ''}`}
+      className={className || ''}
       style={{
-        fontFamily: "var(--font-golems-mono), 'JetBrains Mono', 'IBM Plex Mono', 'Fira Code', Monaco, monospace",
-        ...sizeStyles[size],
+        fontFamily: "'IBM Plex Mono', 'Fira Code', Monaco, monospace",
+        lineHeight: 1.15,
+        whiteSpace: 'pre',
+        overflow: 'hidden',
+        userSelect: 'none',
         margin: 0,
         padding: 0,
+        opacity: visible ? 1 : 0,
+        transition: 'opacity 0.4s ease',
+        ...SIZE_STYLES[size],
       }}
     >
-      {GUARDIAN_ART.slice(0, visibleLines).map((line, i) => (
+      {GUARDIAN_ART.map((line, i) => (
         <div
           key={i}
-          className={animated ? 'animate-[lineReveal_0.3s_ease_forwards] opacity-0' : ''}
-          style={animated ? { animationDelay: `${i * 60}ms` } : undefined}
+          style={animated ? {
+            animation: 'lineReveal 0.3s ease forwards',
+            animationDelay: `${i * 60}ms`,
+            opacity: 0,
+          } : undefined}
         >
           {colorLine(line)}
         </div>

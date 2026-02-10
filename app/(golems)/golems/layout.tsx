@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import { JetBrains_Mono, Inter } from 'next/font/google';
+import { JetBrains_Mono, Inter, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import Sidebar from './components/Sidebar';
 
@@ -13,6 +13,13 @@ const inter = Inter({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-golems-mono',
+  display: 'swap',
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ['400'],
+  subsets: ['latin'],
+  variable: '--font-ibm-plex-mono',
   display: 'swap',
 });
 
@@ -29,7 +36,7 @@ export const metadata: Metadata = {
 
 export default function GolemsRootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${ibmPlexMono.variable}`}>
       <body className="bg-[#0c0b0a] text-[#c0b8a8] antialiased scrollbar-none">
         <div className="flex min-h-screen">
           <Sidebar />
