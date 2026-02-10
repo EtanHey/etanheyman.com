@@ -5,6 +5,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
 import { useMDXComponents } from '@/mdx-components';
+import MermaidDiagram from '../../components/MermaidDiagram';
 
 const CONTENT_DIR = join(process.cwd(), 'content', 'golems');
 
@@ -49,7 +50,23 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   const raw = readFileSync(filePath, 'utf-8');
   const { content } = matter(raw);
 
-  const components = useMDXComponents({});
+  const baseComponents = useMDXComponents({});
+  const components = {
+    ...baseComponents,
+    pre: ({ children, ...props }: React.ComponentPropsWithoutRef<'pre'> & { children?: React.ReactNode }) => {
+      // Detect mermaid code blocks: <pre><code className="language-mermaid">...</code></pre>
+      const child = children as React.ReactElement<{ className?: string; children?: React.ReactNode }> | undefined;
+      if (child?.props?.className === 'language-mermaid') {
+        const chart = String(child.props.children || '');
+        return <MermaidDiagram chart={chart} />;
+      }
+      return (
+        <pre className="bg-[#0d0d0d] border border-[#e5950026] rounded-lg p-4 mb-4 overflow-x-auto text-sm font-mono" {...props}>
+          {children}
+        </pre>
+      );
+    },
+  };
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">

@@ -136,7 +136,7 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-[#0c0b0a] border-r border-[#e5950015] z-40 overflow-y-auto transition-transform duration-200 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-[#0c0b0a] border-r border-[#e5950015] z-40 overflow-y-auto scrollbar-none transition-transform duration-200 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0`}
       >

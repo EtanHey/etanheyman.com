@@ -194,7 +194,6 @@ flowchart TD
     RW <--> SB[("Supabase<br/><small>Postgres + RLS + migrations</small>")]
     SB <--> MAC["Your Mac<br/><small>Telegram API, Gmail API, Claude API</small>"]
 ```
-```
 
 ## Security
 

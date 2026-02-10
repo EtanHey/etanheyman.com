@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import LaptopIcon from "../components/navigation/about/LaptopIcon";
-import LocationIcon from "../components/navigation/about/LocationIcon";
-import SendIcon from "../components/navigation/about/SendIcon";
-import TimelineParallax from "../components/navigation/about/TimelineParallax";
+import LaptopIcon from "@/app/components/navigation/about/LaptopIcon";
+import LocationIcon from "@/app/components/navigation/about/LocationIcon";
+import SendIcon from "@/app/components/navigation/about/SendIcon";
+import TimelineParallax from "@/app/components/navigation/about/TimelineParallax";
 import {
   techIconMap,
   TechIconName,
   TechIconWrapper,
-} from "../components/tech-icons/TechIconWrapper";
-import { useRegion } from "../hooks/useRegion";
-import { LoadingText } from "../components/ui/LoadingText";
+} from "@/app/components/tech-icons/TechIconWrapper";
+import { useRegion } from "@/app/hooks/useRegion";
+import { LoadingText } from "@/app/components/ui/LoadingText";
 
 const AboutPage = () => {
   const { contactInfo, isLoading } = useRegion();

@@ -1,6 +1,6 @@
 import { getAllProjects } from "@/lib/projects";
 import Link from "next/link";
-import Me from "./components/Me";
+import Me from "@/app/components/Me";
 import { ArrowRight } from "lucide-react";
 import { FeaturedProjectCard, HomeProjectCard } from "@/app/components/ProjectCard";
 
