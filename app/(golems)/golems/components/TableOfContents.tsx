@@ -1,15 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 type TocItem = { id: string; text: string; level: number };
 
 export default function TableOfContents() {
   const [headings, setHeadings] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState('');
+  const navRef = useRef<HTMLElement>(null);
+  const isHovering = useRef(false);
+
+  // Auto-scroll the TOC to keep active item visible (unless user is browsing the TOC)
+  const scrollTocToActive = useCallback((id: string) => {
+    if (isHovering.current || !navRef.current) return;
+    const activeLink = navRef.current.querySelector(`a[href="#${CSS.escape(id)}"]`);
+    if (activeLink) {
+      activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }, []);
 
   useEffect(() => {
-    // Read actual heading IDs from the DOM (set by rehype-slug)
     const article = document.querySelector('article');
     if (!article) return;
 
@@ -26,7 +36,6 @@ export default function TableOfContents() {
     }
     setHeadings(items);
 
-    // Scroll to hash on load
     if (window.location.hash) {
       const target = document.getElementById(window.location.hash.slice(1));
       if (target) {
@@ -34,12 +43,15 @@ export default function TableOfContents() {
       }
     }
 
-    // IntersectionObserver for active heading tracking
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
+            const id = entry.target.id;
+            setActiveId(id);
+            scrollTocToActive(id);
+            // Update URL hash so reload/share preserves position (replaceState avoids history spam)
+            history.replaceState(null, '', `#${id}`);
           }
         }
       },
@@ -51,12 +63,17 @@ export default function TableOfContents() {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [scrollTocToActive]);
 
   if (headings.length < 3) return null;
 
   return (
-    <nav className="hidden xl:block w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-none">
+    <nav
+      ref={navRef}
+      onMouseEnter={() => { isHovering.current = true; }}
+      onMouseLeave={() => { isHovering.current = false; }}
+      className="hidden xl:block w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-none"
+    >
       <p className="text-xs font-semibold text-[#e59500] uppercase tracking-wider mb-3">On this page</p>
       <ul className="space-y-1 text-sm">
         {headings.map((h, i) => (
