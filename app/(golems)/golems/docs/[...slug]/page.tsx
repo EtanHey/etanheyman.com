@@ -7,6 +7,7 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useMDXComponents } from '@/mdx-components';
 import MermaidDiagram from '../../components/MermaidDiagram';
 import CopyButton from '../../components/CopyButton';
@@ -150,7 +151,24 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 flex gap-8">
+    <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col gap-0">
+      {/* Doc header with logo — visible on all pages */}
+      <div className="flex items-center gap-3 mb-8 pl-0 md:hidden">
+        <Image
+          src="/images/golems-logo.svg"
+          alt="Golems logo"
+          width={32}
+          height={32}
+          className="shrink-0 drop-shadow-[0_0_12px_rgba(229,149,0,0.3)]"
+        />
+        <Link
+          href="/golems"
+          className="text-lg font-bold bg-gradient-to-br from-[#f0ebe0] to-[#e59500] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+        >
+          Golems
+        </Link>
+      </div>
+      <div className="flex gap-8">
       <article className="flex-1 min-w-0 max-w-3xl">
         <MDXRemote
           source={content}
@@ -200,6 +218,7 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
 
       {/* Table of Contents — only shows on xl screens for pages with 3+ headings */}
       {headings.length >= 3 && <TableOfContents headings={headings} />}
+      </div>
     </div>
   );
 }
