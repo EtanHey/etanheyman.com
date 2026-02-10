@@ -172,11 +172,30 @@ export async function getOverviewStats(): Promise<{ data: OverviewStats | null; 
     // Fetch usage stats from cloud worker
     let usageStats: UsageStats | null = null;
     try {
-      const usageRes = await fetch(`${RAILWAY_BASE_URL}/usage`, {
+      const usageRes = await fetch(`${RAILWAY_BASE_URL}/usage?period=all`, {
         signal: AbortSignal.timeout(5000),
       });
       if (usageRes.ok) {
-        usageStats = await usageRes.json();
+        const raw = await usageRes.json();
+        // Map nested response (paid.totalCalls, etc.) to flat UsageStats
+        const paid = raw.paid || {};
+        const rawBySource = paid.bySource || {};
+        const bySource: Record<string, UsageBySource> = {};
+        for (const [src, data] of Object.entries(rawBySource)) {
+          const d = data as Record<string, number>;
+          bySource[src] = {
+            calls: d.totalCalls ?? 0,
+            inputTokens: d.totalInputTokens ?? 0,
+            outputTokens: d.totalOutputTokens ?? 0,
+          };
+        }
+        usageStats = {
+          totalCalls: paid.totalCalls ?? raw.combined?.totalCalls ?? 0,
+          totalInputTokens: paid.totalInputTokens ?? 0,
+          totalOutputTokens: paid.totalOutputTokens ?? 0,
+          estimatedCostUSD: paid.totalCost ?? 0,
+          bySource,
+        };
       }
     } catch {
       // Usage stats are non-critical, silently fail
