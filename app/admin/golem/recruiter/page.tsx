@@ -11,10 +11,18 @@ import {
   Loader2,
 } from 'lucide-react';
 import { getRecruiterDashboard, getRecruiterJobs, type RecruiterDashboard, type RecruiterJob } from '../actions/recruiter';
-import { correctJobScore } from '../actions/data';
+import { correctJobScore, updateJobStatus } from '../actions/data';
 import { ActionItem, PageHeader, ScoreEditor } from '../components';
 import { formatRelativeTime } from '../lib/format';
 import { sourceConfig, statusConfig, type JobStatus } from '../lib/constants';
+
+const JOB_STATUS_OPTIONS: { value: JobStatus; label: string }[] = [
+  { value: 'new', label: 'New' },
+  { value: 'viewed', label: 'Viewed' },
+  { value: 'saved', label: 'Saved' },
+  { value: 'applied', label: 'Applied' },
+  { value: 'archived', label: 'Archived' },
+];
 
 function cleanDescription(html: string | null): string {
   if (!html) return '';
@@ -61,6 +69,7 @@ export default function RecruiterPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeStatus, setActiveStatus] = useState<JobStatus | 'all'>('all');
+  const [highScoreOnly, setHighScoreOnly] = useState(false);
   const [expandedJobId, setExpandedJobId] = useState<string | null>(null);
   const [showConnections, setShowConnections] = useState(false);
 
@@ -91,9 +100,15 @@ export default function RecruiterPage() {
   }, {}) ?? {};
 
   const filteredJobs = useMemo(() => {
-    if (activeStatus === 'all') return jobs;
-    return jobs.filter((job) => job.status === activeStatus);
-  }, [jobs, activeStatus]);
+    let result = activeStatus === 'all' ? jobs : jobs.filter((job) => job.status === activeStatus);
+    if (highScoreOnly) {
+      result = result.filter((job) => {
+        const score = job.human_match_score ?? job.match_score;
+        return score !== null && score >= 8;
+      });
+    }
+    return result;
+  }, [jobs, activeStatus, highScoreOnly]);
 
   if (loading && !dashboard) {
     return (
@@ -126,8 +141,8 @@ export default function RecruiterPage() {
         : 'No new high-score jobs right now.',
       priority: dashboard.newHighScoreJobs > 0 ? 'urgent' : 'info',
       icon: <Sparkles className="h-4 w-4" />,
-      actionLabel: dashboard.newHighScoreJobs > 0 ? 'Filter to new jobs' : undefined,
-      onAction: dashboard.newHighScoreJobs > 0 ? () => setActiveStatus('new') : undefined,
+      actionLabel: dashboard.newHighScoreJobs > 0 ? 'Show high-score jobs' : undefined,
+      onAction: dashboard.newHighScoreJobs > 0 ? () => { setActiveStatus('new'); setHighScoreOnly(true); } : undefined,
     },
     {
       title: `Follow up on ${dashboard.staleApplications} stale applications`,
@@ -181,7 +196,7 @@ export default function RecruiterPage() {
         {/* Section B: Jobs Pipeline */}
         <div className="space-y-3">
           <h2 className="text-sm font-semibold text-white/80">Jobs Pipeline</h2>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {([
               { key: 'all', label: 'All', count: dashboard.totalJobs },
               { key: 'new', label: 'New', count: statusCounts.new || 0 },
@@ -195,9 +210,9 @@ export default function RecruiterPage() {
                 <button
                   key={tab.key}
                   type="button"
-                  onClick={() => setActiveStatus(tab.key)}
+                  onClick={() => { setActiveStatus(tab.key); setHighScoreOnly(false); }}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                    isActive
+                    isActive && !highScoreOnly
                       ? 'bg-white/20 text-white'
                       : 'bg-white/5 text-white/50 hover:bg-white/10'
                   }`}
@@ -206,6 +221,18 @@ export default function RecruiterPage() {
                 </button>
               );
             })}
+            <button
+              type="button"
+              onClick={() => setHighScoreOnly((prev) => !prev)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                highScoreOnly
+                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                  : 'bg-white/5 text-white/50 hover:bg-white/10'
+              }`}
+            >
+              <Sparkles className="h-3 w-3 inline mr-1" />
+              Score 8+
+            </button>
           </div>
 
           <div className="space-y-3">
@@ -233,7 +260,23 @@ export default function RecruiterPage() {
                         <h3 className="text-sm font-semibold text-white">{job.title}</h3>
                         <p className="text-xs text-white/60">{job.company}</p>
                       </div>
-                      <StatusBadge status={job.status} />
+                      <select
+                        value={job.status}
+                        onChange={async (e) => {
+                          const newStatus = e.target.value;
+                          const { success } = await updateJobStatus(job.id, newStatus);
+                          if (success) {
+                            setJobs((prev) => prev.map((j) => (j.id === job.id ? { ...j, status: newStatus } : j)));
+                          }
+                        }}
+                        className="text-xs rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-white/70 focus:outline-none focus:ring-1 focus:ring-white/20"
+                      >
+                        {JOB_STATUS_OPTIONS.map((opt) => (
+                          <option key={opt.value} value={opt.value} className="bg-[#00003f] text-white">
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="flex flex-wrap items-center gap-3 text-xs text-white/50 mb-2">
                       <span className={source.color}>{source.label}</span>
