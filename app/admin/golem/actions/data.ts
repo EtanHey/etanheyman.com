@@ -158,7 +158,7 @@ export async function getGolemOverviewStats(): Promise<{ data: GolemOverviewStat
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-    const [jobsRes, subsRes, emailsRes, runsRes, usageRes] = await Promise.all([
+    const [jobsRes, subsRes, emailsRes, runsRes, eventsRes, usageRes] = await Promise.all([
       supabase.from('golem_jobs').select('status'),
       supabase.from('subscriptions').select('amount, frequency, status'),
       supabase
@@ -172,12 +172,17 @@ export async function getGolemOverviewStats(): Promise<{ data: GolemOverviewStat
         .order('started_at', { ascending: false })
         .limit(200),
       supabase
+        .from('golem_events')
+        .select('actor, created_at')
+        .order('created_at', { ascending: false })
+        .limit(500),
+      supabase
         .from('llm_usage')
         .select('cost_usd, created_at')
         .gte('created_at', sevenDaysAgo),
     ]);
 
-    const errors = [jobsRes.error, subsRes.error, emailsRes.error, runsRes.error, usageRes.error]
+    const errors = [jobsRes.error, subsRes.error, emailsRes.error, runsRes.error, eventsRes.error, usageRes.error]
       .filter(Boolean)
       .map((err) => err!.message);
     if (errors.length > 0) {
@@ -210,7 +215,23 @@ export async function getGolemOverviewStats(): Promise<{ data: GolemOverviewStat
         latestByService.set(row.service, { status: row.status || null });
       }
     }
-    const totalServices = latestByService.size;
+    // Fallback: derive service status from golem_events for missing services
+    const actorToServiceOverview: Record<string, string> = {
+      emailgolem: 'email-golem', jobgolem: 'job-golem', nightshift: 'nightshift',
+      telegram: 'telegram', bedtimeguardian: 'bedtime-guardian', briefing: 'briefing',
+    };
+    const latestEventByActorOverview = new Map<string, string>();
+    for (const event of (eventsRes.data || []) as any[]) {
+      if (!latestEventByActorOverview.has(event.actor)) {
+        latestEventByActorOverview.set(event.actor, event.created_at);
+      }
+    }
+    for (const [actor, serviceName] of Object.entries(actorToServiceOverview)) {
+      if (!latestByService.has(serviceName) && latestEventByActorOverview.has(actor)) {
+        latestByService.set(serviceName, { status: 'ok' });
+      }
+    }
+    const totalServices = Math.max(latestByService.size, Object.keys(actorToServiceOverview).length);
     let servicesGreen = 0;
     for (const entry of latestByService.values()) {
       if (isGreenServiceStatus(entry.status)) servicesGreen += 1;
