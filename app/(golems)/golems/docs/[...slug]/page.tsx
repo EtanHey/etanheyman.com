@@ -56,6 +56,8 @@ function getAllDocPaths(dir: string, prefix = ''): string[] {
   return paths;
 }
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const paths = getAllDocPaths(CONTENT_DIR);
   return paths.map((p) => ({ slug: p.split('/') }));

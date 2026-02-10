@@ -150,7 +150,11 @@ export default function Sidebar() {
       {mobileOpen && (
         <div
           className="fixed inset-0 bg-black/60 z-40 md:hidden"
+          role="button"
+          tabIndex={0}
+          aria-label="Close navigation"
           onClick={() => setMobileOpen(false)}
+          onKeyDown={(e) => { if (e.key === 'Escape' || e.key === 'Enter') setMobileOpen(false); }}
         />
       )}
 

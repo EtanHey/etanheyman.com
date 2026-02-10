@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -216,17 +216,24 @@ function renderLine(raw: string): ReactNode {
 
 function HomepageHero() {
   const [activeTab, setActiveTab] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval>>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
+  const startAutoplay = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
       setActiveTab((prev) => (prev + 1) % tabs.length);
     }, 6000);
-    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    startAutoplay();
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [startAutoplay]);
 
   const handleTabChange = useCallback((index: number) => {
     setActiveTab(index);
-  }, []);
+    startAutoplay(); // Reset timer so user's selection isn't immediately overridden
+  }, [startAutoplay]);
 
   const currentTab = tabs[activeTab];
 
@@ -241,19 +248,19 @@ function HomepageHero() {
         {/* ── TERMINAL (left) ── */}
         <div className="flex flex-col gap-4">
           {/* Header with logo + title */}
-          <div className="flex items-center gap-4 py-1 max-md:justify-center">
+          <div className="flex items-center gap-4 py-1 justify-center md:justify-start">
             <Image
               src="/images/golems-logo.svg"
               alt="Golems logo"
               width={56}
               height={56}
-              className="shrink-0 drop-shadow-[0_0_20px_rgba(229,149,0,0.4)] max-md:w-10 max-md:h-10 max-sm:w-9 max-sm:h-9"
+              className="shrink-0 drop-shadow-[0_0_20px_rgba(229,149,0,0.4)] w-9 sm:w-10 sm:h-10 md:w-14 md:h-14"
             />
             <div className="flex flex-col gap-0.5">
-              <h1 className="text-3xl md:text-[1.8rem] font-black tracking-tight leading-tight m-0 bg-gradient-to-br from-[#f0ebe0] to-[#e59500] bg-clip-text text-transparent max-md:text-2xl max-sm:text-xl">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-tight m-0 bg-gradient-to-br from-[#f0ebe0] to-[#e59500] bg-clip-text text-transparent">
                 Golems
               </h1>
-              <div className="font-mono text-xs text-[#7c6f5e] flex items-center gap-1.5 flex-wrap max-sm:text-[0.65rem]">
+              <div className="font-mono text-[0.65rem] sm:text-xs text-[#7c6f5e] flex items-center gap-1.5 flex-wrap">
                 <span className="text-[#a09080]">Spawn</span>
                 <span className="text-[#c46d3c] opacity-70">&rarr;</span>
                 <span className="text-[#a09080]">Work</span>
@@ -302,15 +309,15 @@ function HomepageHero() {
             {/* Terminal content */}
             <div className="p-4 md:px-5 font-mono text-xs md:text-[0.76rem] leading-relaxed text-[#c0b8a8] h-[260px] sm:h-[340px] md:h-[420px] overflow-y-auto overflow-x-hidden scrollbar-none" role="tabpanel">
               {currentTab.showMascot ? (
-                <div className="grid grid-cols-[auto_1fr] gap-6 items-start max-md:grid-cols-1">
-                  <div className="max-md:hidden opacity-90">
+                <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-start">
+                  <div className="hidden md:block opacity-90">
                     <GolemMascot variant="guardian" size="md" animated={false} />
                   </div>
                   <div className="overflow-hidden">
                     {currentTab.lines.map((line, i) => (
                       <div
                         key={`${activeTab}-${i}`}
-                        className="whitespace-pre max-md:whitespace-pre-wrap max-md:break-words opacity-0 animate-[lineReveal_0.3s_ease_forwards]"
+                        className="whitespace-pre-wrap break-words md:whitespace-pre md:break-normal opacity-0 animate-[lineReveal_0.3s_ease_forwards]"
                         style={{ animationDelay: `${i * 50}ms` }}
                       >
                         {renderLine(line)}
@@ -323,7 +330,7 @@ function HomepageHero() {
                   {currentTab.lines.map((line, i) => (
                     <div
                       key={`${activeTab}-${i}`}
-                      className="whitespace-pre max-md:whitespace-pre-wrap max-md:break-words opacity-0 animate-[lineReveal_0.3s_ease_forwards]"
+                      className="whitespace-pre-wrap break-words md:whitespace-pre md:break-normal opacity-0 animate-[lineReveal_0.3s_ease_forwards]"
                       style={{ animationDelay: `${i * 50}ms` }}
                     >
                       {renderLine(line)}
@@ -336,22 +343,22 @@ function HomepageHero() {
           </div>
 
           {/* Action buttons */}
-          <div className="flex flex-wrap gap-3 items-center max-md:flex-col max-md:w-full max-md:justify-center">
+          <div className="flex flex-col w-full justify-center md:flex-row md:flex-wrap md:w-auto md:items-center gap-3">
             <Link
               href="/golems/docs/getting-started"
-              className="bg-gradient-to-br from-[#e59500] to-[#c46d3c] text-[#0c0b0a] font-bold py-2.5 px-6 rounded-lg text-sm hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(229,149,0,0.35)] transition-all no-underline max-md:w-full max-md:text-center max-md:min-h-12 max-md:flex max-md:items-center max-md:justify-center max-sm:py-2 max-sm:px-5 max-sm:text-[0.8rem]"
+              className="bg-gradient-to-br from-[#e59500] to-[#c46d3c] text-[#0c0b0a] font-bold py-2 px-5 rounded-lg text-[0.8rem] sm:py-2.5 sm:px-6 sm:text-sm hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(229,149,0,0.35)] transition-all no-underline w-full text-center min-h-12 flex items-center justify-center md:w-auto md:min-h-0 md:inline-flex"
             >
               Get Started
             </Link>
             <Link
               href="/golems/docs/architecture"
-              className="text-[#2dd4a8] border border-[#2dd4a840] font-semibold py-2.5 px-6 rounded-lg text-sm hover:border-[#2dd4a899] hover:bg-[#2dd4a80f] transition-all no-underline max-md:w-full max-md:text-center max-md:min-h-12 max-md:flex max-md:items-center max-md:justify-center max-sm:py-2 max-sm:px-5 max-sm:text-[0.8rem]"
+              className="text-[#2dd4a8] border border-[#2dd4a840] font-semibold py-2 px-5 rounded-lg text-[0.8rem] sm:py-2.5 sm:px-6 sm:text-sm hover:border-[#2dd4a899] hover:bg-[#2dd4a80f] transition-all no-underline w-full text-center min-h-12 flex items-center justify-center md:w-auto md:min-h-0 md:inline-flex"
             >
               Architecture
             </Link>
             <Link
               href="https://github.com/EtanHey/golems"
-              className="text-[#908575] border border-[#90857533] font-medium py-2.5 px-5 rounded-lg text-[0.85rem] hover:text-[#c0b8a8] hover:border-[#90857566] hover:bg-[#9085750f] transition-all no-underline max-md:w-full max-md:text-center max-md:min-h-12 max-md:flex max-md:items-center max-md:justify-center max-sm:py-2 max-sm:px-4 max-sm:text-[0.78rem]"
+              className="text-[#908575] border border-[#90857533] font-medium py-2 px-4 rounded-lg text-[0.78rem] sm:py-2.5 sm:px-5 sm:text-[0.85rem] hover:text-[#c0b8a8] hover:border-[#90857566] hover:bg-[#9085750f] transition-all no-underline w-full text-center min-h-12 flex items-center justify-center md:w-auto md:min-h-0 md:inline-flex"
             >
               GitHub &rarr;
             </Link>
@@ -359,15 +366,15 @@ function HomepageHero() {
         </div>
 
         {/* ── TELEGRAM (right sidebar, iPhone frame) ── */}
-        <div className="self-stretch flex flex-col max-lg:max-w-full max-lg:mx-auto">
-          <div className="flex-1 flex flex-col bg-black rounded-[44px] max-lg:rounded-2xl border-2 border-[#3a3a3c] max-lg:border max-lg:border-[#e5950026] max-lg:bg-[#0e1621] shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_1px_#1c1c1e,inset_0_0_0_1px_rgba(255,255,255,0.04)] max-lg:shadow-[0_12px_40px_rgba(0,0,0,0.4)] overflow-hidden relative">
+        <div className="self-stretch flex flex-col max-w-full mx-auto lg:max-w-none lg:mx-0">
+          <div className="flex-1 flex flex-col bg-[#0e1621] rounded-2xl border border-[#e5950026] shadow-[0_12px_40px_rgba(0,0,0,0.4)] lg:bg-black lg:rounded-[44px] lg:border-2 lg:border-[#3a3a3c] lg:shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_1px_#1c1c1e,inset_0_0_0_1px_rgba(255,255,255,0.04)] overflow-hidden relative">
             {/* Side button (desktop only) */}
-            <div className="absolute right-[-4px] top-[100px] w-[3px] h-11 bg-[#3a3a3c] rounded-r max-lg:hidden z-10" />
+            <div className="hidden lg:block absolute right-[-4px] top-[100px] w-[3px] h-11 bg-[#3a3a3c] rounded-r z-10" />
             {/* Dynamic Island (desktop only) */}
-            <div className="w-[92px] h-7 bg-black rounded-[20px] mx-auto mt-2.5 relative z-[5] shrink-0 max-lg:hidden" />
+            <div className="hidden lg:block w-[92px] h-7 bg-black rounded-[20px] mx-auto mt-2.5 relative z-[5] shrink-0" />
             <TelegramMock activeIndex={activeTab} onTopicClick={handleTabChange} />
             {/* Home bar (desktop only) */}
-            <div className="w-[100px] h-1 bg-white/20 rounded-full mx-auto my-2 shrink-0 max-lg:hidden" />
+            <div className="hidden lg:block w-[100px] h-1 bg-white/20 rounded-full mx-auto my-2 shrink-0" />
           </div>
         </div>
       </div>
@@ -379,14 +386,14 @@ function HomepageHero() {
 
 function GetStartedSection() {
   return (
-    <section className="py-20 max-md:py-12 bg-gradient-to-b from-[#0c0b0a] to-[#0a0908] relative">
+    <section className="py-12 md:py-20 bg-gradient-to-b from-[#0c0b0a] to-[#0a0908] relative">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#e5950033] to-transparent" />
       <div className="max-w-[1000px] mx-auto px-6">
-        <h2 className="text-center text-4xl max-sm:text-2xl font-extrabold text-[#f0ebe0] mb-2 tracking-tight">
+        <h2 className="text-center text-2xl sm:text-4xl font-extrabold text-[#f0ebe0] mb-2 tracking-tight">
           Get Started in 60 Seconds
         </h2>
         <p className="text-center text-[#7c6f5e] mb-12 italic">Four commands. That&apos;s it.</p>
-        <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {installSteps.map((s) => (
             <div key={s.step} className="bg-[#14120e]/90 border border-[#e5950014] rounded-xl p-5 hover:border-[#e5950040] transition-colors">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#e59500] to-[#c46d3c] text-[#0c0b0a] font-extrabold text-sm flex items-center justify-center mb-3">
@@ -417,16 +424,16 @@ function GetStartedSection() {
 
 function GolemsSection() {
   return (
-    <section className="py-20 max-md:py-12 bg-gradient-to-b from-[#0c0b0a] to-[#080807] relative">
+    <section className="py-12 md:py-20 bg-gradient-to-b from-[#0c0b0a] to-[#080807] relative">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#e5950026] to-transparent" />
-      <div className="max-w-[1000px] mx-auto px-6 max-sm:px-4">
-        <h2 className="text-center text-4xl max-sm:text-2xl font-extrabold text-[#f0ebe0] mb-2 tracking-tight">
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6">
+        <h2 className="text-center text-2xl sm:text-4xl font-extrabold text-[#f0ebe0] mb-2 tracking-tight">
           Meet the Golems
         </h2>
         <p className="text-center text-[#7c6f5e] mb-12 italic">
           Each golem owns a domain, not an I/O channel
         </p>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] max-sm:grid-cols-1 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
           {golems.map((g) => (
             <Link
               key={g.name}
@@ -453,14 +460,14 @@ function GolemsSection() {
 
 function ArchitectureSection() {
   return (
-    <section className="py-20 max-md:py-12 bg-[#0c0b0a] relative">
+    <section className="py-12 md:py-20 bg-[#0c0b0a] relative">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2dd4a81e] to-transparent" />
       <div className="max-w-[1000px] mx-auto px-6">
-        <h2 className="text-center text-4xl max-sm:text-2xl font-extrabold text-[#f0ebe0] mb-2 tracking-tight">
+        <h2 className="text-center text-2xl sm:text-4xl font-extrabold text-[#f0ebe0] mb-2 tracking-tight">
           How It Works
         </h2>
         <p className="text-center text-[#7c6f5e] mb-12 italic">Mac is the brain, Railway is the body</p>
-        <div className="flex items-center justify-center gap-8 max-w-[700px] mx-auto max-md:flex-col max-md:gap-4">
+        <div className="flex flex-col gap-4 md:flex-row md:gap-8 items-center justify-center max-w-[700px] mx-auto">
           <div className="flex-1 bg-[#14120e]/90 border border-[#c46d3c1a] rounded-xl p-6 hover:border-[#e5950040] transition-colors">
             <h3 className="text-base font-bold text-[#e59500] mb-3">Your Mac (Brain)</h3>
             <ul className="list-none p-0 m-0 space-y-1">
@@ -469,7 +476,7 @@ function ArchitectureSection() {
               ))}
             </ul>
           </div>
-          <div className="text-2xl text-[#2dd4a8] shrink-0 drop-shadow-[0_0_12px_rgba(45,212,168,0.2)] max-md:rotate-90">&harr;</div>
+          <div className="text-2xl text-[#2dd4a8] shrink-0 drop-shadow-[0_0_12px_rgba(45,212,168,0.2)] rotate-90 md:rotate-0">&harr;</div>
           <div className="flex-1 bg-[#14120e]/90 border border-[#c46d3c1a] rounded-xl p-6 hover:border-[#e5950040] transition-colors">
             <h3 className="text-base font-bold text-[#e59500] mb-3">Railway (Body)</h3>
             <ul className="list-none p-0 m-0 space-y-1">
