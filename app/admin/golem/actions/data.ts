@@ -110,6 +110,140 @@ export interface OverviewStats {
   usageStats: UsageStats | null;
 }
 
+export interface GolemOverviewStats {
+  recruiter: {
+    newJobs: number;
+    appliedJobs: number;
+  };
+  teller: {
+    monthlyTotal: number;
+    paymentAlerts: number;
+  };
+  monitor: {
+    servicesGreen: number;
+    totalServices: number;
+    llmSpend: number;
+  };
+}
+
+function monthlyMultiplier(frequency: string | null): number {
+  if (!frequency) return 1;
+  const freq = frequency.toLowerCase();
+  if (freq.includes('year') || freq.includes('annual')) return 1 / 12;
+  if (freq.includes('quarter')) return 1 / 3;
+  if (freq.includes('week')) return 52 / 12;
+  if (freq.includes('day')) return 30;
+  if (freq.includes('month')) return 1;
+  return 1;
+}
+
+function isGreenServiceStatus(status: string | null): boolean {
+  if (!status) return false;
+  const normalized = status.toLowerCase();
+  if (normalized.includes('fail') || normalized.includes('error')) return false;
+  return (
+    normalized.includes('ok') ||
+    normalized.includes('success') ||
+    normalized.includes('complete') ||
+    normalized.includes('healthy') ||
+    normalized.includes('running')
+  );
+}
+
+export async function getGolemOverviewStats(): Promise<{ data: GolemOverviewStats | null; error: string | null }> {
+  try {
+    await requireAuth();
+    const supabase = createAdminClient();
+
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    const [jobsRes, subsRes, emailsRes, runsRes, usageRes] = await Promise.all([
+      supabase.from('golem_jobs').select('status'),
+      supabase.from('subscriptions').select('amount, frequency, status'),
+      supabase
+        .from('emails')
+        .select('id')
+        .eq('category', 'subscription')
+        .gte('received_at', thirtyDaysAgo),
+      supabase
+        .from('service_runs')
+        .select('service, started_at, ended_at, status')
+        .order('started_at', { ascending: false })
+        .limit(200),
+      supabase
+        .from('llm_usage')
+        .select('cost_usd, created_at')
+        .gte('created_at', sevenDaysAgo),
+    ]);
+
+    const errors = [jobsRes.error, subsRes.error, emailsRes.error, runsRes.error, usageRes.error]
+      .filter(Boolean)
+      .map((err) => err!.message);
+    if (errors.length > 0) {
+      throw new Error(errors.join('; '));
+    }
+
+    let newJobs = 0;
+    let appliedJobs = 0;
+    for (const row of (jobsRes.data || []) as { status: string | null }[]) {
+      if (row.status === 'new') newJobs += 1;
+      if (row.status === 'applied') appliedJobs += 1;
+    }
+
+    const subscriptions = (subsRes.data || []) as Array<{
+      amount: number | null;
+      frequency: string | null;
+      status: string | null;
+    }>;
+    const monthlyTotal = subscriptions.reduce((total, sub) => {
+      if (sub.status?.toLowerCase() !== 'active') return total;
+      if (sub.amount == null) return total;
+      return total + sub.amount * monthlyMultiplier(sub.frequency);
+    }, 0);
+
+    const paymentAlerts = (emailsRes.data || []).length;
+
+    const latestByService = new Map<string, { status: string | null }>();
+    for (const row of (runsRes.data || []) as any[]) {
+      if (!latestByService.has(row.service)) {
+        latestByService.set(row.service, { status: row.status || null });
+      }
+    }
+    const totalServices = latestByService.size;
+    let servicesGreen = 0;
+    for (const entry of latestByService.values()) {
+      if (isGreenServiceStatus(entry.status)) servicesGreen += 1;
+    }
+
+    let llmSpend = 0;
+    for (const row of (usageRes.data || []) as { cost_usd: number | null }[]) {
+      llmSpend += row.cost_usd || 0;
+    }
+
+    return {
+      data: {
+        recruiter: {
+          newJobs,
+          appliedJobs,
+        },
+        teller: {
+          monthlyTotal,
+          paymentAlerts,
+        },
+        monitor: {
+          servicesGreen,
+          totalServices,
+          llmSpend,
+        },
+      },
+      error: null,
+    };
+  } catch (err) {
+    return { data: null, error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
 export async function getOverviewStats(): Promise<{ data: OverviewStats | null; error: string | null }> {
   try {
     await requireAuth();

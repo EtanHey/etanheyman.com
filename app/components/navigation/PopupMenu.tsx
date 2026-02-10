@@ -12,31 +12,34 @@ const PopupMenu = ({
 
   return (
     <div
-      onClick={() => setIsOpen(false)}
-      className={`absolute top-1/2 right-0 -z-10 flex w-fit flex-col gap-2 rounded-b-[40px] bg-white px-4 py-6 transition-all duration-300 ease-in-out ${isOpen ? "pointer-events-auto max-h-[500px] translate-y-0 opacity-100" : "pointer-events-none max-h-0 translate-y-[-10px] overflow-hidden px-0 py-0 opacity-0"}`}
+      className={`absolute right-4 top-[72px] z-50 flex w-fit flex-col gap-2 rounded-[24px] bg-white px-6 py-5 shadow-[0px_8px_32px_rgba(0,0,63,0.25)] transition-all duration-300 ease-in-out ${isOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"}`}
     >
-      <div className="flex min-w-21 flex-col items-center gap-4">
+      <div className="flex min-w-[120px] flex-col items-center gap-4">
         <Link
           href="/"
-          className={`${pathname === "/" ? "font-bold text-[#0f82eb]" : "text-[#171717]"}`}
+          onClick={() => setIsOpen(false)}
+          className={`text-[16px] font-medium transition-colors ${pathname === "/" ? "font-bold text-[#0f82eb]" : "text-[#171717] hover:text-[#0f82eb]"}`}
         >
           Home
         </Link>
         <Link
           href="/projects"
-          className={`${pathname === "/projects" ? "font-bold text-[#0f82eb]" : "text-[#171717]"}`}
+          onClick={() => setIsOpen(false)}
+          className={`text-[16px] font-medium transition-colors ${pathname === "/projects" ? "font-bold text-[#0f82eb]" : "text-[#171717] hover:text-[#0f82eb]"}`}
         >
           Projects
         </Link>
         <Link
           href="/about"
-          className={`${pathname === "/about" ? "font-bold text-[#0f82eb]" : "text-[#171717]"}`}
+          onClick={() => setIsOpen(false)}
+          className={`text-[16px] font-medium transition-colors ${pathname === "/about" ? "font-bold text-[#0f82eb]" : "text-[#171717] hover:text-[#0f82eb]"}`}
         >
           About
         </Link>
         <Link
           href="/contact"
-          className={`${pathname === "/contact" ? "font-bold text-[#0f82eb]" : "text-[#171717]"}`}
+          onClick={() => setIsOpen(false)}
+          className={`text-[16px] font-medium transition-colors ${pathname === "/contact" ? "font-bold text-[#0f82eb]" : "text-[#171717] hover:text-[#0f82eb]"}`}
         >
           Contact
         </Link>
