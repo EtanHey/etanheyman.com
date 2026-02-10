@@ -1,10 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { Menu, X, ArrowLeft } from 'lucide-react';
 
 interface SidebarItem {
   title: string;
@@ -66,109 +63,44 @@ const sidebarConfig: SidebarSection[] = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   const isDocsPage = pathname.startsWith('/golems/docs');
 
-  const sidebarNav = (
-    <nav className="flex flex-col gap-6 p-4">
-      <Link
-        href="/"
-        className="flex items-center gap-2 text-xs text-[#7c6f5e] hover:text-[#c0b8a8] transition-colors mb-2"
-      >
-        <ArrowLeft className="h-3 w-3" />
-        etanheyman.com
-      </Link>
-
-      <Link
-        href="/golems"
-        onClick={() => setMobileOpen(false)}
-        className="text-[#e59500] font-bold text-lg tracking-tight hover:text-[#f0ebe0] transition-colors"
-      >
-        Golems
-      </Link>
-
-      {sidebarConfig.map((section) => (
-        <div key={section.title}>
-          <h3 className="text-[10px] font-bold uppercase tracking-widest text-[#7c6f5e] mb-2">
-            {section.title}
-          </h3>
-          <ul className="space-y-0.5">
-            {section.items.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
-                      isActive
-                        ? 'bg-[#e5950015] text-[#e59500] font-medium'
-                        : 'text-[#908575] hover:text-[#c0b8a8] hover:bg-[#ffffff08]'
-                    }`}
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))}
-    </nav>
-  );
+  // Only show sidebar on doc pages
+  if (!isDocsPage) return null;
 
   return (
-    <>
-      {/* Mobile header bar — visible on doc pages below md */}
-      {isDocsPage && (
-        <header className="fixed top-0 left-0 right-0 z-50 md:hidden bg-[#0c0b0a]/95 backdrop-blur-sm border-b border-[#e5950015]">
-          <div className="flex items-center gap-3 px-4 h-12">
-            <button
-              type="button"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="text-[#e59500] p-1 -ml-1"
-              aria-label="Toggle navigation"
-            >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-            <Link href="/golems" onClick={() => setMobileOpen(false)} className="flex items-center gap-2">
-              <Image
-                src="/images/golems-logo.svg"
-                alt="Golems"
-                width={24}
-                height={24}
-                className="shrink-0 drop-shadow-[0_0_8px_rgba(229,149,0,0.3)]"
-              />
-              <span className="font-bold text-[#e59500] text-sm tracking-tight">Golems</span>
-            </Link>
+    <aside
+      className="hidden md:block w-64 shrink-0 sticky top-12 h-[calc(100vh-3rem)] overflow-y-auto scrollbar-none bg-[#0c0b0a] border-r border-[#e5950015]"
+    >
+      <nav className="flex flex-col gap-6 p-4">
+        {sidebarConfig.map((section) => (
+          <div key={section.title}>
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-[#7c6f5e] mb-2">
+              {section.title}
+            </h3>
+            <ul className="space-y-0.5">
+              {section.items.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
+                        isActive
+                          ? 'bg-[#e5950015] text-[#e59500] font-medium'
+                          : 'text-[#908575] hover:text-[#c0b8a8] hover:bg-[#ffffff08]'
+                      }`}
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
-        </header>
-      )}
-
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 bg-black/60 z-40 md:hidden"
-          role="button"
-          tabIndex={0}
-          aria-label="Close navigation"
-          onClick={() => setMobileOpen(false)}
-          onKeyDown={(e) => { if (e.key === 'Escape' || e.key === 'Enter') setMobileOpen(false); }}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-[#0c0b0a] border-r border-[#e5950015] z-40 overflow-y-auto scrollbar-none transition-transform duration-200 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0`}
-      >
-        {/* Push sidebar content below header on mobile */}
-        <div className="pt-12 md:pt-0">
-          {sidebarNav}
-        </div>
-      </aside>
-    </>
+        ))}
+      </nav>
+    </aside>
   );
 }

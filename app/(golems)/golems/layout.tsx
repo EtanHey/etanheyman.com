@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { JetBrains_Mono, Inter, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
+import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 
 const inter = Inter({
@@ -38,6 +39,7 @@ export default function GolemsRootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${ibmPlexMono.variable}`}>
       <body className="bg-[#0c0b0a] text-[#c0b8a8] antialiased scrollbar-none">
+        <Header />
         <div className="flex min-h-screen">
           <Sidebar />
           <main className="flex-1 min-w-0 overflow-x-clip">{children}</main>
