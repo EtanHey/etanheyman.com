@@ -279,7 +279,7 @@ function HomepageHero() {
             </div>
 
             {/* Tab bar */}
-            <div className="flex bg-[#141210] border-b border-[#e595000f] overflow-x-auto" role="tablist">
+            <div className="flex bg-[#141210] border-b border-[#e595000f] overflow-x-auto scrollbar-none" role="tablist">
               {tabs.map((t, i) => (
                 <button
                   key={t.id}
@@ -300,7 +300,7 @@ function HomepageHero() {
             </div>
 
             {/* Terminal content */}
-            <div className="p-4 md:px-5 font-mono text-xs md:text-[0.76rem] leading-relaxed text-[#c0b8a8] h-[260px] sm:h-[340px] md:h-[420px] overflow-y-auto overflow-x-hidden" role="tabpanel">
+            <div className="p-4 md:px-5 font-mono text-xs md:text-[0.76rem] leading-relaxed text-[#c0b8a8] h-[260px] sm:h-[340px] md:h-[420px] overflow-y-auto overflow-x-hidden scrollbar-none" role="tabpanel">
               {currentTab.showMascot ? (
                 <div className="grid grid-cols-[auto_1fr] gap-6 items-start max-md:grid-cols-1">
                   <div className="max-md:hidden opacity-90">

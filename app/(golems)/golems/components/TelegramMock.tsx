@@ -83,7 +83,7 @@ export default function TelegramMock({ activeIndex, onTopicClick }: TelegramMock
       </div>
 
       {/* Topic tabs */}
-      <div className="flex overflow-x-auto bg-[#17212b] border-b border-white/5 gap-0" role="tablist">
+      <div className="flex overflow-x-auto scrollbar-none bg-[#17212b] border-b border-white/5 gap-0" role="tablist">
         {topicScenes.map((t, i) => (
           <button
             key={t.topic}
@@ -104,7 +104,7 @@ export default function TelegramMock({ activeIndex, onTopicClick }: TelegramMock
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto flex flex-col gap-3 p-4 sm:gap-2 sm:p-3" role="tabpanel">
+      <div className="flex-1 overflow-y-auto scrollbar-none flex flex-col gap-3 p-4 sm:gap-2 sm:p-3" role="tabpanel">
         {scene.messages.map((msg, i) => (
           <div
             key={`${activeIndex}-${i}`}
