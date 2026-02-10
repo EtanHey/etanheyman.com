@@ -131,7 +131,7 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 pt-16 md:pt-12 pb-12 flex gap-8">
+    <div className="max-w-6xl mx-auto px-6 pt-8 pb-12 flex gap-8">
       <article className="flex-1 min-w-0 max-w-3xl">
         <MDXRemote
           source={content}
