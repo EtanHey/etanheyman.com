@@ -34,8 +34,7 @@ export interface RecruiterDashboard {
     connectionName: string;
     position: string | null;
     company: string | null;
-    jobTitle: string;
-    jobCompany: string;
+    matchingJobs: Array<{ title: string; company: string; status: string }>;
   }>;
 }
 
@@ -98,26 +97,38 @@ export async function getRecruiterDashboard(): Promise<{ data: RecruiterDashboar
     ).length;
 
     const matchableJobs = appliedJobs.map((job: any) => ({
-      company: (job.company || '').toLowerCase(),
+      company: job.company || '',
+      companyNormalized: (job.company || '').toLowerCase(),
       title: job.title,
       status: job.status,
     }));
     const connectionMatches: RecruiterDashboard['connectionMatches'] = [];
+    const seenConnections = new Set<string>();
+    const uniqueConnections = [];
     for (const conn of (connectionsRes.data || []) as any[]) {
+      const nameKey = (conn.full_name || '').trim().toLowerCase();
+      if (!nameKey || seenConnections.has(nameKey)) continue;
+      seenConnections.add(nameKey);
+      uniqueConnections.push(conn);
+    }
+    for (const conn of uniqueConnections) {
+      if (connectionMatches.length >= 20) break;
       const normalized = (conn.company_normalized || conn.company || '').toLowerCase();
       if (!normalized) continue;
-      for (const job of matchableJobs) {
-        if (!job.company) continue;
-        if (normalized.includes(job.company) || job.company.includes(normalized)) {
-          connectionMatches.push({
-            connectionName: conn.full_name || 'Unknown',
-            position: conn.position,
-            company: conn.company,
-            jobTitle: job.title,
-            jobCompany: job.company,
-          });
-        }
-      }
+      const matchingJobs = matchableJobs
+        .filter((job) => job.companyNormalized && (normalized.includes(job.companyNormalized) || job.companyNormalized.includes(normalized)))
+        .map((job) => ({
+          title: job.title,
+          company: job.company,
+          status: job.status,
+        }));
+      if (matchingJobs.length === 0) continue;
+      connectionMatches.push({
+        connectionName: conn.full_name || 'Unknown',
+        position: conn.position,
+        company: conn.company,
+        matchingJobs,
+      });
     }
 
     return {
@@ -127,7 +138,7 @@ export async function getRecruiterDashboard(): Promise<{ data: RecruiterDashboar
         newHighScoreJobs: hotJobsRes.data?.length || 0,
         staleApplications,
         hotJobs: (hotJobsRes.data || []) as any,
-        connectionMatches: connectionMatches.slice(0, 10),
+        connectionMatches,
       },
       error: null,
     };
