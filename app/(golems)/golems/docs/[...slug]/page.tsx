@@ -11,6 +11,7 @@ import { useMDXComponents } from '@/mdx-components';
 import MermaidDiagram from '../../components/MermaidDiagram';
 import CopyButton from '../../components/CopyButton';
 import TableOfContents from '../../components/TableOfContents';
+import ArchitectureDiagram from '../../components/ArchitectureDiagram';
 
 const CONTENT_DIR = join(process.cwd(), 'content', 'golems');
 
@@ -142,6 +143,7 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   return (
     <div className="max-w-6xl mx-auto px-6 pt-8 pb-12 flex gap-8">
       <article className="flex-1 min-w-0 max-w-3xl">
+        {slugStr === 'architecture' && <ArchitectureDiagram />}
         <MDXRemote
           source={content}
           components={components}
