@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import TelegramMock from './components/TelegramMock';
 import GolemMascot from './components/GolemMascot';
+import CopyButton from './components/CopyButton';
 
 /* ── Tab content: real CLI flows ───────────────────────────────── */
 
@@ -249,7 +250,7 @@ function HomepageHero() {
         background: 'radial-gradient(ellipse 700px 500px at 15% 50%, rgba(229,149,0,0.10) 0%, transparent 70%), radial-gradient(ellipse 500px 400px at 85% 30%, rgba(196,109,60,0.07) 0%, transparent 70%), radial-gradient(ellipse 300px 300px at 50% 80%, rgba(45,212,168,0.04) 0%, transparent 70%)',
       }} />
 
-      <div className="relative z-[2] grid grid-cols-1 lg:grid-cols-[1fr_280px] xl:grid-cols-[1fr_280px] gap-4 p-4 md:p-6 max-w-[1400px] items-start">
+      <div className="relative z-[2] grid grid-cols-1 lg:grid-cols-[1fr_280px] xl:grid-cols-[1fr_280px] gap-4 p-4 md:p-6 max-w-[1400px] mx-auto items-start">
         {/* ── TERMINAL (left) ── */}
         <div className="flex flex-col gap-4">
           {/* Header with logo + title */}
@@ -400,7 +401,8 @@ function GetStartedSection() {
         <p className="text-center text-[#7c6f5e] mb-12 italic">Four commands. That&apos;s it.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {installSteps.map((s) => (
-            <div key={s.step} className="bg-[#14120e]/90 border border-[#e5950014] rounded-xl p-5 hover:border-[#e5950040] transition-colors">
+            <div key={s.step} className="relative group bg-[#14120e]/90 border border-[#e5950014] rounded-xl p-5 hover:border-[#e5950040] transition-colors">
+              <CopyButton text={s.command} />
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#e59500] to-[#c46d3c] text-[#0c0b0a] font-extrabold text-sm flex items-center justify-center mb-3">
                 {s.step}
               </div>
