@@ -110,7 +110,7 @@ This comes from `event-log.json` maintained by infrastructure (last 24 hours via
 ### Telegram Session
 
 ```bash
-cd packages/autonomous
+cd packages/claude
 
 # Start persistent session
 claude --continue
@@ -139,11 +139,11 @@ bun src/night-shift.ts
 
 ```bash
 # Telegram
-export TELEGRAM_BOT_TOKEN=$(op read op://development/TELEGRAM_BOT_TOKEN/credential)
-export TELEGRAM_CHAT_ID=$(op read op://development/TELEGRAM_CHAT_ID/credential)
+export TELEGRAM_BOT_TOKEN=$(op read op://YOUR_VAULT/YOUR_TELEGRAM_ITEM/credential)
+export TELEGRAM_CHAT_ID=$(op read op://YOUR_VAULT/YOUR_CHAT_ID_ITEM/credential)
 
 # Claude Code API
-export ANTHROPIC_API_KEY=$(op read op://development/ANTHROPIC_GOLEMS_API_KEY/credential)
+export ANTHROPIC_API_KEY=$(op read op://YOUR_VAULT/YOUR_ANTHROPIC_ITEM/credential)
 
 # Night Shift targets
 export REPOS_PATH=~/Gits  # Base path for repos
@@ -190,7 +190,7 @@ pgrep -fl "telegram-bot"
 # Restart bot
 launchctl kickstart gui/$(id -u)/com.golemszikaron.telegram
 # Or use CLI
-./packages/autonomous/bin/golems start telegram
+golems start telegram
 ```
 
 **Night Shift not running at 4am:**

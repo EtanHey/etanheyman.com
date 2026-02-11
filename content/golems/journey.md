@@ -41,7 +41,7 @@ Instead of building golems first, we built **Zikaron** — a memory layer using 
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. Zikaron would index 200k+ conversation chunks and return results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database, instant queries. Zikaron now indexes 238K+ conversation chunks and returns results in under 2 seconds.
 
 ### Jan 17: First Golem — Email Router
 
@@ -193,7 +193,7 @@ Anthropic released Agent Teams (v2.1.32+):
 
 Built the full ecosystem in a concentrated sprint:
 
-**Phase 1 — Ship What's Built:** 8 bug fixes, email routing, reply drafting, follow-up tracking, shared types, agent-runner.ts. 333 tests passing.
+**Phase 1 — Ship What's Built:** 8 bug fixes, email routing, reply drafting, follow-up tracking, shared types, agent-runner.ts. 333 tests passing at this point.
 
 **Phase 2 — Cloud Offload:** Mac = brain, Railway = body. Supabase migration (8 new tables), Dockerfile, dual-mode notification sender, state store abstraction. Cost tracking: Haiku 4.5 at $0.80/MTok input.
 
@@ -201,7 +201,7 @@ Built the full ecosystem in a concentrated sprint:
 
 **Phase 4 — Tooling:** Helpers layer (rate-limited API wrappers), DeepSource static analysis, skills catalog CLI, plugin architecture, session forking, Playwright E2E scaffold.
 
-**Final count:** 400+ tests, 35 plan items completed, 6 domain golems, 3 MCP servers.
+**Sprint count:** 400+ tests at the time, 35 plan items completed, 3 MCP servers. (Post-Phase 8 componentization: 1,179 tests, 4,056 assertions across 10 packages.)
 
 ### Feb 7: Distribution Strategy
 
@@ -251,7 +251,7 @@ Built entirely with:
 - **Railway** — Cloud deployment
 - **Grammy** — Telegram bot framework
 - **sqlite-vec** — Local vector search (Zikaron)
-- **Docusaurus** — This documentation site
+- **Next.js** — Documentation site (etanheyman.com/golems)
 
 ### Feb 7: Zikaron sqlite-vec Migration
 
@@ -263,7 +263,7 @@ With tax season approaching, TellerGolem was born: IRS Schedule C expense catego
 
 ### Feb 7: Docsite Launch
 
-Docusaurus documentation site with an alchemical workshop theme (ember/obsidian palette). Interactive terminal hero showcasing all golems, Telegram mock showing real notification flows, Mermaid architecture diagrams. Built with help from 5 CLI agents running in parallel (Gemini, Cursor, Codex, Kiro, Haiku).
+Documentation site with an alchemical workshop theme (ember/obsidian palette), later ported from Docusaurus to Next.js at etanheyman.com/golems. Interactive terminal hero showcasing all golems, Telegram mock showing real notification flows, Mermaid architecture diagrams. Built with help from 5 CLI agents running in parallel (Gemini, Cursor, Codex, Kiro, Haiku).
 
 ### Feb 7: Claude Cowork Research
 
@@ -316,28 +316,71 @@ The concept: every golem tab is a "trailer" showing what it actually does, not a
 
 ---
 
+## Phase 8: The Componentization (Feb 8–11)
+
+The monolith that worked needed to become a plugin ecosystem that scales.
+
+### The Problem
+
+Everything lived in `packages/autonomous/` — a single package with all golems, all services, all infrastructure. It worked, but:
+- Couldn't install a single golem as a Claude Code plugin
+- Tight coupling between golems made changes risky
+- No clear boundaries for contributors
+- Test failures in one area blocked everything
+
+### The Solution: 9-Phase Migration
+
+Planned and executed a 9-phase componentization with a strict policy: if anything breaks or feels wrong, **stop and notify on Telegram**. No improvising through blockers.
+
+| Phase | What Happened | Tests After |
+|-------|-------------|-------------|
+| **1. Extract Shared** | Created `@golems/shared` — Supabase, LLM, email, state, notifications. 12 files moved. | 890 pass |
+| **2. Decouple** | Broke all cross-golem imports. Added `getStatus()` to every golem. Zero cross-golem business logic imports. | 890 pass |
+| **3. Thin Router** | Telegram bot from 1,957 lines to 97. Each golem gets its own Grammy Composer. | 890 pass |
+| **4. Bun Workspaces** | Created 8 package scaffolds. Moved ~80 files via `git mv`. 90 strangler wrappers for backward compat. | 862 pass |
+| **5. CC Plugins** | Created `plugin.json` for 7 packages. Wrote CLAUDE.md per golem. 16 skills, 3 agents. | — |
+| **6. CoachGolem** | Brand new golem: Google Calendar sync, daily planning, ecosystem status aggregation. 15 tests. | +15 pass |
+| **7. Services** | Cloud Worker, Night Shift, Briefing moved to `@golems/services`. Root Dockerfile for Railway workspace. | — |
+| **8. Infrastructure** | Launchd plists updated. `load-env.ts` made workspace-aware. Pre-commit hook fixed. | — |
+| **9. Distribution** | npm metadata on all packages. READMEs per package. Root CLAUDE.md rewritten. | **1,179 pass** |
+
+### Key Decisions
+
+**Strangler wrappers over big bang.** `packages/autonomous/` kept 1-line re-exports so nothing broke during migration. Tests still pass through the old paths. Zero downtime — the Telegram bot stayed live through all 9 phases.
+
+**EmailGolem dissolved into shared.** Email is infrastructure (polling, scoring, routing), not domain expertise. The email subsystem lives in `@golems/shared/email/` — every golem can receive emails routed to it.
+
+**CLI agents as research assistants.** Cursor with `@codebase` did the bulk file-move planning (282-line manifest). Gemini handled web research. Each phase step was tagged with its executor: `[Opus]`, `[Cursor work]`, `[Gemini research]`, `[context7]`, `[bun test]`, `[manual]`.
+
+### The Result
+
+```
+Before:  1 package, ~890 tests, tightly coupled
+After:   10 packages, 1,179 tests, each golem independently installable
+```
+
+6 golems (Claude orchestrator + Recruiter, Teller, Job, Coach, Content domain experts), plus @golems/shared (including the Email system), @golems/services, Ralph, and Zikaron.
+
+---
+
 ## What's Next
 
 ### Immediate
-- Deploy cloud worker to Railway (cost-efficient Israeli timezone scheduling)
-- Admin dashboard wiring (jobs, email scores, golem status)
-- Telegram bot restart with updated autonomous package
-- Per-repo session management (iTerm/terminal tab automation)
+- Deploy updated cloud worker to Railway
+- 24h smoke test of all launchd plists
+- Telegram command verification (all composers)
 
 ### Medium-term
-- Teaching mode — CLI that explains what it's doing and why
 - NightShift self-healing (retry strategies, hang detection)
-- Centralized config (`golems.config.ts`)
+- ContentGolem migration (move logic from skills into `src/`)
+- Teaching mode — CLI that explains what it's doing and why
 - Axiom observability + cost tracking
-- ContentGolem for autonomous content generation
 
 ### Long-term
 - Plugin marketplace for Claude Code extensions
 - MCP server distribution (works in Zed, Cursor, VS Code)
 - Mobile dashboard (Expo + React Native)
-- Homebrew distribution via homebrew-ralphtools
-- Context sharing Claude Code ↔ Cowork (via repo)
-- `/large-plan` skill — formalize the folder-based async collab planning into a reusable pattern
+- `/large-plan` skill — formalize async collab planning into a reusable pattern
 
 ---
 

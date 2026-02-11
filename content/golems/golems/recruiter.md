@@ -197,7 +197,7 @@ export SUPABASE_SERVICE_KEY=$(op read op://YOUR_VAULT/YOUR_SUPABASE_ITEM/service
 ## Running RecruiterGolem
 
 ```bash
-cd packages/autonomous
+cd packages/recruiter
 
 # Use Telegram commands for outreach
 # /outreach - Send personalized message
@@ -205,8 +205,8 @@ cd packages/autonomous
 # /practice {mode} - Start interview practice
 # /stats - View outreach statistics
 
-# Or use CLI script
-./bin/recruiterGolem
+# Or use the golems CLI
+golems recruit --find
 ```
 
 ## Integration Points

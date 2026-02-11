@@ -73,9 +73,10 @@ const tabs: TerminalTab[] = [
       '\x1b[34mClaude Sessions:\x1b[0m 3 running',
       '\x1b[34mNight Shift Target:\x1b[0m songscript',
       '',
-      '\x1b[34mSkills:\x1b[0m 34 loaded',
-      '\x1b[34mTests:\x1b[0m 539 passing',
-      '\x1b[34mMemory:\x1b[0m 200k+ chunks indexed',
+      '\x1b[34mSkills:\x1b[0m 30+ loaded',
+      '\x1b[34mPackages:\x1b[0m 10 (shared, claude, jobs, recruiter, teller, content, coach, services, ralph, zikaron)',
+      '\x1b[34mTests:\x1b[0m 1179 passing (4056 assertions)',
+      '\x1b[34mMemory:\x1b[0m 238K+ chunks indexed',
     ],
   },
   {
@@ -97,7 +98,7 @@ const tabs: TerminalTab[] = [
       '',
       '\x1b[36mFeedback:\x1b[0m',
       '  \x1b[32m\u2713\x1b[0m Strong opening with concrete system',
-      '  \x1b[33m\u25CB\x1b[0m Add metrics (539 tests, 34 skills)',
+      '  \x1b[33m\u25CB\x1b[0m Add metrics (1179 tests, 10 packages, 30+ skills)',
       '  \x1b[33m\u25CB\x1b[0m Mention the constraint: Mac + Railway split',
       '',
       '\x1b[34mScore: 7.2/10\x1b[0m | \x1b[33mElo: +15\x1b[0m',
@@ -115,7 +116,7 @@ const tabs: TerminalTab[] = [
       '\x1b[33mScanning inbox... 23 new emails\x1b[0m',
       '',
       '\x1b[31m\u26A0 URGENT (score 10):\x1b[0m',
-      '  From: hiring@linear.dev',
+      '  From: hiring@acme-corp.dev',
       '  Subj: "Interview confirmation \u2014 Tuesday 2pm"',
       '  \x1b[32m\u2192 Routed to RecruiterGolem\x1b[0m',
       '',
@@ -162,12 +163,16 @@ const tabs: TerminalTab[] = [
 /* ── Golems grid data ──────────────────────────────────────────── */
 
 const golems = [
-  { emoji: '\uD83E\uDD16', name: 'ClaudeGolem', desc: 'Persistent Telegram-bridged Claude session. Manages Night Shift, content generation, and interactive coding.', link: '/golems/docs/golems/claude' },
-  { emoji: '\uD83D\uDCE7', name: 'EmailGolem', desc: 'Scores, categorizes, and routes incoming email. Detects subscriptions and payment failures.', link: '/golems/docs/golems/email' },
-  { emoji: '\uD83D\uDCBC', name: 'RecruiterGolem', desc: 'Finds contacts via GitHub, Exa, Hunter. Manages outreach, follow-ups, and interview practice.', link: '/golems/docs/golems/recruiter' },
-  { emoji: '\uD83D\uDCB0', name: 'TellerGolem', desc: 'Tax categorization, payment failure alerts, monthly and annual expense reports.', link: '/golems/docs/golems/teller' },
-  { emoji: '\uD83C\uDFAF', name: 'JobGolem', desc: 'Scrapes Indeed, SecretTLV, Drushim, Goozali. Scores and surfaces hot matches.', link: '/golems/docs/golems/job-golem' },
-  { emoji: '\uD83C\uDF19', name: 'NightShift', desc: 'Autonomous 4am improvements. Rotates across repos, creates PRs, sends morning briefings.', link: '/golems/docs/architecture' },
+  { emoji: '\uD83E\uDD16', name: 'ClaudeGolem', desc: 'Telegram orchestrator. Routes commands to domain golems, spawns Claude sessions, manages notifications.', link: '/golems/docs/golems/claude' },
+  { emoji: '\uD83D\uDCE7', name: 'Email System', desc: 'Scores, categorizes, and routes incoming email. Infrastructure in @golems/shared.', link: '/golems/docs/golems/email' },
+  { emoji: '\uD83D\uDCBC', name: 'RecruiterGolem', desc: 'Contact finder, style-adapted outreach, follow-ups, and 7-mode interview practice with Elo tracking.', link: '/golems/docs/golems/recruiter' },
+  { emoji: '\uD83D\uDCB0', name: 'TellerGolem', desc: 'Tax categorization (Schedule C), payment alerts, monthly and annual expense reports.', link: '/golems/docs/golems/teller' },
+  { emoji: '\uD83C\uDFAF', name: 'JobGolem', desc: 'Scrapes Indeed, SecretTLV, Drushim, Goozali. LLM-scored matching with auto-outreach for 8+ scores.', link: '/golems/docs/golems/job-golem' },
+  { emoji: '\uD83D\uDCC5', name: 'CoachGolem', desc: 'Calendar sync, daily planning, ecosystem status aggregation. Reads all golems, helps you prioritize.', link: '/golems/docs/golems/coach' },
+  { emoji: '\u270D\uFE0F', name: 'ContentGolem', desc: 'LinkedIn drafting, Soltome publishing, ghostwriting. Critique-wave pipeline for quality content.', link: '/golems/docs/packages/content' },
+  { emoji: '\uD83C\uDF19', name: 'Services', desc: 'Night Shift (4am), Morning Briefing (8am), Cloud Worker (Railway), Wizard, Doctor health checks.', link: '/golems/docs/packages/services' },
+  { emoji: '\uD83D\uDD04', name: 'Ralph', desc: 'Autonomous coding loop. Reads PRDs, implements stories, reviews with CodeRabbit, commits and PRs.', link: '/golems/docs/packages/ralph' },
+  { emoji: '\uD83E\uDDE0', name: 'Zikaron', desc: 'Memory layer. 238K+ indexed chunks across all sessions. Semantic search in under 2 seconds.', link: '/golems/docs/packages/zikaron' },
 ];
 
 const installSteps = [
@@ -431,9 +436,9 @@ function GolemsSection() {
           Meet the Golems
         </h2>
         <p className="text-center text-[#7c6f5e] mb-12 italic">
-          Each golem owns a domain, not an I/O channel
+          6 golems + infrastructure. Each golem owns a domain, not an I/O channel.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {golems.map((g) => (
             <Link
               key={g.name}

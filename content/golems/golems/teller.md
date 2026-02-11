@@ -108,19 +108,19 @@ TellerGolem exposes two MCP tools via the `golems-email` MCP server (in `email-g
 ## Running TellerGolem
 
 ```bash
-cd packages/autonomous
+cd packages/teller
 
 # Monthly report (current month)
-bun run src/teller-golem/index.ts --report
+bun run src/index.ts --report
 
 # Specific month
-bun run src/teller-golem/index.ts --report --month 2026-02
+bun run src/index.ts --report --month 2026-02
 
 # Tax report (current year)
-bun run src/teller-golem/index.ts --report --tax
+bun run src/index.ts --report --tax
 
 # Specific tax year
-bun run src/teller-golem/index.ts --report --tax --year 2025
+bun run src/index.ts --report --tax --year 2025
 ```
 
 ## Integration Points

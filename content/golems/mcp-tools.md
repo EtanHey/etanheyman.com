@@ -14,14 +14,19 @@ Add to `.mcp.json` in your Claude Code project:
 {
   "golems-email": {
     "command": "bun",
-    "args": ["run", "packages/autonomous/src/email-golem/mcp-server.ts"]
+    "args": ["run", "packages/shared/src/email/mcp-server.ts"]
   },
   "golems-jobs": {
     "command": "bun",
-    "args": ["run", "packages/autonomous/src/job-golem/mcp-server.ts"]
+    "args": ["run", "packages/jobs/src/mcp-server.ts"]
+  },
+  "zikaron": {
+    "command": "zikaron-mcp"
   }
 }
 ```
+
+Additional MCP servers (supabase, exa, sophtron) are configured globally in `~/.claude/.mcp.json`.
 
 Then in Claude Code: `/tools` or use `@golems-email` in any prompt.
 
@@ -225,6 +230,73 @@ Quick job statistics.
 - Total jobs seen
 - Total batches
 - Hot/warm/cold counts
+
+---
+
+## Memory Tools (zikaron)
+
+Zikaron provides persistent memory across Claude Code sessions — semantic search over 238K+ indexed conversation chunks.
+
+### zikaron_search
+
+Semantic search across all past Claude Code sessions.
+
+**Parameters:**
+- `query` (string, required) — Natural language search query
+- `project` (string, optional) — Filter by project path (e.g., `-Users-etanheyman-Gits-golems`)
+- `limit` (number, default: 10) — Max results
+
+**Returns:** Matching chunks with content, score, project, and timestamp
+
+**Example:**
+```
+How did I implement the email scoring system?
+```
+
+### zikaron_context
+
+Get surrounding conversation context for a search result.
+
+**Parameters:**
+- `chunk_id` (string, required) — Chunk ID from a search result
+
+**Returns:** The chunk plus surrounding conversation turns for full context
+
+### zikaron_stats
+
+Index statistics.
+
+**Returns:** Total chunks, projects indexed, database size, last index time
+
+### zikaron_list_projects
+
+List all indexed projects.
+
+**Returns:** Project paths with chunk counts
+
+---
+
+## Database Tools (supabase)
+
+Full Supabase database access via the official `@supabase/mcp-server-supabase` server. Provides read/write access to all Golems tables.
+
+Key capabilities: table listing, SQL queries, migrations, edge functions, type generation. See [Supabase MCP docs](https://github.com/supabase-community/supabase-mcp) for the full tool list.
+
+---
+
+## Web Search Tools (exa)
+
+Exa AI-powered web search via `exa-mcp-server`. Used by RecruiterGolem for company research and contact discovery.
+
+Key capabilities: semantic web search, code context retrieval, company research.
+
+---
+
+## Banking Tools (sophtron)
+
+Bank account and transaction access via `@sophtron/sophtron-mcp-server`. Used by TellerGolem for transaction categorization and tax preparation.
+
+Key capabilities: account listing, transaction history, identity verification.
 
 ---
 
