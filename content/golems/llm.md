@@ -140,10 +140,10 @@ export STATE_BACKEND=file
 export TELEGRAM_MODE=local
 
 # Restart Mac services
-./packages/autonomous/bin/golems latest
+golems latest
 
 # Check status
-./packages/autonomous/bin/golems status
+golems status
 ```
 
 No data loss, no disruption. The state in Supabase is still there for when you re-enable cloud.
@@ -377,7 +377,7 @@ export SUPABASE_SERVICE_KEY=$(op read op://YOUR_VAULT/YOUR_SUPABASE_ITEM/service
 
 ```bash
 # From golems root (CLI must be in PATH or use full path)
-./packages/autonomous/bin/golems status
+golems status
 
 # Expected output:
 # === GOLEMS STATUS ===
@@ -389,17 +389,14 @@ export SUPABASE_SERVICE_KEY=$(op read op://YOUR_VAULT/YOUR_SUPABASE_ITEM/service
 ### 4. Run Your First Agent
 
 ```bash
-# Navigate to autonomous package first
-cd packages/autonomous
-
-# Route an email through EmailGolem
-bun src/email-golem/index.ts
-
 # Start the Telegram bot
-bun src/telegram-bot.ts
+bun packages/claude/src/telegram-bot.ts
+
+# Route emails through the email system
+bun packages/shared/src/email/index.ts
 
 # Trigger night shift improvements
-bun src/night-shift.ts
+bun packages/services/src/night-shift.ts
 ```
 
 ## Monorepo Structure
@@ -427,8 +424,7 @@ golems/
 │   │   ├── src/            ← FastAPI daemon + Python CLI
 │   │   └── data/           ← sqlite-vec embeddings
 │   │
-│   └── docsite/            ← This site (Docusaurus)
-│       └── docs/           ← Markdown files
+│   └── (docs hosted at etanheyman.com/golems)
 │
 │
 ├── packages/autonomous/supabase/
@@ -455,10 +451,10 @@ golems/
 op read op://YOUR_VAULT/YOUR_TELEGRAM_ITEM/credential
 
 # Restart a specific service
-./packages/autonomous/bin/golems restart telegram
+golems restart telegram
 
 # Or restart all services (using the 'latest' command)
-./packages/autonomous/bin/golems latest
+golems latest
 ```
 
 **Tests failing:**
@@ -525,7 +521,7 @@ Instead of building golems first, we built **Zikaron** — a memory layer using 
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. Zikaron would index 200k+ conversation chunks and return results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database, instant queries. Zikaron now indexes 238K+ conversation chunks and returns results in under 2 seconds.
 
 ### Jan 17: First Golem — Email Router
 
@@ -677,7 +673,7 @@ Anthropic released Agent Teams (v2.1.32+):
 
 Built the full ecosystem in a concentrated sprint:
 
-**Phase 1 — Ship What's Built:** 8 bug fixes, email routing, reply drafting, follow-up tracking, shared types, agent-runner.ts. 333 tests passing.
+**Phase 1 — Ship What's Built:** 8 bug fixes, email routing, reply drafting, follow-up tracking, shared types, agent-runner.ts. 333 tests passing at this point.
 
 **Phase 2 — Cloud Offload:** Mac = brain, Railway = body. Supabase migration (8 new tables), Dockerfile, dual-mode notification sender, state store abstraction. Cost tracking: Haiku 4.5 at $0.80/MTok input.
 
@@ -685,7 +681,7 @@ Built the full ecosystem in a concentrated sprint:
 
 **Phase 4 — Tooling:** Helpers layer (rate-limited API wrappers), DeepSource static analysis, skills catalog CLI, plugin architecture, session forking, Playwright E2E scaffold.
 
-**Final count:** 400+ tests, 35 plan items completed, 6 domain golems, 3 MCP servers.
+**Sprint count:** 400+ tests at the time, 35 plan items completed, 3 MCP servers. (Post-Phase 8: 1,179 tests, 4,056 assertions across 10 packages.)
 
 ### Feb 7: Distribution Strategy
 
@@ -1159,7 +1155,7 @@ This comes from `event-log.json` maintained by infrastructure (last 24 hours via
 ### Telegram Session
 
 ```bash
-cd packages/autonomous
+cd packages/claude
 
 # Start persistent session
 claude --continue
@@ -1188,11 +1184,11 @@ bun src/night-shift.ts
 
 ```bash
 # Telegram
-export TELEGRAM_BOT_TOKEN=$(op read op://development/TELEGRAM_BOT_TOKEN/credential)
-export TELEGRAM_CHAT_ID=$(op read op://development/TELEGRAM_CHAT_ID/credential)
+export TELEGRAM_BOT_TOKEN=$(op read op://YOUR_VAULT/YOUR_TELEGRAM_ITEM/credential)
+export TELEGRAM_CHAT_ID=$(op read op://YOUR_VAULT/YOUR_CHAT_ID_ITEM/credential)
 
 # Claude Code API
-export ANTHROPIC_API_KEY=$(op read op://development/ANTHROPIC_GOLEMS_API_KEY/credential)
+export ANTHROPIC_API_KEY=$(op read op://YOUR_VAULT/YOUR_ANTHROPIC_ITEM/credential)
 
 # Night Shift targets
 export REPOS_PATH=~/Gits  # Base path for repos
@@ -1239,7 +1235,7 @@ pgrep -fl "telegram-bot"
 # Restart bot
 launchctl kickstart gui/$(id -u)/com.golemszikaron.telegram
 # Or use CLI
-./packages/autonomous/bin/golems start telegram
+golems start telegram
 ```
 
 **Night Shift not running at 4am:**
@@ -1409,19 +1405,14 @@ CREATE TABLE payments (
 );
 ```
 
-## Running EmailGolem
+## Running the Email System
 
 ```bash
-cd packages/autonomous
-
 # Manually trigger poll cycle (normally runs every 10min)
-bun src/email-golem/index.ts
+bun packages/shared/src/email/index.ts
 
-# Search emails (dry run mode)
-bun src/email-golem/index.ts search --dry-run
-
-# Limit processing to N emails
-bun src/email-golem/index.ts --max 10
+# Or use the CLI
+golems email --triage
 ```
 
 ## Integration with Other Golems
@@ -1820,7 +1811,7 @@ export SUPABASE_SERVICE_KEY=$(op read op://YOUR_VAULT/YOUR_SUPABASE_ITEM/service
 ## Running RecruiterGolem
 
 ```bash
-cd packages/autonomous
+cd packages/recruiter
 
 # Use Telegram commands for outreach
 # /outreach - Send personalized message
@@ -1828,8 +1819,8 @@ cd packages/autonomous
 # /practice {mode} - Start interview practice
 # /stats - View outreach statistics
 
-# Or use CLI script
-./bin/recruiterGolem
+# Or use the golems CLI
+golems recruit --find
 ```
 
 ## Integration Points
@@ -1995,16 +1986,16 @@ TellerGolem exposes two MCP tools via the `golems-email` MCP server (in `email-g
 ## Running TellerGolem
 
 ```bash
-cd packages/autonomous
+cd packages/teller
 
 # Monthly report (current month)
-bun run src/teller-golem/index.ts --report
+bun run src/index.ts --report
 
 # Specific month
-bun run src/teller-golem/index.ts --report --month 2026-02
+bun run src/index.ts --report --month 2026-02
 
 # Tax report (current year)
-bun run src/teller-golem/index.ts --report --tax
+bun run src/index.ts --report --tax
 
 # Specific tax year
 bun run src/teller-golem/index.ts --report --tax --year 2025

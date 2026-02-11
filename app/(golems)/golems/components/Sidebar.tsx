@@ -24,18 +24,36 @@ const sidebarConfig: SidebarSection[] = [
   {
     title: 'Golems',
     items: [
-      { title: 'EmailGolem', href: '/golems/docs/golems/email' },
-      { title: 'RecruiterGolem', href: '/golems/docs/golems/recruiter' },
       { title: 'ClaudeGolem', href: '/golems/docs/golems/claude' },
+      { title: 'RecruiterGolem', href: '/golems/docs/golems/recruiter' },
       { title: 'TellerGolem', href: '/golems/docs/golems/teller' },
       { title: 'JobGolem', href: '/golems/docs/golems/job-golem' },
+      { title: 'CoachGolem', href: '/golems/docs/golems/coach' },
+      { title: 'ContentGolem', href: '/golems/docs/packages/content' },
     ],
   },
   {
     title: 'Infrastructure',
     items: [
-      { title: 'Cloud Worker', href: '/golems/docs/cloud-worker' },
+      { title: 'Shared (Foundation)', href: '/golems/docs/packages/shared' },
+      { title: 'Email System', href: '/golems/docs/golems/email' },
+      { title: 'Services', href: '/golems/docs/packages/services' },
+      { title: 'Ralph', href: '/golems/docs/packages/ralph' },
+      { title: 'Zikaron', href: '/golems/docs/packages/zikaron' },
+    ],
+  },
+  {
+    title: 'Features',
+    items: [
+      { title: 'Interview Practice', href: '/golems/docs/interview-practice' },
+      { title: 'Skills Library', href: '/golems/docs/skills' },
       { title: 'MCP Tools', href: '/golems/docs/mcp-tools' },
+    ],
+  },
+  {
+    title: 'Deep Dives',
+    items: [
+      { title: 'Cloud Worker', href: '/golems/docs/cloud-worker' },
       { title: 'LLM Integration', href: '/golems/docs/llm' },
       { title: 'Per-Repo Sessions', href: '/golems/docs/per-repo-sessions' },
     ],
@@ -56,6 +74,7 @@ const sidebarConfig: SidebarSection[] = [
   {
     title: 'More',
     items: [
+      { title: 'FAQ', href: '/golems/docs/faq' },
       { title: 'Engineering Journey', href: '/golems/docs/journey' },
     ],
   },

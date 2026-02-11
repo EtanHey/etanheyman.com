@@ -4,11 +4,24 @@ sidebar_position: 2
 
 # Architecture
 
+## 6 Golems + Infrastructure, 2 Environments
+
+Golems is a **Bun workspace monorepo with 10 packages** — 6 golems (1 orchestrator + 5 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks) and Railway cloud (data collection and polling).
+
+| Package | Role |
+|---------|------|
+| `@golems/shared` | Foundation — Supabase, LLM, email, state, notifications |
+| `@golems/claude` | Orchestrator — Telegram bot, command routing |
+| `@golems/recruiter` | Outreach, contacts, interview practice (Elo) |
+| `@golems/teller` | Finance, tax categorization, spending reports |
+| `@golems/jobs` | Job scraping, matching, MCP tools |
+| `@golems/content` | LinkedIn, Soltome, ghostwriting |
+| `@golems/coach` | Calendar, daily planning, ecosystem status |
+| `@golems/services` | Night Shift, Briefing, Cloud Worker, Wizard, Doctor |
+| `ralph` | Autonomous coding loop (PRD execution) |
+| `zikaron` | Memory layer (Python, 238K+ chunks, sqlite-vec) |
+
 ## Mac = Brain, Railway = Body
-
-![Architecture data flow](/img/architecture-flow.svg)
-
-Golems splits work between your local Mac (cognitive tasks) and Railway cloud (data collection and polling).
 
 ```mermaid
 flowchart TB
@@ -126,10 +139,10 @@ export STATE_BACKEND=file
 export TELEGRAM_MODE=local
 
 # Restart Mac services
-./packages/autonomous/bin/golems latest
+golems latest
 
 # Check status
-./packages/autonomous/bin/golems status
+golems status
 ```
 
 No data loss, no disruption. The state in Supabase is still there for when you re-enable cloud.

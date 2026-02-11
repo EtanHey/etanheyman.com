@@ -6,11 +6,12 @@ sidebar_position: 1
 
 ## What is Golems?
 
-Golems is an autonomous AI agent ecosystem built for Claude Code. It's a monorepo of domain-expert agents (RecruiterGolem, EmailGolem, TellerGolem, JobGolem, ClaudeGolem) powered by:
+Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **10 packages** — 6 golems plus shared infrastructure, each installable as a Claude Code plugin.
 
-- **Infrastructure:** Supabase (data), Railway (cloud compute), Telegram (notifications), Zikaron (memory layer)
-- **Local Engine:** Mac-based night shift, telegram bot, notification server
-- **Cloud Worker:** Remote email polling, job scraping, briefing generation
+- **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
+- **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
+- **Infrastructure:** @golems/shared (foundation + email system), @golems/services (Night Shift, Cloud Worker, Briefing)
+- **Tools:** Ralph (autonomous coding loop), Zikaron (238K+ chunk memory layer)
 - **Core Principle:** Golems are domain experts, not I/O channels — they own specific knowledge areas and produce specialized outputs
 
 ## Architecture Principle
@@ -20,16 +21,17 @@ A Golem is a domain expert focused on one area. It doesn't care about how messag
 ```mermaid
 flowchart TD
     subgraph golems["Domain Expert Golems"]
-        RG["RecruiterGolem<br/><small>outreach, contact scoring</small>"]
-        EG["EmailGolem<br/><small>routing, replies, follow-ups</small>"]
+        RG["RecruiterGolem<br/><small>outreach, contacts, practice</small>"]
         TG["TellerGolem<br/><small>finance, tax reports</small>"]
         JG["JobGolem<br/><small>job scraping, matching</small>"]
-        CG["ClaudeGolem<br/><small>Telegram, Night Shift</small>"]
+        CG["CoachGolem<br/><small>calendar, daily planning</small>"]
+        XG["ContentGolem<br/><small>LinkedIn, Soltome</small>"]
     end
-    golems --> infra["Shared Infrastructure<br/><small>Supabase · Telegram · Railway</small>"]
+    CL["ClaudeGolem<br/><small>Telegram orchestrator</small>"] --> golems
+    golems --> infra["@golems/shared<br/><small>Supabase · LLM · Email · State</small>"]
 ```
 
-Each Golem operates independently. Multiple Golems can process the same event. The infrastructure handles routing and notifications.
+Each golem operates independently and only depends on `@golems/shared`. ClaudeGolem routes Telegram commands to the appropriate domain golem.
 
 ## Prerequisites
 
@@ -75,7 +77,7 @@ export SUPABASE_SERVICE_KEY=$(op read op://YOUR_VAULT/YOUR_SUPABASE_ITEM/service
 
 ```bash
 # From golems root (CLI must be in PATH or use full path)
-./packages/autonomous/bin/golems status
+golems status
 
 # Expected output:
 # === GOLEMS STATUS ===
@@ -87,53 +89,35 @@ export SUPABASE_SERVICE_KEY=$(op read op://YOUR_VAULT/YOUR_SUPABASE_ITEM/service
 ### 4. Run Your First Agent
 
 ```bash
-# Navigate to autonomous package first
-cd packages/autonomous
-
-# Route an email through EmailGolem
-bun src/email-golem/index.ts
-
 # Start the Telegram bot
-bun src/telegram-bot.ts
+bun packages/claude/src/telegram-bot.ts
+
+# Route emails through the email system
+bun packages/shared/src/email/index.ts
 
 # Trigger night shift improvements
-bun src/night-shift.ts
+bun packages/services/src/night-shift.ts
 ```
 
 ## Monorepo Structure
 
 ```
-golems/
-├── packages/
-│   ├── autonomous/          ← Main app: Telegram bot, Golems, local runners
-│   │   ├── src/
-│   │   │   ├── email-golem/ ← Email routing, scoring, MCP server
-│   │   │   ├── job-golem/   ← Job scraping, matching, MCP server
-│   │   │   ├── recruiter-golem/ ← Outreach, contacts, practice
-│   │   │   ├── teller-golem/ ← Finance, categorization, reports
-│   │   │   ├── telegram-bot.ts ← Bot + notification server
-│   │   │   ├── night-shift.ts  ← Autonomous improvements
-│   │   │   └── cloud-worker.ts ← Railway cloud entry point
-│   │   ├── tests/          ← Unit tests
-│   │   └── src/lib/        ← Shared utilities
-│   │
-│   ├── ralph/              ← Claude Code autonomous loop
-│   │   ├── skills/         ← 6 skill categories
-│   │   └── src/            ← Loop runner, story parser
-│   │
-│   ├── zikaron/            ← Memory layer (semantic search)
-│   │   ├── src/            ← FastAPI daemon + Python CLI
-│   │   └── data/           ← sqlite-vec embeddings
-│   │
-│   └── docsite/            ← This site (Docusaurus)
-│       └── docs/           ← Markdown files
-│
-│
-├── packages/autonomous/supabase/
-│   ├── migrations/         ← SQL schema changes
-│   └── functions/          ← Edge Functions
-│
-└── packages/autonomous/Dockerfile              ← Railway cloud worker image
+golems/                              # Bun workspace monorepo
+├── packages/shared/                 # @golems/shared — Supabase, LLM, email, state
+├── packages/claude/                 # ClaudeGolem — Telegram orchestrator
+├── packages/recruiter/              # RecruiterGolem — outreach, practice, contacts
+├── packages/teller/                 # TellerGolem — finances, tax categorization
+├── packages/jobs/                   # JobGolem — scraping, matching, MCP tools
+├── packages/content/                # ContentGolem — LinkedIn, Soltome
+├── packages/coach/                  # CoachGolem — calendar, daily planning
+├── packages/services/               # Night Shift, Briefing, Cloud Worker, Wizard
+├── packages/autonomous/             # Legacy (1-line re-exports for compatibility)
+├── packages/ralph/                  # Autonomous coding loop (Zsh)
+│   └── skills/golem-powers/         # 30+ Claude Code skills
+├── packages/zikaron/                # Memory layer (Python + sqlite-vec)
+├── launchd/                         # macOS service plists
+├── Dockerfile                       # Railway cloud worker image
+└── supabase/migrations/             # SQL schema changes
 ```
 
 ## Next Steps
@@ -153,10 +137,10 @@ golems/
 op read op://YOUR_VAULT/YOUR_TELEGRAM_ITEM/credential
 
 # Restart a specific service
-./packages/autonomous/bin/golems restart telegram
+golems restart telegram
 
 # Or restart all services (using the 'latest' command)
-./packages/autonomous/bin/golems latest
+golems latest
 ```
 
 **Tests failing:**

@@ -2,9 +2,11 @@
 sidebar_position: 1
 ---
 
-# EmailGolem
+# Email System (Infrastructure)
 
-EmailGolem is the intake layer for all external communication. It polls Gmail on a schedule (hourly 6am-7pm in cloud with 12pm lunch skip and 10pm check, or every 10 minutes via local launchd), scores emails for urgency, routes them to domain experts, and manages reply drafting and follow-ups.
+> **Note:** The email subsystem was dissolved into `@golems/shared` during Phase 8 componentization. It's infrastructure — not a standalone golem. The email system lives in `packages/shared/src/email/` and provides scoring, routing, and MCP tools that all golems can use.
+
+The email system is the intake layer for all external communication. It polls Gmail on a schedule (hourly 6am-7pm in cloud with 12pm lunch skip and 10pm check, or every 10 minutes via local launchd), scores emails for urgency, routes them to domain experts, and manages reply drafting and follow-ups.
 
 ## Core Pipeline
 
@@ -37,18 +39,18 @@ Routes emails to domain golems based on content patterns:
 
 ## Files
 
-**Core Engine:**
-- `src/email-golem/index.ts` — Main entry point, Gmail client initialization
-- `src/email-golem/gmail-client.ts` — OAuth2 auth, polling logic
-- `src/email-golem/scorer.ts` — Ollama/Haiku scoring pipeline (no caching)
-- `src/email-golem/db-client.ts` — Supabase adapter with offline queue
-- `src/email-golem/mcp-server.ts` — MCP server (7 email tools + 2 teller tools)
-- `src/email-golem/types.ts` — TypeScript interfaces
+**Core Engine** (in `packages/shared/src/email/`):
+- `index.ts` — Main entry point, Gmail client initialization
+- `gmail-client.ts` — OAuth2 auth, polling logic
+- `scorer.ts` — Ollama/Haiku scoring pipeline (no caching)
+- `db-client.ts` — Supabase adapter with offline queue
+- `mcp-server.ts` — MCP server (7 email tools + 2 teller tools)
+- `types.ts` — TypeScript interfaces
 
 **Routing & Processing:**
-- `src/email-golem/router.ts` — Domain golem routing logic
-- `src/email-golem/draft-reply.ts` — Template-based reply generation with intents
-- `src/email-golem/followup.ts` — Follow-up scheduling and tracking
+- `router.ts` — Domain golem routing logic
+- `draft-reply.ts` — Template-based reply generation with intents
+- `followup.ts` — Follow-up scheduling and tracking
 
 ## Key Features
 
@@ -85,7 +87,7 @@ Follow-ups trigger alerts if not completed by due date.
 
 ## MCP Tools
 
-Available via the `golems-email` MCP server (`email-golem/mcp-server.ts`):
+Available via the `golems-email` MCP server (`packages/shared/src/email/mcp-server.ts`):
 
 - **`email_getRecent`** — Fetch last N emails from inbox
 - **`email_search`** — Search emails by keyword (subject/sender, last 7 days only)
@@ -142,19 +144,14 @@ CREATE TABLE payments (
 );
 ```
 
-## Running EmailGolem
+## Running the Email System
 
 ```bash
-cd packages/autonomous
-
 # Manually trigger poll cycle (normally runs every 10min)
-bun src/email-golem/index.ts
+bun packages/shared/src/email/index.ts
 
-# Search emails (dry run mode)
-bun src/email-golem/index.ts search --dry-run
-
-# Limit processing to N emails
-bun src/email-golem/index.ts --max 10
+# Or use the CLI
+golems email --triage
 ```
 
 ## Integration with Other Golems
