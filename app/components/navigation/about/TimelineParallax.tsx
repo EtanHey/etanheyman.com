@@ -410,15 +410,16 @@ const TimelineParallax = () => {
       {/* Ambient spotlight — soft glow that follows the active card (hidden on mobile for perf) */}
       {!reducedMotion && (
         <motion.div
-          className="pointer-events-none absolute top-0 -left-20 hidden h-[350px] w-[350px] rounded-full sm:block"
+          className="pointer-events-none absolute -left-20 hidden h-[350px] w-[350px] rounded-full sm:block"
           animate={{
-            y: `calc(${(currentActiveIndex / Math.max(timelineData.length - 1, 1)) * 100}% - 50%)`,
+            top: `${(currentActiveIndex / Math.max(timelineData.length - 1, 1)) * 100}%`,
           }}
           transition={{ type: "spring", stiffness: 40, damping: 25 }}
           style={{
             background: `radial-gradient(circle, rgba(${BRAND_BLUE_RGB}, 0.12) 0%, rgba(${BRAND_BLUE_RGB}, 0.04) 40%, transparent 70%)`,
             filter: "blur(60px)",
             willChange: "transform",
+            marginTop: "-175px",
           }}
         />
       )}
