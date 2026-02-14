@@ -12,6 +12,12 @@ import {
 import { useRef, useState } from "react";
 import SendRightPointer from "./SendRightPointer";
 
+// --- Brand color constants (single source of truth) ---
+const BRAND_BLUE = "#0F82EB";
+const BRAND_BLUE_RGB = "15, 130, 235";
+const BRAND_DARK = "#0053A4";
+const BRAND_LIGHT = "#3B9FFF";
+
 // Timeline data - ordered from newest to oldest
 const timelineData = [
   {
@@ -124,10 +130,10 @@ function DotWithRipple({
         className="rounded-full border-2"
         animate={{
           scale: isActive ? 1.5 : 1,
-          borderColor: isFilled ? "#0F82EB" : "#4B5563",
-          backgroundColor: isFilled ? "#0F82EB" : "transparent",
+          borderColor: isFilled ? BRAND_BLUE : "#4B5563",
+          backgroundColor: isFilled ? BRAND_BLUE : "transparent",
           boxShadow: isActive
-            ? "0 0 12px rgba(15, 130, 235, 0.6), 0 0 24px rgba(15, 130, 235, 0.2)"
+            ? `0 0 12px rgba(${BRAND_BLUE_RGB}, 0.6), 0 0 24px rgba(${BRAND_BLUE_RGB}, 0.2)`
             : "0 0 0px rgba(0, 0, 0, 0)",
         }}
         transition={
@@ -158,7 +164,7 @@ function TimelineCard({
   reducedMotion: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const isInView = useInView(cardRef, { once: true, amount: 0.02 });
+  const isInView = useInView(cardRef, { once: true, amount: 0.1 });
 
   const setRefs = (el: HTMLDivElement | null) => {
     cardRef.current = el;
@@ -213,37 +219,47 @@ function TimelineCard({
           }}
           animate={{
             borderLeftColor: isActive
-              ? "#0F82EB"
+              ? BRAND_BLUE
               : isPast
-                ? "rgba(15, 130, 235, 0.12)"
+                ? `rgba(${BRAND_BLUE_RGB}, 0.12)`
                 : "transparent",
             borderTopColor: isActive
-              ? "rgba(15, 130, 235, 0.15)"
+              ? `rgba(${BRAND_BLUE_RGB}, 0.15)`
               : "transparent",
             borderRightColor: isActive
-              ? "rgba(15, 130, 235, 0.15)"
+              ? `rgba(${BRAND_BLUE_RGB}, 0.15)`
               : "transparent",
             borderBottomColor: isActive
-              ? "rgba(15, 130, 235, 0.15)"
+              ? `rgba(${BRAND_BLUE_RGB}, 0.15)`
               : "transparent",
             backgroundColor: isActive
-              ? "rgba(15, 130, 235, 0.05)"
+              ? `rgba(${BRAND_BLUE_RGB}, 0.05)`
               : "rgba(0, 0, 0, 0)",
             boxShadow: isActive
-              ? "0 8px 32px rgba(15, 130, 235, 0.2), 0 0 60px rgba(15, 130, 235, 0.05), inset 0 1px 0 rgba(15, 130, 235, 0.08)"
+              ? `0 8px 32px rgba(${BRAND_BLUE_RGB}, 0.2), 0 0 60px rgba(${BRAND_BLUE_RGB}, 0.05), inset 0 1px 0 rgba(${BRAND_BLUE_RGB}, 0.08)`
               : "0 0 0px rgba(0, 0, 0, 0)",
           }}
           whileHover={
             !isActive && !reducedMotion
               ? {
                   y: -6,
-                  backgroundColor: "rgba(15, 130, 235, 0.03)",
-                  borderLeftColor: "rgba(15, 130, 235, 0.15)",
-                  boxShadow:
-                    "0 6px 24px rgba(15, 130, 235, 0.12), 0 0 8px rgba(15, 130, 235, 0.05)",
+                  backgroundColor: `rgba(${BRAND_BLUE_RGB}, 0.03)`,
+                  borderLeftColor: `rgba(${BRAND_BLUE_RGB}, 0.15)`,
+                  boxShadow: `0 6px 24px rgba(${BRAND_BLUE_RGB}, 0.12), 0 0 8px rgba(${BRAND_BLUE_RGB}, 0.05)`,
                 }
               : undefined
           }
+          whileFocus={
+            !isActive && !reducedMotion
+              ? {
+                  y: -6,
+                  backgroundColor: `rgba(${BRAND_BLUE_RGB}, 0.03)`,
+                  borderLeftColor: `rgba(${BRAND_BLUE_RGB}, 0.15)`,
+                  boxShadow: `0 6px 24px rgba(${BRAND_BLUE_RGB}, 0.12), 0 0 8px rgba(${BRAND_BLUE_RGB}, 0.05)`,
+                }
+              : undefined
+          }
+          tabIndex={0}
           transition={{ duration: 0.4, ease: "easeOut" }}
         >
           {/* Date badge with accent line */}
@@ -269,10 +285,10 @@ function TimelineCard({
           <motion.h3
             className="mb-2 text-base font-semibold sm:text-lg"
             animate={{
-              color: isActive ? "#0F82EB" : "#FFFFFF",
+              color: isActive ? BRAND_BLUE : "#FFFFFF",
               textShadow: isActive
-                ? "0 0 30px rgba(15, 130, 235, 0.4)"
-                : "0 0 0px rgba(15, 130, 235, 0)",
+                ? `0 0 30px rgba(${BRAND_BLUE_RGB}, 0.4)`
+                : `0 0 0px rgba(${BRAND_BLUE_RGB}, 0)`,
             }}
             transition={{ duration: 0.4 }}
           >
@@ -383,19 +399,18 @@ const TimelineParallax = () => {
 
   return (
     <div ref={timelineRef} className="relative py-4">
-      {/* Ambient spotlight — soft glow that follows the active card */}
+      {/* Ambient spotlight — soft glow that follows the active card (hidden on mobile for perf) */}
       {!reducedMotion && (
         <motion.div
-          className="pointer-events-none absolute -left-20 h-[350px] w-[350px] rounded-full"
+          className="pointer-events-none absolute top-0 -left-20 hidden h-[350px] w-[350px] rounded-full sm:block"
           animate={{
-            top: `${(currentActiveIndex / Math.max(timelineData.length - 1, 1)) * 100}%`,
+            y: `calc(${(currentActiveIndex / Math.max(timelineData.length - 1, 1)) * 100}% - 50%)`,
           }}
           transition={{ type: "spring", stiffness: 40, damping: 25 }}
           style={{
-            background:
-              "radial-gradient(circle, rgba(15, 130, 235, 0.12) 0%, rgba(15, 130, 235, 0.04) 40%, transparent 70%)",
-            y: "-50%",
+            background: `radial-gradient(circle, rgba(${BRAND_BLUE_RGB}, 0.12) 0%, rgba(${BRAND_BLUE_RGB}, 0.04) 40%, transparent 70%)`,
             filter: "blur(60px)",
+            willChange: "transform",
           }}
         />
       )}
@@ -410,12 +425,12 @@ const TimelineParallax = () => {
           style={{
             scaleY: smoothProgress,
             willChange: "transform",
-            background: "linear-gradient(to bottom, #0053A4, #0F82EB, #3B9FFF)",
+            background: `linear-gradient(to bottom, ${BRAND_DARK}, ${BRAND_BLUE}, ${BRAND_LIGHT})`,
             boxShadow: [
-              "0 0 5px #0F82EB",
-              "0 0 15px rgba(15, 130, 235, 0.5)",
-              "0 0 35px rgba(15, 130, 235, 0.25)",
-              "0 0 70px rgba(15, 130, 235, 0.1)",
+              `0 0 5px ${BRAND_BLUE}`,
+              `0 0 15px rgba(${BRAND_BLUE_RGB}, 0.5)`,
+              `0 0 35px rgba(${BRAND_BLUE_RGB}, 0.25)`,
+              `0 0 70px rgba(${BRAND_BLUE_RGB}, 0.1)`,
             ].join(", "),
           }}
         />
@@ -477,30 +492,30 @@ const TimelineParallax = () => {
           <div
             className="relative flex h-[38px] w-[38px] items-center justify-center rounded-full bg-blue-500"
             style={{
-              boxShadow:
-                "0 0 12px rgba(15, 130, 235, 0.6), 0 0 30px rgba(15, 130, 235, 0.3)",
+              boxShadow: `0 0 12px rgba(${BRAND_BLUE_RGB}, 0.6), 0 0 30px rgba(${BRAND_BLUE_RGB}, 0.3)`,
             }}
           >
             <SendRightPointer />
           </div>
         </motion.div>
 
-        {/* Timeline cards */}
-        <div className="flex flex-col gap-6 sm:gap-8">
+        {/* Timeline cards — semantic ordered list for accessibility */}
+        <ol className="flex list-none flex-col gap-6 sm:gap-8">
           {timelineData.map((item, index) => (
-            <TimelineCard
-              key={index}
-              item={item}
-              index={index}
-              isActive={index === currentActiveIndex}
-              isPast={index < currentActiveIndex}
-              itemRef={(el) => {
-                itemRefs.current[index] = el;
-              }}
-              reducedMotion={!!reducedMotion}
-            />
+            <li key={index}>
+              <TimelineCard
+                item={item}
+                index={index}
+                isActive={index === currentActiveIndex}
+                isPast={index < currentActiveIndex}
+                itemRef={(el) => {
+                  itemRefs.current[index] = el;
+                }}
+                reducedMotion={!!reducedMotion}
+              />
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </div>
   );
