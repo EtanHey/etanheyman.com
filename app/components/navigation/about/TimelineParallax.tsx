@@ -1,6 +1,14 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring, useInView, useMotionValueEvent } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useInView,
+  useMotionValueEvent,
+  useReducedMotion,
+} from "framer-motion";
 import { useRef, useState } from "react";
 import SendRightPointer from "./SendRightPointer";
 
@@ -62,139 +70,274 @@ const timelineData = [
   },
 ];
 
-// Timeline Item Component
-function TimelineItem({
-  item,
-  index,
-  isPast,
+// --- Dot with animated ripple rings ---
+function DotWithRipple({
   isActive,
-  itemRef
+  isPast,
+  reducedMotion,
+  isVisible,
 }: {
-  item: typeof timelineData[0];
-  index: number;
-  isPast: boolean;
   isActive: boolean;
-  itemRef: (el: HTMLDivElement | null) => void;
+  isPast: boolean;
+  reducedMotion: boolean;
+  isVisible: boolean;
 }) {
-  // Determine dot state: active (arrow at this item), past (arrow passed), or future
   const isFilled = isActive || isPast;
 
   return (
-    <div
-      ref={itemRef}
-      className="relative pl-8 sm:pl-10 md:pl-12"
+    <motion.div
+      className="absolute"
+      style={{ top: "1.75rem", left: "1.5px", transform: "translateX(-50%)" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.3 }}
     >
-      {/* Timeline dot */}
+      {/* Sonar ripple rings — only on active dot */}
+      {isActive && !reducedMotion && (
+        <>
+          {[0, 1].map((i) => (
+            <motion.div
+              key={`ripple-${i}`}
+              className="absolute rounded-full border border-blue-400/30"
+              style={{
+                top: "50%",
+                left: "50%",
+                x: "-50%",
+                y: "-50%",
+              }}
+              initial={{ width: 14, height: 14, opacity: 0.6 }}
+              animate={{ width: 50, height: 50, opacity: 0 }}
+              transition={{
+                duration: 1.5,
+                delay: i * 0.4,
+                repeat: Infinity,
+                repeatDelay: 1.2,
+                ease: "easeOut",
+              }}
+            />
+          ))}
+        </>
+      )}
+
+      {/* The dot itself */}
       <motion.div
-        className={`absolute h-3 w-3 rounded-full border-2 transition-all duration-300 sm:h-4 sm:w-4`}
+        className="rounded-full border-2"
         animate={{
-          scale: isActive ? 1.25 : 1,
-          borderColor: isFilled ? "#0F82EB" : "#9ca3af",
-          backgroundColor: isFilled ? "#0F82EB" : "#ffffff",
+          scale: isActive ? 1.5 : 1,
+          borderColor: isFilled ? "#0F82EB" : "#4B5563",
+          backgroundColor: isFilled ? "#0F82EB" : "transparent",
+          boxShadow: isActive
+            ? "0 0 12px rgba(15, 130, 235, 0.6), 0 0 24px rgba(15, 130, 235, 0.2)"
+            : "0 0 0px rgba(0, 0, 0, 0)",
         }}
-        transition={{
-          type: "spring",
-          stiffness: 300,
-          damping: 30,
-        }}
-        style={{
-          top: "1.25rem",
-          left: "2px", // Half of line width (4px / 2) to center on line
-          x: "-50%", // Center the dot using Framer Motion's x
-        }}
+        transition={
+          reducedMotion
+            ? { duration: 0.15 }
+            : { type: "spring", stiffness: 300, damping: 25 }
+        }
+        style={{ width: 14, height: 14 }}
+      />
+    </motion.div>
+  );
+}
+
+// --- Individual timeline card with 3D entrance + glassmorphism ---
+function TimelineCard({
+  item,
+  index,
+  isActive,
+  isPast,
+  itemRef,
+  reducedMotion,
+}: {
+  item: (typeof timelineData)[0];
+  index: number;
+  isActive: boolean;
+  isPast: boolean;
+  itemRef: (el: HTMLDivElement | null) => void;
+  reducedMotion: boolean;
+}) {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const isInView = useInView(cardRef, { once: true, amount: 0.02 });
+
+  const setRefs = (el: HTMLDivElement | null) => {
+    cardRef.current = el;
+    itemRef(el);
+  };
+
+  return (
+    <div
+      ref={setRefs}
+      className="relative pl-10 sm:pl-12 md:pl-14"
+      style={reducedMotion ? undefined : { perspective: 800 }}
+    >
+      <DotWithRipple
+        isActive={isActive}
+        isPast={isPast}
+        reducedMotion={reducedMotion}
+        isVisible={isInView}
       />
 
-      {/* Item content */}
+      {/* Entrance animation wrapper — 3D unfold on scroll */}
       <motion.div
-        className={`transition-all duration-300`}
-        animate={{
-          x: isActive ? 4 : 0,
-          opacity: isActive ? 1 : 0.8,
-        }}
-        transition={{ duration: 0.3 }}
+        initial={
+          reducedMotion
+            ? { opacity: 0 }
+            : { opacity: 0, y: 30, rotateX: 6 }
+        }
+        animate={
+          isInView
+            ? reducedMotion
+              ? { opacity: 1 }
+              : { opacity: 1, y: 0, rotateX: 0 }
+            : undefined
+        }
+        transition={
+          reducedMotion
+            ? { duration: 0.3 }
+            : {
+                type: "spring",
+                stiffness: 80,
+                damping: 18,
+                delay: index * 0.08,
+              }
+        }
+        style={reducedMotion ? undefined : { transformStyle: "preserve-3d" }}
       >
-        <div className="flex flex-col">
-          <span className="text-xs font-medium text-blue-400 sm:text-sm">
-            {item.period}
-          </span>
-          <h3
-            className={`mt-1 mb-2 text-base font-semibold transition-colors duration-300 sm:text-lg ${
-              isActive ? "text-blue-600" : "text-white"
-            }`}
+        {/* Glass card — active state gets full treatment */}
+        <motion.div
+          className="rounded-xl p-4 sm:p-5"
+          style={{
+            borderWidth: "1px 1px 1px 3px",
+            borderStyle: "solid",
+          }}
+          animate={{
+            borderLeftColor: isActive
+              ? "#0F82EB"
+              : isPast
+                ? "rgba(15, 130, 235, 0.12)"
+                : "transparent",
+            borderTopColor: isActive
+              ? "rgba(15, 130, 235, 0.15)"
+              : "transparent",
+            borderRightColor: isActive
+              ? "rgba(15, 130, 235, 0.15)"
+              : "transparent",
+            borderBottomColor: isActive
+              ? "rgba(15, 130, 235, 0.15)"
+              : "transparent",
+            backgroundColor: isActive
+              ? "rgba(15, 130, 235, 0.05)"
+              : "rgba(0, 0, 0, 0)",
+            boxShadow: isActive
+              ? "0 8px 32px rgba(15, 130, 235, 0.2), 0 0 60px rgba(15, 130, 235, 0.05), inset 0 1px 0 rgba(15, 130, 235, 0.08)"
+              : "0 0 0px rgba(0, 0, 0, 0)",
+          }}
+          whileHover={
+            !isActive && !reducedMotion
+              ? {
+                  y: -6,
+                  backgroundColor: "rgba(15, 130, 235, 0.03)",
+                  borderLeftColor: "rgba(15, 130, 235, 0.15)",
+                  boxShadow:
+                    "0 6px 24px rgba(15, 130, 235, 0.12), 0 0 8px rgba(15, 130, 235, 0.05)",
+                }
+              : undefined
+          }
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          {/* Date badge with accent line */}
+          <div className="mb-1 flex items-center gap-2">
+            <motion.div
+              className="h-[2px] rounded-full bg-blue-500"
+              animate={{
+                width: isActive ? 24 : 12,
+                opacity: isActive ? 1 : 0.4,
+              }}
+              transition={{ duration: 0.4 }}
+            />
+            <motion.span
+              className="text-xs font-medium tracking-wider text-blue-400 sm:text-sm"
+              animate={{ opacity: isActive ? 1 : 0.7 }}
+              transition={{ duration: 0.3 }}
+            >
+              {item.period}
+            </motion.span>
+          </div>
+
+          {/* Title with glow on active */}
+          <motion.h3
+            className="mb-2 text-base font-semibold sm:text-lg"
+            animate={{
+              color: isActive ? "#0F82EB" : "#FFFFFF",
+              textShadow: isActive
+                ? "0 0 30px rgba(15, 130, 235, 0.4)"
+                : "0 0 0px rgba(15, 130, 235, 0)",
+            }}
+            transition={{ duration: 0.4 }}
           >
             {item.title}
-          </h3>
-          <p className="text-xs font-light text-gray-300 sm:text-sm">
+          </motion.h3>
+
+          {/* Description */}
+          <motion.p
+            className="text-xs font-light leading-relaxed sm:text-sm"
+            animate={{
+              color: isActive
+                ? "rgba(209, 213, 219, 1)"
+                : "rgba(209, 213, 219, 0.6)",
+            }}
+            transition={{ duration: 0.4 }}
+          >
             {item.description}
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </motion.div>
     </div>
   );
 }
 
+// --- Main Timeline Component ---
 const TimelineParallax = () => {
+  const reducedMotion = useReducedMotion();
   const timelineRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
-  const arrowRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
 
-  // Track scroll progress for the timeline section
-  // Using "center center" makes it track when timeline is in middle of viewport
   const { scrollYProgress } = useScroll({
     target: timelineRef,
     offset: ["start center", "end center"],
   });
 
-  // Very light smoothing for line progress (visual polish)
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 300,
     damping: 40,
     restDelta: 0.001,
   });
 
-  // Arrow position with minimal smoothing for responsiveness
   const arrowScrollProgress = useSpring(scrollYProgress, {
-    stiffness: 400,
-    damping: 50,
+    stiffness: 600,
+    damping: 35,
     restDelta: 0.001,
   });
 
-  // Map scroll progress to arrow position - use percentage directly
   const arrowTop = useTransform(arrowScrollProgress, [0, 1], ["0%", "100%"]);
-
-  // Arrow opacity - visible throughout most of the timeline
   const arrowOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.95, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
-  // Track current active and past items
-  const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
-
-  // AIDEV-NOTE: Complex active-index calculation using getBoundingClientRect()
-  // This calculates which timeline item the arrow is currently pointing at by checking
-  // the actual DOM element bounds on every scroll event. Trade-offs:
-  // - Accuracy: Always correct even with dynamic content heights or window resizes
-  // - Performance: getBoundingClientRect() is called on every scroll change
-  // The performance impact is acceptable here because:
-  // 1. Framer Motion already optimizes scroll events
-  // 2. We're only checking ~9 elements (timeline items)
-  // 3. The scroll is smoothed with spring physics (stiffness: 400, damping: 50)
-  // Future optimization: Could throttle or cache rect calculations if needed
-  // Update active index based on arrow position relative to actual DOM elements
+  // AIDEV-NOTE: Active-index calculation using getBoundingClientRect()
+  // Checks which timeline item the arrow is pointing at on every scroll event.
+  // Performance acceptable: Framer Motion optimizes scroll events, only 9 elements.
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (!timelineRef.current) return;
 
-    // Get timeline container bounds
     const timelineRect = timelineRef.current.getBoundingClientRect();
     const timelineHeight = timelineRect.height;
-
-    // Calculate arrow's absolute position within timeline
     const arrowPosition = latest * timelineHeight;
 
-    // Find which item the arrow is currently at or has passed
     let activeIndex = 0;
     let foundMatch = false;
 
@@ -207,21 +350,18 @@ const TimelineParallax = () => {
       const itemTop = itemRect.top - timelineTop;
       const itemBottom = itemTop + itemRect.height;
 
-      // Check if arrow is within this item's bounds
       if (arrowPosition >= itemTop && arrowPosition < itemBottom) {
         activeIndex = i;
         foundMatch = true;
         break;
       }
 
-      // Check if arrow is between this item and the next item (in the gap)
       if (i < itemRefs.current.length - 1) {
         const nextItemEl = itemRefs.current[i + 1];
         if (nextItemEl) {
           const nextItemRect = nextItemEl.getBoundingClientRect();
           const nextItemTop = nextItemRect.top - timelineTop;
 
-          // If arrow is in the gap between items, use the next item as active
           if (arrowPosition >= itemBottom && arrowPosition < nextItemTop) {
             activeIndex = i + 1;
             foundMatch = true;
@@ -230,7 +370,6 @@ const TimelineParallax = () => {
         }
       }
 
-      // If we're past all items, set to last item
       if (i === itemRefs.current.length - 1 && arrowPosition >= itemBottom) {
         activeIndex = i;
         foundMatch = true;
@@ -243,41 +382,113 @@ const TimelineParallax = () => {
   });
 
   return (
-    <div ref={timelineRef} className="relative">
-      {/* Timeline container */}
-      <div className="relative">
-        {/* Background line - left side */}
-        <div className="absolute top-0 left-0 h-full w-1 bg-blue-200/40" />
-
-        {/* Progress line - left side (GPU accelerated with Framer Motion) */}
+    <div ref={timelineRef} className="relative py-4">
+      {/* Ambient spotlight — soft glow that follows the active card */}
+      {!reducedMotion && (
         <motion.div
-          ref={progressRef}
-          className="absolute top-0 left-0 h-full w-1 origin-top bg-blue-500"
+          className="pointer-events-none absolute -left-20 h-[350px] w-[350px] rounded-full"
+          animate={{
+            top: `${(currentActiveIndex / Math.max(timelineData.length - 1, 1)) * 100}%`,
+          }}
+          transition={{ type: "spring", stiffness: 40, damping: 25 }}
+          style={{
+            background:
+              "radial-gradient(circle, rgba(15, 130, 235, 0.12) 0%, rgba(15, 130, 235, 0.04) 40%, transparent 70%)",
+            y: "-50%",
+            filter: "blur(60px)",
+          }}
+        />
+      )}
+
+      <div className="relative">
+        {/* Background track line */}
+        <div className="absolute top-0 left-0 h-full w-[3px] rounded-full bg-blue-200/15" />
+
+        {/* Neon progress line — glowing energy trail */}
+        <motion.div
+          className="absolute top-0 left-0 h-full w-[3px] origin-top rounded-full"
           style={{
             scaleY: smoothProgress,
+            willChange: "transform",
+            background: "linear-gradient(to bottom, #0053A4, #0F82EB, #3B9FFF)",
+            boxShadow: [
+              "0 0 5px #0F82EB",
+              "0 0 15px rgba(15, 130, 235, 0.5)",
+              "0 0 35px rgba(15, 130, 235, 0.25)",
+              "0 0 70px rgba(15, 130, 235, 0.1)",
+            ].join(", "),
           }}
         />
 
-        {/* Arrow - positioned left of the line (GPU accelerated) */}
+        {/* Arrow indicator with pulse rings */}
         <motion.div
-          ref={arrowRef}
-          className="pointer-events-none absolute left-0 z-999999"
+          className="pointer-events-none absolute left-0 z-50"
           style={{
             top: arrowTop,
             opacity: arrowOpacity,
-            x: "-1rem",
-            y: "-1rem", // Center the arrow vertically
+            x: "-1.15rem",
+            y: "-1.15rem",
+            willChange: "transform",
           }}
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 shadow-lg sm:h-9 sm:w-9">
+          {/* Pulse ring — outer */}
+          {!reducedMotion && (
+            <>
+              <motion.div
+                className="absolute rounded-full border-2 border-blue-400/40"
+                style={{
+                  top: "50%",
+                  left: "50%",
+                  width: 38,
+                  height: 38,
+                  x: "-50%",
+                  y: "-50%",
+                }}
+                animate={{ scale: [1, 2], opacity: [0.5, 0] }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                }}
+              />
+              {/* Pulse ring — inner delayed */}
+              <motion.div
+                className="absolute rounded-full border border-blue-400/20"
+                style={{
+                  top: "50%",
+                  left: "50%",
+                  width: 38,
+                  height: 38,
+                  x: "-50%",
+                  y: "-50%",
+                }}
+                animate={{ scale: [1, 2.8], opacity: [0.3, 0] }}
+                transition={{
+                  duration: 2,
+                  delay: 0.6,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                }}
+              />
+            </>
+          )}
+
+          {/* Arrow circle with glow */}
+          <div
+            className="relative flex h-[38px] w-[38px] items-center justify-center rounded-full bg-blue-500"
+            style={{
+              boxShadow:
+                "0 0 12px rgba(15, 130, 235, 0.6), 0 0 30px rgba(15, 130, 235, 0.3)",
+            }}
+          >
             <SendRightPointer />
           </div>
         </motion.div>
 
-        {/* Timeline Items */}
-        <div className="flex flex-col gap-8">
+        {/* Timeline cards */}
+        <div className="flex flex-col gap-6 sm:gap-8">
           {timelineData.map((item, index) => (
-            <TimelineItem
+            <TimelineCard
               key={index}
               item={item}
               index={index}
@@ -286,6 +497,7 @@ const TimelineParallax = () => {
               itemRef={(el) => {
                 itemRefs.current[index] = el;
               }}
+              reducedMotion={!!reducedMotion}
             />
           ))}
         </div>
