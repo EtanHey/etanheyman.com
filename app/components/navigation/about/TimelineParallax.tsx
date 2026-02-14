@@ -6,6 +6,7 @@ import {
   useTransform,
   useSpring,
   useInView,
+  useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
 } from "framer-motion";
@@ -317,6 +318,7 @@ function TimelineCard({
 const TimelineParallax = () => {
   const reducedMotion = useReducedMotion();
   const timelineRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
 
@@ -325,19 +327,17 @@ const TimelineParallax = () => {
     offset: ["start center", "end center"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, {
+  // AIDEV-NOTE: Snap progress — both arrow AND progress line snap to dot positions.
+  // Uses useMotionValue (not React state) so useSpring tracks changes reactively.
+  // This creates the "gravity well" effect at each dot.
+  const snapTarget = useMotionValue(0);
+  const snapProgress = useSpring(snapTarget, {
     stiffness: 300,
-    damping: 40,
+    damping: 28,
     restDelta: 0.001,
   });
 
-  const arrowScrollProgress = useSpring(scrollYProgress, {
-    stiffness: 600,
-    damping: 35,
-    restDelta: 0.001,
-  });
-
-  const arrowTop = useTransform(arrowScrollProgress, [0, 1], ["0%", "100%"]);
+  const arrowTop = useTransform(snapProgress, [0, 1], ["0%", "100%"]);
   const arrowOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.95, 1],
@@ -394,6 +394,14 @@ const TimelineParallax = () => {
 
     if (foundMatch) {
       setCurrentActiveIndex(activeIndex);
+      // Snap to the dot's ACTUAL position within the inner track container
+      const activeEl = itemRefs.current[activeIndex];
+      if (activeEl && trackRef.current) {
+        const trackRect = trackRef.current.getBoundingClientRect();
+        const activeRect = activeEl.getBoundingClientRect();
+        const dotY = activeRect.top - trackRect.top + 35; // dot center: 1.75rem + 7px (half of 14px dot)
+        snapTarget.set(dotY / trackRect.height);
+      }
     }
   });
 
@@ -415,7 +423,7 @@ const TimelineParallax = () => {
         />
       )}
 
-      <div className="relative">
+      <div ref={trackRef} className="relative">
         {/* Background track line */}
         <div className="absolute top-0 left-0 h-full w-[3px] rounded-full bg-blue-200/15" />
 
@@ -423,7 +431,7 @@ const TimelineParallax = () => {
         <motion.div
           className="absolute top-0 left-0 h-full w-[3px] origin-top rounded-full"
           style={{
-            scaleY: smoothProgress,
+            scaleY: snapProgress,
             willChange: "transform",
             background: `linear-gradient(to bottom, ${BRAND_DARK}, ${BRAND_BLUE}, ${BRAND_LIGHT})`,
             boxShadow: [
@@ -435,14 +443,14 @@ const TimelineParallax = () => {
           }}
         />
 
-        {/* Arrow indicator with pulse rings */}
+        {/* Arrow indicator with pulse rings — snaps to dot positions */}
         <motion.div
           className="pointer-events-none absolute left-0 z-50"
           style={{
             top: arrowTop,
             opacity: arrowOpacity,
-            x: "-1.15rem",
-            y: "-1.15rem",
+            x: "calc(-1.15rem + 2px)",
+            y: "-19px",
             willChange: "transform",
           }}
         >
