@@ -209,6 +209,20 @@ cd packages/recruiter
 golems recruit --find
 ```
 
+## Interview Practice
+
+RecruiterGolem includes a full interview practice system with **7 modes** and Elo rating tracking. See the dedicated [Interview Practice guide](/golems/docs/interview-practice) for all modes, commands, and Elo details.
+
+| Mode | Focus |
+|------|-------|
+| Leetcode | Coding problems, algorithm practice |
+| System Design | Architecture, scaling, trade-offs |
+| Debugging | Bug hunting, root cause analysis |
+| Code Review | Review practice, pattern recognition |
+| Behavioral | STAR format, leadership stories |
+| Optimization | Performance tuning, bottleneck analysis |
+| Complexity | Algorithm complexity, Big-O analysis |
+
 ## Integration Points
 
 - **EmailGolem** — Detects job offers and interview requests, routes to RecruiterGolem

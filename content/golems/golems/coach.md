@@ -16,8 +16,9 @@ CoachGolem is the **life planner**: it reads state from all other golems, integr
 1. **Read-only** — CoachGolem reads other golems' state, never invokes them
 2. **Human-centric** — suggests priorities, doesn't auto-execute
 3. **Calendar-aware** — knows about meetings, deadlines, blocked time
-4. **Gentle** — nudges, doesn't nag. Respects energy levels and context
-5. **Graceful degradation** — works without Calendar credentials (returns empty events)
+4. **Health-aware** — integrates with Whoop for recovery/strain/sleep data
+5. **Gentle** — nudges, doesn't nag. Respects energy levels and context
+6. **Graceful degradation** — works without Calendar or Whoop credentials
 
 ## How It Works
 
@@ -25,8 +26,9 @@ CoachGolem is the **life planner**: it reads state from all other golems, integr
 Morning:
   1. Read all golem statuses (jobs found, outreach pending, drafts ready)
   2. Read Google Calendar (meetings, deadlines)
-  3. Generate daily plan with priority-sorted pending items
-  4. Send to Telegram as morning nudge (via briefing)
+  3. Read Whoop data (recovery score, strain, sleep performance)
+  4. Generate daily plan with priority-sorted pending items
+  5. Send to Telegram as morning nudge (via briefing)
 
 Evening:
   1. Check compliance: what got done vs. plan
@@ -62,6 +64,7 @@ Evening:
 - `@golems/recruiter` — getStatus() for draft/follow-up counts
 - `@golems/teller` — getStatus() for financial summary
 - `googleapis` — Google Calendar API v3
+- Whoop API — recovery, sleep, strain metrics
 
 ## Source
 

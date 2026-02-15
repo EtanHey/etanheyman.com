@@ -12,35 +12,43 @@ import MermaidDiagram from '../../components/MermaidDiagram';
 import CopyButton from '../../components/CopyButton';
 import TableOfContents from '../../components/TableOfContents';
 import ArchitectureDiagram from '../../components/ArchitectureDiagram';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const CONTENT_DIR = join(process.cwd(), 'content', 'golems');
 
 // Flat ordered list of all docs for prev/next navigation (matches sidebar order)
+// Matches sidebar order: Getting Started → Agents → Tools & Layers → Infrastructure → Guides
 const DOC_ORDER = [
+  // Getting Started
   'getting-started',
   'architecture',
+  // Agents
   'golems/claude',
-  'golems/email',
   'golems/recruiter',
   'golems/teller',
-  'golems/job-golem',
   'golems/coach',
-  'packages/shared',
   'packages/content',
-  'packages/services',
-  'packages/ralph',
-  'packages/zikaron',
-  'interview-practice',
+  // Tools & Layers
+  'golems/email',
+  'golems/job-golem',
+  'packages/shared',
   'skills',
   'mcp-tools',
+  // Infrastructure
+  'packages/services',
+  'packages/zikaron',
+  'packages/ralph',
   'cloud-worker',
-  'llm',
   'per-repo-sessions',
+  // Guides
   'configuration/env-vars',
   'configuration/secrets',
-  'deployment/railway',
   'faq',
   'journey',
+  // Not in sidebar but accessible
+  'interview-practice',
+  'llm',
+  'deployment/railway',
 ];
 
 function getDocTitle(slug: string): string {
@@ -105,7 +113,8 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   if (!existsSync(filePath)) notFound();
 
   const raw = readFileSync(filePath, 'utf-8');
-  const { content } = matter(raw);
+  const { data, content } = matter(raw);
+  const pageTitle = data.title || content.match(/^#\s+(.+)/m)?.[1] || slug[slug.length - 1];
 
   // Prev/next navigation
   const currentIndex = DOC_ORDER.indexOf(slugStr);
@@ -141,8 +150,9 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 pt-8 pb-12 flex gap-8">
+    <div className="max-w-6xl mx-auto px-4 md:px-6 pt-4 md:pt-8 pb-12 flex gap-8">
       <article className="flex-1 min-w-0 max-w-3xl">
+        <Breadcrumbs title={pageTitle} />
         {slugStr === 'architecture' && <ArchitectureDiagram />}
         <MDXRemote
           source={content}
