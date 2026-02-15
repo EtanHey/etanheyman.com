@@ -34,7 +34,7 @@ railway login
 
 ### Link Project
 
-From repo root or `packages/autonomous/`:
+From repo root:
 
 ```bash
 railway link
@@ -201,7 +201,7 @@ railway up
 
 ## Database Migrations
 
-Supabase migrations live in `packages/autonomous/supabase/migrations/`:
+Supabase migrations are managed via the Supabase MCP or dashboard:
 
 ```bash
 # List pending migrations

@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ## What is Golems?
 
-Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **15 packages** — 5 domain golems plus orchestrator, shared infrastructure, dashboard, and tools — each installable as a Claude Code plugin.
+Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **15 packages** — 5 domain golems (Recruiter, Teller, Job, Coach, Content), ClaudeGolem orchestrator, shared infrastructure, services, dashboard, orchestrator (n8n), tax-helper, golems-tui, Ralph, Zikaron, and legacy compat — each installable as a Claude Code plugin.
 
 - **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
 - **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
