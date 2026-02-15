@@ -20,43 +20,18 @@ const topicScenes: TopicScene[] = [
     messages: [
       { sender: 'Etan', emoji: '\uD83D\uDC64', text: 'hey, what did you get done while I was asleep?', time: '8:12' },
       { sender: 'ClaudeGolem', emoji: '\uD83E\uDD16', text: 'Night Shift ran from 3-5am. Shipped 2 PRs on songscript, fixed that flaky test. All green.', time: '8:12' },
-      { sender: 'ClaudeGolem', emoji: '\uD83E\uDD16', text: 'Also: 1 urgent email from Stripe, and a 9.2 job match came in. Check the topics.', time: '8:13' },
+      { sender: 'Etan', emoji: '\uD83D\uDC64', text: 'nice. any urgent emails?', time: '8:13' },
+      { sender: 'ClaudeGolem', emoji: '\uD83E\uDD16', text: 'Stripe payment failed — card expired. Also a 9.2 job match came in and Sarah replied about Thursday. Check Alerts.', time: '8:13' },
     ],
   },
   {
-    topic: 'Email',
-    topicEmoji: '\uD83D\uDCE7',
-    messages: [
-      { sender: 'EmailGolem', emoji: '\uD83D\uDCE7', text: 'Stripe payment failed for Vercel Pro — card on file expired. Needs action today.', time: '09:15' },
-      { sender: 'EmailGolem', emoji: '\uD83D\uDCE7', text: 'GitHub: 2 review requests on golems. Routed interview prep email to Recruiter.', time: '09:16' },
-      { sender: 'EmailGolem', emoji: '\uD83D\uDCE7', text: 'Reminder: follow-up with Acme is due tomorrow. Draft ready if you want it.', time: '09:17' },
-    ],
-  },
-  {
-    topic: 'Recruitment',
-    topicEmoji: '\uD83D\uDCBC',
-    messages: [
-      { sender: 'RecruiterGolem', emoji: '\uD83D\uDCBC', text: 'Sarah @ TechCorp replied: "Let\'s schedule for Thursday." Want me to confirm?', time: '10:30' },
-      { sender: 'RecruiterGolem', emoji: '\uD83D\uDCBC', text: 'Your Elo is 1847 now. Ready for a system design round? You\'ve been crushing it.', time: '10:31' },
-      { sender: 'RecruiterGolem', emoji: '\uD83D\uDCBC', text: 'Sent check-ins to 3 contacts who went quiet. Keeping the pipeline warm.', time: '10:32' },
-    ],
-  },
-  {
-    topic: 'Finance',
-    topicEmoji: '\uD83D\uDCB0',
-    messages: [
-      { sender: 'TellerGolem', emoji: '\uD83D\uDCB0', text: '\u26A0\uFE0F Heads up: Vercel charge bounced. Update the card before they suspend.', time: '11:00' },
-      { sender: 'TellerGolem', emoji: '\uD83D\uDCB0', text: 'Feb so far: $847 across 14 subs. Software is 62% of spend.', time: '11:01' },
-      { sender: 'TellerGolem', emoji: '\uD83D\uDCB0', text: 'Flagged 3 tax deductions from this week. Review when you get a chance.', time: '11:02' },
-    ],
-  },
-  {
-    topic: 'Jobs',
-    topicEmoji: '\uD83C\uDFAF',
+    topic: 'Alerts',
+    topicEmoji: '\uD83D\uDD14',
     messages: [
       { sender: 'JobGolem', emoji: '\uD83C\uDFAF', text: 'Strong match: Senior Engineer @ Acme — 9.2/10. Stack is exactly your thing.', time: '06:15' },
-      { sender: 'JobGolem', emoji: '\uD83C\uDFAF', text: 'Also found: Full Stack @ TechCorp (8.7) — React + Node, remote-first.', time: '06:16' },
-      { sender: 'JobGolem', emoji: '\uD83C\uDFAF', text: 'Sent intro to the Acme recruiter. 3 new listings matched your profile today.', time: '06:17' },
+      { sender: 'EmailGolem', emoji: '\uD83D\uDCE7', text: 'Stripe payment failed for Vercel Pro — card on file expired. Needs action today.', time: '09:15' },
+      { sender: 'RecruiterGolem', emoji: '\uD83D\uDCBC', text: 'Sarah @ TechCorp replied: "Let\'s schedule for Thursday."', time: '10:30' },
+      { sender: 'TellerGolem', emoji: '\uD83D\uDCB0', text: 'Feb so far: $847 across 14 subs. Flagged 3 tax deductions.', time: '11:01' },
     ],
   },
 ];
@@ -78,7 +53,7 @@ export default function TelegramMock({ activeIndex, onTopicClick }: TelegramMock
         </div>
         <div>
           <div className="font-semibold text-sm text-white/95 sm:text-xs">Golems</div>
-          <div className="text-[0.65rem] text-white/40">5 golems online</div>
+          <div className="text-[0.65rem] text-white/40">6 golems online</div>
         </div>
       </div>
 

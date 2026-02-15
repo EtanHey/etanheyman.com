@@ -36,7 +36,7 @@ const golems = [
 const capabilities = ['Skills', 'MCP Tools', 'Rules', 'Context'];
 
 const infra = [
-  { name: 'Services', sub: 'Railway cloud', color: C.cyan, items: ['Email', 'Jobs', 'Briefing', 'Night Shift'] },
+  { name: 'Services', sub: 'Railway cloud', color: C.cyan, items: ['Email', 'Jobs', 'Briefing'] },
   { name: 'Supabase', sub: 'Postgres + RLS', color: C.cyan, glow: true },
   { name: 'Zikaron', sub: '238K+ chunks', color: C.pink },
 ];
