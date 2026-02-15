@@ -76,7 +76,7 @@ const tabs: TerminalTab[] = [
       '',
       '\x1b[34mSkills:\x1b[0m 30+ loaded',
       '\x1b[34mPackages:\x1b[0m 10 (shared, claude, jobs, recruiter, teller, content, coach, services, ralph, zikaron)',
-      '\x1b[34mTests:\x1b[0m 1179 passing (4056 assertions)',
+      '\x1b[34mTests:\x1b[0m 1148 passing (3990 assertions)',
       '\x1b[34mMemory:\x1b[0m 238K+ chunks indexed',
     ],
   },
@@ -134,6 +134,62 @@ const tabs: TerminalTab[] = [
     ],
   },
   {
+    id: 'coach',
+    label: 'Coach',
+    emoji: '\uD83D\uDCC5',
+    lines: [
+      '$ golems coach --plan',
+      '',
+      '\x1b[34m=== DAILY PLAN ===\x1b[0m',
+      '\x1b[33mFeb 15, 2026 \u2014 Saturday\x1b[0m',
+      '',
+      '\x1b[36mHealth (Whoop):\x1b[0m',
+      '  Recovery: \x1b[32m82%\x1b[0m (green)',
+      '  Sleep: 7.2h (94% efficiency)',
+      '  Strain: 8.4 yesterday',
+      '',
+      '\x1b[36mPriorities:\x1b[0m',
+      '  \x1b[32m1.\x1b[0m Finish docs polish PR (etanheyman.com)',
+      '  \x1b[33m2.\x1b[0m 2 overdue email follow-ups',
+      '  \x1b[33m3.\x1b[0m Interview prep: system design (Elo 1450)',
+      '',
+      '\x1b[36mGolem Status:\x1b[0m',
+      '  \x1b[32m\u2713\x1b[0m Jobs: 3 new matches (best: 9.2)',
+      '  \x1b[32m\u2713\x1b[0m Email: inbox triaged, 2 follow-ups due',
+      '  \x1b[33m\u25CB\x1b[0m Recruiter: Sarah wants Thursday confirmed',
+      '',
+      '\x1b[32m\u2714 Plan ready. Have a good day.\x1b[0m',
+    ],
+  },
+  {
+    id: 'content',
+    label: 'Content',
+    emoji: '\u270D\uFE0F',
+    lines: [
+      '$ golems content --draft linkedin',
+      '',
+      '\x1b[34m=== CONTENT PIPELINE ===\x1b[0m',
+      '\x1b[33mDraft: LinkedIn post (topic: agentic systems)\x1b[0m',
+      '',
+      '\x1b[36mResearch:\x1b[0m',
+      '  Pulled 3 recent commits for context',
+      '  Found 2 relevant Zikaron chunks',
+      '  Audience: Israeli tech, English post',
+      '',
+      '\x1b[36mDraft (v1):\x1b[0m',
+      '  "I built 6 autonomous agents that run while I',
+      '  sleep. Night Shift creates PRs at 4am. Morning',
+      '  Briefing summarizes everything at 8am. The trick?',
+      '  They don\'t talk to each other directly..."',
+      '',
+      '\x1b[34mCritique wave:\x1b[0m \x1b[33mRunning 3 agents...\x1b[0m',
+      '  Agent 1: \x1b[32m8/10\x1b[0m \u2014 Strong hook, add metrics',
+      '  Agent 2: \x1b[32m7/10\x1b[0m \u2014 Good, shorten last paragraph',
+      '',
+      '\x1b[34mReady for review.\x1b[0m Draft saved to scratchpad.',
+    ],
+  },
+  {
     id: 'nightshift',
     label: 'NightShift',
     emoji: '\uD83C\uDF19',
@@ -179,7 +235,7 @@ const golems = [
 const installSteps = [
   { step: '1', command: 'git clone https://github.com/EtanHey/golems && cd golems', label: 'Clone', desc: 'Get the monorepo' },
   { step: '2', command: 'bun install', label: 'Install', desc: 'One command, all packages' },
-  { step: '3', command: 'golems wizard', label: 'Setup', desc: 'Interactive 7-phase wizard wires everything' },
+  { step: '3', command: 'golems wizard', label: 'Setup', desc: 'Interactive 3-phase wizard wires everything' },
   { step: '4', command: 'golems status', label: 'Verify', desc: 'See all your golems running' },
 ];
 
@@ -487,7 +543,7 @@ function ArchitectureSection() {
           <div className="flex-1 bg-[#14120e]/90 border border-[#c46d3c1a] rounded-xl p-6 hover:border-[#e5950040] transition-colors">
             <h3 className="text-base font-bold text-[#e59500] mb-3">Railway (Body)</h3>
             <ul className="list-none p-0 m-0 space-y-1">
-              {['Email Poller', 'Job Scraper', 'Briefing Generator', 'Content Pipeline'].map((item) => (
+              {['Email Poller', 'Job Scraper', 'Briefing Generator'].map((item) => (
                 <li key={item} className="text-[#908575] text-sm font-mono before:content-['\2022_'] before:text-[#c46d3c]">{item}</li>
               ))}
             </ul>
