@@ -221,6 +221,7 @@ export default function Header() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => setMobileOpen(false)}
                   className="block px-3 py-2 rounded-md text-sm text-[#7c6f5e] hover:text-[#c0b8a8] hover:bg-[#ffffff08] transition-colors"
                 >
                   {link.label} &rarr;
@@ -233,10 +234,9 @@ export default function Header() {
 
       {/* Mobile overlay to close menu — preventDefault stops phantom taps */}
       {mobileOpen && (
-        <div
-          className="fixed inset-0 z-40 md:hidden"
-          role="button"
-          tabIndex={0}
+        <button
+          type="button"
+          className="fixed inset-0 z-40 md:hidden appearance-none bg-transparent border-none cursor-default"
           aria-label="Close navigation"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setMobileOpen(false); }}
           onTouchEnd={(e) => { e.preventDefault(); setMobileOpen(false); }}
