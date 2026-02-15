@@ -215,13 +215,13 @@ RecruiterGolem includes a full interview practice system with **7 modes** and El
 
 | Mode | Focus |
 |------|-------|
-| Behavioral | STAR format, leadership stories |
-| Technical | TypeScript, React, system patterns |
+| Leetcode | Coding problems, algorithm practice |
 | System Design | Architecture, scaling, trade-offs |
-| Live Coding | Algorithm problems with hints |
-| Take-Home | Project scoping and implementation |
-| Culture Fit | Values, team dynamics |
-| Negotiation | Salary, equity, offer evaluation |
+| Debugging | Bug hunting, root cause analysis |
+| Code Review | Review practice, pattern recognition |
+| Behavioral | STAR format, leadership stories |
+| Optimization | Performance tuning, bottleneck analysis |
+| Complexity | Algorithm complexity, Big-O analysis |
 
 ## Integration Points
 
