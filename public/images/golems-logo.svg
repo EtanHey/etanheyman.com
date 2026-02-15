@@ -60,7 +60,8 @@
 
   <!-- === אמת (EMET/TRUTH) === -->
   <text x="100" y="58" text-anchor="middle" font-family="'David Libre', 'Frank Ruhl Libre', serif"
-        font-size="26" font-weight="700" fill="url(#emetGlow)" filter="url(#softGlow)" letter-spacing="4">אמת</text>
+        font-size="26" font-weight="700" fill="url(#emetGlow)" filter="url(#softGlow)" letter-spacing="4"
+        direction="rtl" unicode-bidi="bidi-override">אמת</text>
 
   <!-- === EYES === -->
   <!-- Left eye socket -->

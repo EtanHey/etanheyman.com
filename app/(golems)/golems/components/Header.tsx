@@ -78,6 +78,11 @@ export default function Header() {
     if (isDocsPage) setDocsExpanded(true);
   }, [isDocsPage]);
 
+  // Close mobile menu on navigation (prevents phantom taps from onClick race)
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
   return (
     <>
       <header className="sticky top-0 z-50 bg-[#0c0b0a]/95 backdrop-blur-sm border-b border-[#e5950015]">
@@ -145,16 +150,18 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile dropdown */}
+        {/* Mobile dropdown — sits above the overlay via header's z-50 */}
         {mobileOpen && (
-          <nav className="md:hidden border-t border-[#e5950015] bg-[#0c0b0a] px-4 py-3 space-y-1 max-h-[calc(100vh-3rem)] overflow-y-auto">
+          <nav
+            className="md:hidden border-t border-[#e5950015] bg-[#0c0b0a] px-4 py-3 space-y-1 max-h-[calc(100vh-3rem)] overflow-y-auto relative z-[51]"
+            onClick={(e) => e.stopPropagation()}
+          >
             {navLinks.map((link) => {
               const isActive = pathname.startsWith(link.href);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setMobileOpen(false)}
                   className={`block px-3 py-2 rounded-md text-sm transition-colors ${
                     isActive
                       ? 'text-[#e59500] bg-[#e5950015]'
@@ -190,7 +197,6 @@ export default function Header() {
                             <Link
                               key={item.href}
                               href={item.href}
-                              onClick={() => setMobileOpen(false)}
                               className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
                                 isActive
                                   ? 'bg-[#e5950015] text-[#e59500] font-medium'
@@ -226,14 +232,14 @@ export default function Header() {
         )}
       </header>
 
-      {/* Mobile overlay to close menu */}
+      {/* Mobile overlay to close menu — preventDefault stops phantom taps */}
       {mobileOpen && (
-        <div
-          className="fixed inset-0 z-40 md:hidden"
-          role="button"
-          tabIndex={0}
+        <button
+          type="button"
+          className="fixed inset-0 z-40 md:hidden appearance-none bg-transparent border-none cursor-default"
           aria-label="Close navigation"
-          onClick={() => setMobileOpen(false)}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setMobileOpen(false); }}
+          onTouchEnd={(e) => { e.preventDefault(); setMobileOpen(false); }}
           onKeyDown={(e) => { if (e.key === 'Escape') setMobileOpen(false); }}
         />
       )}
