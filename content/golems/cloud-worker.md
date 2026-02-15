@@ -38,11 +38,11 @@ Railway auto-runs on startup.
 ## Required Environment Variables
 
 ```
-LLM_BACKEND=haiku
+LLM_BACKEND=gemini
 STATE_BACKEND=supabase
 TELEGRAM_MODE=direct
 TZ=Asia/Jerusalem
-ANTHROPIC_API_KEY=sk-ant-...
+GOOGLE_GENERATIVE_AI_API_KEY=...
 SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 SUPABASE_SERVICE_KEY=eyJ...
 TELEGRAM_BOT_TOKEN=...
