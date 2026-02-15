@@ -135,15 +135,25 @@ export default async function ProjectPage({
           )}
         </GitEl>
         {project.docsUrl && (
-          <a
-            href={project.docsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-4 rounded-[80px] border-2 border-emerald-400 px-8 py-5 font-[Nutmeg] text-[20px] text-emerald-400 transition-colors hover:bg-emerald-400 hover:text-white md:text-[24px]"
-          >
-            Docs
-            <BookOpen aria-hidden="true" className="h-5 w-5" />
-          </a>
+          project.docsUrl.startsWith('/') ? (
+            <Link
+              href={project.docsUrl}
+              className="flex items-center justify-center gap-4 rounded-[80px] border-2 border-emerald-400 px-8 py-5 font-[Nutmeg] text-[20px] text-emerald-400 transition-colors hover:bg-emerald-400 hover:text-white md:text-[24px]"
+            >
+              Docs
+              <BookOpen aria-hidden="true" className="h-5 w-5" />
+            </Link>
+          ) : (
+            <a
+              href={project.docsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-4 rounded-[80px] border-2 border-emerald-400 px-8 py-5 font-[Nutmeg] text-[20px] text-emerald-400 transition-colors hover:bg-emerald-400 hover:text-white md:text-[24px]"
+            >
+              Docs
+              <BookOpen aria-hidden="true" className="h-5 w-5" />
+            </a>
+          )
         )}
       </div>
 
