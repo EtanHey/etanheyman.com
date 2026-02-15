@@ -64,6 +64,7 @@ Evening:
 - `@golems/recruiter` — getStatus() for draft/follow-up counts
 - `@golems/teller` — getStatus() for financial summary
 - `googleapis` — Google Calendar API v3
+- Whoop API — recovery, sleep, strain metrics
 
 ## Source
 

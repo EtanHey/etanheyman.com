@@ -25,8 +25,8 @@ const sectionMap: Record<string, string> = {
   'configuration/secrets': 'Guides',
   'faq': 'Guides',
   'journey': 'Guides',
-  'interview-practice': 'Features',
-  'llm': 'Reference',
+  'interview-practice': 'Agents',
+  'llm': 'Guides',
   'deployment/railway': 'Guides',
   'getting-started': 'Getting Started',
   'architecture': 'Getting Started',
@@ -40,7 +40,7 @@ export default function Breadcrumbs({ title }: { title: string }) {
   if (!section) return null;
 
   return (
-    <nav className="flex items-center gap-1.5 text-xs text-[#7c6f5e] mb-4 md:mb-6">
+    <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#7c6f5e] mb-4 md:mb-6">
       <Link href="/golems" className="hover:text-[#c0b8a8] transition-colors">
         Golems
       </Link>

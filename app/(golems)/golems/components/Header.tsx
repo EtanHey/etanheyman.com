@@ -136,7 +136,7 @@ export default function Header() {
 
             <button
               type="button"
-              onClick={() => { setMobileOpen(!mobileOpen); setDocsExpanded(false); }}
+              onClick={() => { setMobileOpen(!mobileOpen); if (mobileOpen) setDocsExpanded(false); }}
               className="md:hidden text-[#e59500] p-1"
               aria-label="Toggle navigation"
             >
