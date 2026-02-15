@@ -57,7 +57,7 @@ export async function middleware(request: NextRequest) {
   return response;
 }
 
-// Run middleware on all routes
+// Run middleware on all routes except static docsite
 export const config = {
-  matcher: '/:path*',
+  matcher: ['/((?!golems(?:/|$)).*)'],
 };

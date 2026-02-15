@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/golems/:match*",
-      "destination": "https://dashboard.etanheyman.com/golems/:match*"
-    }
-  ]
-}
