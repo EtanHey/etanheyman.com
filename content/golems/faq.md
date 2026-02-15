@@ -26,8 +26,8 @@ Yes. Golems runs in three modes:
 | Mode | LLM | State | Best For |
 |------|-----|-------|----------|
 | **Full Local** | Ollama | File-based | Testing, development |
-| **Hybrid** | Haiku (cloud) | File-based | Development with better LLM |
-| **Full Cloud** | Haiku (cloud) | Supabase | Production |
+| **Hybrid** | Gemini Flash-Lite (cloud) | File-based | Development with better LLM |
+| **Full Cloud** | Gemini Flash-Lite (cloud) | Supabase | Production |
 
 Set with env vars: `LLM_BACKEND`, `STATE_BACKEND`, `TELEGRAM_MODE`.
 
@@ -37,10 +37,10 @@ Estimated monthly costs for production mode:
 
 | Service | Cost | Notes |
 |---------|------|-------|
-| **Anthropic (Haiku 4.5)** | ~$5-15/mo | Email scoring, job matching, drafts. Input: $0.80/MTok, Output: $4.00/MTok |
+| **Google (Gemini Flash-Lite)** | Free | Email scoring, job matching, drafts. Free tier sufficient for personal use |
 | **Railway** | ~$5-10/mo | Cloud worker compute (email poller, job scraper, briefing) |
 | **Supabase** | Free tier | Sufficient for personal use (500MB database, 50K auth users) |
-| **Total** | ~$10-25/mo | Varies with usage volume |
+| **Total** | ~$5-10/mo | Mostly Railway compute |
 
 Running fully local with Ollama costs $0/mo (just electricity).
 
@@ -54,7 +54,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## How many tests does Golems have?
 
-**1,179 tests** with **4,056 assertions** across 75+ test files. The test suite covers all packages — 6 golems plus shared infrastructure — and runs with `bun test` from the monorepo root.
+**1,148 tests** with **3,990 assertions** across 75+ test files. The test suite covers all packages — 6 golems plus shared infrastructure — and runs with `bun test` from the monorepo root.
 
 ## What's the tech stack?
 
@@ -66,7 +66,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 | **Cloud Compute** | Railway (Docker) |
 | **Local Services** | macOS launchd |
 | **Memory** | Python + sqlite-vec + sentence-transformers |
-| **LLM** | Anthropic Haiku 4.5 (cloud) or Ollama (local) |
+| **LLM** | Gemini Flash-Lite (cloud) or Ollama (local) |
 | **Autonomous Loop** | Zsh (Ralph) |
 | **Secrets** | 1Password CLI |
 
