@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ hostname: "utfs.io" }],
   },
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  async rewrites() {
+    return [
+      {
+        source: "/golems/:path*",
+        destination: "https://dashboard.etanheyman.com/golems/:path*",
+      },
+    ];
+  },
 };
 
 export default withMDX(nextConfig);
