@@ -14,7 +14,7 @@ Create a new project in Railway with these settings:
 - **Project:** golems (or any name you choose)
 - **Service:** golems
 - **Region:** Any region (US West, Europe, etc.)
-- **Root:** `packages/autonomous`
+- **Root:** `/` (repo root)
 - **Builder:** Dockerfile
 
 ## Getting Started
@@ -63,7 +63,7 @@ Set all 18 variables in Railway dashboard (`Settings` → `Variables`):
 
 | Variable | Value | Notes |
 |----------|-------|-------|
-| `LLM_BACKEND` | `haiku` | Cloud execution |
+| `LLM_BACKEND` | `gemini` | Cloud execution (free Gemini Flash-Lite) |
 | `STATE_BACKEND` | `supabase` | Cloud state |
 | `TELEGRAM_MODE` | `direct` | Direct API calls |
 | `TZ` | `Asia/Jerusalem` | Scheduling |
@@ -72,7 +72,7 @@ Set all 18 variables in Railway dashboard (`Settings` → `Variables`):
 
 | Variable | Source | Required |
 |----------|--------|----------|
-| `ANTHROPIC_API_KEY` | Your Anthropic Console | ✅ Yes |
+| `GOOGLE_GENERATIVE_AI_API_KEY` | Google AI Studio | ✅ Yes |
 | `SUPABASE_URL` | Your Supabase project (format: `https://YOUR_PROJECT.supabase.co`) | ✅ Yes |
 | `SUPABASE_SERVICE_KEY` | Supabase dashboard → Settings → API | ✅ Yes |
 | `GMAIL_CLIENT_ID` | Google Cloud Console → OAuth credentials | ✅ Yes |
@@ -83,14 +83,12 @@ Set all 18 variables in Railway dashboard (`Settings` → `Variables`):
 
 ### Telegram Topics
 
-| Variable | Example Value | How to Get |
-|----------|---------------|-----------|
-| `TELEGRAM_TOPIC_ALERTS` | `3` | Create topic, send `/setup alerts` in that topic |
-| `TELEGRAM_TOPIC_NIGHTSHIFT` | `4` | Create topic, send `/setup nightshift` in that topic |
-| `TELEGRAM_TOPIC_EMAIL` | `5` | Create topic, send `/setup email` in that topic |
-| `TELEGRAM_TOPIC_JOBS` | `7` | Create topic, send `/setup jobs` in that topic |
-| `TELEGRAM_TOPIC_RECRUITER` | `126` | Create topic, send `/setup recruiter` in that topic |
-| `TELEGRAM_TOPIC_UPTIME` | `282` | Create topic, send `/setup uptime` in that topic |
+Two topics in the Telegram group:
+
+| Variable | Purpose |
+|----------|---------|
+| `TELEGRAM_TOPIC_GENERAL` | Interactive ClaudeGolem chat |
+| `TELEGRAM_TOPIC_ALERTS` | One-way notifications (jobs, email, nightshift, health) |
 
 ### Monitoring
 
@@ -112,7 +110,7 @@ Returns `200 OK` with:
 {
   "status": "ok",
   "uptime": 3600,
-  "backend": "haiku",
+  "backend": "gemini",
   "stateBackend": "supabase",
   "telegramMode": "direct",
   "israelTime": "2026-02-06T12:30:00+02:00",
@@ -140,7 +138,7 @@ Returns API cost stats:
   "recentCalls": [
     {
       "timestamp": "2026-02-06T10:30:00Z",
-      "model": "claude-haiku-4-5-20251001",
+      "model": "gemini-2.5-flash-lite",
       "source": "email-golem",
       "inputTokens": 1250,
       "outputTokens": 342
@@ -179,7 +177,7 @@ railway up
 Then switch back:
 
 ```bash
-railway variables set LLM_BACKEND=haiku
+railway variables set LLM_BACKEND=gemini
 railway up
 ```
 
@@ -240,8 +238,8 @@ railway logs
 - Verify topic IDs (TELEGRAM_TOPIC_*)
 
 #### LLM calls failing
-- Check ANTHROPIC_API_KEY is set
-- Verify account has sufficient credits
+- Check GOOGLE_GENERATIVE_AI_API_KEY is set
+- Verify API key is valid in Google AI Studio
 - Check logs for rate limiting
 
 ### Debug Command
@@ -257,14 +255,10 @@ bun run src/cloud-worker.ts
 Monitor API costs in three places:
 
 1. **Railway dashboard** — Compute (usually $5-10/month)
-2. **Anthropic console** — LLM calls (`/usage` endpoint)
+2. **Google AI Studio** — LLM calls (Gemini Flash-Lite is free tier)
 3. **Supabase dashboard** — Database queries
 
-Haiku 4.5 pricing:
-- Input: $0.80 per million tokens
-- Output: $4.00 per million tokens
-
-Typical monthly cost: $20-40 depending on activity.
+Gemini Flash-Lite is free for personal use. Total monthly cost is mostly Railway compute: ~$5-10.
 
 ## Scaling
 
