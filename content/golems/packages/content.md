@@ -249,7 +249,7 @@ flowchart TD
 
     subgraph publish["Publish"]
         SOLT["Soltome<br/><small>2 credits per post</small>"]
-        LINKED["LinkedIn<br/><small>2026 algorithm rules</small>"]
+        LINKED["LinkedIn<br/><small>current algorithm rules</small>"]
     end
 
     TOPIC --> DRAFT --> critique --> REFINE --> APPROVE --> publish
