@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
 const navLinks = [
   { label: 'Docs', href: '/golems/docs/getting-started' },
+  { label: 'Architecture', href: '/golems/docs/architecture' },
   { label: 'Journey', href: '/golems/docs/journey' },
   { label: 'For LLMs', href: '/golems/docs/llm' },
 ];
@@ -19,65 +20,47 @@ const externalLinks = [
 
 const docsSections = [
   {
-    title: 'Overview',
+    title: 'Getting Started',
     items: [
-      { title: 'Getting Started', href: '/golems/docs/getting-started' },
+      { title: 'Introduction', href: '/golems/docs/getting-started' },
       { title: 'Architecture', href: '/golems/docs/architecture' },
     ],
   },
   {
-    title: 'Golems',
+    title: 'Agents',
     items: [
       { title: 'ClaudeGolem', href: '/golems/docs/golems/claude' },
       { title: 'RecruiterGolem', href: '/golems/docs/golems/recruiter' },
       { title: 'TellerGolem', href: '/golems/docs/golems/teller' },
-      { title: 'JobGolem', href: '/golems/docs/golems/job-golem' },
       { title: 'CoachGolem', href: '/golems/docs/golems/coach' },
       { title: 'ContentGolem', href: '/golems/docs/packages/content' },
     ],
   },
   {
-    title: 'Infrastructure',
+    title: 'Tools & Layers',
     items: [
-      { title: 'Shared (Foundation)', href: '/golems/docs/packages/shared' },
       { title: 'Email System', href: '/golems/docs/golems/email' },
-      { title: 'Services', href: '/golems/docs/packages/services' },
-      { title: 'Ralph', href: '/golems/docs/packages/ralph' },
-      { title: 'Zikaron', href: '/golems/docs/packages/zikaron' },
-    ],
-  },
-  {
-    title: 'Features',
-    items: [
-      { title: 'Interview Practice', href: '/golems/docs/interview-practice' },
+      { title: 'Job Scraping', href: '/golems/docs/golems/job-golem' },
+      { title: 'Shared Foundation', href: '/golems/docs/packages/shared' },
       { title: 'Skills Library', href: '/golems/docs/skills' },
       { title: 'MCP Tools', href: '/golems/docs/mcp-tools' },
     ],
   },
   {
-    title: 'Deep Dives',
+    title: 'Infrastructure',
     items: [
+      { title: 'Services', href: '/golems/docs/packages/services' },
+      { title: 'Zikaron (Memory)', href: '/golems/docs/packages/zikaron' },
+      { title: 'Ralph (Coding Loop)', href: '/golems/docs/packages/ralph' },
       { title: 'Cloud Worker', href: '/golems/docs/cloud-worker' },
-      { title: 'LLM Integration', href: '/golems/docs/llm' },
       { title: 'Per-Repo Sessions', href: '/golems/docs/per-repo-sessions' },
     ],
   },
   {
-    title: 'Configuration',
+    title: 'Guides',
     items: [
       { title: 'Environment Variables', href: '/golems/docs/configuration/env-vars' },
-      { title: 'Secrets', href: '/golems/docs/configuration/secrets' },
-    ],
-  },
-  {
-    title: 'Deployment',
-    items: [
-      { title: 'Railway', href: '/golems/docs/deployment/railway' },
-    ],
-  },
-  {
-    title: 'More',
-    items: [
+      { title: 'Secrets & 1Password', href: '/golems/docs/configuration/secrets' },
       { title: 'FAQ', href: '/golems/docs/faq' },
       { title: 'Engineering Journey', href: '/golems/docs/journey' },
     ],
@@ -87,8 +70,13 @@ const docsSections = [
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [docsExpanded, setDocsExpanded] = useState(false);
   const isDocsPage = pathname.startsWith('/golems/docs');
+  const [docsExpanded, setDocsExpanded] = useState(isDocsPage);
+
+  // Auto-expand docs section when navigating to a docs page
+  useEffect(() => {
+    if (isDocsPage) setDocsExpanded(true);
+  }, [isDocsPage]);
 
   return (
     <>
