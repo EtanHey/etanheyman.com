@@ -34,6 +34,7 @@ const docsSections = [
       { title: 'TellerGolem', href: '/golems/docs/golems/teller' },
       { title: 'CoachGolem', href: '/golems/docs/golems/coach' },
       { title: 'ContentGolem', href: '/golems/docs/packages/content' },
+      { title: 'Content Pipelines', href: '/golems/docs/content-pipelines' },
     ],
   },
   {
@@ -53,6 +54,8 @@ const docsSections = [
       { title: 'Zikaron (Memory)', href: '/golems/docs/packages/zikaron' },
       { title: 'Ralph (Coding Loop)', href: '/golems/docs/packages/ralph' },
       { title: 'Cloud Worker', href: '/golems/docs/cloud-worker' },
+      { title: 'Dashboard', href: '/golems/docs/packages/dashboard' },
+      { title: 'Orchestrator', href: '/golems/docs/packages/orchestrator' },
       { title: 'Per-Repo Sessions', href: '/golems/docs/per-repo-sessions' },
     ],
   },

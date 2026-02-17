@@ -17,7 +17,7 @@ The only hard dependency is `@golems/shared` for database and LLM access.
 
 ## What's the memory cost?
 
-Zikaron uses sqlite-vec with bge-large-en-v1.5 embeddings. For 238K+ chunks, the database is approximately 1-2GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
+Zikaron uses sqlite-vec with bge-large-en-v1.5 embeddings. For 260K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
 
 ## Does it work without Railway?
 
@@ -26,8 +26,8 @@ Yes. Golems runs in three modes:
 | Mode | LLM | State | Best For |
 |------|-----|-------|----------|
 | **Full Local** | Ollama | File-based | Testing, development |
-| **Hybrid** | Gemini Flash-Lite (cloud) | File-based | Development with better LLM |
-| **Full Cloud** | Gemini Flash-Lite (cloud) | Supabase | Production |
+| **Hybrid** | Gemini (cloud, free) | File-based | Development with better LLM |
+| **Full Cloud** | Gemini (cloud, free) | Supabase | Production |
 
 Set with env vars: `LLM_BACKEND`, `STATE_BACKEND`, `TELEGRAM_MODE`.
 
@@ -37,12 +37,12 @@ Estimated monthly costs for production mode:
 
 | Service | Cost | Notes |
 |---------|------|-------|
-| **Google (Gemini Flash-Lite)** | Free | Email scoring, job matching, drafts. Free tier sufficient for personal use |
+| **Gemini (Flash-Lite)** | **$0/mo** | Email scoring, job matching, drafts — free tier covers all usage |
 | **Railway** | ~$5-10/mo | Cloud worker compute (email poller, job scraper, briefing) |
 | **Supabase** | Free tier | Sufficient for personal use (500MB database, 50K auth users) |
-| **Total** | ~$5-10/mo | Mostly Railway compute |
+| **Total** | ~$5-10/mo | Gemini is free, Railway is the main cost |
 
-Running fully local with Ollama costs $0/mo (just electricity).
+Running fully local with Ollama costs $0/mo (just electricity). Production switched from Haiku ($5-15/mo) to Gemini Flash-Lite (free) in Feb 2026.
 
 ## Can I customize the outreach style?
 
@@ -54,7 +54,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## How many tests does Golems have?
 
-**1,148 tests** with **3,990 assertions** across 75+ test files. The test suite covers all packages — 6 golems plus shared infrastructure — and runs with `bun test` from the monorepo root.
+**1,148 tests** with **3,990 assertions** across 74 test files. The test suite covers all packages — 6 golems plus shared infrastructure — and runs with `bun test` from the monorepo root.
 
 ## What's the tech stack?
 
@@ -66,7 +66,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 | **Cloud Compute** | Railway (Docker) |
 | **Local Services** | macOS launchd |
 | **Memory** | Python + sqlite-vec + sentence-transformers |
-| **LLM** | Gemini Flash-Lite (cloud) or Ollama (local) |
+| **LLM** | Gemini 2.5 Flash-Lite (cloud, free), Haiku 4.5 (fallback), Ollama (local), GLM-4.7-Flash (enrichment) |
 | **Autonomous Loop** | Zsh (Ralph) |
 | **Secrets** | 1Password CLI |
 

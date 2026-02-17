@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Railway Deployment
 
-Golems Phase 2 runs on **Railway** as the cloud "body" while the Mac remains the "brain" (Telegram bot, Night Shift, notifications).
+The Railway cloud worker is the "body" of the Golems ecosystem — it handles data collection (email polling, job scraping, Whoop sync) and morning briefings while the Mac remains the "brain" (Telegram bot, Night Shift, notifications).
 
 ## Railway Project
 
@@ -14,8 +14,10 @@ Create a new project in Railway with these settings:
 - **Project:** golems (or any name you choose)
 - **Service:** golems
 - **Region:** Any region (US West, Europe, etc.)
-- **Root:** `/` (repo root)
+- **Root:** Repository root (the Dockerfile is at the repo root)
 - **Builder:** Dockerfile
+
+The Dockerfile builds a Bun workspace image with all packages. The entry point is `packages/services/src/cloud-worker.ts`.
 
 ## Getting Started
 
@@ -34,7 +36,7 @@ railway login
 
 ### Link Project
 
-From repo root:
+From the repo root:
 
 ```bash
 railway link
@@ -45,8 +47,11 @@ railway link
 ### Deploy
 
 ```bash
-railway up
-# Rebuilds Docker image and deploys
+# Upload and deploy local code
+railway up -d
+
+# Or redeploy from latest upload
+railway redeploy -y
 ```
 
 Watch logs:
@@ -57,13 +62,13 @@ railway logs -f
 
 ## Environment Variables
 
-Set all 18 variables in Railway dashboard (`Settings` → `Variables`):
+Set these variables in Railway dashboard (`Settings` → `Variables`):
 
 ### Core Configuration
 
 | Variable | Value | Notes |
 |----------|-------|-------|
-| `LLM_BACKEND` | `gemini` | Cloud execution (free Gemini Flash-Lite) |
+| `LLM_BACKEND` | `gemini` | Gemini 2.5 Flash-Lite (free tier) |
 | `STATE_BACKEND` | `supabase` | Cloud state |
 | `TELEGRAM_MODE` | `direct` | Direct API calls |
 | `TZ` | `Asia/Jerusalem` | Scheduling |
@@ -72,29 +77,39 @@ Set all 18 variables in Railway dashboard (`Settings` → `Variables`):
 
 | Variable | Source | Required |
 |----------|--------|----------|
-| `GOOGLE_GENERATIVE_AI_API_KEY` | Google AI Studio | ✅ Yes |
-| `SUPABASE_URL` | Your Supabase project (format: `https://YOUR_PROJECT.supabase.co`) | ✅ Yes |
-| `SUPABASE_SERVICE_KEY` | Supabase dashboard → Settings → API | ✅ Yes |
-| `GMAIL_CLIENT_ID` | Google Cloud Console → OAuth credentials | ✅ Yes |
-| `GMAIL_CLIENT_SECRET` | Google Cloud Console | ✅ Yes |
-| `GMAIL_REFRESH_TOKEN` | OAuth flow (see Gmail setup docs) | ✅ Yes |
-| `TELEGRAM_BOT_TOKEN` | @BotFather on Telegram | ✅ Yes |
-| `TELEGRAM_CHAT_ID` | Your Telegram group/chat ID | ✅ Yes |
+| `GOOGLE_GENERATIVE_AI_API_KEY` | Google AI Studio | Yes (primary LLM) |
+| `ANTHROPIC_API_KEY` | Anthropic Console | Optional (Haiku fallback) |
+| `SUPABASE_URL` | Your Supabase project (format: `https://YOUR_PROJECT.supabase.co`) | Yes |
+| `SUPABASE_SERVICE_KEY` | Supabase dashboard → Settings → API | Yes |
+| `SUPABASE_ANON_KEY` | Supabase dashboard → Settings → API | Yes |
+| `GMAIL_CLIENT_ID` | Google Cloud Console → OAuth credentials | Yes |
+| `GMAIL_CLIENT_SECRET` | Google Cloud Console | Yes |
+| `GMAIL_REFRESH_TOKEN` | OAuth flow (see Gmail setup docs) | Yes |
+| `TELEGRAM_BOT_TOKEN` | @BotFather on Telegram | Yes |
+| `TELEGRAM_CHAT_ID` | Your Telegram group/chat ID | Yes |
+| `TELEGRAM_ALLOWED_IDS` | Comma-separated Telegram user IDs | Yes |
 
 ### Telegram Topics
 
-Two topics in the Telegram group:
+| Variable | Example Value | How to Get |
+|----------|---------------|-----------|
+| `TELEGRAM_TOPIC_ALERTS` | `3` | Create topic in your Telegram group |
+| `TELEGRAM_TOPIC_NIGHTSHIFT` | `4` | Create topic in your Telegram group |
+| `TELEGRAM_TOPIC_EMAIL` | `5` | Create topic in your Telegram group |
+| `TELEGRAM_TOPIC_JOBS` | `7` | Create topic in your Telegram group |
+| `TELEGRAM_TOPIC_RECRUITER` | `126` | Create topic in your Telegram group |
+| `TELEGRAM_TOPIC_UPTIME` | `282` | Create topic in your Telegram group |
 
-| Variable | Purpose |
-|----------|---------|
-| `TELEGRAM_TOPIC_GENERAL` | Interactive ClaudeGolem chat |
-| `TELEGRAM_TOPIC_ALERTS` | One-way notifications (jobs, email, nightshift, health) |
+## Cloud Worker Schedule
 
-### Monitoring
+| Job | Interval | What | Model |
+|-----|----------|------|-------|
+| Email Poller | Hourly (6am-7pm, skip noon, +10pm) | Fetch Gmail, route to Golems | Gemini Flash-Lite |
+| Job Scraper | 6am, 9am, 1pm Sun-Thu | Find relevant jobs, score | Gemini Flash-Lite |
+| Whoop Sync | 5x daily (7am, 10am, 2pm, 5pm, 8pm) | Sync biometrics to Supabase | -- |
+| Briefing | 8:00 AM | Daily Telegram summary | Gemini Flash-Lite |
 
-| Variable | Value | Purpose |
-|----------|-------|---------|
-| `RAILWAY_URL` | Auto-populated by Railway | Health check endpoint |
+All schedules use Israel/Asia/Jerusalem timezone with automatic DST handling.
 
 ## Health & Monitoring
 
@@ -113,7 +128,7 @@ Returns `200 OK` with:
   "backend": "gemini",
   "stateBackend": "supabase",
   "telegramMode": "direct",
-  "israelTime": "2026-02-06T12:30:00+02:00",
+  "israelTime": "2026-02-15T12:30:00+02:00",
   "isWorkHours": true,
   "isWorkday": true
 }
@@ -127,29 +142,7 @@ Railway automatically checks `/health` every 30 seconds.
 GET /usage
 ```
 
-Returns API cost stats:
-
-```json
-{
-  "totalCalls": 145,
-  "totalInputTokens": 28450,
-  "totalOutputTokens": 12890,
-  "estimatedCostUSD": 0.58,
-  "recentCalls": [
-    {
-      "timestamp": "2026-02-06T10:30:00Z",
-      "model": "gemini-2.5-flash-lite",
-      "source": "email-golem",
-      "inputTokens": 1250,
-      "outputTokens": 342
-    }
-  ],
-  "bySource": {
-    "email-golem": { "calls": 52, "cost": 0.23 },
-    "job-golem": { "calls": 93, "cost": 0.35 }
-  }
-}
-```
+Returns API cost stats by source (email-golem, job-golem, briefing, etc.).
 
 ### Uptime Monitoring
 
@@ -158,60 +151,35 @@ Configure **UptimeRobot** (free tier):
 1. Go to [uptimerobot.com](https://uptimerobot.com)
 2. Add monitor: `https://your-service.up.railway.app/health`
 3. Check every 5 minutes
-4. Set webhook notification to Telegram (optional - configure bot webhook)
-5. Receives alerts in Telegram `⏰ Uptime` topic
+4. Webhook alerts can be sent to Telegram via `/webhook/uptimerobot`
 
 ## Rollback Strategy
 
 All configs are **environment-based** for quick rollback:
 
-### Revert LLM Backend
-
-If cloud LLM has issues:
-
 ```bash
-railway variables set LLM_BACKEND=ollama
-railway up
-```
+# Switch LLM backend
+railway variables set LLM_BACKEND=gemini  # Free (default, recommended)
+railway variables set LLM_BACKEND=haiku   # Paid fallback (optional)
 
-Then switch back:
+# Switch state backend
+railway variables set STATE_BACKEND=file  # Local fallback
 
-```bash
-railway variables set LLM_BACKEND=gemini
-railway up
-```
-
-### Revert State Backend
-
-If Supabase has issues:
-
-```bash
-railway variables set STATE_BACKEND=file
-railway up
-```
-
-### Revert Telegram Mode
-
-If direct notifications fail:
-
-```bash
-railway variables set TELEGRAM_MODE=local
-railway up
+# Always redeploy after variable changes
+railway redeploy -y
 ```
 
 ## Database Migrations
 
-Supabase migrations are managed via the Supabase MCP or dashboard:
+Migrations are managed via the Supabase MCP server or dashboard:
 
 ```bash
-# List pending migrations
-supabase migration list --linked
+# Via MCP (in Claude Code)
+mcp__supabase__apply_migration(project_id, name, query)
 
-# Apply migration
+# Via Supabase CLI
 supabase db push
 ```
-
-Phase 2 migration: `003_cloud_offload.sql`
 
 ## Logs & Debugging
 
@@ -221,8 +189,11 @@ Phase 2 migration: `003_cloud_offload.sql`
 # Stream live logs
 railway logs -f
 
-# Last 100 lines
-railway logs
+# Last 20 lines
+railway logs -n 20
+
+# Recent deployments
+railway deployment list
 ```
 
 ### Common Issues
@@ -238,60 +209,41 @@ railway logs
 - Verify topic IDs (TELEGRAM_TOPIC_*)
 
 #### LLM calls failing
-- Check GOOGLE_GENERATIVE_AI_API_KEY is set
-- Verify API key is valid in Google AI Studio
+- Check `GOOGLE_GENERATIVE_AI_API_KEY` is set (primary)
+- For Haiku fallback: check `ANTHROPIC_API_KEY` and account credits
 - Check logs for rate limiting
 
-### Debug Command
+#### Service restart (without rebuild)
 
 ```bash
-railway exec bash
-# Now in Railway container
-bun run src/cloud-worker.ts
+railway service restart -y
 ```
 
 ## Cost Management
 
-Monitor API costs in three places:
+Monitor costs in two places:
 
-1. **Railway dashboard** — Compute (usually $5-10/month)
-2. **Google AI Studio** — LLM calls (Gemini Flash-Lite is free tier)
-3. **Supabase dashboard** — Database queries
+1. **Railway dashboard** — Compute (~$5-10/month)
+2. **Supabase dashboard** — Database queries (free tier sufficient)
 
-Gemini Flash-Lite is free for personal use. Total monthly cost is mostly Railway compute: ~$5-10.
+LLM costs:
+- **Gemini Flash-Lite** (default): Free tier
+- **GLM-4.7-Flash** (local): Free (Ollama)
+- **Haiku 4.5** (paid fallback): $0.80/$4.00 per million tokens
 
-## Scaling
+Typical monthly cost: **$5-10** (Railway compute only, LLM is free with Gemini).
 
-### Horizontal
+## Dockerfile Notes
 
-Railway auto-scales based on CPU/memory:
-
-```bash
-# Check current plan
-railway environments list
-
-# Upgrade to Pro for auto-scaling
-# (requires paid Railway account)
-```
-
-### Vertical
-
-Increase memory in `railway.json`:
-
-```json
-{
-  "services": {
-    "golems": {
-      "runtime": "dockerfile",
-      "memory": "512",
-      "cpus": "1"
-    }
-  }
-}
-```
+- The Dockerfile lives at the **repo root** (not in a package)
+- Don't copy `bun.lockb` — local-only packages cause lockfile mismatch
+- All workspace `package.json` files must be copied for Bun workspace resolution
+- Uses `bun install --production` without `--frozen-lockfile`
+- Entry point: `packages/services/src/cloud-worker.ts`
 
 ## See Also
 
+- [Cloud Worker](../cloud-worker.md) — Schedule details and endpoints
 - [Environment Variables](../configuration/env-vars.md) — Complete variable reference
 - [Secrets Management](../configuration/secrets.md) — How to store API keys
 - [Golems Architecture](../architecture.md) — System design
