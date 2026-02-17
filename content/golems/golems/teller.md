@@ -1,5 +1,6 @@
 ---
-sidebar_position: 4
+title: "TellerGolem — Finance"
+description: "Subscription tracking, expense categorization (IRS Schedule C), payment failure detection, and financial reports."
 ---
 
 # TellerGolem
@@ -134,7 +135,7 @@ bun run src/index.ts --report --tax --year 2025
 
 ```bash
 # LLM for categorization
-export LLM_BACKEND=haiku  # or 'ollama' for local
+export LLM_BACKEND=gemini  # or 'ollama' (local), 'haiku' (fallback)
 
 # Database
 export SUPABASE_URL=...
