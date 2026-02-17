@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
+import type { DocNavItem } from '../lib/docs-nav';
 
 const navLinks = [
   { label: 'Docs', href: '/golems/docs/getting-started' },
@@ -18,59 +19,11 @@ const externalLinks = [
   { label: 'GitHub', href: 'https://github.com/EtanHey/golems' },
 ];
 
-const docsSections = [
-  {
-    title: 'Getting Started',
-    items: [
-      { title: 'Introduction', href: '/golems/docs/getting-started' },
-      { title: 'Architecture', href: '/golems/docs/architecture' },
-    ],
-  },
-  {
-    title: 'Agents',
-    items: [
-      { title: 'ClaudeGolem', href: '/golems/docs/golems/claude' },
-      { title: 'RecruiterGolem', href: '/golems/docs/golems/recruiter' },
-      { title: 'TellerGolem', href: '/golems/docs/golems/teller' },
-      { title: 'CoachGolem', href: '/golems/docs/golems/coach' },
-      { title: 'ContentGolem', href: '/golems/docs/packages/content' },
-      { title: 'Content Pipelines', href: '/golems/docs/content-pipelines' },
-    ],
-  },
-  {
-    title: 'Tools & Layers',
-    items: [
-      { title: 'Email System', href: '/golems/docs/golems/email' },
-      { title: 'Job Scraping', href: '/golems/docs/golems/job-golem' },
-      { title: 'Shared Foundation', href: '/golems/docs/packages/shared' },
-      { title: 'Skills Library', href: '/golems/docs/skills' },
-      { title: 'MCP Tools', href: '/golems/docs/mcp-tools' },
-    ],
-  },
-  {
-    title: 'Infrastructure',
-    items: [
-      { title: 'Services', href: '/golems/docs/packages/services' },
-      { title: 'Zikaron (Memory)', href: '/golems/docs/packages/zikaron' },
-      { title: 'Ralph (Coding Loop)', href: '/golems/docs/packages/ralph' },
-      { title: 'Cloud Worker', href: '/golems/docs/cloud-worker' },
-      { title: 'Dashboard', href: '/golems/docs/packages/dashboard' },
-      { title: 'Orchestrator', href: '/golems/docs/packages/orchestrator' },
-      { title: 'Per-Repo Sessions', href: '/golems/docs/per-repo-sessions' },
-    ],
-  },
-  {
-    title: 'Guides',
-    items: [
-      { title: 'Environment Variables', href: '/golems/docs/configuration/env-vars' },
-      { title: 'Secrets & 1Password', href: '/golems/docs/configuration/secrets' },
-      { title: 'FAQ', href: '/golems/docs/faq' },
-      { title: 'Engineering Journey', href: '/golems/docs/journey' },
-    ],
-  },
-];
+interface Props {
+  nav: DocNavItem[];
+}
 
-export default function Header() {
+export default function Header({ nav }: Props) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const isDocsPage = pathname.startsWith('/golems/docs');
@@ -189,29 +142,49 @@ export default function Header() {
                 </button>
                 {docsExpanded && (
                   <div className="pl-2 space-y-3 pt-1">
-                    {docsSections.map((section) => (
-                      <div key={section.title}>
-                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#7c6f5e] mb-1 px-3">
-                          {section.title}
-                        </h4>
-                        {section.items.map((item) => {
-                          const isActive = pathname === item.href;
-                          return (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
-                                isActive
-                                  ? 'bg-[#e5950015] text-[#e59500] font-medium'
-                                  : 'text-[#908575] hover:text-[#c0b8a8] hover:bg-[#ffffff08]'
-                              }`}
-                            >
-                              {item.title}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    ))}
+                    {nav.map((section) => {
+                      if (!section.children) {
+                        const href = `/golems/docs/${section.slug}`;
+                        const isActive = pathname === href;
+                        return (
+                          <Link
+                            key={section.slug}
+                            href={href}
+                            className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
+                              isActive
+                                ? 'bg-[#e5950015] text-[#e59500] font-medium'
+                                : 'text-[#908575] hover:text-[#c0b8a8] hover:bg-[#ffffff08]'
+                            }`}
+                          >
+                            {section.title}
+                          </Link>
+                        );
+                      }
+                      return (
+                        <div key={section.slug}>
+                          <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#7c6f5e] mb-1 px-3">
+                            {section.title}
+                          </h4>
+                          {section.children.map((item) => {
+                            const href = `/golems/docs/${item.slug}`;
+                            const isActive = pathname === href;
+                            return (
+                              <Link
+                                key={item.slug}
+                                href={href}
+                                className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
+                                  isActive
+                                    ? 'bg-[#e5950015] text-[#e59500] font-medium'
+                                    : 'text-[#908575] hover:text-[#c0b8a8] hover:bg-[#ffffff08]'
+                                }`}
+                              >
+                                {item.title}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </>
