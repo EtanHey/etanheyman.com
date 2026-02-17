@@ -4,6 +4,7 @@ import { JetBrains_Mono, Inter, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
+import { getDocsNav, type DocNavItem } from './lib/docs-nav';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -36,12 +37,14 @@ export const metadata: Metadata = {
 };
 
 export default function GolemsRootLayout({ children }: { children: ReactNode }) {
+  const nav = getDocsNav();
+
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${ibmPlexMono.variable}`}>
       <body className="bg-[#0c0b0a] text-[#c0b8a8] antialiased scrollbar-none">
-        <Header />
+        <Header nav={nav} />
         <div className="flex min-h-screen">
-          <Sidebar />
+          <Sidebar nav={nav} />
           <main className="flex-1 min-w-0 overflow-x-clip">{children}</main>
         </div>
       </body>

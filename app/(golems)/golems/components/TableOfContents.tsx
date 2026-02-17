@@ -23,7 +23,7 @@ export default function TableOfContents() {
     const article = document.querySelector('article');
     if (!article) return;
 
-    const els = article.querySelectorAll('h2, h3, h4');
+    const els = article.querySelectorAll('h2, h3');
     const items: TocItem[] = [];
     for (const el of els) {
       if (el.id && el.textContent) {
