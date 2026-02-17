@@ -28,6 +28,7 @@ const DOC_ORDER = [
   'golems/teller',
   'golems/coach',
   'packages/content',
+  'content-pipelines',
   // Tools & Layers
   'golems/email',
   'golems/job-golem',
@@ -39,6 +40,8 @@ const DOC_ORDER = [
   'packages/zikaron',
   'packages/ralph',
   'cloud-worker',
+  'packages/dashboard',
+  'packages/orchestrator',
   'per-repo-sessions',
   // Guides
   'configuration/env-vars',

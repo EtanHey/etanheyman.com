@@ -1,5 +1,6 @@
 ---
-sidebar_position: 5
+title: "JobGolem — Job Discovery"
+description: "Israeli job board scraping, LLM scoring, profile matching, and auto-outreach via RecruiterGolem."
 ---
 
 # JobGolem
@@ -88,7 +89,7 @@ cat ~/.golems-zikaron/job-golem/results/jobs-*.json
 
 ```bash
 # Optional: Use cloud-based LLM instead of Ollama
-LLM_BACKEND=haiku  # or "ollama" (default)
+LLM_BACKEND=gemini  # or "ollama" (local), "haiku" (fallback)
 
 # Supabase (for cloud deployment)
 SUPABASE_URL=...
