@@ -13,54 +13,9 @@ import CopyButton from '../../components/CopyButton';
 import TableOfContents from '../../components/TableOfContents';
 import ArchitectureDiagram from '../../components/ArchitectureDiagram';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { getDocsNav, flattenNav } from '../../lib/docs-nav';
 
 const CONTENT_DIR = join(process.cwd(), 'content', 'golems');
-
-// Flat ordered list of all docs for prev/next navigation (matches sidebar order)
-// Matches sidebar order: Getting Started → Agents → Tools & Layers → Infrastructure → Guides
-const DOC_ORDER = [
-  // Getting Started
-  'getting-started',
-  'architecture',
-  // Agents
-  'golems/claude',
-  'golems/recruiter',
-  'golems/teller',
-  'golems/coach',
-  'packages/content',
-  'content-pipelines',
-  // Tools & Layers
-  'golems/email',
-  'golems/job-golem',
-  'packages/shared',
-  'skills',
-  'mcp-tools',
-  // Infrastructure
-  'packages/services',
-  'packages/zikaron',
-  'packages/ralph',
-  'cloud-worker',
-  'packages/dashboard',
-  'packages/orchestrator',
-  'per-repo-sessions',
-  // Guides
-  'configuration/env-vars',
-  'configuration/secrets',
-  'faq',
-  'journey',
-  // Not in sidebar but accessible
-  'interview-practice',
-  'llm',
-  'deployment/railway',
-];
-
-function getDocTitle(slug: string): string {
-  const filePath = join(CONTENT_DIR, slug) + '.md';
-  if (!existsSync(filePath)) return slug;
-  const raw = readFileSync(filePath, 'utf-8');
-  const { data, content } = matter(raw);
-  return data.title || content.match(/^#\s+(.+)/m)?.[1] || slug.split('/').pop() || slug;
-}
 
 function getAllDocPaths(dir: string, prefix = ''): string[] {
   const paths: string[] = [];
@@ -119,10 +74,14 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   const { data, content } = matter(raw);
   const pageTitle = data.title || content.match(/^#\s+(.+)/m)?.[1] || slug[slug.length - 1];
 
-  // Prev/next navigation
-  const currentIndex = DOC_ORDER.indexOf(slugStr);
-  const prevDoc = currentIndex > 0 ? DOC_ORDER[currentIndex - 1] : null;
-  const nextDoc = currentIndex >= 0 && currentIndex < DOC_ORDER.length - 1 ? DOC_ORDER[currentIndex + 1] : null;
+  // Strip first H1 from content to avoid duplicate title rendering (matches dashboard)
+  const strippedContent = content.replace(/^#\s+.+\n?/m, '');
+
+  // Prev/next navigation from auto-generated nav (matches sidebar order)
+  const docOrder = flattenNav(getDocsNav());
+  const currentIndex = docOrder.findIndex((d) => d.slug === slugStr);
+  const prevDoc = currentIndex > 0 ? docOrder[currentIndex - 1] : null;
+  const nextDoc = currentIndex >= 0 && currentIndex < docOrder.length - 1 ? docOrder[currentIndex + 1] : null;
 
   const baseComponents = useMDXComponents({});
   const components = {
@@ -158,7 +117,7 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
         <Breadcrumbs title={pageTitle} />
         {slugStr === 'architecture' && <ArchitectureDiagram />}
         <MDXRemote
-          source={content}
+          source={strippedContent}
           components={components}
           options={{
             mdxOptions: {
@@ -179,23 +138,23 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
           <nav className="flex justify-between items-center mt-12 pt-6 border-t border-[#e5950026]">
             {prevDoc ? (
               <Link
-                href={`/golems/docs/${prevDoc}`}
+                href={`/golems/docs/${prevDoc.slug}`}
                 className="flex flex-col gap-1 text-left group"
               >
                 <span className="text-xs text-[#8b7355]">Previous</span>
                 <span className="text-[#c0b8a8] group-hover:text-[#e59500] transition-colors">
-                  &larr; {getDocTitle(prevDoc)}
+                  &larr; {prevDoc.title}
                 </span>
               </Link>
             ) : <div />}
             {nextDoc ? (
               <Link
-                href={`/golems/docs/${nextDoc}`}
+                href={`/golems/docs/${nextDoc.slug}`}
                 className="flex flex-col gap-1 text-right group"
               >
                 <span className="text-xs text-[#8b7355]">Next</span>
                 <span className="text-[#c0b8a8] group-hover:text-[#e59500] transition-colors">
-                  {getDocTitle(nextDoc)} &rarr;
+                  {nextDoc.title} &rarr;
                 </span>
               </Link>
             ) : <div />}
