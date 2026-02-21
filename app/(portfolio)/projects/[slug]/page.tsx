@@ -1,13 +1,29 @@
 import AdminEditButton from "@/app/components/AdminEditButton";
-import { getProjectBySlugOrId } from "@/lib/projects";
+import { getProjectBySlugOrId, getAllProjects } from "@/lib/projects";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Github, BookOpen } from "lucide-react";
+import {
+  Github,
+  BookOpen,
+  ArrowLeft,
+  ExternalLink,
+  Terminal,
+} from "lucide-react";
 import {
   TechIconWrapper,
   TechIconName,
 } from "@/app/components/tech-icons/TechIconWrapper";
+import {
+  getProjectShowcaseConfig,
+  getDefaultAccent,
+} from "./project-showcase-config";
+import { StatsBar } from "./components/StatsBar";
+import { FeaturesGrid } from "./components/FeaturesGrid";
+import { CodeBlock } from "./components/CodeBlock";
+import { CrossLinks } from "./components/CrossLinks";
+import { JourneyTimeline } from "./components/JourneyTimeline";
+import { ArchitectureDiagram } from "./components/ArchitectureDiagram";
 
 export default async function ProjectPage({
   params,
@@ -21,211 +37,222 @@ export default async function ProjectPage({
     notFound();
   }
 
+  const showcase = getProjectShowcaseConfig(slug);
+  const accent = showcase?.accent ?? getDefaultAccent();
+  const allProjects = await getAllProjects();
+
   const isGitPrivate = project.gitUrl === "private";
-  const GitEl = isGitPrivate ? "button" : "a";
 
   return (
-    <main className="relative z-10 container mx-auto px-4 py-8 md:px-8 lg:px-16">
-      {/* Back button and admin button */}
-      <div className="relative z-20 mb-8 flex items-center justify-between">
-        <Link
-          href="/"
-          className="inline-block text-blue-300 transition-colors hover:text-blue-200"
-        >
-          ← Back to Home
-        </Link>
+    <main className="relative z-10 mx-auto max-w-5xl px-4 py-8 md:px-8 md:py-16">
+      {/* Ambient accent glow */}
+      <div
+        className="pointer-events-none fixed top-0 left-1/2 h-[500px] w-[700px] -translate-x-1/2 opacity-[0.06]"
+        style={{
+          background: `radial-gradient(ellipse, ${accent.color}, transparent 70%)`,
+        }}
+      />
 
+      {/* Back + Admin */}
+      <div className="relative z-20 mb-12 flex items-center justify-between">
+        <Link
+          href="/projects"
+          className="flex items-center gap-2 font-[Nutmeg] text-[14px] font-light text-white/40 transition-colors hover:text-white/70"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          All Projects
+        </Link>
         <AdminEditButton projectId={project.id} />
       </div>
 
-      {/* Hero Section */}
-      <div className="relative z-20 mb-12">
-        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:gap-8">
-            {project.logoUrl && (
-              <div className="relative z-30 aspect-square h-[120px] w-[120px] flex-shrink-0 overflow-hidden rounded-[40px] shadow-[0px_0px_80px_0px_rgba(15,130,235,1)] md:h-[180px] md:w-[180px]">
-                {/* Check if logo is SVG or has #svg/#logo marker */}
-                {(project.logoUrl.toLowerCase().endsWith('.svg') ||
-                  project.logoUrl.includes('#svg') ||
-                  project.logoUrl.includes('#logo')) ? (
-                  <>
-                    {/* Add light background for SVG/logo files */}
-                    <div className="absolute inset-0 bg-blue-50" />
-                    <img
-                      src={project.logoUrl.replace('#svg', '').replace('#logo', '')}
-                      alt={`${project.title} logo`}
-                      className="relative h-full w-full object-contain p-4"
-                    />
-                  </>
-                ) : (
-                  <Image
-                    src={project.logoUrl}
+      {/* ─── Hero ─── */}
+      <section className="relative z-20 mb-14">
+        <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-10">
+          {project.logoUrl && (
+            <div
+              className="relative z-30 aspect-square h-[100px] w-[100px] flex-shrink-0 overflow-hidden rounded-3xl md:h-[140px] md:w-[140px]"
+              style={{
+                boxShadow: `0 0 60px rgba(${accent.colorRgb}, 0.3)`,
+              }}
+            >
+              {project.logoUrl.toLowerCase().endsWith(".svg") ||
+              project.logoUrl.includes("#svg") ||
+              project.logoUrl.includes("#logo") ? (
+                <>
+                  <div className="absolute inset-0 bg-blue-50" />
+                  <img
+                    src={project.logoUrl
+                      .replace("#svg", "")
+                      .replace("#logo", "")}
                     alt={`${project.title} logo`}
-                    fill
-                    className="object-contain"
+                    className="relative h-full w-full object-contain p-4"
                   />
-                )}
-              </div>
-            )}
-            <div>
-              <h1 className="mb-4 font-[Nutmeg] text-[34px] font-semibold text-white md:text-[64px]">
-                {project.title}
-              </h1>
-              <p className="font-[Nutmeg] text-[15px] leading-[1.2] font-light text-white/80 md:text-[20px]">
-                {project.description}
-              </p>
+                </>
+              ) : (
+                <Image
+                  src={project.logoUrl}
+                  alt={`${project.title} logo`}
+                  fill
+                  className="object-contain"
+                />
+              )}
+            </div>
+          )}
+
+          <div className="flex-1">
+            <h1 className="mb-3 font-[Nutmeg] text-[30px] font-bold leading-[1.1] text-white md:text-[52px]">
+              {project.title}
+            </h1>
+            <p className="mb-5 max-w-[620px] font-[Nutmeg] text-[15px] font-light leading-relaxed text-white/55 md:text-[17px]">
+              {project.description}
+            </p>
+
+            {/* Badges + action buttons */}
+            <div className="flex flex-wrap items-center gap-3">
+              {showcase?.tagline && (
+                <div
+                  className="flex items-center gap-2 rounded-full border px-4 py-2 font-mono text-[12px] md:text-[13px]"
+                  style={{
+                    borderColor: `rgba(${accent.colorRgb}, 0.3)`,
+                    color: accent.color,
+                    backgroundColor: `rgba(${accent.colorRgb}, 0.08)`,
+                  }}
+                >
+                  <Terminal className="h-3.5 w-3.5" />
+                  {showcase.tagline}
+                </div>
+              )}
+
+              {!isGitPrivate && project.gitUrl && (
+                <a
+                  href={project.gitUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 transition-colors hover:border-white/20 hover:text-white/75 md:text-[13px]"
+                >
+                  <Github className="h-3.5 w-3.5" />
+                  Source
+                </a>
+              )}
+
+              {project.docsUrl &&
+                (project.docsUrl.startsWith("/") ? (
+                  <Link
+                    href={project.docsUrl}
+                    className="flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 transition-colors hover:border-white/20 hover:text-white/75 md:text-[13px]"
+                  >
+                    <BookOpen className="h-3.5 w-3.5" />
+                    Docs
+                  </Link>
+                ) : (
+                  <a
+                    href={project.docsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 transition-colors hover:border-white/20 hover:text-white/75 md:text-[13px]"
+                  >
+                    <BookOpen className="h-3.5 w-3.5" />
+                    Docs
+                  </a>
+                ))}
+
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 rounded-full px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white transition-colors md:text-[13px]"
+                  style={{ backgroundColor: accent.color }}
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  Live
+                </a>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Action Buttons */}
-      <div className="relative z-20 mb-12 flex flex-col gap-4 md:flex-row">
-        {project.liveUrl && (
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-4 rounded-[80px] bg-blue-500 px-8 py-5 font-[Nutmeg] text-[20px] text-white transition-colors hover:bg-blue-600 md:text-[24px]"
-          >
-            Go to website
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1 8H15M15 8L8 1M15 8L8 15"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </a>
-        )}
-        <GitEl
-          {...(isGitPrivate
-            ? {
-                type: "button" as const,
-                disabled: true,
-                "aria-label":
-                  "Code repository for this project is private",
-              }
-            : {
-                href: project.gitUrl,
-                target: "_blank",
-                rel: "noopener noreferrer",
-              })}
-          className={
-            isGitPrivate
-              ? "flex items-center justify-center gap-3 rounded-[80px] border border-white/20 bg-white/5 px-8 py-5 font-[Nutmeg] text-[18px] text-white/70 cursor-not-allowed md:text-[20px]"
-              : "flex items-center justify-center gap-4 rounded-[80px] border-2 border-[#59BCF5] px-8 py-5 font-[Nutmeg] text-[20px] text-[#59BCF5] transition-colors hover:bg-[#59BCF5] hover:text-white md:text-[24px]"
-          }
-        >
-          {isGitPrivate ? (
-            "Code is private"
-          ) : (
-            <>
-              Github link
-              <Github aria-hidden="true" className="h-4 w-4" />
-            </>
-          )}
-        </GitEl>
-        {project.docsUrl && (
-          project.docsUrl.startsWith('/') ? (
-            <Link
-              href={project.docsUrl}
-              className="flex items-center justify-center gap-4 rounded-[80px] border-2 border-emerald-400 px-8 py-5 font-[Nutmeg] text-[20px] text-emerald-400 transition-colors hover:bg-emerald-400 hover:text-white md:text-[24px]"
-            >
-              Docs
-              <BookOpen aria-hidden="true" className="h-5 w-5" />
-            </Link>
-          ) : (
-            <a
-              href={project.docsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-4 rounded-[80px] border-2 border-emerald-400 px-8 py-5 font-[Nutmeg] text-[20px] text-emerald-400 transition-colors hover:bg-emerald-400 hover:text-white md:text-[24px]"
-            >
-              Docs
-              <BookOpen aria-hidden="true" className="h-5 w-5" />
-            </a>
-          )
-        )}
-      </div>
+      {/* ─── Stats Bar ─── */}
+      {showcase?.stats && (
+        <section className="relative z-20 mb-14">
+          <StatsBar stats={showcase.stats} accentColor={accent.color} />
+        </section>
+      )}
 
-      {/* Technologies */}
+      {/* ─── Technologies ─── */}
       {project.technologies && project.technologies.length > 0 && (
-        <div className="relative z-20 mb-16">
+        <section className="relative z-20 mb-14">
+          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+            Built with
+          </h2>
           <div className="grid grid-cols-6 gap-[23.45px] md:grid-cols-8 xl:gap-11">
             {project.technologies.map((tech) => (
               <TechIconWrapper key={tech} name={tech as TechIconName} />
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Project Journey */}
-      {project.projectJourney && project.projectJourney.length > 0 && (
-        <div className="relative z-20">
-          <h2 className="mb-8 font-[Nutmeg] text-[26px] font-semibold text-[#88CFF8] md:mb-12 md:text-[48px]">
-            Project journey
+      {/* ─── Features Grid ─── */}
+      {showcase?.features && (
+        <section className="relative z-20 mb-14">
+          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+            Key features
           </h2>
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute top-0 bottom-0 left-0 w-1 rounded-lg bg-[#002072]">
-              <div
-                className="absolute top-0 left-0 w-full rounded-lg bg-blue-500"
-                style={{
-                  height: `${(1 / project.projectJourney.length) * 100}%`,
-                }}
-              />
-            </div>
-
-            {/* Journey items */}
-            <div className="space-y-16 md:space-y-24">
-              {project.projectJourney.map((journey, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-6 md:flex-row md:gap-12"
-                >
-                  {/* Content */}
-                  <div className="flex-1 pl-8 md:pl-12">
-                    <div className="mb-3 flex items-start gap-4">
-                      <div className="relative z-30 flex size-[29px] items-center justify-center rounded-full bg-blue-500 shadow-[0px_0px_24px_0px_rgba(15,130,235,1)]">
-                        <span className="font-[Nutmeg] text-[20px] leading-none font-light text-white">
-                          {index + 1}
-                        </span>
-                      </div>
-                      <h3 className="font-[Nutmeg] text-[20px] font-semibold text-white md:text-[24px]">
-                        {journey.title}
-                      </h3>
-                    </div>
-                    <p className="max-w-[558px] font-[Nutmeg] text-[14px] leading-[1.2] font-light text-white/80 md:text-[18px]">
-                      {journey.description}
-                    </p>
-                  </div>
-
-                  {/* Image */}
-                  {journey.imgUrl && (
-                    <div className="relative z-30 h-[186px] w-full overflow-hidden rounded-[10px] shadow-[0px_0px_40px_0px_rgba(89,188,245,1)] md:h-[375px] md:w-[597px] md:rounded-[20px]">
-                      <Image
-                        src={journey.imgUrl}
-                        alt={journey.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+          <FeaturesGrid
+            features={showcase.features}
+            accentColor={accent.color}
+            accentColorRgb={accent.colorRgb}
+          />
+        </section>
       )}
+
+      {/* ─── How It Works ─── */}
+      {showcase?.architectureFlow && (
+        <section className="relative z-20 mb-14">
+          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+            How it works
+          </h2>
+          <ArchitectureDiagram
+            nodes={showcase.architectureFlow}
+            accentColor={accent.color}
+            accentColorRgb={accent.colorRgb}
+          />
+        </section>
+      )}
+
+      {/* ─── Getting Started ─── */}
+      {showcase?.installTabs && (
+        <section className="relative z-20 mb-14">
+          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+            Get started
+          </h2>
+          <CodeBlock
+            tabs={showcase.installTabs}
+            accentColor={accent.color}
+          />
+        </section>
+      )}
+
+      {/* ─── Project Journey ─── */}
+      {project.projectJourney && project.projectJourney.length > 0 && (
+        <section className="relative z-20 mb-14">
+          <h2 className="mb-8 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+            The journey
+          </h2>
+          <JourneyTimeline
+            steps={project.projectJourney}
+            accentColor={accent.color}
+            accentColorRgb={accent.colorRgb}
+          />
+        </section>
+      )}
+
+      {/* ─── Cross Links ─── */}
+      <section className="relative z-20">
+        <CrossLinks projects={allProjects} currentSlug={slug} />
+      </section>
     </main>
   );
 }
