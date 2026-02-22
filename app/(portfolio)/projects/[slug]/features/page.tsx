@@ -80,13 +80,13 @@ export default async function FeaturesPage({
         <h1 className="mb-3 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
           Features
         </h1>
-        <p className="max-w-[600px] font-[Nutmeg] text-[22px] font-bold leading-tight text-white md:text-[36px]">
+        <p className="max-w-[600px] break-words font-[Nutmeg] text-[22px] font-bold leading-tight text-white md:text-[36px]">
           What {project.title} can do
         </p>
       </section>
 
       {/* Feature sections */}
-      <div className="space-y-24 md:space-y-32">
+      <div className="space-y-16 md:space-y-22">
         {highlightedSections.map((section, i) => (
           <FeatureSectionRow
             key={section.title}
