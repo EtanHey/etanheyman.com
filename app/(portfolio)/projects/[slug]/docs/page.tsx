@@ -80,7 +80,7 @@ export default async function DocsPage({
         <h1 className="mb-3 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
           Get started
         </h1>
-        <p className="max-w-[600px] font-[Nutmeg] text-[22px] font-bold leading-tight text-white md:text-[36px]">
+        <p className="max-w-[600px] break-words font-[Nutmeg] text-[22px] font-bold leading-tight text-white md:text-[36px]">
           Set up {project.title}
         </p>
       </section>
