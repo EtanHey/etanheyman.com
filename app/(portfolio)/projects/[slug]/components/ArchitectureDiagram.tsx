@@ -169,7 +169,7 @@ export function ArchitectureDiagram({
 
                 {/* Arrow connector (not after last node) */}
                 {i < nodes.length - 1 && (
-                  <div className="flex-shrink-0 px-1">
+                  <div className="flex-shrink-0 px-0.5">
                     <svg
                       width="28"
                       height="16"
@@ -306,16 +306,16 @@ export function ArchitectureDiagram({
               {i < nodes.length - 1 && (
                 <svg
                   width="16"
-                  height="24"
-                  viewBox="0 0 16 24"
+                  height="18"
+                  viewBox="0 0 16 18"
                   fill="none"
-                  className="my-1"
+                  className="my-0.5"
                 >
                   <line
                     x1="8"
                     y1="0"
                     x2="8"
-                    y2="16"
+                    y2="12"
                     stroke={accentColor}
                     strokeWidth="1.5"
                     strokeOpacity={visible ? 0.3 : 0}
@@ -326,7 +326,7 @@ export function ArchitectureDiagram({
                     }}
                   />
                   <path
-                    d="M 4 14 L 8 20 L 12 14"
+                    d="M 4 10 L 8 16 L 12 10"
                     stroke={accentColor}
                     strokeWidth="1.5"
                     fill="none"
