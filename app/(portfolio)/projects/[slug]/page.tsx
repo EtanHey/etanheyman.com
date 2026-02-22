@@ -25,6 +25,7 @@ import { JourneyTimeline } from "./components/JourneyTimeline";
 import { ArchitectureDiagram } from "./components/ArchitectureDiagram";
 import { TaglineBadge } from "./components/TaglineBadge";
 import { TerminalShowcase } from "./components/TerminalShowcase";
+import { ClaudeUIMockup } from "./components/ClaudeUIMockup";
 import { getTerminalShowcaseData } from "./terminal-showcase-config";
 import { highlightCode } from "@/lib/highlight";
 
@@ -194,6 +195,16 @@ export default async function ProjectPage({
             title={terminalData.title}
             accentColor={accent.color}
           />
+        </section>
+      )}
+
+      {/* ─── Claude UI Mockup (BrainLayer only) ─── */}
+      {slug === "brainlayer" && (
+        <section className="relative z-20 mb-14">
+          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+            See it in action
+          </h2>
+          <ClaudeUIMockup accentColor={accent.color} />
         </section>
       )}
 
