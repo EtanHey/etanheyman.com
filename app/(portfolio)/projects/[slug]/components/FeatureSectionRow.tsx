@@ -45,6 +45,7 @@ interface Props {
   index: number;
   accentColor: string;
   accentColorRgb: string;
+  codeHighlightedHtml?: string;
 }
 
 export function FeatureSectionRow({
@@ -52,6 +53,7 @@ export function FeatureSectionRow({
   index,
   accentColor,
   accentColorRgb,
+  codeHighlightedHtml,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -133,6 +135,7 @@ export function FeatureSectionRow({
             caption={section.codeExample.caption}
             accentColor={accentColor}
             accentColorRgb={accentColorRgb}
+            highlightedHtml={codeHighlightedHtml}
           />
         )}
 

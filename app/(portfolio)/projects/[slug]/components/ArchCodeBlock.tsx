@@ -9,6 +9,7 @@ interface Props {
   caption?: string;
   accentColor: string;
   accentColorRgb: string;
+  highlightedHtml?: string;
 }
 
 export function ArchCodeBlock({
@@ -17,6 +18,7 @@ export function ArchCodeBlock({
   caption,
   accentColor,
   accentColorRgb,
+  highlightedHtml,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -78,9 +80,16 @@ export function ArchCodeBlock({
 
       {/* Code */}
       <div className="p-5">
-        <pre className="overflow-x-auto font-mono text-[12px] leading-relaxed text-white/70 md:text-[13px]">
-          <code>{code}</code>
-        </pre>
+        {highlightedHtml ? (
+          <div
+            className="overflow-x-auto font-mono text-[12px] leading-relaxed md:text-[13px] [&_pre]:!bg-transparent [&_pre]:!p-0 [&_code]:!bg-transparent"
+            dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+          />
+        ) : (
+          <pre className="overflow-x-auto font-mono text-[12px] leading-relaxed text-white/70 md:text-[13px]">
+            <code>{code}</code>
+          </pre>
+        )}
       </div>
 
       {/* Caption */}
