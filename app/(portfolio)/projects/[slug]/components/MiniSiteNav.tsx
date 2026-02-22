@@ -47,69 +47,81 @@ export function MiniSiteNav({
         }}
       >
         <div className="mx-auto flex max-w-5xl items-center px-4 md:px-8">
-          {/* Left: Project identity */}
-          <div className="mr-4 flex shrink-0 items-center gap-2.5">
-            {isOverview ? (
-              <span className="flex items-center gap-2.5">
-                {cleanLogoUrl && (
-                  <div className="relative h-[28px] w-[28px] flex-shrink-0 overflow-hidden rounded-lg">
-                    {isSvg ? (
-                      <>
-                        <div className="absolute inset-0 bg-blue-50" />
-                        <img
-                          src={cleanLogoUrl}
-                          alt={`${title} logo`}
-                          className="relative h-full w-full object-contain p-1"
-                        />
-                      </>
-                    ) : (
-                      <Image
-                        src={cleanLogoUrl}
-                        alt={`${title} logo`}
-                        fill
-                        className="object-contain"
-                      />
-                    )}
-                  </div>
-                )}
-                <span className="hidden font-[Nutmeg] text-[14px] font-bold text-white/70 sm:inline">
-                  {title}
-                </span>
-              </span>
-            ) : (
-              <Link
-                href={basePath}
-                className="flex items-center gap-2.5 transition-opacity hover:opacity-80"
-              >
-                {cleanLogoUrl && (
-                  <div className="relative h-[28px] w-[28px] flex-shrink-0 overflow-hidden rounded-lg">
-                    {isSvg ? (
-                      <>
-                        <div className="absolute inset-0 bg-blue-50" />
-                        <img
-                          src={cleanLogoUrl}
-                          alt={`${title} logo`}
-                          className="relative h-full w-full object-contain p-1"
-                        />
-                      </>
-                    ) : (
-                      <Image
-                        src={cleanLogoUrl}
-                        alt={`${title} logo`}
-                        fill
-                        className="object-contain"
-                      />
-                    )}
-                  </div>
-                )}
-                <span className="hidden font-[Nutmeg] text-[14px] font-bold text-white/70 sm:inline">
-                  {title}
-                </span>
-              </Link>
-            )}
-          </div>
+          {/* Left: Back link */}
+          <Link
+            href={isOverview ? "/projects" : basePath}
+            className="mr-3 flex shrink-0 items-center gap-1.5 py-3.5 font-mono text-[11px] tracking-wide text-white/30 transition-colors hover:text-white/55 md:mr-4"
+          >
+            <ArrowLeft className="h-3 w-3" />
+            <span className="hidden sm:inline">
+              {isOverview ? "All Projects" : "Overview"}
+            </span>
+          </Link>
 
-          {/* Center: Tabs */}
+          {/* Divider */}
+          <div className="mr-3 h-4 w-px shrink-0 bg-white/10 md:mr-4" />
+
+          {/* Project identity */}
+          {isOverview ? (
+            <span className="mr-2 flex shrink-0 items-center gap-2.5">
+              {cleanLogoUrl && (
+                <div className="relative h-[28px] w-[28px] flex-shrink-0 overflow-hidden rounded-lg">
+                  {isSvg ? (
+                    <>
+                      <div className="absolute inset-0 bg-blue-50" />
+                      <img
+                        src={cleanLogoUrl}
+                        alt={`${title} logo`}
+                        className="relative h-full w-full object-contain p-1"
+                      />
+                    </>
+                  ) : (
+                    <Image
+                      src={cleanLogoUrl}
+                      alt={`${title} logo`}
+                      fill
+                      className="object-contain"
+                    />
+                  )}
+                </div>
+              )}
+              <span className="hidden font-[Nutmeg] text-[14px] font-bold text-white/70 sm:inline">
+                {title}
+              </span>
+            </span>
+          ) : (
+            <Link
+              href={basePath}
+              className="mr-2 flex shrink-0 items-center gap-2.5 transition-opacity hover:opacity-80"
+            >
+              {cleanLogoUrl && (
+                <div className="relative h-[28px] w-[28px] flex-shrink-0 overflow-hidden rounded-lg">
+                  {isSvg ? (
+                    <>
+                      <div className="absolute inset-0 bg-blue-50" />
+                      <img
+                        src={cleanLogoUrl}
+                        alt={`${title} logo`}
+                        className="relative h-full w-full object-contain p-1"
+                      />
+                    </>
+                  ) : (
+                    <Image
+                      src={cleanLogoUrl}
+                      alt={`${title} logo`}
+                      fill
+                      className="object-contain"
+                    />
+                  )}
+                </div>
+              )}
+              <span className="hidden font-[Nutmeg] text-[14px] font-bold text-white/70 sm:inline">
+                {title}
+              </span>
+            </Link>
+          )}
+
+          {/* Tabs */}
           <div className="flex flex-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {tabs.map((tab) => {
               const href = `${basePath}${tab.path}`;
@@ -141,17 +153,6 @@ export function MiniSiteNav({
               );
             })}
           </div>
-
-          {/* Right: Back link */}
-          <Link
-            href={isOverview ? "/projects" : basePath}
-            className="ml-4 flex shrink-0 items-center gap-1.5 py-3.5 font-mono text-[11px] tracking-wide text-white/30 transition-colors hover:text-white/55"
-          >
-            <ArrowLeft className="h-3 w-3" />
-            <span className="hidden sm:inline">
-              {isOverview ? "All Projects" : "Overview"}
-            </span>
-          </Link>
         </div>
       </nav>
     </div>
