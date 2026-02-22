@@ -8,6 +8,14 @@ import { getGettingStartedData } from "../getting-started-config";
 import { StepCard } from "../components/StepCard";
 import type { Metadata } from "next";
 
+export function generateStaticParams() {
+  return [
+    { slug: "brainlayer" },
+    { slug: "voicelayer" },
+    { slug: "golems" },
+  ];
+}
+
 export async function generateMetadata({
   params,
 }: {

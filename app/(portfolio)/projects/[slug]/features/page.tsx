@@ -8,6 +8,14 @@ import { getFeaturesData } from "../features-config";
 import { FeatureSectionRow } from "../components/FeatureSectionRow";
 import type { Metadata } from "next";
 
+export function generateStaticParams() {
+  return [
+    { slug: "brainlayer" },
+    { slug: "voicelayer" },
+    { slug: "golems" },
+  ];
+}
+
 export async function generateMetadata({
   params,
 }: {

@@ -11,6 +11,14 @@ import { InsightCallout } from "../components/InsightCallout";
 import { ComparisonTable } from "../components/ComparisonTable";
 import type { Metadata } from "next";
 
+export function generateStaticParams() {
+  return [
+    { slug: "brainlayer" },
+    { slug: "voicelayer" },
+    { slug: "golems" },
+  ];
+}
+
 export async function generateMetadata({
   params,
 }: {
