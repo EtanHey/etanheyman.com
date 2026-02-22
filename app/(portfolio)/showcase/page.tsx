@@ -43,8 +43,8 @@ const FLAGSHIP_PROJECTS = [
     tagline: "Persistent Memory for AI Agents",
     stat: "268K+",
     statLabel: "indexed chunks",
-    color: "#8B5CF6",
-    colorRgb: "139, 92, 246",
+    color: "#6366F1",
+    colorRgb: "99, 102, 241",
     icon: Brain,
     highlights: [
       "14 MCP tools",
@@ -59,8 +59,8 @@ const FLAGSHIP_PROJECTS = [
     tagline: "Voice I/O for AI Coding Agents",
     stat: "~300ms",
     statLabel: "STT latency",
-    color: "#10B981",
-    colorRgb: "16, 185, 129",
+    color: "#38BDF8",
+    colorRgb: "56, 189, 248",
     icon: Mic,
     highlights: [
       "7 MCP tools, 5 voice modes",
@@ -75,8 +75,8 @@ const FLAGSHIP_PROJECTS = [
     tagline: "Autonomous AI Agent Ecosystem",
     stat: "150+",
     statLabel: "PRs merged",
-    color: "#F59E0B",
-    colorRgb: "245, 158, 11",
+    color: "#94A3B8",
+    colorRgb: "148, 163, 184",
     icon: Bot,
     highlights: [
       "10 packages, 7 domain agents",

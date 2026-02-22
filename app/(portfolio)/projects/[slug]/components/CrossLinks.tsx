@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Project } from "@/lib/projects";
 import { getProjectShowcaseConfig, getDefaultAccent } from "../project-showcase-config";
 
+const ECOSYSTEM_SLUGS = new Set(["golems", "brainlayer", "voicelayer"]);
+
 export function CrossLinks({
   projects,
   currentSlug,
@@ -9,6 +11,7 @@ export function CrossLinks({
   projects: Project[];
   currentSlug: string;
 }) {
+  const isEcosystemProject = ECOSYSTEM_SLUGS.has(currentSlug);
   const related = projects.filter(
     (p) => p.slug !== currentSlug && p.featured,
   );
@@ -17,7 +20,7 @@ export function CrossLinks({
   return (
     <div>
       <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
-        Part of the ecosystem
+        {isEcosystemProject ? "Part of the ecosystem" : "More projects"}
       </h2>
       <div className="grid gap-4 md:grid-cols-2">
         {related.map((project) => {
