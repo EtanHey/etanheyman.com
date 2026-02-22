@@ -169,6 +169,10 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 }
 
 export async function getProjectById(id: string): Promise<Project | null> {
+  // Reject non-UUID strings early — avoids Postgres "invalid input syntax for type uuid" errors
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(id)) return null;
+
   try {
     const supabase = await createClient();
 

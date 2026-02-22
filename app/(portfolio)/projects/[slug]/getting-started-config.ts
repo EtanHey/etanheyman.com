@@ -7,6 +7,7 @@ export interface GettingStartedStep {
   command?: string;
   language?: string;
   note?: string;
+  link?: { href: string; label: string };
 }
 
 const gettingStartedData: Record<string, GettingStartedStep[]> = {
@@ -60,7 +61,7 @@ const gettingStartedData: Record<string, GettingStartedStep[]> = {
       title: "Full documentation",
       description:
         "Comprehensive docs with API reference, enrichment fields, search filters, and configuration options.",
-      note: "Visit etanhey.github.io/brainlayer for the complete documentation.",
+      link: { href: "https://etanhey.github.io/brainlayer", label: "View BrainLayer Docs" },
     },
   ],
 
@@ -111,7 +112,7 @@ const gettingStartedData: Record<string, GettingStartedStep[]> = {
       title: "Full documentation",
       description:
         "Complete reference for all 5 voice modes, environment variables, STT backends, and session management.",
-      note: "Visit etanhey.github.io/voicelayer for the complete documentation.",
+      link: { href: "https://etanhey.github.io/voicelayer", label: "View VoiceLayer Docs" },
     },
   ],
 
