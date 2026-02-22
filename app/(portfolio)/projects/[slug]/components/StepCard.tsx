@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, ExternalLink } from "lucide-react";
 import type { GettingStartedStep } from "../getting-started-config";
 
 interface Props {
@@ -9,9 +9,10 @@ interface Props {
   accentColor: string;
   accentColorRgb: string;
   isLast: boolean;
+  commandHighlightedHtml?: string;
 }
 
-export function StepCard({ step, accentColor, accentColorRgb, isLast }: Props) {
+export function StepCard({ step, accentColor, accentColorRgb, isLast, commandHighlightedHtml }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -115,10 +116,34 @@ export function StepCard({ step, accentColor, accentColorRgb, isLast }: Props) {
                 </span>
               </button>
             </div>
-            <pre className="overflow-x-auto p-4 font-mono text-[12px] leading-relaxed text-white/65 md:text-[13px]">
-              <code>{step.command}</code>
-            </pre>
+            {commandHighlightedHtml ? (
+              <div
+                className="overflow-x-auto p-4 font-mono text-[12px] leading-relaxed md:text-[13px] [&_pre]:!bg-transparent [&_pre]:!p-0 [&_code]:!bg-transparent"
+                dangerouslySetInnerHTML={{ __html: commandHighlightedHtml }}
+              />
+            ) : (
+              <pre className="overflow-x-auto p-4 font-mono text-[12px] leading-relaxed text-white/65 md:text-[13px]">
+                <code>{step.command}</code>
+              </pre>
+            )}
           </div>
+        )}
+
+        {step.link && (
+          <a
+            href={step.link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-3 inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 font-mono text-[12px] transition-all hover:brightness-125 md:text-[13px]"
+            style={{
+              borderColor: `rgba(${accentColorRgb}, 0.25)`,
+              color: accentColor,
+              backgroundColor: `rgba(${accentColorRgb}, 0.08)`,
+            }}
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            {step.link.label}
+          </a>
         )}
 
         {step.note && (
