@@ -90,7 +90,7 @@ export function FeatureSectionRow({
       }}
     >
       {/* Text side */}
-      <div className="flex-1">
+      <div className="min-w-0 flex-1">
         {/* Icon + number */}
         <div className="mb-4 flex items-center gap-3">
           <div
@@ -127,7 +127,7 @@ export function FeatureSectionRow({
       </div>
 
       {/* Visual side */}
-      <div className="flex-1">
+      <div className="min-w-0 flex-1">
         {section.codeExample && (
           <ArchCodeBlock
             code={section.codeExample.code}
