@@ -121,8 +121,8 @@ export function MiniSiteNav({
             </Link>
           )}
 
-          {/* Tabs */}
-          <div className="flex flex-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {/* Tabs — scrollable on mobile, all visible on desktop */}
+          <div className="flex flex-1 overflow-x-auto md:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {tabs.map((tab) => {
               const href = `${basePath}${tab.path}`;
               const isActive =
@@ -134,7 +134,7 @@ export function MiniSiteNav({
                 <Link
                   key={tab.label}
                   href={href}
-                  className={`relative shrink-0 px-4 py-3.5 font-mono text-[11px] tracking-[0.15em] uppercase transition-colors duration-200 md:px-5 md:text-[12px] ${
+                  className={`relative shrink-0 px-3 py-3.5 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors duration-200 md:px-4 md:text-[12px] md:tracking-[0.15em] ${
                     isActive
                       ? "text-white"
                       : "text-white/40 hover:text-white/60"
@@ -142,7 +142,7 @@ export function MiniSiteNav({
                 >
                   {tab.label}
                   <span
-                    className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-300 ease-out md:left-5 md:right-5"
+                    className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full transition-all duration-300 ease-out md:left-4 md:right-4"
                     style={{
                       backgroundColor: accentColor,
                       opacity: isActive ? 1 : 0,
