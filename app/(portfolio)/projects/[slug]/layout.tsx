@@ -54,7 +54,7 @@ export default async function ProjectLayout({
   const jsonLd = project ? buildJsonLd(project, slug) : null;
 
   return (
-    <div className="w-full max-w-full overflow-x-hidden">
+    <>
       {jsonLd && (
         <script
           type="application/ld+json"
@@ -71,6 +71,6 @@ export default async function ProjectLayout({
         logoUrl={project?.logoUrl ?? null}
       />
       {children}
-    </div>
+    </>
   );
 }

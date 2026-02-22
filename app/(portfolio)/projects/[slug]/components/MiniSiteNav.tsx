@@ -122,7 +122,7 @@ export function MiniSiteNav({
           )}
 
           {/* Tabs — scrollable on mobile, all visible on desktop */}
-          <div className="flex flex-1 overflow-x-auto md:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex min-w-0 flex-1 overflow-x-auto md:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {tabs.map((tab) => {
               const href = `${basePath}${tab.path}`;
               const isActive =

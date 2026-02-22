@@ -127,7 +127,7 @@ export default async function ProjectPage({
     : undefined;
 
   return (
-    <main className="relative z-10 mx-auto max-w-5xl overflow-x-hidden px-4 py-8 md:px-8 md:py-16">
+    <main className="relative z-10 mx-auto w-full max-w-5xl overflow-x-hidden px-4 py-8 md:px-8 md:py-16">
       {/* Ambient accent glow */}
       <div
         className="pointer-events-none fixed top-0 left-1/2 h-[500px] w-[700px] -translate-x-1/2 opacity-[0.06]"
