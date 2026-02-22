@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getProjectBySlugOrId } from "@/lib/projects";
+import { highlightCode } from "@/lib/highlight";
 import {
   getProjectShowcaseConfig,
   getDefaultAccent,
@@ -43,6 +44,16 @@ export default async function FeaturesPage({
   const sections = getFeaturesData(slug);
   if (!sections) notFound();
 
+  // Pre-highlight all code blocks server-side
+  const highlightedSections = await Promise.all(
+    sections.map(async (section) => ({
+      ...section,
+      codeHighlightedHtml: section.codeExample
+        ? await highlightCode(section.codeExample.code, section.codeExample.language)
+        : undefined,
+    })),
+  );
+
   const showcase = getProjectShowcaseConfig(slug);
   const accent = showcase?.accent ?? getDefaultAccent();
 
@@ -60,13 +71,14 @@ export default async function FeaturesPage({
 
       {/* Feature sections */}
       <div className="space-y-24 md:space-y-32">
-        {sections.map((section, i) => (
+        {highlightedSections.map((section, i) => (
           <FeatureSectionRow
             key={section.title}
             section={section}
             index={i}
             accentColor={accent.color}
             accentColorRgb={accent.colorRgb}
+            codeHighlightedHtml={section.codeHighlightedHtml}
           />
         ))}
       </div>

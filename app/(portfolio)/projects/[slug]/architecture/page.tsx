@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getProjectBySlugOrId } from "@/lib/projects";
+import { highlightCode } from "@/lib/highlight";
 import {
   getProjectShowcaseConfig,
   getDefaultAccent,
@@ -46,6 +47,16 @@ export default async function ArchitecturePage({
   const sections = getArchitectureData(slug);
   if (!sections) notFound();
 
+  // Pre-highlight all code blocks server-side
+  const highlightedSections = await Promise.all(
+    sections.map(async (section) => ({
+      ...section,
+      codeHighlightedHtml: section.codeExample
+        ? await highlightCode(section.codeExample.code, section.codeExample.language)
+        : undefined,
+    })),
+  );
+
   const showcase = getProjectShowcaseConfig(slug);
   const accent = showcase?.accent ?? getDefaultAccent();
 
@@ -63,7 +74,7 @@ export default async function ArchitecturePage({
 
       {/* Sections */}
       <div className="space-y-20 md:space-y-28">
-        {sections.map((section, i) => (
+        {highlightedSections.map((section, i) => (
           <section key={section.title} className="relative">
             {/* Section number */}
             <div
@@ -100,6 +111,7 @@ export default async function ArchitecturePage({
                   caption={section.codeExample.caption}
                   accentColor={accent.color}
                   accentColorRgb={accent.colorRgb}
+                  highlightedHtml={section.codeHighlightedHtml}
                 />
               )}
 

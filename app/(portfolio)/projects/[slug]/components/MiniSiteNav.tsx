@@ -25,11 +25,11 @@ export function MiniSiteNav({
   const basePath = `/projects/${slug}`;
 
   return (
-    <div className="sticky top-[88px] z-[5] w-full self-stretch">
+    <div className="sticky top-[88px] z-40 w-full self-stretch">
       <nav
-        className="border-b border-white/[0.06] bg-[#00003F]/80 backdrop-blur-md"
+        className="border-b border-white/[0.06] bg-[#00003F]/95 backdrop-blur-xl"
         style={{
-          boxShadow: `0 1px 0 0 rgba(${accentColorRgb}, 0.04)`,
+          boxShadow: `0 1px 0 0 rgba(${accentColorRgb}, 0.08), 0 4px 12px rgba(0, 0, 0, 0.3)`,
         }}
       >
         <div className="mx-auto flex max-w-5xl overflow-x-auto px-4 md:px-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getProjectBySlugOrId } from "@/lib/projects";
+import { highlightCode } from "@/lib/highlight";
 import {
   getProjectShowcaseConfig,
   getDefaultAccent,
@@ -43,6 +44,16 @@ export default async function DocsPage({
   const steps = getGettingStartedData(slug);
   if (!steps) notFound();
 
+  // Pre-highlight all code blocks server-side
+  const highlightedSteps = await Promise.all(
+    steps.map(async (step) => ({
+      ...step,
+      commandHighlightedHtml: step.command
+        ? await highlightCode(step.command, step.language ?? "bash")
+        : undefined,
+    })),
+  );
+
   const showcase = getProjectShowcaseConfig(slug);
   const accent = showcase?.accent ?? getDefaultAccent();
 
@@ -60,13 +71,14 @@ export default async function DocsPage({
 
       {/* Steps */}
       <div className="max-w-2xl">
-        {steps.map((step, i) => (
+        {highlightedSteps.map((step, i) => (
           <StepCard
             key={step.step}
             step={step}
             accentColor={accent.color}
             accentColorRgb={accent.colorRgb}
             isLast={i === steps.length - 1}
+            commandHighlightedHtml={step.commandHighlightedHtml}
           />
         ))}
       </div>
