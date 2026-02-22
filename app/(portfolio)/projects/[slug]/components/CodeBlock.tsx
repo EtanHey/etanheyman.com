@@ -62,9 +62,16 @@ export function CodeBlock({
       </div>
       {/* Code content */}
       <div className="p-5">
-        <pre className="overflow-x-auto font-mono text-[13px] leading-relaxed text-white/75 md:text-[14px]">
-          <code>{tabs[activeTab].command}</code>
-        </pre>
+        {tabs[activeTab].highlightedHtml ? (
+          <div
+            className="overflow-x-auto font-mono text-[13px] leading-relaxed md:text-[14px] [&_pre]:!bg-transparent [&_pre]:!p-0 [&_code]:!bg-transparent"
+            dangerouslySetInnerHTML={{ __html: tabs[activeTab].highlightedHtml }}
+          />
+        ) : (
+          <pre className="overflow-x-auto font-mono text-[13px] leading-relaxed text-white/75 md:text-[14px]">
+            <code>{tabs[activeTab].command}</code>
+          </pre>
+        )}
       </div>
     </div>
   );
