@@ -15,6 +15,17 @@ import {
   Bot,
   Zap,
   Cloud,
+  Scissors,
+  Database,
+  Brain,
+  BookOpen,
+  HelpCircle,
+  Package,
+  Monitor,
+  Shield,
+  GitBranch,
+  Mail,
+  Lightbulb,
   type LucideIcon,
 } from "lucide-react";
 
@@ -39,6 +50,17 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Bot,
   Zap,
   Cloud,
+  Scissors,
+  Database,
+  Brain,
+  BookOpen,
+  HelpCircle,
+  Package,
+  Monitor,
+  Shield,
+  GitBranch,
+  Mail,
+  Lightbulb,
 };
 
 interface Props {
