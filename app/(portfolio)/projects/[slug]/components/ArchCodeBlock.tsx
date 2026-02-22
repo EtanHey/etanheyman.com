@@ -79,14 +79,14 @@ export function ArchCodeBlock({
       </div>
 
       {/* Code */}
-      <div className="p-5">
+      <div className="overflow-x-auto p-4 md:p-5">
         {highlightedHtml ? (
           <div
-            className="overflow-x-auto font-mono text-[12px] leading-relaxed md:text-[13px] [&_pre]:!bg-transparent [&_pre]:!p-0 [&_code]:!bg-transparent"
+            className="font-mono text-[11px] leading-relaxed md:text-[13px] [&_pre]:!bg-transparent [&_pre]:!p-0 [&_pre]:overflow-x-auto [&_code]:!bg-transparent"
             dangerouslySetInnerHTML={{ __html: highlightedHtml }}
           />
         ) : (
-          <pre className="overflow-x-auto font-mono text-[12px] leading-relaxed text-white/70 md:text-[13px]">
+          <pre className="overflow-x-auto font-mono text-[11px] leading-relaxed text-white/70 md:text-[13px]">
             <code>{code}</code>
           </pre>
         )}
