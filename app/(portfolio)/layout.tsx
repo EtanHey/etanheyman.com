@@ -121,7 +121,7 @@ export default function RootLayout({
           {/* Top SVGs (fixed to viewport) */}
           <Nav />
           {/* Main content */}
-          <div className="bg-background relative z-0 flex h-full grow flex-col items-center justify-center overflow-hidden">
+          <div className="bg-background relative z-0 flex h-full grow flex-col items-center justify-center overflow-clip">
             <TopMobileBgCover />
             <BottomMobileBgCover />
             {children}
