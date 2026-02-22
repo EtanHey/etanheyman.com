@@ -25,7 +25,7 @@ const Nav = () => {
     <nav className="bg-background sticky top-0 z-10 h-full w-full px-4.5 pt-3 pb-4">
       <div className="relative flex h-15 items-center justify-between gap-3.75 rounded-[80px] bg-white px-4 py-2.5">
         <SocialLinks iconContainerClassName="flex items-center justify-center p-1 rounded-full bg-blue-50 shadow-[0px_1px_1px_0px_#00004326]" />
-        <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+        <Link href="/" aria-label="Home" className="absolute left-1/2 z-10 -translate-x-1/2 flex items-center justify-center">
           <Logo />
         </Link>
         <div
