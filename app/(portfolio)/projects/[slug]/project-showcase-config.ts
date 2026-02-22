@@ -34,6 +34,7 @@ export interface ArchitectureNode {
 export interface ProjectShowcaseConfig {
   accent: ProjectAccent;
   tagline?: string;
+  isMiniSite?: boolean;
   stats: ProjectStat[];
   features: ProjectFeature[];
   installTabs: InstallTab[];
@@ -44,6 +45,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
   brainlayer: {
     accent: { color: "#6366F1", colorRgb: "99, 102, 241" },
     tagline: "pip install brainlayer",
+    isMiniSite: true,
     stats: [
       { value: 268, suffix: "K+", label: "Indexed chunks" },
       { value: 14, label: "MCP tools" },
@@ -100,6 +102,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
   voicelayer: {
     accent: { color: "#38BDF8", colorRgb: "56, 189, 248" },
     tagline: "bunx voicelayer-mcp",
+    isMiniSite: true,
     stats: [
       { value: 7, label: "MCP tools" },
       { value: 5, label: "Voice modes" },
@@ -151,6 +154,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
 
   golems: {
     accent: { color: "#94A3B8", colorRgb: "148, 163, 184" },
+    isMiniSite: true,
     stats: [
       { value: 10, label: "Packages" },
       { value: 7, label: "Domain agents" },
@@ -213,4 +217,9 @@ export function getProjectShowcaseConfig(
 
 export function getDefaultAccent(): ProjectAccent {
   return { color: "#0F82EB", colorRgb: "15, 130, 235" };
+}
+
+export function isMiniSiteProject(slug: string): boolean {
+  const config = configs[slug];
+  return config?.isMiniSite === true;
 }

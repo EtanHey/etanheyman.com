@@ -13,7 +13,10 @@ export function CrossLinks({
 }) {
   const isEcosystemProject = ECOSYSTEM_SLUGS.has(currentSlug);
   const related = projects.filter(
-    (p) => p.slug !== currentSlug && p.featured,
+    (p) =>
+      p.slug !== currentSlug &&
+      p.featured &&
+      (!isEcosystemProject || ECOSYSTEM_SLUGS.has(p.slug ?? "")),
   );
   if (related.length === 0) return null;
 
