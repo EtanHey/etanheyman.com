@@ -128,27 +128,14 @@ function parseMetric(text: string, regex: RegExp): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function inferToolsCount(project: Project): number {
+function inferToolsCount(project: Project): number | null {
   const sourceText = `${project.shortDescription} ${project.description}`;
-  const fromText = parseMetric(sourceText, TOOL_COUNT_REGEX);
-
-  if (fromText !== null) {
-    return fromText;
-  }
-
-  return project.technologies?.length ?? 0;
+  return parseMetric(sourceText, TOOL_COUNT_REGEX);
 }
 
-function inferTestCount(project: Project): number {
+function inferTestCount(project: Project): number | null {
   const sourceText = `${project.shortDescription} ${project.description}`;
-  const fromText = parseMetric(sourceText, TEST_COUNT_REGEX);
-
-  if (fromText !== null) {
-    return fromText;
-  }
-
-  const journeyBasedCount = (project.projectJourney?.length ?? 0) * 8;
-  return journeyBasedCount;
+  return parseMetric(sourceText, TEST_COUNT_REGEX);
 }
 
 function getProjectAccent(project: Project): AccentName {
@@ -295,8 +282,11 @@ function ProjectCardBase({
   const accent = ACCENT_STYLES[getProjectAccent(project)];
   const isSvgOrLogo = isSvgOrLogoAsset(project.previewImage);
 
-  const animatedTools = useHoverCounter(inferToolsCount(project), isHovering);
-  const animatedTests = useHoverCounter(inferTestCount(project), isHovering);
+  const toolsCount = inferToolsCount(project);
+  const testsCount = inferTestCount(project);
+  const hasStats = toolsCount !== null || testsCount !== null;
+  const animatedTools = useHoverCounter(toolsCount ?? 0, isHovering);
+  const animatedTests = useHoverCounter(testsCount ?? 0, isHovering);
 
   return (
     <Link
@@ -402,27 +392,33 @@ function ProjectCardBase({
           <div className="flex-grow" />
 
           <div className="relative">
-            <div
-              className={cn(
-                "pointer-events-none absolute bottom-full left-0 flex translate-y-2 opacity-0 transition-all duration-300",
-                "group-hover/card:translate-y-0 group-hover/card:opacity-100",
-                "group-focus-within/card:translate-y-0 group-focus-within/card:opacity-100",
-                variant === "featured" ? "mb-4 gap-3" : "mb-3 gap-2",
-              )}
-            >
-              <StatPill
-                label="Tools"
-                value={animatedTools}
-                accent={accent}
-                variant={variant}
-              />
-              <StatPill
-                label="Tests"
-                value={animatedTests}
-                accent={accent}
-                variant={variant}
-              />
-            </div>
+            {hasStats && (
+              <div
+                className={cn(
+                  "pointer-events-none absolute bottom-full left-0 flex translate-y-2 opacity-0 transition-all duration-300",
+                  "group-hover/card:translate-y-0 group-hover/card:opacity-100",
+                  "group-focus-within/card:translate-y-0 group-focus-within/card:opacity-100",
+                  variant === "featured" ? "mb-4 gap-3" : "mb-3 gap-2",
+                )}
+              >
+                {toolsCount !== null && (
+                  <StatPill
+                    label="Tools"
+                    value={animatedTools}
+                    accent={accent}
+                    variant={variant}
+                  />
+                )}
+                {testsCount !== null && (
+                  <StatPill
+                    label="Tests"
+                    value={animatedTests}
+                    accent={accent}
+                    variant={variant}
+                  />
+                )}
+              </div>
+            )}
 
             <h3 className={cn("font-[Nutmeg] font-semibold text-white", variantStyles.title)}>
               {project.title}
