@@ -5,7 +5,6 @@ import {
 } from "./project-showcase-config";
 import { getProjectBySlugOrId } from "@/lib/projects";
 import { MiniSiteNav } from "./components/MiniSiteNav";
-import { SubpageHeader } from "./components/SubpageHeader";
 
 function buildJsonLd(
   project: {
@@ -68,11 +67,9 @@ export default async function ProjectLayout({
         slug={slug}
         accentColor={accent.color}
         accentColorRgb={accent.colorRgb}
+        title={project?.title ?? slug}
+        logoUrl={project?.logoUrl ?? null}
       />
-      {/* Persistent project identity for sub-pages (overview has its own hero) */}
-      {project && (
-        <SubpageHeader slug={slug} title={project.title} logoUrl={project.logoUrl} />
-      )}
       {children}
     </>
   );

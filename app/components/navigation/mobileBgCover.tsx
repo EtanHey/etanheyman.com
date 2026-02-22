@@ -133,7 +133,7 @@ const BottomMobileBgCover = () => {
 
   return (
     <div
-      className="pointer-events-none absolute bottom-0 left-0 h-fit w-full"
+      className="pointer-events-none absolute bottom-0 left-0 h-fit w-full overflow-hidden"
       aria-hidden="true"
     >
       {/* Bottom Right SVG */}
@@ -172,7 +172,7 @@ const TopMobileBgCover = () => {
 
   return (
     <div
-      className="pointer-events-none absolute top-0 left-0 h-fit w-full"
+      className="pointer-events-none absolute top-0 left-0 h-fit w-full overflow-hidden"
       aria-hidden="true"
     >
       {/* Top Right SVG - fixed position for all pages */}
