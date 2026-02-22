@@ -3,7 +3,9 @@ import {
   getDefaultAccent,
   isMiniSiteProject,
 } from "./project-showcase-config";
+import { getProjectBySlugOrId } from "@/lib/projects";
 import { MiniSiteNav } from "./components/MiniSiteNav";
+import { SubpageHeader } from "./components/SubpageHeader";
 
 export default async function ProjectLayout({
   children,
@@ -20,6 +22,7 @@ export default async function ProjectLayout({
 
   const config = getProjectShowcaseConfig(slug);
   const accent = config?.accent ?? getDefaultAccent();
+  const project = await getProjectBySlugOrId(slug);
 
   return (
     <>
@@ -28,6 +31,10 @@ export default async function ProjectLayout({
         accentColor={accent.color}
         accentColorRgb={accent.colorRgb}
       />
+      {/* Persistent project identity for sub-pages (overview has its own hero) */}
+      {project && (
+        <SubpageHeader slug={slug} title={project.title} logoUrl={project.logoUrl} />
+      )}
       {children}
     </>
   );
