@@ -24,6 +24,8 @@ import { CrossLinks } from "./components/CrossLinks";
 import { JourneyTimeline } from "./components/JourneyTimeline";
 import { ArchitectureDiagram } from "./components/ArchitectureDiagram";
 import { TaglineBadge } from "./components/TaglineBadge";
+import { TerminalShowcase } from "./components/TerminalShowcase";
+import { getTerminalShowcaseData } from "./terminal-showcase-config";
 import { highlightCode } from "@/lib/highlight";
 
 export default async function ProjectPage({
@@ -43,6 +45,7 @@ export default async function ProjectPage({
   const allProjects = await getAllProjects();
 
   const isGitPrivate = project.gitUrl === "private";
+  const terminalData = getTerminalShowcaseData(slug);
 
   // Pre-highlight install tab commands server-side
   const highlightedTabs = showcase?.installTabs
@@ -182,6 +185,17 @@ export default async function ProjectPage({
           </div>
         </div>
       </section>
+
+      {/* ─── Terminal Showcase ─── */}
+      {terminalData && (
+        <section className="relative z-20 mb-14">
+          <TerminalShowcase
+            tabs={terminalData.tabs}
+            title={terminalData.title}
+            accentColor={accent.color}
+          />
+        </section>
+      )}
 
       {/* ─── Stats Bar ─── */}
       {showcase?.stats && (
