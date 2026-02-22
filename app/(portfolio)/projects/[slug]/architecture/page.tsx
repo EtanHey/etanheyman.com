@@ -29,9 +29,25 @@ export async function generateMetadata({
   const project = await getProjectBySlugOrId(slug);
   if (!project) return {};
 
+  const title = `${project.title} — Architecture | Etan Heyman`;
+  const description = `Technical architecture deep-dive for ${project.title}. Data pipelines, search systems, and infrastructure decisions.`;
+  const canonical = `/projects/${slug}/architecture`;
+
   return {
-    title: `${project.title} — Architecture | Etan Heyman`,
-    description: `Technical architecture deep-dive for ${project.title}. Data pipelines, search systems, and infrastructure decisions.`,
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "article",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
   };
 }
 

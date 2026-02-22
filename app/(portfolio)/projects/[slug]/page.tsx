@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import AdminEditButton from "@/app/components/AdminEditButton";
 import { getProjectBySlugOrId, getAllProjects } from "@/lib/projects";
 import Image from "next/image";
@@ -27,6 +28,69 @@ import { TaglineBadge } from "./components/TaglineBadge";
 import { TerminalShowcase } from "./components/TerminalShowcase";
 import { getTerminalShowcaseData } from "./terminal-showcase-config";
 import { highlightCode } from "@/lib/highlight";
+
+const PROJECT_DESCRIPTIONS: Record<string, string> = {
+  brainlayer:
+    "Persistent memory layer for AI coding assistants. 268K+ indexed chunks, 14 MCP tools, hybrid semantic search with sqlite-vec.",
+  voicelayer:
+    "Voice I/O layer for AI assistants. Local TTS via edge-tts, STT via whisper.cpp (~300ms), session booking, 5 voice modes.",
+  golems:
+    "Autonomous AI agent ecosystem. 10 packages, 7 domain agents, multi-LLM routing, Night Shift autonomous coding at 3am.",
+};
+
+export function generateStaticParams() {
+  return [
+    { slug: "brainlayer" },
+    { slug: "voicelayer" },
+    { slug: "golems" },
+  ];
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProjectBySlugOrId(slug);
+  if (!project) return {};
+
+  const description =
+    PROJECT_DESCRIPTIONS[slug] ||
+    project.shortDescription ||
+    project.description;
+  const title = `${project.title} | Etan Heyman`;
+  const canonical = `/projects/${slug}`;
+
+  const ogImages = project.logoUrl
+    ? [
+        {
+          url: project.logoUrl,
+          width: 512,
+          height: 512,
+          alt: `${project.title} logo`,
+        },
+      ]
+    : undefined;
+
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "article",
+      ...(ogImages && { images: ogImages }),
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+  };
+}
 
 export default async function ProjectPage({
   params,
