@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import { getAllProjects } from "@/lib/projects";
 import { ProjectCard } from "@/app/components/ProjectCard";
+
+export const metadata: Metadata = {
+  title: "Projects | Etan Heyman",
+  description:
+    "Open-source projects by Etan Heyman: BrainLayer (AI memory), VoiceLayer (voice I/O), Golems (autonomous agents), and more.",
+  alternates: { canonical: "/projects" },
+};
 
 export default async function ProjectsPage() {
   const projects = await getAllProjects();
