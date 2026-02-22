@@ -17,6 +17,7 @@ export interface ProjectFeature {
 export interface InstallTab {
   label: string;
   command: string;
+  highlightedHtml?: string;
 }
 
 export interface ProjectAccent {
