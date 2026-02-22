@@ -47,6 +47,7 @@ const gettingStartedData: Record<string, GettingStartedStep[]> = {
       description:
         "Search your development history using natural language. Results include content, enrichment metadata, and relevance scores.",
       command: 'brainlayer search "how did I implement auth"',
+      note: 'Example output: "Found 12 results across 3 projects. Top: JWT middleware in shared/auth.ts (score: 0.89, importance: 8, intent: implementing)"',
     },
     {
       step: 5,
