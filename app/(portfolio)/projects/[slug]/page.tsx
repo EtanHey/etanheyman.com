@@ -8,7 +8,6 @@ import {
   BookOpen,
   ArrowLeft,
   ExternalLink,
-  Terminal,
 } from "lucide-react";
 import {
   TechIconWrapper,
@@ -24,6 +23,8 @@ import { CodeBlock } from "./components/CodeBlock";
 import { CrossLinks } from "./components/CrossLinks";
 import { JourneyTimeline } from "./components/JourneyTimeline";
 import { ArchitectureDiagram } from "./components/ArchitectureDiagram";
+import { TaglineBadge } from "./components/TaglineBadge";
+import { highlightCode } from "@/lib/highlight";
 
 export default async function ProjectPage({
   params,
@@ -42,6 +43,21 @@ export default async function ProjectPage({
   const allProjects = await getAllProjects();
 
   const isGitPrivate = project.gitUrl === "private";
+
+  // Pre-highlight install tab commands server-side
+  const highlightedTabs = showcase?.installTabs
+    ? await Promise.all(
+        showcase.installTabs.map(async (tab) => {
+          const lang = tab.label.toLowerCase().includes("mcp") ||
+            tab.label.toLowerCase().includes("config") ||
+            tab.label.toLowerCase().includes("json")
+            ? "json"
+            : "bash";
+          const highlightedHtml = await highlightCode(tab.command, lang);
+          return { ...tab, highlightedHtml };
+        }),
+      )
+    : undefined;
 
   return (
     <main className="relative z-10 mx-auto max-w-5xl px-4 py-8 md:px-8 md:py-16">
@@ -110,17 +126,11 @@ export default async function ProjectPage({
             {/* Badges + action buttons */}
             <div className="flex flex-wrap items-center gap-3">
               {showcase?.tagline && (
-                <div
-                  className="flex items-center gap-2 rounded-full border px-4 py-2 font-mono text-[12px] md:text-[13px]"
-                  style={{
-                    borderColor: `rgba(${accent.colorRgb}, 0.3)`,
-                    color: accent.color,
-                    backgroundColor: `rgba(${accent.colorRgb}, 0.08)`,
-                  }}
-                >
-                  <Terminal className="h-3.5 w-3.5" />
-                  {showcase.tagline}
-                </div>
+                <TaglineBadge
+                  tagline={showcase.tagline}
+                  accentColor={accent.color}
+                  accentColorRgb={accent.colorRgb}
+                />
               )}
 
               {!isGitPrivate && project.gitUrl && (
@@ -229,7 +239,7 @@ export default async function ProjectPage({
             Get started
           </h2>
           <CodeBlock
-            tabs={showcase.installTabs}
+            tabs={highlightedTabs ?? showcase.installTabs}
             accentColor={accent.color}
           />
         </section>
