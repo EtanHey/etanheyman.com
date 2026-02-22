@@ -7,7 +7,6 @@ import { notFound } from "next/navigation";
 import {
   Github,
   BookOpen,
-  ArrowLeft,
   ExternalLink,
 } from "lucide-react";
 import {
@@ -137,15 +136,8 @@ export default async function ProjectPage({
         }}
       />
 
-      {/* Back + Admin */}
-      <div className="relative z-20 mb-12 flex items-center justify-between">
-        <Link
-          href="/projects"
-          className="flex items-center gap-2 font-[Nutmeg] text-[14px] font-light text-white/40 transition-colors hover:text-white/70"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          All Projects
-        </Link>
+      {/* Admin edit (back link is now in MiniSiteNav header) */}
+      <div className="relative z-20 mb-12 flex items-center justify-end">
         <AdminEditButton projectId={project.id} />
       </div>
 

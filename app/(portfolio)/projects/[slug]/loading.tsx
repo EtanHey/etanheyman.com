@@ -1,11 +1,23 @@
 export default function Loading() {
   return (
-    <main className="relative z-10 mx-auto min-h-screen max-w-5xl overflow-x-hidden px-4 py-8 md:px-8 md:py-16">
-      <div className="animate-pulse">
-        {/* Back link */}
-        <div className="mb-12">
-          <div className="h-4 w-28 rounded bg-white/5" />
+    <main className="relative z-10 min-h-screen overflow-x-hidden">
+      {/* Skeleton nav bar matching MiniSiteNav */}
+      <div className="sticky top-[88px] z-40 w-full border-b border-white/[0.06] bg-[#00003F]/95 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-5xl items-center px-4 py-3.5 md:px-8">
+          <div className="h-3 w-16 rounded bg-white/5" />
+          <div className="mx-3 h-4 w-px bg-white/10 md:mx-4" />
+          <div className="h-[28px] w-[28px] rounded-lg bg-white/5" />
+          <div className="ml-2.5 hidden h-3 w-24 rounded bg-white/5 sm:block" />
+          <div className="ml-auto flex gap-4">
+            <div className="h-3 w-16 rounded bg-white/[0.03]" />
+            <div className="h-3 w-20 rounded bg-white/[0.03]" />
+            <div className="h-3 w-14 rounded bg-white/[0.03]" />
+            <div className="h-3 w-18 rounded bg-white/[0.03]" />
+          </div>
         </div>
+      </div>
+
+      <div className="mx-auto max-w-5xl animate-pulse px-4 py-8 md:px-8 md:py-16">
 
         {/* Hero: logo + title + description + badges */}
         <section className="mb-14">
