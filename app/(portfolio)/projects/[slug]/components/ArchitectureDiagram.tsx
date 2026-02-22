@@ -22,6 +22,7 @@ export interface ArchNode {
   icon: string;
   title: string;
   subtitle: string;
+  children?: string[];
 }
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -119,6 +120,29 @@ export function ArchitectureDiagram({
                       {node.subtitle}
                     </p>
                   </div>
+
+                  {/* Forked children badges */}
+                  {node.children && node.children.length > 0 && (
+                    <div className="mt-2 flex flex-wrap justify-center gap-1">
+                      {node.children.map((child, ci) => (
+                        <span
+                          key={child}
+                          className="rounded-full px-2 py-0.5 font-mono text-[8px] leading-tight"
+                          style={{
+                            backgroundColor: `rgba(${accentColorRgb}, 0.1)`,
+                            color: `rgba(${accentColorRgb}, 0.7)`,
+                            borderWidth: 1,
+                            borderColor: `rgba(${accentColorRgb}, 0.15)`,
+                            opacity: visible ? 1 : 0,
+                            transition: "opacity 300ms",
+                            transitionDelay: `${i * 100 + 400 + ci * 60}ms`,
+                          }}
+                        >
+                          {child}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Arrow connector (not after last node) */}
@@ -225,13 +249,34 @@ export function ArchitectureDiagram({
                     />
                   )}
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="font-[Nutmeg] text-[13px] font-semibold text-white/90">
                     {node.title}
                   </p>
                   <p className="font-mono text-[10px] text-white/35">
                     {node.subtitle}
                   </p>
+                  {node.children && node.children.length > 0 && (
+                    <div className="mt-1.5 flex flex-wrap gap-1">
+                      {node.children.map((child, ci) => (
+                        <span
+                          key={child}
+                          className="rounded-full px-1.5 py-0.5 font-mono text-[8px] leading-tight"
+                          style={{
+                            backgroundColor: `rgba(${accentColorRgb}, 0.1)`,
+                            color: `rgba(${accentColorRgb}, 0.7)`,
+                            borderWidth: 1,
+                            borderColor: `rgba(${accentColorRgb}, 0.15)`,
+                            opacity: visible ? 1 : 0,
+                            transition: "opacity 300ms",
+                            transitionDelay: `${i * 80 + 300 + ci * 50}ms`,
+                          }}
+                        >
+                          {child}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

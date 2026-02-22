@@ -81,40 +81,40 @@ const ACCENT_STYLES: Record<AccentName, AccentStyles> = {
     fallbackGradient: "from-blue-500 to-blue-700",
   },
   violet: {
-    border: "border-violet-300/45",
-    rail: "bg-violet-300/80",
-    glow: "md:group-hover/card:shadow-[0_0_32px_0_rgba(139,92,246,0.3)]",
+    border: "border-indigo-300/35",
+    rail: "bg-indigo-300/70",
+    glow: "md:group-hover/card:shadow-[0_0_32px_0_rgba(99,102,241,0.25)]",
     featuredGlow:
-      "md:group-hover/card:shadow-[0_0_62px_2px_rgba(139,92,246,0.44)]",
+      "md:group-hover/card:shadow-[0_0_62px_2px_rgba(99,102,241,0.35)]",
     hoverTint:
-      "after:bg-[radial-gradient(circle_at_24%_14%,rgba(139,92,246,0.2),transparent_56%)]",
-    statChip: "border-violet-300/45 bg-violet-400/10",
-    statValue: "text-violet-100",
-    fallbackGradient: "from-violet-600 to-indigo-700",
+      "after:bg-[radial-gradient(circle_at_24%_14%,rgba(99,102,241,0.15),transparent_56%)]",
+    statChip: "border-indigo-300/35 bg-indigo-400/10",
+    statValue: "text-indigo-100",
+    fallbackGradient: "from-indigo-800 to-[#00003F]",
   },
   emerald: {
-    border: "border-emerald-300/45",
-    rail: "bg-emerald-300/85",
-    glow: "md:group-hover/card:shadow-[0_0_32px_0_rgba(16,185,129,0.3)]",
+    border: "border-sky-300/35",
+    rail: "bg-sky-300/70",
+    glow: "md:group-hover/card:shadow-[0_0_32px_0_rgba(56,189,248,0.25)]",
     featuredGlow:
-      "md:group-hover/card:shadow-[0_0_62px_2px_rgba(16,185,129,0.42)]",
+      "md:group-hover/card:shadow-[0_0_62px_2px_rgba(56,189,248,0.35)]",
     hoverTint:
-      "after:bg-[radial-gradient(circle_at_24%_14%,rgba(16,185,129,0.18),transparent_56%)]",
-    statChip: "border-emerald-300/45 bg-emerald-400/10",
-    statValue: "text-emerald-100",
-    fallbackGradient: "from-emerald-600 to-teal-700",
+      "after:bg-[radial-gradient(circle_at_24%_14%,rgba(56,189,248,0.15),transparent_56%)]",
+    statChip: "border-sky-300/35 bg-sky-400/10",
+    statValue: "text-sky-100",
+    fallbackGradient: "from-cyan-800 to-[#00003F]",
   },
   amber: {
-    border: "border-amber-300/45",
-    rail: "bg-amber-300/85",
-    glow: "md:group-hover/card:shadow-[0_0_32px_0_rgba(245,158,11,0.32)]",
+    border: "border-slate-300/35",
+    rail: "bg-slate-300/70",
+    glow: "md:group-hover/card:shadow-[0_0_32px_0_rgba(148,163,184,0.25)]",
     featuredGlow:
-      "md:group-hover/card:shadow-[0_0_62px_2px_rgba(245,158,11,0.45)]",
+      "md:group-hover/card:shadow-[0_0_62px_2px_rgba(148,163,184,0.35)]",
     hoverTint:
-      "after:bg-[radial-gradient(circle_at_24%_14%,rgba(245,158,11,0.2),transparent_56%)]",
-    statChip: "border-amber-300/50 bg-amber-400/10",
-    statValue: "text-amber-100",
-    fallbackGradient: "from-amber-500 to-orange-700",
+      "after:bg-[radial-gradient(circle_at_24%_14%,rgba(148,163,184,0.15),transparent_56%)]",
+    statChip: "border-slate-300/35 bg-slate-400/10",
+    statValue: "text-slate-100",
+    fallbackGradient: "from-slate-700 to-[#00003F]",
   },
 };
 
@@ -357,7 +357,19 @@ function ProjectCardBase({
               "absolute inset-0 bg-gradient-to-br",
               accent.fallbackGradient,
             )}
-          />
+          >
+            {/* Show logo centered on gradient when no preview image */}
+            {project.logoUrl && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <img
+                  src={project.logoUrl.replace("#svg", "").replace("#logo", "")}
+                  alt={project.title}
+                  className="h-[40%] w-[40%] object-contain opacity-30 transition-opacity duration-500 group-hover/card:opacity-50"
+                  loading="lazy"
+                />
+              </div>
+            )}
+          </div>
         )}
 
         {/* Bottom readability overlay */}

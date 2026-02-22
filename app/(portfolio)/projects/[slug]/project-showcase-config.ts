@@ -28,6 +28,7 @@ export interface ArchitectureNode {
   icon: string;
   title: string;
   subtitle: string;
+  children?: string[];
 }
 
 export interface ProjectShowcaseConfig {
@@ -41,7 +42,7 @@ export interface ProjectShowcaseConfig {
 
 const configs: Record<string, ProjectShowcaseConfig> = {
   brainlayer: {
-    accent: { color: "#8B5CF6", colorRgb: "139, 92, 246" },
+    accent: { color: "#6366F1", colorRgb: "99, 102, 241" },
     tagline: "pip install brainlayer",
     stats: [
       { value: 268, suffix: "K+", label: "Indexed chunks" },
@@ -97,7 +98,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
   },
 
   voicelayer: {
-    accent: { color: "#10B981", colorRgb: "16, 185, 129" },
+    accent: { color: "#38BDF8", colorRgb: "56, 189, 248" },
     tagline: "bunx voicelayer-mcp",
     stats: [
       { value: 7, label: "MCP tools" },
@@ -149,7 +150,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
   },
 
   golems: {
-    accent: { color: "#F59E0B", colorRgb: "245, 158, 11" },
+    accent: { color: "#94A3B8", colorRgb: "148, 163, 184" },
     stats: [
       { value: 10, label: "Packages" },
       { value: 7, label: "Domain agents" },
@@ -197,7 +198,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     architectureFlow: [
       { icon: "Send", title: "Telegram", subtitle: "User commands" },
       { icon: "Bot", title: "Orchestrator", subtitle: "Route to golems" },
-      { icon: "Zap", title: "Domain Agents", subtitle: "7 specialized" },
+      { icon: "Zap", title: "Domain Agents", subtitle: "7 specialized golems", children: ["Jobs", "Recruiter", "Content", "Coach", "Teller", "Services", "Claude"] },
       { icon: "Binary", title: "LLM Router", subtitle: "Multi-model cost opt" },
       { icon: "Cloud", title: "Cloud + Local", subtitle: "Railway + Mac" },
     ],
