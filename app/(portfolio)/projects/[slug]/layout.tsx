@@ -59,7 +59,9 @@ export default async function ProjectLayout({
       {jsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/\u003c\/script/gi, "<\\/script"),
+          }}
         />
       )}
       <MiniSiteNav
