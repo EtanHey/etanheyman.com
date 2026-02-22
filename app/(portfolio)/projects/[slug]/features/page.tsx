@@ -7,6 +7,7 @@ import {
 } from "../project-showcase-config";
 import { getFeaturesData } from "../features-config";
 import { FeatureSectionRow } from "../components/FeatureSectionRow";
+import { SubpageHeader } from "../components/SubpageHeader";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -61,6 +62,7 @@ export default async function FeaturesPage({
     <main className="relative z-10 mx-auto max-w-5xl px-4 py-8 md:px-8 md:py-16">
       {/* Page header */}
       <section className="mb-16">
+        <SubpageHeader slug={slug} title={project.title} logoUrl={project.logoUrl} />
         <h1 className="mb-3 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
           Features
         </h1>
