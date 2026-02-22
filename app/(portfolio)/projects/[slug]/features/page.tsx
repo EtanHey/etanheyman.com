@@ -26,9 +26,25 @@ export async function generateMetadata({
   const project = await getProjectBySlugOrId(slug);
   if (!project) return {};
 
+  const title = `${project.title} — Features | Etan Heyman`;
+  const description = `Detailed feature showcase for ${project.title}. Capabilities, code examples, and technical highlights.`;
+  const canonical = `/projects/${slug}/features`;
+
   return {
-    title: `${project.title} — Features | Etan Heyman`,
-    description: `Detailed feature showcase for ${project.title}. Capabilities, code examples, and technical highlights.`,
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "article",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
   };
 }
 
