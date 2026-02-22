@@ -63,7 +63,7 @@ export default async function ProjectPage({
     : undefined;
 
   return (
-    <main className="relative z-10 mx-auto max-w-5xl px-4 py-8 md:px-8 md:py-16">
+    <main className="relative z-10 mx-auto max-w-5xl overflow-x-hidden px-4 py-8 md:px-8 md:py-16">
       {/* Ambient accent glow */}
       <div
         className="pointer-events-none fixed top-0 left-1/2 h-[500px] w-[700px] -translate-x-1/2 opacity-[0.06]"
@@ -210,7 +210,7 @@ export default async function ProjectPage({
           <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
             Built with
           </h2>
-          <div className="grid grid-cols-6 gap-[23.45px] md:grid-cols-8 xl:gap-11">
+          <div className="grid grid-cols-4 gap-5 sm:grid-cols-6 md:grid-cols-8 xl:gap-11">
             {project.technologies.map((tech) => (
               <TechIconWrapper key={tech} name={tech as TechIconName} />
             ))}

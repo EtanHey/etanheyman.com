@@ -73,7 +73,7 @@ export function StepCard({ step, accentColor, accentColorRgb, isLast, commandHig
       </div>
 
       {/* Content */}
-      <div className={`flex-1 ${!isLast ? "pb-10" : ""}`}>
+      <div className={`min-w-0 flex-1 ${!isLast ? "pb-10" : ""}`}>
         <h3 className="mb-2 font-[Nutmeg] text-[17px] font-semibold text-white md:text-[19px]">
           {step.title}
         </h3>

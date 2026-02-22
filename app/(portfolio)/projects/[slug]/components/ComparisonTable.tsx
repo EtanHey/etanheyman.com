@@ -45,7 +45,7 @@ export function ComparisonTable({
       }}
     >
       <div className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <table className="w-full min-w-[500px]">
+        <table className="w-full min-w-[360px] md:min-w-[500px]">
           <thead>
             <tr
               style={{
@@ -55,7 +55,7 @@ export function ComparisonTable({
               {headers.map((header, i) => (
                 <th
                   key={i}
-                  className={`border-b px-4 py-3 text-left font-mono text-[11px] tracking-[0.1em] uppercase ${
+                  className={`border-b px-2.5 py-2.5 text-left font-mono text-[10px] tracking-[0.1em] uppercase md:px-4 md:py-3 md:text-[11px] ${
                     i === 0 ? "text-white/30" : "text-white/50"
                   }`}
                   style={{
@@ -81,7 +81,7 @@ export function ComparisonTable({
                 {row.map((cell, ci) => (
                   <td
                     key={ci}
-                    className={`border-b px-4 py-2.5 font-mono text-[12px] md:text-[13px] ${
+                    className={`border-b px-2.5 py-2 font-mono text-[11px] md:px-4 md:py-2.5 md:text-[13px] ${
                       ci === 0
                         ? "font-medium text-white/50"
                         : ci === 1

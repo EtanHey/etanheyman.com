@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <main className="relative z-10 mx-auto min-h-screen max-w-5xl px-4 py-8 md:px-8 md:py-16">
+    <main className="relative z-10 mx-auto min-h-screen max-w-5xl overflow-x-hidden px-4 py-8 md:px-8 md:py-16">
       <div className="animate-pulse">
         {/* Back link */}
         <div className="mb-12">
@@ -11,19 +11,24 @@ export default function Loading() {
         <section className="mb-14">
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-10">
             <div className="h-[100px] w-[100px] flex-shrink-0 rounded-3xl bg-white/5 md:h-[140px] md:w-[140px]" />
-            <div className="flex-1 space-y-4">
-              <div className="h-10 w-72 rounded bg-white/5 md:h-14 md:w-96" />
+            <div className="min-w-0 flex-1 space-y-4">
+              <div className="h-10 w-full max-w-[288px] rounded bg-white/5 md:h-14 md:max-w-[384px]" />
               <div className="space-y-2">
                 <div className="h-4 w-full max-w-[520px] rounded bg-white/[0.03]" />
                 <div className="h-4 w-full max-w-[400px] rounded bg-white/[0.03]" />
               </div>
-              <div className="flex gap-3 pt-1">
+              <div className="flex flex-wrap gap-3 pt-1">
                 <div className="h-9 w-32 rounded-full bg-white/5" />
                 <div className="h-9 w-24 rounded-full bg-white/[0.03]" />
                 <div className="h-9 w-20 rounded-full bg-white/[0.03]" />
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Terminal showcase */}
+        <section className="mb-14">
+          <div className="h-[260px] rounded-xl border border-white/[0.06] bg-white/[0.02] sm:h-[340px] md:h-[380px]" />
         </section>
 
         {/* Stats bar */}
@@ -41,7 +46,7 @@ export default function Loading() {
         {/* Built with */}
         <section className="mb-14">
           <div className="mb-6 h-3 w-20 rounded bg-white/5" />
-          <div className="grid grid-cols-6 gap-6 md:grid-cols-8">
+          <div className="grid grid-cols-4 gap-5 sm:grid-cols-6 md:grid-cols-8 xl:gap-11">
             {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
