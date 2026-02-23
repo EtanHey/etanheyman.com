@@ -105,14 +105,14 @@ const gettingStartedData: Record<string, GettingStartedStep[]> = {
       title: "Try your first voice command",
       description:
         "Use the announce mode for a quick fire-and-forget test. The agent will speak the message aloud.",
-      command: '// In a Claude Code session:\nqa_voice_announce("Hello from VoiceLayer!")',
+      command: '// In a Claude Code session:\nvoice_speak("Hello from VoiceLayer!")',
       language: "typescript",
     },
     {
       step: 5,
       title: "Full documentation",
       description:
-        "Complete reference for all 5 voice modes, environment variables, STT backends, and session management.",
+        "Complete reference for voice_speak and voice_ask, environment variables, STT backends, and session management.",
       link: { href: "https://etanhey.github.io/voicelayer", label: "View VoiceLayer Docs" },
     },
   ],
