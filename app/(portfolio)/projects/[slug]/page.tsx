@@ -31,9 +31,9 @@ import { highlightCode } from "@/lib/highlight";
 
 const PROJECT_DESCRIPTIONS: Record<string, string> = {
   brainlayer:
-    "Persistent memory layer for AI coding assistants. 268K+ indexed chunks, 14 MCP tools, hybrid semantic search with sqlite-vec.",
+    "Persistent memory layer for AI coding assistants. 268K+ indexed chunks, 3 intelligent tools (brain_search, brain_store, brain_recall), hybrid semantic search with sqlite-vec.",
   voicelayer:
-    "Voice I/O layer for AI assistants. Local TTS via edge-tts, STT via whisper.cpp (~300ms), session booking, 5 voice modes.",
+    "Voice I/O layer for AI assistants. Local TTS via edge-tts, STT via whisper.cpp (~300ms), session booking, 2 tools (voice_speak, voice_ask) with auto-mode detection.",
   golems:
     "Autonomous AI agent ecosystem. 10 packages, 7 domain agents, multi-LLM routing, Night Shift autonomous coding at 3am.",
 };
