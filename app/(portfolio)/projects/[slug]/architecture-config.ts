@@ -92,7 +92,7 @@ return sorted(fused, reverse=True)[:n]`,
     {
       title: "MCP Integration",
       description:
-        "14 MCP tools expose BrainLayer's full capability to any Claude Code session. The tools follow a deliberate decision hierarchy: think retrieves task-aware context for informed decisions, search performs targeted hybrid queries with filters, recall traces file and topic history, and context expands isolated results into full conversation windows. Additional tools handle session analysis, regression detection, and persistent memory storage.",
+        "3 MCP tools expose BrainLayer's full capability to any Claude Code session. brain_search finds relevant context with hybrid semantic + keyword queries. brain_store persists decisions and learnings. brain_recall traces file and topic history. From 14 specialized tools to 3 that just work — backward-compat aliases for existing workflows.",
       diagramNodes: [
         {
           icon: "Brain",
@@ -109,15 +109,11 @@ return sorted(fused, reverse=True)[:n]`,
         {
           icon: "Wrench",
           title: "Tools",
-          subtitle: "14 total",
+          subtitle: "3 total",
           children: [
-            "store",
-            "sessions",
-            "regression",
-            "file_timeline",
-            "operations",
-            "plan_links",
-            "stats",
+            "brain_search",
+            "brain_store",
+            "brain_recall",
           ],
         },
       ],
@@ -126,15 +122,13 @@ return sorted(fused, reverse=True)[:n]`,
 
   voicelayer: [
     {
-      title: "Voice Modes Pipeline",
+      title: "Voice Tools Pipeline",
       description:
-        "VoiceLayer implements 5 distinct interaction patterns, each optimized for a different use case. announce is fire-and-forget TTS for status updates. brief delivers slower-paced explanations. consult speaks and signals for an optional response. converse enables full bidirectional Q&A with session booking. think silently logs to markdown — perfect for discovery calls where the AI observes without speaking.",
+        "VoiceLayer implements 2 tools with auto-mode detection. voice_speak handles text-to-speech (announce, brief, consult). voice_ask enables full bidirectional Q&A with session booking. The system automatically picks the right interaction pattern — fire-and-forget announcements, slower-paced briefings, or full conversation — based on context.",
       diagramNodes: [
-        { icon: "Volume2", title: "Announce", subtitle: "Fire-and-forget TTS" },
-        { icon: "BookOpen", title: "Brief", subtitle: "Slow-paced explain" },
-        { icon: "HelpCircle", title: "Consult", subtitle: "Speak + optional listen" },
-        { icon: "MessageSquare", title: "Converse", subtitle: "Full Q&A (blocking)" },
-        { icon: "Brain", title: "Think", subtitle: "Silent markdown log" },
+        { icon: "Volume2", title: "voice_speak", subtitle: "TTS, auto rate" },
+        { icon: "MessageSquare", title: "voice_ask", subtitle: "Q&A + session lock" },
+        { icon: "Zap", title: "Auto mode", subtitle: "Context-aware selection" },
       ],
     },
     {
@@ -284,15 +278,15 @@ const result = await runLLM(prompt);
     {
       title: "MCP Ecosystem",
       description:
-        "8 MCP servers provide 60+ tools across the ecosystem. BrainLayer contributes 14 memory tools. The email server handles triage with 7 tools. VoiceLayer exposes voice I/O. Supabase provides database access. Specialized servers for web search (Exa), financial data (Sophtron), and local LLM inference (GLM) round out the toolkit. Each golem declares which MCP servers it needs — the orchestrator ensures they're available at session startup.",
+        "8 MCP servers provide 60+ tools across the ecosystem. BrainLayer contributes 3 memory tools (brain_search, brain_store, brain_recall). The email server handles triage with 7 tools. VoiceLayer exposes 2 voice tools (voice_speak, voice_ask). Supabase provides database access. Specialized servers for web search (Exa), financial data (Sophtron), and local LLM inference (GLM) round out the toolkit. Each golem declares which MCP servers it needs — the orchestrator ensures they're available at session startup.",
       diagramNodes: [
         {
           icon: "Brain",
           title: "BrainLayer",
-          subtitle: "14 tools",
+          subtitle: "3 tools",
         },
         { icon: "Mail", title: "Email", subtitle: "7 tools" },
-        { icon: "Mic", title: "VoiceLayer", subtitle: "7 tools" },
+        { icon: "Mic", title: "VoiceLayer", subtitle: "2 tools" },
         { icon: "Database", title: "Supabase", subtitle: "SQL + DDL" },
         {
           icon: "Wrench",
