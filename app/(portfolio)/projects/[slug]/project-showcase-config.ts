@@ -49,7 +49,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     isMiniSite: true,
     stats: [
       { value: 268, suffix: "K+", label: "Indexed chunks" },
-      { value: 14, label: "MCP tools" },
+      { value: 3, label: "MCP tools" },
       { value: 1024, label: "Vector dimensions" },
       { value: 13, suffix: "s", prefix: "~", label: "Enrichment / chunk" },
     ],
@@ -68,9 +68,9 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
       {
         iconName: "Database",
-        title: "14 MCP Tools",
+        title: "3 MCP Tools",
         description:
-          "search, context, think, recall, store, file_timeline, regression, sessions, and more.",
+          "brain_search, brain_store, brain_recall — from 14 specialized tools to 3 that just work. Backward-compat aliases for existing workflows.",
       },
       {
         iconName: "Brain",
@@ -96,7 +96,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { icon: "FileText", title: "Indexing", subtitle: "Chunk + deduplicate" },
       { icon: "Binary", title: "Embedding", subtitle: "bge-large 1024-dim" },
       { icon: "Search", title: "Hybrid Search", subtitle: "Vec + FTS5 + RRF" },
-      { icon: "Wrench", title: "MCP Tools", subtitle: "14 tools for agents" },
+      { icon: "Wrench", title: "MCP Tools", subtitle: "3 tools for agents" },
     ],
   },
 
@@ -105,17 +105,17 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "bunx voicelayer-mcp",
     isMiniSite: true,
     stats: [
-      { value: 7, label: "MCP tools" },
-      { value: 5, label: "Voice modes" },
+      { value: 2, label: "MCP tools" },
+      { value: 2, label: "STT backends" },
       { value: 300, suffix: "ms", prefix: "~", label: "STT latency" },
       { value: 75, suffix: "+", label: "Tests passing" },
     ],
     features: [
       {
         iconName: "Mic",
-        title: "5 Voice Modes",
+        title: "2 Tools, Auto Mode",
         description:
-          "announce, brief, consult, converse, think — from fire-and-forget TTS to full voice Q&A.",
+          "voice_speak and voice_ask handle everything — fire-and-forget TTS to full voice Q&A, with automatic mode detection.",
       },
       {
         iconName: "Radio",
@@ -147,7 +147,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     architectureFlow: [
       { icon: "Mic", title: "Speech", subtitle: "User voice input" },
       { icon: "Radio", title: "STT", subtitle: "whisper.cpp ~300ms" },
-      { icon: "Bot", title: "Voice Modes", subtitle: "5 modes: ask→brief" },
+      { icon: "Bot", title: "Voice Tools", subtitle: "2 tools, auto detection" },
       { icon: "Lock", title: "Session Mgr", subtitle: "Lockfile mutex" },
       { icon: "Volume2", title: "TTS Output", subtitle: "edge-tts neural" },
     ],

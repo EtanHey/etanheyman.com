@@ -36,7 +36,7 @@ const DEFAULT_MESSAGES: ConversationMessage[] = [
   },
   {
     type: "tool_call",
-    name: "brainlayer_search",
+    name: "brain_search",
     params: {
       query: '"auth middleware implementation"',
       project: '"golems"',

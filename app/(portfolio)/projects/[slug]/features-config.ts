@@ -60,19 +60,14 @@ const featuresData: Record<string, FeatureSection[]> = {
     },
     {
       iconName: "Wrench",
-      title: "14 MCP Tools",
-      tagline: "Full memory access for any Claude session",
+      title: "3 MCP Tools",
+      tagline: "Powerful memory layer with 3 intelligent tools that understand what you need",
       description:
-        "Every tool follows a deliberate decision hierarchy. think retrieves task-aware context for starting work. search performs hybrid queries with rich filters. recall traces file and topic history across sessions. context expands isolated results into full conversation windows. store persists important decisions and patterns for future retrieval.",
+        "From 14 specialized tools to 3 that just work. brain_search finds relevant context with hybrid semantic + keyword queries. brain_store persists decisions and learnings. brain_recall traces file and topic history. Backward-compat aliases keep existing workflows intact.",
       highlights: [
-        "brainlayer_think — task-aware context retrieval",
-        "brainlayer_search — hybrid query with 7 filter dimensions",
-        "brainlayer_recall — file and topic history",
-        "brainlayer_context — expand results to full conversation",
-        "brainlayer_store — persist decisions and learnings",
-        "brainlayer_regression — what changed since last success",
-        "brainlayer_sessions — browse historical sessions",
-        "brainlayer_file_timeline — trace file interactions",
+        "brain_search — hybrid query, 7 filter dimensions, understands intent",
+        "brain_store — persist decisions and learnings",
+        "brain_recall — file and topic history across sessions",
       ],
     },
     {
@@ -121,16 +116,14 @@ const featuresData: Record<string, FeatureSection[]> = {
   voicelayer: [
     {
       iconName: "Mic",
-      title: "5 Voice Modes",
-      tagline: "From fire-and-forget to full conversation",
+      title: "2 Tools, Auto Mode Detection",
+      tagline: "From fire-and-forget to full conversation — automatically",
       description:
-        "Each mode is optimized for a different interaction pattern. announce speaks status updates without waiting. brief delivers slower-paced explanations for digestion. consult speaks and optionally listens. converse enables full bidirectional Q&A with exclusive microphone booking. think silently logs to markdown — perfect for discovery calls where the AI observes without speaking.",
+        "voice_speak for text-to-speech (announcements, briefings, status updates). voice_ask for bidirectional Q&A with session booking. Auto-mode detection chooses the right interaction pattern based on context — no manual mode switching.",
       highlights: [
-        "announce — fire-and-forget TTS (+10% rate)",
-        "brief — slow-paced explanation (-10% rate)",
-        "consult — speak + optional response",
-        "converse — full Q&A, blocking, session lock",
-        "think — silent markdown log, no audio",
+        "voice_speak — fire-and-forget TTS, rate adaptation by content length",
+        "voice_ask — full Q&A with microphone lock, STT via whisper.cpp",
+        "Auto-mode — picks announce, brief, consult, converse, or think automatically",
       ],
     },
     {
@@ -292,11 +285,11 @@ const featuresData: Record<string, FeatureSection[]> = {
       title: "MCP Server Ecosystem",
       tagline: "8 servers, 60+ tools powering every golem",
       description:
-        "Each golem declares which MCP servers it needs. BrainLayer provides 14 memory tools. The email server handles triage with 7 tools. VoiceLayer exposes voice I/O. Supabase provides database access. Exa handles web search, Sophtron connects to bank APIs, and a local GLM server provides free text generation. The orchestrator ensures all declared servers are running before spawning a golem.",
+        "Each golem declares which MCP servers it needs. BrainLayer provides 3 memory tools (brain_search, brain_store, brain_recall). The email server handles triage with 7 tools. VoiceLayer exposes 2 voice tools (voice_speak, voice_ask). Supabase provides database access. Exa handles web search, Sophtron connects to bank APIs, and a local GLM server provides free text generation. The orchestrator ensures all declared servers are running before spawning a golem.",
       highlights: [
-        "BrainLayer — 14 memory & search tools",
+        "BrainLayer — 3 memory tools",
         "Email — 7 triage & draft tools",
-        "VoiceLayer — 7 voice I/O tools",
+        "VoiceLayer — 2 voice tools",
         "Supabase — SQL & DDL access",
         "Exa — web search & code context",
         "Sophtron — bank transaction APIs",
