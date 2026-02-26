@@ -48,10 +48,10 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "pip install brainlayer",
     isMiniSite: true,
     stats: [
-      { value: 268, suffix: "K+", label: "Indexed chunks" },
-      { value: 3, label: "MCP tools" },
+      { value: 328, suffix: "K+", label: "Indexed chunks" },
+      { value: 7, label: "MCP tools" },
       { value: 1024, label: "Vector dimensions" },
-      { value: 13, suffix: "s", prefix: "~", label: "Enrichment / chunk" },
+      { value: 43, label: "KG entities" },
     ],
     features: [
       {
@@ -68,15 +68,15 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
       {
         iconName: "Database",
-        title: "3 MCP Tools",
+        title: "7 MCP Tools",
         description:
-          "brain_search, brain_store, brain_recall — from 14 specialized tools to 3 that just work. Backward-compat aliases for existing workflows.",
+          "3 core (search, store, recall) + 4 knowledge graph (digest, entity, update, person lookup). From 14 specialized tools to 7 — backward-compat aliases for existing workflows.",
       },
       {
         iconName: "Brain",
-        title: "Session Analysis",
+        title: "Knowledge Graph",
         description:
-          "Operation grouping, regression detection, plan linking, and enriched session summaries.",
+          "Entity extraction, relation mapping, person lookup, and sentiment analysis. 43 entities across people, projects, and technologies.",
       },
     ],
     installTabs: [
@@ -92,11 +92,15 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
     ],
     architectureFlow: [
-      { icon: "MessageSquare", title: "Conversation", subtitle: "CC sessions → JSONL" },
+      {
+        icon: "MessageSquare",
+        title: "Conversation",
+        subtitle: "CC sessions → JSONL",
+      },
       { icon: "FileText", title: "Indexing", subtitle: "Chunk + deduplicate" },
       { icon: "Binary", title: "Embedding", subtitle: "bge-large 1024-dim" },
       { icon: "Search", title: "Hybrid Search", subtitle: "Vec + FTS5 + RRF" },
-      { icon: "Wrench", title: "MCP Tools", subtitle: "3 tools for agents" },
+      { icon: "Wrench", title: "MCP Tools", subtitle: "7 tools for agents" },
     ],
   },
 
@@ -147,7 +151,11 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     architectureFlow: [
       { icon: "Mic", title: "Speech", subtitle: "User voice input" },
       { icon: "Radio", title: "STT", subtitle: "whisper.cpp ~300ms" },
-      { icon: "Bot", title: "Voice Tools", subtitle: "2 tools, auto detection" },
+      {
+        icon: "Bot",
+        title: "Voice Tools",
+        subtitle: "2 tools, auto detection",
+      },
       { icon: "Lock", title: "Session Mgr", subtitle: "Lockfile mutex" },
       { icon: "Volume2", title: "TTS Output", subtitle: "edge-tts neural" },
     ],
@@ -203,7 +211,20 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     architectureFlow: [
       { icon: "Send", title: "Telegram", subtitle: "User commands" },
       { icon: "Bot", title: "Orchestrator", subtitle: "Route to golems" },
-      { icon: "Zap", title: "Domain Agents", subtitle: "7 specialized golems", children: ["Jobs", "Recruiter", "Content", "Coach", "Teller", "Services", "Claude"] },
+      {
+        icon: "Zap",
+        title: "Domain Agents",
+        subtitle: "7 specialized golems",
+        children: [
+          "Jobs",
+          "Recruiter",
+          "Content",
+          "Coach",
+          "Teller",
+          "Services",
+          "Claude",
+        ],
+      },
       { icon: "Binary", title: "LLM Router", subtitle: "Multi-model cost opt" },
       { icon: "Cloud", title: "Cloud + Local", subtitle: "Railway + Mac" },
     ],
