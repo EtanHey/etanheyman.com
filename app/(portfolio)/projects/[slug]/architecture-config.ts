@@ -40,7 +40,11 @@ const architectureData: Record<string, ArchitectureSection[]> = {
           title: "Extract",
           subtitle: "JSONL → sessions",
         },
-        { icon: "FileText", title: "Classify", subtitle: "Content-type detection" },
+        {
+          icon: "FileText",
+          title: "Classify",
+          subtitle: "Content-type detection",
+        },
         { icon: "Scissors", title: "Chunk", subtitle: "AST-aware splitting" },
         { icon: "Binary", title: "Embed", subtitle: "bge-large 1024-dim" },
         { icon: "Database", title: "Store", subtitle: "SQLite + sqlite-vec" },
@@ -71,7 +75,7 @@ return sorted(fused, reverse=True)[:n]`,
         "Raw chunks are useful but lack structure. A local LLM (GLM-4.7-Flash or Qwen2.5-Coder-14B on Apple Silicon via MLX) enriches each chunk with 10 metadata fields: summary, tags, importance score (1-10), intent classification, primary code symbols, a hypothetical query for HyDE-style retrieval, epistemic level, version scope, tech debt impact, and external dependencies. Processing runs at ~50-100 chunks per batch with 5-minute stall detection per chunk.",
       callout: {
         title: "Why local LLM?",
-        text: "268K+ chunks at ~$0.01/chunk via cloud API = $2,680. Local GLM-4.7-Flash costs $0 in electricity. The enrichment quality is comparable for structured extraction tasks, and no data leaves the machine.",
+        text: "328K+ chunks at ~$0.01/chunk via cloud API = $3,280. Local GLM-4.7-Flash costs $0 in electricity. The enrichment quality is comparable for structured extraction tasks, and no data leaves the machine.",
       },
     },
     {
@@ -81,18 +85,30 @@ return sorted(fused, reverse=True)[:n]`,
       comparisonTable: {
         headers: ["", "BrainLayer", "pgvector", "Pinecone", "Chroma"],
         rows: [
-          ["Deployment", "pip install", "PostgreSQL server", "Cloud SaaS", "Docker/Cloud"],
+          [
+            "Deployment",
+            "pip install",
+            "PostgreSQL server",
+            "Cloud SaaS",
+            "Docker/Cloud",
+          ],
           ["Cost", "Free", "Server costs", "$0.04/1M vec/mo", "Free (OSS)"],
           ["Offline", "Yes", "Needs DB conn", "No", "Needs server"],
           ["Portability", "Copy .db file", "pg_dump", "N/A", "Export"],
-          ["Hybrid search", "FTS5 built-in", "Separate plugin", "Vector only", "Limited"],
+          [
+            "Hybrid search",
+            "FTS5 built-in",
+            "Separate plugin",
+            "Vector only",
+            "Limited",
+          ],
         ],
       },
     },
     {
       title: "MCP Integration",
       description:
-        "3 MCP tools expose BrainLayer's full capability to any Claude Code session. brain_search finds relevant context with hybrid semantic + keyword queries. brain_store persists decisions and learnings. brain_recall traces file and topic history. From 14 specialized tools to 3 that just work — backward-compat aliases for existing workflows.",
+        "7 MCP tools expose BrainLayer's full capability to any Claude Code session. 3 core memory tools (brain_search, brain_store, brain_recall) handle search, persistence, and recall. 4 knowledge graph tools (brain_digest, brain_entity, brain_update, brain_get_person) add entity extraction, lookup, updates, and person profiles. From 14 specialized tools to 7 that just work — backward-compat aliases for existing workflows.",
       diagramNodes: [
         {
           icon: "Brain",
@@ -109,11 +125,15 @@ return sorted(fused, reverse=True)[:n]`,
         {
           icon: "Wrench",
           title: "Tools",
-          subtitle: "3 total",
+          subtitle: "7 total",
           children: [
             "brain_search",
             "brain_store",
             "brain_recall",
+            "brain_digest",
+            "brain_entity",
+            "brain_update",
+            "brain_get_person",
           ],
         },
       ],
@@ -127,8 +147,16 @@ return sorted(fused, reverse=True)[:n]`,
         "VoiceLayer implements 2 tools with auto-mode detection. voice_speak handles text-to-speech (announce, brief, consult). voice_ask enables full bidirectional Q&A with session booking. The system automatically picks the right interaction pattern — fire-and-forget announcements, slower-paced briefings, or full conversation — based on context.",
       diagramNodes: [
         { icon: "Volume2", title: "voice_speak", subtitle: "TTS, auto rate" },
-        { icon: "MessageSquare", title: "voice_ask", subtitle: "Q&A + session lock" },
-        { icon: "Zap", title: "Auto mode", subtitle: "Context-aware selection" },
+        {
+          icon: "MessageSquare",
+          title: "voice_ask",
+          subtitle: "Q&A + session lock",
+        },
+        {
+          icon: "Zap",
+          title: "Auto mode",
+          subtitle: "Context-aware selection",
+        },
       ],
     },
     {
@@ -159,7 +187,11 @@ Stop: touch /tmp/voicelayer-stop`,
       diagramNodes: [
         { icon: "FileText", title: "Text", subtitle: "Agent response" },
         { icon: "Volume2", title: "Edge-TTS", subtitle: "Neural synthesis" },
-        { icon: "Radio", title: "Rate Adjust", subtitle: "Mode + length aware" },
+        {
+          icon: "Radio",
+          title: "Rate Adjust",
+          subtitle: "Mode + length aware",
+        },
         { icon: "Mic", title: "Play", subtitle: "afplay / mpv" },
       ],
     },
@@ -234,9 +266,17 @@ try {
         headers: ["", "Railway (Cloud)", "macOS (Local)"],
         rows: [
           ["Workload", "Scheduled cron tasks", "Real-time services"],
-          ["LLM Backend", "Gemini Flash-Lite (free)", "MLX / GLM (free) → Haiku (paid)"],
+          [
+            "LLM Backend",
+            "Gemini Flash-Lite (free)",
+            "MLX / GLM (free) → Haiku (paid)",
+          ],
           ["State", "Supabase", "Local files"],
-          ["Services", "Email, Jobs, Briefing", "Telegram, Memory, Voice, Night Shift"],
+          [
+            "Services",
+            "Email, Jobs, Briefing",
+            "Telegram, Memory, Voice, Night Shift",
+          ],
           ["Cost", "~$5/mo Railway", "$0 (Mac Mini)"],
         ],
       },
@@ -278,12 +318,12 @@ const result = await runLLM(prompt);
     {
       title: "MCP Ecosystem",
       description:
-        "8 MCP servers provide 60+ tools across the ecosystem. BrainLayer contributes 3 memory tools (brain_search, brain_store, brain_recall). The email server handles triage with 7 tools. VoiceLayer exposes 2 voice tools (voice_speak, voice_ask). Supabase provides database access. Specialized servers for web search (Exa), financial data (Sophtron), and local LLM inference (GLM) round out the toolkit. Each golem declares which MCP servers it needs — the orchestrator ensures they're available at session startup.",
+        "8 MCP servers provide 60+ tools across the ecosystem. BrainLayer contributes 7 tools — 3 core memory (brain_search, brain_store, brain_recall) + 4 knowledge graph (brain_digest, brain_entity, brain_update, brain_get_person). The email server handles triage with 7 tools. VoiceLayer exposes 2 voice tools (voice_speak, voice_ask). Supabase provides database access. Specialized servers for web search (Exa), financial data (Sophtron), and local LLM inference (GLM) round out the toolkit. Each golem declares which MCP servers it needs — the orchestrator ensures they're available at session startup.",
       diagramNodes: [
         {
           icon: "Brain",
           title: "BrainLayer",
-          subtitle: "3 tools",
+          subtitle: "7 tools",
         },
         { icon: "Mail", title: "Email", subtitle: "7 tools" },
         { icon: "Mic", title: "VoiceLayer", subtitle: "2 tools" },
