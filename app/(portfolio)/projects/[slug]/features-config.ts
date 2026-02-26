@@ -60,28 +60,33 @@ const featuresData: Record<string, FeatureSection[]> = {
     },
     {
       iconName: "Wrench",
-      title: "3 MCP Tools",
-      tagline: "Powerful memory layer with 3 intelligent tools that understand what you need",
+      title: "7 MCP Tools",
+      tagline:
+        "Powerful memory layer with 7 intelligent tools that understand what you need",
       description:
-        "From 14 specialized tools to 3 that just work. brain_search finds relevant context with hybrid semantic + keyword queries. brain_store persists decisions and learnings. brain_recall traces file and topic history. Backward-compat aliases keep existing workflows intact.",
+        "From 14 specialized tools to 7 that just work. 3 core memory tools (brain_search, brain_store, brain_recall) plus 4 knowledge graph tools (brain_digest, brain_entity, brain_update, brain_get_person). Backward-compat aliases keep existing workflows intact.",
       highlights: [
         "brain_search — hybrid query, 7 filter dimensions, understands intent",
-        "brain_store — persist decisions and learnings",
+        "brain_store — persist decisions, learnings, with entity linking",
         "brain_recall — file and topic history across sessions",
+        "brain_digest — ingest content, extract entities and relations",
+        "brain_entity — knowledge graph lookup with evidence",
+        "brain_update — update, archive, or merge memories",
+        "brain_get_person — person profile + scoped memories in <500ms",
       ],
     },
     {
       iconName: "Brain",
-      title: "Session Analysis",
-      tagline: "Patterns across hundreds of coding sessions",
+      title: "Knowledge Graph",
+      tagline: "Entities, relations, and person lookup across your codebase",
       description:
-        "BrainLayer doesn't just store conversations — it analyzes them. Operations are grouped into logical units (read-edit-test cycles, research chains). Sessions are enriched with quality scores, decisions made, corrections applied, and lessons learned. Plan linking connects sessions to PRD stories, letting you trace work across the entire development lifecycle.",
+        "BrainLayer builds a knowledge graph from your conversations. Bilingual entity extraction (English + Hebrew) with 3 strategies: GLiNER model, regex patterns, and seed entity matching. 43 entities across people, projects, and technologies, connected by typed relations. Person lookup returns entity profiles with scoped memories in a single call. Sentiment analysis per chunk adds emotional context to your development history.",
       highlights: [
-        "Operation grouping — logical read→edit→test cycles",
-        "Quality scoring — 1-10 per session",
-        "Decision tracking across sessions",
-        "Plan linking — PRD story to session tracing",
-        "Regression detection — what broke since last success",
+        "Entity extraction — bilingual NER with 3 strategies",
+        "43 entities — people, projects, technologies",
+        "Relation mapping — typed edges between entities",
+        "Person lookup — profile + memories in <500ms",
+        "Sentiment analysis — per-chunk emotional context",
       ],
     },
     {
@@ -89,13 +94,14 @@ const featuresData: Record<string, FeatureSection[]> = {
       title: "Multi-Source Ingestion",
       tagline: "Not just Claude Code sessions",
       description:
-        "The pipeline ingests from multiple sources: Claude Code JSONL transcripts (primary), WhatsApp message exports, and YouTube transcript downloads. Each source has content-aware filtering — WhatsApp messages need only 15 characters to be indexed (short-form messaging), while general assistant text requires 50 characters. Source metadata is preserved for filtered search.",
+        "The pipeline ingests from six sources: Claude Code JSONL transcripts (primary), WhatsApp message exports, YouTube transcript downloads, Markdown docs, Desktop files, and manual entries. Each source has content-aware filtering — WhatsApp messages need only 15 characters to be indexed (short-form messaging), while general assistant text requires 50 characters. Source metadata is preserved for filtered search.",
       highlights: [
         "Claude Code sessions — JSONL transcript parsing",
         "WhatsApp exports — short-form message indexing",
         "YouTube transcripts — learning content",
+        "Markdown + Desktop — long-form local sources",
+        "Manual entries — quick capture memories",
         "Source-aware filtering and thresholds",
-        "Per-source content-type detection",
       ],
     },
     {
@@ -285,9 +291,9 @@ const featuresData: Record<string, FeatureSection[]> = {
       title: "MCP Server Ecosystem",
       tagline: "8 servers, 60+ tools powering every golem",
       description:
-        "Each golem declares which MCP servers it needs. BrainLayer provides 3 memory tools (brain_search, brain_store, brain_recall). The email server handles triage with 7 tools. VoiceLayer exposes 2 voice tools (voice_speak, voice_ask). Supabase provides database access. Exa handles web search, Sophtron connects to bank APIs, and a local GLM server provides free text generation. The orchestrator ensures all declared servers are running before spawning a golem.",
+        "Each golem declares which MCP servers it needs. BrainLayer provides 7 memory + KG tools (brain_search, brain_store, brain_recall, brain_digest, brain_entity, brain_update, brain_get_person). The email server handles triage with 7 tools. VoiceLayer exposes 2 voice tools (voice_speak, voice_ask). Supabase provides database access. Exa handles web search, Sophtron connects to bank APIs, and a local GLM server provides free text generation. The orchestrator ensures all declared servers are running before spawning a golem.",
       highlights: [
-        "BrainLayer — 3 memory tools",
+        "BrainLayer — 7 memory + KG tools",
         "Email — 7 triage & draft tools",
         "VoiceLayer — 2 voice tools",
         "Supabase — SQL & DDL access",

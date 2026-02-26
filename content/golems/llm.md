@@ -2658,7 +2658,7 @@ Built the full ecosystem in a concentrated sprint:
 
 **Phase 4 — Tooling:** Helpers layer (rate-limited API wrappers), DeepSource static analysis, skills catalog CLI, plugin architecture, session forking, Playwright E2E scaffold.
 
-**Sprint count:** 400+ tests at the time, 35 plan items completed, 3 MCP servers. (Post-Phase 8 componentization: 1,179 tests, 4,056 assertions across 10 packages.)
+**Sprint count:** 400+ tests at the time, 35 plan items completed, 7 MCP tools. (Post-Phase 8 componentization: 1,179 tests, 4,056 assertions across 10 packages.)
 
 ### Feb 7: Distribution Strategy
 

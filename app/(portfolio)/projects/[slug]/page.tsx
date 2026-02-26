@@ -4,11 +4,7 @@ import { getProjectBySlugOrId, getAllProjects } from "@/lib/projects";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  Github,
-  BookOpen,
-  ExternalLink,
-} from "lucide-react";
+import { Github, BookOpen, ExternalLink } from "lucide-react";
 import {
   TechIconWrapper,
   TechIconName,
@@ -31,7 +27,7 @@ import { highlightCode } from "@/lib/highlight";
 
 const PROJECT_DESCRIPTIONS: Record<string, string> = {
   brainlayer:
-    "Persistent memory layer for AI coding assistants. 268K+ indexed chunks, 3 intelligent tools (brain_search, brain_store, brain_recall), hybrid semantic search with sqlite-vec.",
+    "Persistent memory layer for AI coding assistants. 328K+ indexed chunks, 7 intelligent tools (search, store, recall + knowledge graph), 43 KG entities, hybrid semantic search with sqlite-vec.",
   voicelayer:
     "Voice I/O layer for AI assistants. Local TTS via edge-tts, STT via whisper.cpp (~300ms), session booking, 2 tools (voice_speak, voice_ask) with auto-mode detection.",
   golems:
@@ -39,11 +35,7 @@ const PROJECT_DESCRIPTIONS: Record<string, string> = {
 };
 
 export function generateStaticParams() {
-  return [
-    { slug: "brainlayer" },
-    { slug: "voicelayer" },
-    { slug: "golems" },
-  ];
+  return [{ slug: "brainlayer" }, { slug: "voicelayer" }, { slug: "golems" }];
 }
 
 export async function generateMetadata({
@@ -115,11 +107,12 @@ export default async function ProjectPage({
   const highlightedTabs = showcase?.installTabs
     ? await Promise.all(
         showcase.installTabs.map(async (tab) => {
-          const lang = tab.label.toLowerCase().includes("mcp") ||
+          const lang =
+            tab.label.toLowerCase().includes("mcp") ||
             tab.label.toLowerCase().includes("config") ||
             tab.label.toLowerCase().includes("json")
-            ? "json"
-            : "bash";
+              ? "json"
+              : "bash";
           const highlightedHtml = await highlightCode(tab.command, lang);
           return { ...tab, highlightedHtml };
         }),
@@ -176,10 +169,10 @@ export default async function ProjectPage({
           )}
 
           <div className="flex-1">
-            <h1 className="mb-3 font-[Nutmeg] text-[30px] font-bold leading-[1.1] text-white md:text-[52px]">
+            <h1 className="mb-3 font-[Nutmeg] text-[30px] leading-[1.1] font-bold text-white md:text-[52px]">
               {project.title}
             </h1>
-            <p className="mb-5 max-w-[620px] font-[Nutmeg] text-[15px] font-light leading-relaxed text-white/55 md:text-[17px]">
+            <p className="mb-5 max-w-[620px] font-[Nutmeg] text-[15px] leading-relaxed font-light text-white/55 md:text-[17px]">
               {project.description}
             </p>
 
