@@ -1144,7 +1144,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## How many tests does Golems have?
 
-**1,179 tests** with **4,056 assertions** across 75+ test files. The test suite covers all packages — 6 golems plus shared infrastructure — and runs with `bun test` from the monorepo root.
+**1,199 tests** with **2,928 assertions** across 79 test files. The test suite covers all 14 packages and runs with `bun test` from the monorepo root.
 
 ## What's the tech stack?
 
@@ -1186,7 +1186,7 @@ Claude Code v2.1 or later. The plugin system, skill loading, and MCP server supp
 
 ## What is Golems?
 
-Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **10 packages** — 6 golems plus shared infrastructure, each installable as a Claude Code plugin.
+Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **14 packages** — 7 domain agents plus shared infrastructure, dashboard, TUI, and autonomous tools, each installable as a Claude Code plugin.
 
 - **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
 - **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
