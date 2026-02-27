@@ -165,7 +165,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     accent: { color: "#94A3B8", colorRgb: "148, 163, 184" },
     isMiniSite: true,
     stats: [
-      { value: 10, label: "Packages" },
+      { value: 14, label: "Packages" },
       { value: 7, label: "Domain agents" },
       { value: 60, suffix: "+", label: "MCP tools" },
       { value: 150, suffix: "+", label: "PRs merged" },
