@@ -166,7 +166,7 @@ const terminalData: Record<string, { tabs: TerminalTab[]; title: string }> = {
         lines: [
           "\x1b[90m$\x1b[0m golems status",
           "",
-          "\x1b[1;33mGolems Ecosystem\x1b[0m  \x1b[90m·\x1b[0m  10 packages, 7 agents",
+          "\x1b[1;33mGolems Ecosystem\x1b[0m  \x1b[90m·\x1b[0m  14 packages, 7 agents",
           "",
           "\x1b[32m\u25CF\x1b[0m \x1b[1;37mTelegram Bot\x1b[0m      \x1b[32mrunning\x1b[0m  \x1b[90mport 3847\x1b[0m",
           "\x1b[32m\u25CF\x1b[0m \x1b[1;37mCloud Worker\x1b[0m      \x1b[32mrunning\x1b[0m  \x1b[90mRailway\x1b[0m",
