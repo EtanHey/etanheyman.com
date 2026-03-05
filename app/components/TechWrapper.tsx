@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 
 interface TechWrapperProps {
   children: ReactNode;
@@ -24,63 +24,44 @@ const TechWrapper: React.FC<TechWrapperProps> = ({
   className = "",
   name = "",
 }) => {
-  // Start at 0.8 for SSR, randomize on mount
-  const [opacity, setOpacity] = useState(0.8);
-  const [isHovered, setIsHovered] = useState(false);
-  const baseRef = useRef(0.8);
-  const rafRef = useRef<number>(0);
+  const elRef = useRef<HTMLDivElement>(null);
+  const hoveredRef = useRef(false);
 
-  // Randomize on mount — different every reload
   useEffect(() => {
-    const base = 0.5 + Math.random() * 0.5; // 0.5 to 1.0
-    baseRef.current = base;
-    setOpacity(base);
-  }, []);
+    const el = elRef.current;
+    if (!el) return;
 
-  // Slow organic pulse
-  useEffect(() => {
-    if (isHovered) return;
-
-    const speed = 0.0002 + Math.random() * 0.0003; // random cycle speed
+    const base = 0.5 + Math.random() * 0.5;
+    const speed = 0.0002 + Math.random() * 0.0003;
     const phase = Math.random() * Math.PI * 2;
-    const base = baseRef.current;
+    el.style.opacity = String(base);
 
-    let running = true;
+    let raf: number;
     const animate = (time: number) => {
-      if (!running || isHovered) return;
-      const wave = Math.sin(time * speed + phase);
-      const range = 1.0 - base;
-      const value = base + (wave * 0.5 + 0.5) * range * 0.5;
-      setOpacity(value);
-      rafRef.current = requestAnimationFrame(animate);
+      if (!hoveredRef.current) {
+        const wave = Math.sin(time * speed + phase);
+        const range = 1.0 - base;
+        el.style.opacity = String(base + (wave * 0.5 + 0.5) * range * 0.5);
+      }
+      raf = requestAnimationFrame(animate);
     };
-    rafRef.current = requestAnimationFrame(animate);
+    raf = requestAnimationFrame(animate);
 
-    return () => {
-      running = false;
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [isHovered]);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   return (
     <div
+      ref={elRef}
       onMouseEnter={() => {
-        setIsHovered(true);
-        setOpacity(1);
+        hoveredRef.current = true;
+        if (elRef.current) elRef.current.style.opacity = "1";
       }}
       onMouseLeave={() => {
-        setIsHovered(false);
+        hoveredRef.current = false;
       }}
-      onFocus={() => {
-        setIsHovered(true);
-        setOpacity(1);
-      }}
-      onBlur={() => {
-        setIsHovered(false);
-      }}
-      style={{ opacity }}
+      style={{ opacity: 0.8 }}
       className={`${baseClasses} ${className}`}
-      tabIndex={0}
       role="img"
       aria-label={`${name} technology icon`}
     >
