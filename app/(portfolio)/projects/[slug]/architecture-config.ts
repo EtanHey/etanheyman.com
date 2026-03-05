@@ -19,10 +19,16 @@ export interface ComparisonTable {
   rows: string[][];
 }
 
+export interface ToolListItem {
+  name: string;
+  description: string;
+}
+
 export interface ArchitectureSection {
   title: string;
   description: string;
   diagramNodes?: ArchitectureNode[];
+  toolList?: ToolListItem[];
   codeExample?: CodeExample;
   callout?: InsightCallout;
   comparisonTable?: ComparisonTable;
@@ -33,7 +39,7 @@ const architectureData: Record<string, ArchitectureSection[]> = {
     {
       title: "Data Pipeline",
       description:
-        "Every Claude Code session produces JSONL transcripts. BrainLayer's 4-stage pipeline transforms these raw conversations into searchable knowledge: Extract parses session files and detects continuation chains. Classify identifies content types — user messages, AI code, stack traces, file reads — with content-aware length thresholds. Chunk splits text using AST-aware code parsing (tree-sitter) and paragraph-based text splitting, targeting ~2000 chars per chunk. Finally, Embed generates 1024-dimensional vectors using bge-large-en-v1.5 and stores them in SQLite with sqlite-vec.",
+        "Every Claude Code session produces JSONL transcripts. BrainLayer's 4-stage pipeline turns these into searchable knowledge. Extract parses session files and detects continuation chains. Classify identifies content types (user messages, AI code, stack traces, file reads) with content-aware length thresholds. Chunk splits text using tree-sitter for code and paragraph boundaries for prose, targeting ~2000 chars per chunk. Embed generates 1024-dim vectors with bge-large-en-v1.5 and stores them in SQLite via sqlite-vec.",
       diagramNodes: [
         {
           icon: "MessageSquare",
@@ -53,7 +59,7 @@ const architectureData: Record<string, ArchitectureSection[]> = {
     {
       title: "Hybrid Search",
       description:
-        "Finding relevant memories requires more than vector similarity. BrainLayer runs two search strategies in parallel and fuses the results. Semantic search finds conceptually similar content using 1024-dim embeddings with K-nearest-neighbor lookup (3x oversampling). FTS5 keyword search catches exact matches that semantic search might miss. Reciprocal Rank Fusion (RRF) combines both ranked lists using the formula score = 1/(k + rank), where k=60 prevents any single high rank from dominating.",
+        "Vector similarity alone misses exact keyword matches. BrainLayer runs two strategies in parallel: semantic search with 1024-dim embeddings (KNN, 3x oversampling) and FTS5 keyword search for exact hits. Reciprocal Rank Fusion combines both ranked lists with score = 1/(k + rank), where k=60 keeps any single high rank from dominating the final ordering.",
       codeExample: {
         language: "python",
         code: `# Reciprocal Rank Fusion (k=60)
@@ -72,16 +78,16 @@ return sorted(fused, reverse=True)[:n]`,
     {
       title: "Enrichment Pipeline",
       description:
-        "Raw chunks are useful but lack structure. A local LLM (GLM-4.7-Flash or Qwen2.5-Coder-14B on Apple Silicon via MLX) enriches each chunk with 10 metadata fields: summary, tags, importance score (1-10), intent classification, primary code symbols, a hypothetical query for HyDE-style retrieval, epistemic level, version scope, tech debt impact, and external dependencies. Processing runs at ~50-100 chunks per batch with 5-minute stall detection per chunk.",
+        "Raw chunks need structure. A local LLM (GLM-4.7-Flash or Qwen2.5-Coder-14B via MLX on Apple Silicon) enriches each chunk with 10 metadata fields: summary, tags, importance (1-10), intent, primary code symbols, a hypothetical query for HyDE retrieval, epistemic level, version scope, tech debt impact, and external deps. Batches of 50-100 chunks with 5-minute stall detection per chunk.",
       callout: {
         title: "Why local LLM?",
-        text: "328K+ chunks at ~$0.01/chunk via cloud API = $3,280. Local GLM-4.7-Flash costs $0 in electricity. The enrichment quality is comparable for structured extraction tasks, and no data leaves the machine.",
+        text: "328K+ chunks at ~$0.01/chunk via cloud API = $3,280. Local GLM-4.7-Flash costs $0. Quality is comparable for structured extraction tasks, and no data leaves the machine.",
       },
     },
     {
       title: "Why SQLite",
       description:
-        "BrainLayer stores everything in a single .db file using SQLite + sqlite-vec for vectors and FTS5 for keyword search. This isn't a compromise — it's a deliberate architectural choice. The database ships with the package, requires zero infrastructure, and handles concurrent access from the daemon, MCP server, and enrichment workers via APSW with a 5-second busy timeout.",
+        "Everything lives in a single .db file: SQLite + sqlite-vec for vectors, FTS5 for keywords. Not a compromise. The database ships with the package, needs zero infrastructure, and handles concurrent access from the daemon, MCP server, and enrichment workers via APSW with a 5-second busy timeout.",
       comparisonTable: {
         headers: ["", "BrainLayer", "pgvector", "Pinecone", "Chroma"],
         rows: [
@@ -108,33 +114,40 @@ return sorted(fused, reverse=True)[:n]`,
     {
       title: "MCP Integration",
       description:
-        "7 MCP tools expose BrainLayer's full capability to any Claude Code session. 3 core memory tools (brain_search, brain_store, brain_recall) handle search, persistence, and recall. 4 knowledge graph tools (brain_digest, brain_entity, brain_update, brain_get_person) add entity extraction, lookup, updates, and person profiles. From 14 specialized tools to 7 that just work — backward-compat aliases for existing workflows.",
-      diagramNodes: [
+        "7 MCP tools expose BrainLayer's full capability to any Claude Code session. 3 core memory tools handle search, persistence, and recall. 4 knowledge graph tools add entity extraction, lookup, updates, and person profiles. Started at 14 specialized tools, consolidated to 7 that cover every use case. Old names still work through backward-compat aliases.",
+      toolList: [
         {
-          icon: "Brain",
-          title: "Think",
-          subtitle: "Task-aware context",
-        },
-        { icon: "Search", title: "Search", subtitle: "Hybrid query + filters" },
-        { icon: "FileText", title: "Recall", subtitle: "File & topic history" },
-        {
-          icon: "MessageSquare",
-          title: "Context",
-          subtitle: "Expand results",
+          name: "brain_search",
+          description:
+            "Semantic + keyword hybrid search across all indexed chunks",
         },
         {
-          icon: "Wrench",
-          title: "Tools",
-          subtitle: "7 total",
-          children: [
-            "brain_search",
-            "brain_store",
-            "brain_recall",
-            "brain_digest",
-            "brain_entity",
-            "brain_update",
-            "brain_get_person",
-          ],
+          name: "brain_store",
+          description:
+            "Persist decisions, learnings, bugs, and TODOs with auto-tagging",
+        },
+        {
+          name: "brain_recall",
+          description:
+            "Session context, operational history, and work summaries",
+        },
+        {
+          name: "brain_digest",
+          description:
+            "Ingest raw content and extract entities, relations, action items",
+        },
+        {
+          name: "brain_entity",
+          description:
+            "Look up known entities in the knowledge graph with relations",
+        },
+        {
+          name: "brain_update",
+          description: "Update, archive, or merge existing memory chunks",
+        },
+        {
+          name: "brain_get_person",
+          description: "Retrieve person profiles with interaction history",
         },
       ],
     },
@@ -144,7 +157,7 @@ return sorted(fused, reverse=True)[:n]`,
     {
       title: "Voice Tools Pipeline",
       description:
-        "VoiceLayer implements 2 tools with auto-mode detection. voice_speak handles text-to-speech (announce, brief, consult). voice_ask enables full bidirectional Q&A with session booking. The system automatically picks the right interaction pattern — fire-and-forget announcements, slower-paced briefings, or full conversation — based on context.",
+        "Two tools, auto-mode detection. voice_speak handles TTS in three modes: announce, brief, consult. voice_ask does full bidirectional Q&A with session booking. The system picks the interaction pattern from context: fire-and-forget for short updates, slower pacing for explanations, full conversation for Q&A.",
       diagramNodes: [
         { icon: "Volume2", title: "voice_speak", subtitle: "TTS, auto rate" },
         {
@@ -162,19 +175,17 @@ return sorted(fused, reverse=True)[:n]`,
     {
       title: "Speech-to-Text Flow",
       description:
-        "Recording uses sox at 16kHz mono PCM, processed in 1-second chunks with RMS energy detection for silence. Transcription runs through whisper.cpp locally (~200-400ms on Apple Silicon) with automatic model discovery from ~/.cache/whisper/. A cloud fallback via Wispr Flow WebSocket API handles cases where local transcription isn't available. Users stop recording by touching a signal file — Unix philosophy at its simplest.",
-      codeExample: {
-        language: "text",
-        code: `sox rec (16kHz mono) → WAV buffer
-    ↓
-whisper.cpp (local, ~300ms)
-  OR Wispr Flow (cloud fallback)
-    ↓
-Transcription → Agent response
-
-Stop: touch /tmp/voicelayer-stop`,
-        caption: "Dual-backend STT with filesystem-based stop signal",
-      },
+        "Recording uses sox at 16kHz mono PCM, processed in 1-second chunks with RMS energy detection for silence. Transcription runs through whisper.cpp locally (~200-400ms on Apple Silicon) with automatic model discovery from ~/.cache/whisper/. Cloud fallback via Wispr Flow WebSocket handles cases where local STT isn't available. Stop recording by touching a signal file. Simple Unix.",
+      diagramNodes: [
+        { icon: "Mic", title: "Record", subtitle: "sox 16kHz mono" },
+        { icon: "FileText", title: "WAV Buffer", subtitle: "1s chunks + RMS" },
+        { icon: "Zap", title: "whisper.cpp", subtitle: "Local ~300ms" },
+        {
+          icon: "MessageSquare",
+          title: "Transcription",
+          subtitle: "Agent response",
+        },
+      ],
       callout: {
         title: "~300ms latency",
         text: "whisper.cpp on Apple Silicon with ggml-large-v3-turbo achieves near-instant transcription. No cloud roundtrip, no API keys, no data leaving your machine.",
@@ -183,7 +194,7 @@ Stop: touch /tmp/voicelayer-stop`,
     {
       title: "Text-to-Speech Flow",
       description:
-        "Edge-TTS provides neural-quality speech synthesis for free. Speech rate auto-adjusts based on content length — shorter messages play faster (+10%), longer explanations slow down (-15% for 1000+ chars). Each voice mode has its own rate default: announce is snappy, brief is deliberate. Users can interrupt playback at any time by touching the stop signal file, which a 300ms polling loop monitors during audio output.",
+        "Edge-TTS provides neural-quality speech synthesis for free. Speech rate auto-adjusts by content length: shorter messages play faster (+10%), longer explanations slow down (-15% for 1000+ chars). Each voice mode has its own rate default. Announce is snappy, brief is deliberate. Users interrupt playback by touching a stop signal file, monitored by a 300ms polling loop.",
       diagramNodes: [
         { icon: "FileText", title: "Text", subtitle: "Agent response" },
         { icon: "Volume2", title: "Edge-TTS", subtitle: "Neural synthesis" },
@@ -198,7 +209,7 @@ Stop: touch /tmp/voicelayer-stop`,
     {
       title: "Session Booking",
       description:
-        "Only one session can use the microphone at a time. VoiceLayer solves this with a lockfile mutex — a JSON file at /tmp/voicelayer-session.lock containing the owning PID, session ID, and start timestamp. Lock creation uses atomic wx write flags to prevent race conditions. Dead process detection uses the signal-zero trick: process.kill(pid, 0) throws ESRCH for dead processes, enabling automatic stale lock cleanup.",
+        "Only one session can use the microphone at a time. VoiceLayer handles this with a lockfile mutex: a JSON file at /tmp/voicelayer-session.lock with the owning PID, session ID, and start timestamp. Lock creation uses atomic wx write flags to prevent TOCTOU races. Dead process detection uses the signal-zero trick: process.kill(pid, 0) throws ESRCH for dead processes, so stale locks get cleaned up automatically.",
       codeExample: {
         language: "typescript",
         code: `// Atomic lock creation (TOCTOU-safe)
@@ -218,7 +229,7 @@ try {
       },
       callout: {
         title: "Why lockfile over semaphore?",
-        text: "Lockfiles are simple filesystem artifacts that work across process boundaries without kernel objects or special privileges. Dead process detection via signal-zero is a Unix classic that's both elegant and reliable.",
+        text: "Lockfiles work across process boundaries without kernel objects or special privileges. Dead process detection via signal-zero is a Unix classic. Simple and reliable.",
       },
     },
   ],
@@ -227,7 +238,7 @@ try {
     {
       title: "Monorepo Structure",
       description:
-        "13 packages organized in a Bun monorepo. @golems/shared provides the foundation — Supabase client, multi-backend LLM routing, email processing, and state management. Domain golems (jobs, recruiter, coach, teller, content) are self-contained Claude Code plugins. Ralph handles autonomous PRD execution. The dashboard is a Next.js 16 app with 3D brain visualization. Each package is independently deployable but shares types and utilities through the foundation layer.",
+        "13 packages in a Bun monorepo. @golems/shared is the foundation: Supabase client, multi-backend LLM routing, email processing, state management. Domain golems (jobs, recruiter, coach, teller, content) are self-contained Claude Code plugins. Ralph handles autonomous PRD execution. The dashboard is a Next.js 16 app with 3D brain visualization. Each package deploys independently but shares types and utilities through the foundation layer.",
       diagramNodes: [
         {
           icon: "Package",
@@ -261,7 +272,7 @@ try {
     {
       title: "Cloud + Local Split",
       description:
-        "Golems runs across two environments, each optimized for its workload. Railway hosts the cloud worker — a single service running scheduled cron tasks: email polling (hourly), job scraping (3x/day Sun-Thu), daily briefing generation, and content learning. macOS handles everything real-time: the Telegram bot (Grammy, port 3847), BrainLayer memory indexing, VoiceLayer voice I/O, and Night Shift autonomous coding at 4am via launchd.",
+        "Two environments, each tuned for its workload. Railway runs the cloud worker: scheduled cron tasks for email polling (hourly), job scraping (3x/day Sun-Thu), daily briefings, and content learning. macOS handles real-time services: Telegram bot (Grammy, port 3847), BrainLayer indexing, VoiceLayer I/O, and Night Shift autonomous coding at 4am via launchd.",
       comparisonTable: {
         headers: ["", "Railway (Cloud)", "macOS (Local)"],
         rows: [
@@ -284,7 +295,7 @@ try {
     {
       title: "Multi-LLM Routing",
       description:
-        "Every LLM call goes through a unified routing layer that prioritizes free models. The routing hierarchy: MLX on Apple Silicon (21-87% faster than Ollama, $0) → local GLM-4.7-Flash via Ollama ($0) → Gemini 2.5 Flash-Lite (free tier, 1K RPD) → Groq Llama 4 Scout (free tier) → Claude Haiku 4.5 (paid, only when free options are exhausted). The same runLLM() interface works everywhere — backend selection is an environment variable.",
+        "Every LLM call goes through a routing layer that prefers free models. The hierarchy: MLX on Apple Silicon (21-87% faster than Ollama, $0), local GLM-4.7-Flash via Ollama ($0), Gemini 2.5 Flash-Lite (free tier, 1K RPD), Groq Llama 4 Scout (free tier), then Claude Haiku 4.5 (paid, last resort). Same runLLM() interface everywhere. Backend selection is just an env var.",
       codeExample: {
         language: "typescript",
         code: `// Same interface, any backend
@@ -302,7 +313,7 @@ const result = await runLLM(prompt);
     {
       title: "Autonomous Loop",
       description:
-        "Ralph transforms PRD stories into working code without human intervention. The /prd skill creates structured stories with acceptance criteria. Ralph spawns fresh Claude instances per story, implements the code, and gates every commit behind CodeRabbit AI review. Failed reviews trigger automatic fix-iterate-review cycles (max 3). Night Shift extends this at 4am — scanning repos for TODOs and improvements, creating worktrees, and shipping PRs while the developer sleeps.",
+        "Ralph turns PRD stories into working code without human intervention. The /prd skill creates structured stories with acceptance criteria. Ralph spawns a fresh Claude instance per story, implements the code, and gates every commit behind CodeRabbit AI review. Failed reviews trigger automatic fix-iterate-review cycles (max 3 attempts). Night Shift extends this at 4am: scans repos for TODOs, creates worktrees, ships PRs while the developer sleeps.",
       diagramNodes: [
         { icon: "FileText", title: "PRD", subtitle: "Stories + criteria" },
         { icon: "Bot", title: "Ralph", subtitle: "Spawn Claude" },
@@ -318,7 +329,7 @@ const result = await runLLM(prompt);
     {
       title: "MCP Ecosystem",
       description:
-        "8 MCP servers provide 60+ tools across the ecosystem. BrainLayer contributes 7 tools — 3 core memory (brain_search, brain_store, brain_recall) + 4 knowledge graph (brain_digest, brain_entity, brain_update, brain_get_person). The email server handles triage with 7 tools. VoiceLayer exposes 2 voice tools (voice_speak, voice_ask). Supabase provides database access. Specialized servers for web search (Exa), financial data (Sophtron), and local LLM inference (GLM) round out the toolkit. Each golem declares which MCP servers it needs — the orchestrator ensures they're available at session startup.",
+        "8 MCP servers, 60+ tools. BrainLayer: 7 tools (3 core memory + 4 knowledge graph). Email: 7 tools for triage. VoiceLayer: 2 voice tools. Plus Supabase for database, Exa for web search, Sophtron for financial data, GLM for local inference. Each golem declares which MCP servers it needs. The orchestrator makes sure they're available at session startup.",
       diagramNodes: [
         {
           icon: "Brain",

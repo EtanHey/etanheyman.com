@@ -272,7 +272,11 @@ export default async function ProjectPage({
           </h2>
           <div className="grid grid-cols-4 gap-5 sm:grid-cols-6 md:grid-cols-8 xl:gap-11">
             {project.technologies.map((tech) => (
-              <TechIconWrapper key={tech} name={tech as TechIconName} />
+              <TechIconWrapper
+                key={tech}
+                name={tech as TechIconName}
+                showLabel
+              />
             ))}
           </div>
         </section>

@@ -1,5 +1,6 @@
 export { default as AWSIcon } from "./AWSIcon";
 export { default as AxiomIcon } from "./AxiomIcon";
+export { default as BunIcon } from "./BunIcon";
 export { default as AxiosIcon } from "./AxiosIcon";
 export { default as BubbleIcon } from "./BubbleIcon";
 export { default as CloudinaryIcon } from "./CloudinaryIcon";
@@ -50,6 +51,7 @@ export * from "./TechIcon";
 export { default as TechIcon } from "./TechIcon";
 export * from "./TechIconWrapper";
 export { default as TechIconWrapper } from "./TechIconWrapper";
+export { default as TypeScriptIcon } from "./TypeScriptIcon";
 export { default as VanillaJSIcon } from "./VanillaJSIcon";
 export { default as VueIcon } from "./VueIcon";
 export { default as WhisperCppIcon } from "./WhisperCppIcon";
