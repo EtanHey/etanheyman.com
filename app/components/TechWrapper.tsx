@@ -1,11 +1,11 @@
 "use client";
 
-import React, { ReactNode, useMemo, useState } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 
 interface TechWrapperProps {
   children: ReactNode;
   className?: string;
-  name?: string; // Add name prop to create deterministic opacity
+  name?: string;
 }
 
 const baseClasses = [
@@ -14,7 +14,7 @@ const baseClasses = [
   "sm:h-[74.71px] sm:w-[81.9px] sm:p-[14.37px]",
   "rounded-tl-[338.01px] rounded-br-[338.01px] rounded-bl-[338.01px]",
   "sm:rounded-tl-[574.71px] sm:rounded-br-[574.71px] sm:rounded-bl-[574.71px]",
-  "bg-blue-50 opacity-80 hover:opacity-100",
+  "bg-blue-50 hover:opacity-100",
   "shadow-[0px_0px_34.48px_0px_hsla(209,88%,49%,1)]",
   "transition-opacity duration-300",
 ].join(" ");
@@ -24,30 +24,44 @@ const TechWrapper: React.FC<TechWrapperProps> = ({
   className = "",
   name = "",
 }) => {
-  // Generate a deterministic opacity value based on the component name
-  // This ensures server and client rendering match
-  const nameOpacity = useMemo(() => {
-    if (!name) return 0.8; // Default opacity for unnamed items
+  const elRef = useRef<HTMLDivElement>(null);
+  const hoveredRef = useRef(false);
 
-    // Use a deterministic approach based on name
-    // Sum the character codes of the name and use modulo for determinism
-    const nameSum = name
-      .split("")
-      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
-    return nameSum % 2 === 0 ? 0.8 : 1;
-  }, [name]);
+  useEffect(() => {
+    const el = elRef.current;
+    if (!el) return;
 
-  const [opacity, setOpacity] = useState(nameOpacity);
+    const base = 0.5 + Math.random() * 0.5;
+    const speed = 0.0002 + Math.random() * 0.0003;
+    const phase = Math.random() * Math.PI * 2;
+    el.style.opacity = String(base);
+
+    let raf: number;
+    const animate = (time: number) => {
+      if (!hoveredRef.current) {
+        const wave = Math.sin(time * speed + phase);
+        const range = 1.0 - base;
+        el.style.opacity = String(base + (wave * 0.5 + 0.5) * range * 0.5);
+      }
+      raf = requestAnimationFrame(animate);
+    };
+    raf = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   return (
     <div
-      onMouseEnter={() => setOpacity(1)}
-      onMouseLeave={() => setOpacity(nameOpacity)}
-      onFocus={() => setOpacity(1)}
-      onBlur={() => setOpacity(nameOpacity)}
-      style={{ opacity }}
+      ref={elRef}
+      onMouseEnter={() => {
+        hoveredRef.current = true;
+        if (elRef.current) elRef.current.style.opacity = "1";
+      }}
+      onMouseLeave={() => {
+        hoveredRef.current = false;
+      }}
+      style={{ opacity: 0.8 }}
       className={`${baseClasses} ${className}`}
-      tabIndex={0}
       role="img"
       aria-label={`${name} technology icon`}
     >

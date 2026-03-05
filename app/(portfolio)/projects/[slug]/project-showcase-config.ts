@@ -70,7 +70,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         iconName: "Database",
         title: "7 MCP Tools",
         description:
-          "3 core (search, store, recall) + 4 knowledge graph (digest, entity, update, person lookup). From 14 specialized tools to 7 — backward-compat aliases for existing workflows.",
+          "3 core (search, store, recall) + 4 knowledge graph (digest, entity, update, person lookup). Consolidated from 14 to 7. Old names still work via aliases.",
       },
       {
         iconName: "Brain",
@@ -112,14 +112,14 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { value: 2, label: "MCP tools" },
       { value: 2, label: "STT backends" },
       { value: 300, suffix: "ms", prefix: "~", label: "STT latency" },
-      { value: 75, suffix: "+", label: "Tests passing" },
+      { value: 236, label: "Tests passing" },
     ],
     features: [
       {
         iconName: "Mic",
         title: "2 Tools, Auto Mode",
         description:
-          "voice_speak and voice_ask handle everything — fire-and-forget TTS to full voice Q&A, with automatic mode detection.",
+          "voice_speak and voice_ask cover the full range: fire-and-forget TTS to interactive Q&A, with automatic mode detection.",
       },
       {
         iconName: "Radio",
@@ -131,7 +131,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         iconName: "Lock",
         title: "Session Booking",
         description:
-          'Lockfile-based mic mutex. Other sessions see "line busy" — no conflicts.',
+          'Lockfile-based mic mutex. Other sessions see "line busy". No conflicts.',
       },
       {
         iconName: "Volume2",
@@ -181,7 +181,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         iconName: "Bot",
         title: "7 Domain Agents",
         description:
-          "Recruiter, Jobs, Content, Coach, Teller, Services, Claude — each a self-contained CC plugin.",
+          "Recruiter, Jobs, Content, Coach, Teller, Services, Claude. Each one is a self-contained CC plugin.",
       },
       {
         iconName: "Package",

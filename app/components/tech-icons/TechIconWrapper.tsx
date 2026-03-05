@@ -9,6 +9,7 @@ export type TechIconName =
   | "Axiom"
   | "Axios"
   | "Bubble"
+  | "Bun"
   | "CSS3"
   | "Cloudinary"
   | "Cypress"
@@ -58,6 +59,7 @@ export type TechIconName =
   | "Svelte"
   | "Tailwind"
   | "VanillaJS"
+  | "TypeScript"
   | "Vue"
   | "WhisperCpp"
   | "whisper.cpp"
@@ -68,6 +70,7 @@ interface TechIconWrapperProps extends Omit<TechIconProps, "className"> {
   name: TechIconName;
   wrapperClassName?: string;
   iconClassName?: string;
+  showLabel?: boolean;
 }
 
 // Map of tech names to their respective components
@@ -76,6 +79,7 @@ export const techIconMap: Record<TechIconName, React.FC<TechIconProps>> = {
   Axiom: TechIcons.AxiomIcon,
   Axios: TechIcons.AxiosIcon,
   Bubble: TechIcons.BubbleIcon,
+  Bun: TechIcons.BunIcon,
   CSS3: TechIcons.CSS3Icon,
   Cloudinary: TechIcons.CloudinaryIcon,
   Cypress: TechIcons.CypressIcon,
@@ -124,6 +128,7 @@ export const techIconMap: Record<TechIconName, React.FC<TechIconProps>> = {
   "sqlite-vec": TechIcons.SqliteVecIcon,
   Svelte: TechIcons.SvelteIcon,
   Tailwind: TechIcons.TailwindIcon,
+  TypeScript: TechIcons.TypeScriptIcon,
   VanillaJS: TechIcons.VanillaJSIcon,
   Vue: TechIcons.VueIcon,
   WhisperCpp: TechIcons.WhisperCppIcon,
@@ -136,6 +141,7 @@ export const TechIconWrapper: React.FC<TechIconWrapperProps> = ({
   name,
   wrapperClassName = "",
   iconClassName = "",
+  showLabel = false,
   ...iconProps
 }) => {
   const IconComponent = techIconMap[name];
@@ -145,10 +151,23 @@ export const TechIconWrapper: React.FC<TechIconWrapperProps> = ({
     return null;
   }
 
+  if (!showLabel) {
+    return (
+      <TechWrapper className={wrapperClassName} name={name}>
+        <IconComponent className={iconClassName} {...iconProps} />
+      </TechWrapper>
+    );
+  }
+
   return (
-    <TechWrapper className={wrapperClassName} name={name}>
-      <IconComponent className={iconClassName} {...iconProps} />
-    </TechWrapper>
+    <div className="flex flex-col items-center gap-1.5">
+      <TechWrapper className={wrapperClassName} name={name}>
+        <IconComponent className={iconClassName} {...iconProps} />
+      </TechWrapper>
+      <span className="font-mono text-[9px] text-white/40 md:text-[10px]">
+        {name}
+      </span>
+    </div>
   );
 };
 
