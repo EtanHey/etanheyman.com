@@ -10,14 +10,11 @@ import { ArchitectureDiagram } from "../components/ArchitectureDiagram";
 import { ArchCodeBlock } from "../components/ArchCodeBlock";
 import { InsightCallout } from "../components/InsightCallout";
 import { ComparisonTable } from "../components/ComparisonTable";
+import { ToolList } from "../components/ToolList";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
-  return [
-    { slug: "brainlayer" },
-    { slug: "voicelayer" },
-    { slug: "golems" },
-  ];
+  return [{ slug: "brainlayer" }, { slug: "voicelayer" }, { slug: "golems" }];
 }
 
 export async function generateMetadata({
@@ -68,7 +65,10 @@ export default async function ArchitecturePage({
     sections.map(async (section) => ({
       ...section,
       codeHighlightedHtml: section.codeExample
-        ? await highlightCode(section.codeExample.code, section.codeExample.language)
+        ? await highlightCode(
+            section.codeExample.code,
+            section.codeExample.language,
+          )
         : undefined,
     })),
   );
@@ -83,13 +83,13 @@ export default async function ArchitecturePage({
         <h1 className="mb-3 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
           Architecture
         </h1>
-        <p className="max-w-[600px] break-words font-[Nutmeg] text-[22px] font-bold leading-tight text-white md:text-[36px]">
+        <p className="max-w-[600px] font-[Nutmeg] text-[22px] leading-tight font-bold break-words text-white md:text-[36px]">
           How {project.title} works
         </p>
       </section>
 
       {/* Sections */}
-      <div className="space-y-14 md:space-y-20">
+      <div className="space-y-10 md:space-y-14">
         {highlightedSections.map((section, i) => (
           <section key={section.title} className="relative">
             {/* Section number */}
@@ -106,15 +106,23 @@ export default async function ArchitecturePage({
             </h2>
 
             {/* Description */}
-            <p className="mb-8 max-w-[680px] font-[Nutmeg] text-[14px] font-light leading-relaxed text-white/50 md:text-[16px]">
+            <p className="mb-6 max-w-[680px] font-[Nutmeg] text-[14px] leading-relaxed font-light text-white/50 md:text-[16px]">
               {section.description}
             </p>
 
             {/* Visual elements */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               {section.diagramNodes && (
                 <ArchitectureDiagram
                   nodes={section.diagramNodes}
+                  accentColor={accent.color}
+                  accentColorRgb={accent.colorRgb}
+                />
+              )}
+
+              {section.toolList && (
+                <ToolList
+                  tools={section.toolList}
                   accentColor={accent.color}
                   accentColorRgb={accent.colorRgb}
                 />
@@ -152,7 +160,7 @@ export default async function ArchitecturePage({
 
             {/* Section divider */}
             {i < sections.length - 1 && (
-              <div className="mt-14 md:mt-20">
+              <div className="mt-10 md:mt-14">
                 <div
                   className="h-px w-16"
                   style={{
