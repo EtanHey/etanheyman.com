@@ -6,10 +6,9 @@ import type { ToolListItem } from "../architecture-config";
 interface Props {
   tools: ToolListItem[];
   accentColor: string;
-  accentColorRgb: string;
 }
 
-export function ToolList({ tools, accentColor, accentColorRgb }: Props) {
+export function ToolList({ tools, accentColor }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 

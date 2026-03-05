@@ -121,11 +121,7 @@ export default async function ArchitecturePage({
               )}
 
               {section.toolList && (
-                <ToolList
-                  tools={section.toolList}
-                  accentColor={accent.color}
-                  accentColorRgb={accent.colorRgb}
-                />
+                <ToolList tools={section.toolList} accentColor={accent.color} />
               )}
 
               {section.codeExample && (
