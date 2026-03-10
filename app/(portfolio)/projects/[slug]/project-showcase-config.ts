@@ -166,7 +166,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     isMiniSite: true,
     stats: [
       { value: 11, label: "Packages" },
-      { value: 7, label: "Domain agents" },
+      { value: 4, label: "Domain golems" },
       { value: 55, label: "Skills" },
       { value: 261, suffix: "+", label: "PRs merged" },
     ],
@@ -179,15 +179,15 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
       {
         iconName: "Bot",
-        title: "7 Domain Agents",
+        title: "4 Domain Golems",
         description:
-          "Recruiter, Jobs, Content, Coach, Teller, Services, Claude. Each one is a self-contained CC plugin.",
+          "Coach (primary), Claude (telegram), Recruiter (job hunt), Services (infra). Each is a self-contained CC plugin.",
       },
       {
         iconName: "Package",
         title: "Autonomous Loop",
         description:
-          "Ralph executes PRD stories with CodeRabbit review gates. Night Shift runs improvements at 3am.",
+          "Night Shift runs improvements at 4am with CodeRabbit review gates. Morning Briefing at 8am.",
       },
       {
         iconName: "Cloud",
@@ -214,16 +214,8 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       {
         icon: "Zap",
         title: "Domain Agents",
-        subtitle: "7 specialized golems",
-        children: [
-          "Jobs",
-          "Recruiter",
-          "Content",
-          "Coach",
-          "Teller",
-          "Services",
-          "Claude",
-        ],
+        subtitle: "4 specialized golems",
+        children: ["Coach", "Claude", "Recruiter", "Services"],
       },
       { icon: "Binary", title: "LLM Router", subtitle: "Multi-model cost opt" },
       { icon: "Cloud", title: "Cloud + Local", subtitle: "Railway + Mac" },

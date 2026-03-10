@@ -315,7 +315,7 @@ Setup section in the SKILL.md.`;
 /* ── Terminal demo lines ─────────────────────────────────────── */
 
 const installDemoLines = [
-  "$ npx golem-skills install cmux-agents",
+  "$ npx golems-cli skills install cmux-agents",
   "",
   "\x1b[34m=== INSTALLING cmux-agents ===\x1b[0m",
   "",
@@ -359,8 +359,7 @@ function SkillCard({ skill }: { skill: SkillEntry }) {
         {evalData && (
           <span className="flex items-center gap-1 rounded-full bg-[#28c84015] px-2 py-0.5 text-[0.65rem] font-medium text-[#28c840]">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-            {evalData.evalCount} evals · {evalData.assertionCount}/
-            {evalData.assertionCount} passing
+            {evalData.evalCount} evals · {evalData.assertionCount} assertions
           </span>
         )}
       </div>
@@ -386,7 +385,7 @@ function FeaturedSkill() {
           <span className="block h-2.5 w-2.5 rounded-full bg-[#28c840]" />
         </div>
         <span className="flex-1 text-center font-mono text-[0.72rem] text-[#666]">
-          golem-skills install cmux-agents
+          golems-cli skills install cmux-agents
         </span>
         <div className="w-12" />
       </div>
@@ -418,8 +417,7 @@ function FeaturedSkill() {
         {evalData && (
           <span className="flex items-center gap-1 rounded-full bg-[#28c84015] px-2.5 py-1 text-[0.7rem] font-medium text-[#28c840]">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-            {evalData.evalCount} evals · {evalData.assertionCount}/
-            {evalData.assertionCount} passing
+            {evalData.evalCount} evals · {evalData.assertionCount} assertions
             {evalData.hasFixtures && " · fixtures"}
           </span>
         )}
@@ -457,7 +455,7 @@ export default function SkillsShowcase() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           Skills Library
         </h2>
-        <p className="mb-4 text-center text-[#9b8e7e] italic">
+        <p className="mb-4 text-center text-[#b0a89c] italic">
           {golemsStats.skills.count} reusable Claude Code skills. Install any
           skill with one paste.
         </p>
@@ -468,25 +466,25 @@ export default function SkillsShowcase() {
             <div className="text-lg font-bold text-[#e59500]">
               {golemsStats.skills.count}
             </div>
-            <div className="text-[0.7rem] text-[#9b8e7e]">Skills</div>
+            <div className="text-[0.7rem] text-[#b0a89c]">Skills</div>
           </div>
           <div className="rounded-lg border border-[#28c84014] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#28c840]">
               {golemsStats.skills.withEvals}
             </div>
-            <div className="text-[0.7rem] text-[#9b8e7e]">With Evals</div>
+            <div className="text-[0.7rem] text-[#b0a89c]">With Evals</div>
           </div>
           <div className="rounded-lg border border-[#6ab0f314] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#6ab0f3]">
               {totalAssertions}
             </div>
-            <div className="text-[0.7rem] text-[#9b8e7e]">Assertions</div>
+            <div className="text-[0.7rem] text-[#b0a89c]">Assertions</div>
           </div>
           <div className="rounded-lg border border-[#40d4d414] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#40d4d4]">
               {golemsStats.skills.evalCoverage}
             </div>
-            <div className="text-[0.7rem] text-[#9b8e7e]">Eval Coverage</div>
+            <div className="text-[0.7rem] text-[#b0a89c]">Eval Coverage</div>
           </div>
         </div>
 
@@ -500,7 +498,7 @@ export default function SkillsShowcase() {
               <h3 className="mb-1 text-sm font-bold text-[#2dd4a8]">
                 Install Prompt
               </h3>
-              <p className="mb-3 text-[0.75rem] leading-relaxed text-[#9b8e7e]">
+              <p className="mb-3 text-[0.75rem] leading-relaxed text-[#b0a89c]">
                 Paste this into any Claude Code session to install cmux-agents:
               </p>
               <div className="group relative">

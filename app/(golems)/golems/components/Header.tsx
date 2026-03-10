@@ -88,7 +88,7 @@ export default function Header({ nav }: Props) {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#9b8e7e] transition-colors hover:text-[#c0b8a8]"
+                  className="text-sm text-[#b0a89c] transition-colors hover:text-[#c0b8a8]"
                 >
                   {link.label}
                 </a>
@@ -171,7 +171,7 @@ export default function Header({ nav }: Props) {
                       }
                       return (
                         <div key={section.slug}>
-                          <h4 className="mb-1 px-3 text-[10px] font-bold tracking-widest text-[#9b8e7e] uppercase">
+                          <h4 className="mb-1 px-3 text-[10px] font-bold tracking-widest text-[#b0a89c] uppercase">
                             {section.title}
                           </h4>
                           {section.children.map((item) => {
@@ -207,7 +207,7 @@ export default function Header({ nav }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
-                  className="block rounded-md px-3 py-2 text-sm text-[#9b8e7e] transition-colors hover:bg-[#ffffff08] hover:text-[#c0b8a8]"
+                  className="block rounded-md px-3 py-2 text-sm text-[#b0a89c] transition-colors hover:bg-[#ffffff08] hover:text-[#c0b8a8]"
                 >
                   {link.label} &rarr;
                 </a>

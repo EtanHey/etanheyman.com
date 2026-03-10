@@ -43,7 +43,7 @@ export default function Sidebar({ nav }: Props) {
           // Category with children
           return (
             <div key={section.slug}>
-              <h3 className="mb-2 text-[10px] font-bold tracking-widest text-[#9b8e7e] uppercase">
+              <h3 className="mb-2 text-[10px] font-bold tracking-widest text-[#b0a89c] uppercase">
                 {section.title}
               </h3>
               <ul className="space-y-0.5">

@@ -38,7 +38,7 @@ Each golem operates independently and only depends on `@golems/shared`. ClaudeGo
 Before you start, ensure you have:
 
 - **Bun** (v1.0+) — runtime and package manager
-- **Python** 3.10+ — required for Zikaron package (semantic search)
+- **Python** 3.10+ — required for BrainLayer package (semantic search)
 - **1Password CLI** (`op` command) — secret management
 - **Claude Code** — the IDE
 - **GitHub** — repo access (SSH key configured)

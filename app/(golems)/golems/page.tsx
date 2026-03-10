@@ -383,7 +383,7 @@ function HomepageHero() {
               <h1 className="m-0 bg-gradient-to-br from-[#f0ebe0] to-[#e59500] bg-clip-text text-xl leading-tight font-black tracking-tight text-transparent sm:text-2xl md:text-3xl">
                 Golems
               </h1>
-              <div className="flex flex-wrap items-center gap-1.5 font-mono text-[0.65rem] text-[#9b8e7e] sm:text-xs">
+              <div className="flex flex-wrap items-center gap-1.5 font-mono text-[0.65rem] text-[#b0a89c] sm:text-xs">
                 <span className="text-[#a09080]">Spawn</span>
                 <span className="text-[#c46d3c] opacity-70">&rarr;</span>
                 <span className="text-[#a09080]">Work</span>
@@ -482,6 +482,18 @@ function HomepageHero() {
             </div>
           </div>
 
+          {/* Quick install CTA */}
+          <div className="group relative w-full max-w-lg">
+            <div className="flex items-center rounded-lg border border-[#2dd4a830] bg-[#0d0d0d] px-4 py-2.5 pr-14">
+              <code className="font-mono text-[0.75rem] text-[#2dd4a8] sm:text-sm">
+                <span className="text-[#b0a89c]">$</span> git clone
+                https://github.com/EtanHey/golems &amp;&amp; cd golems
+                &amp;&amp; bun install
+              </code>
+            </div>
+            <CopyButton text="git clone https://github.com/EtanHey/golems && cd golems && bun install" />
+          </div>
+
           {/* Action buttons */}
           <div className="flex w-full flex-col justify-center gap-3 md:w-auto md:flex-row md:flex-wrap md:items-center">
             <Link
@@ -535,7 +547,7 @@ function GetStartedSection() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           Get Started in 60 Seconds
         </h2>
-        <p className="mb-12 text-center text-[#9b8e7e] italic">
+        <p className="mb-12 text-center text-[#b0a89c] italic">
           Four commands. That&apos;s it.
         </p>
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
@@ -554,7 +566,7 @@ function GetStartedSection() {
               <code className="mb-2 block rounded-md border border-[#2dd4a81a] bg-black/40 px-2.5 py-1.5 font-mono text-[0.72rem] break-all text-[#2dd4a8]">
                 {s.command}
               </code>
-              <p className="m-0 text-[0.8rem] leading-snug text-[#9b8e7e]">
+              <p className="m-0 text-[0.8rem] leading-snug text-[#b0a89c]">
                 {s.desc}
               </p>
             </div>
@@ -583,7 +595,7 @@ function EcosystemSection() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           The Ecosystem
         </h2>
-        <p className="mb-10 text-center text-[#9b8e7e] italic">
+        <p className="mb-10 text-center text-[#b0a89c] italic">
           4 domain golems, {golemsStats.skills.count} skills, 2 MCPs, and a CLI.
         </p>
 
@@ -601,7 +613,7 @@ function EcosystemSection() {
                 <span className="text-sm font-bold text-[#e8e2d6]">
                   {g.name}
                 </span>
-                <span className="text-[0.78rem] text-[#9b8e7e]">{g.desc}</span>
+                <span className="text-[0.78rem] text-[#b0a89c]">{g.desc}</span>
               </Link>
             ))}
           </div>
@@ -621,14 +633,14 @@ function EcosystemSection() {
                 {golemsStats.skills.count}
               </div>
               <div className="text-sm font-medium text-[#e8e2d6]">Skills</div>
-              <div className="text-[0.75rem] text-[#9b8e7e]">
+              <div className="text-[0.75rem] text-[#b0a89c]">
                 Reusable Claude Code slash commands
               </div>
             </Link>
             <div className="rounded-lg border border-[#2dd4a814] bg-[#14120e]/90 px-4 py-3">
               <div className="text-lg font-bold text-[#2dd4a8]">2</div>
               <div className="text-sm font-medium text-[#e8e2d6]">MCPs</div>
-              <div className="text-[0.75rem] text-[#9b8e7e]">
+              <div className="text-[0.75rem] text-[#b0a89c]">
                 BrainLayer ({golemsStats.brainlayer.chunksDisplay} chunks) +
                 VoiceLayer
               </div>
@@ -638,7 +650,7 @@ function EcosystemSection() {
               <div className="text-sm font-medium text-[#e8e2d6]">
                 golems-cli
               </div>
-              <div className="text-[0.75rem] text-[#9b8e7e]">
+              <div className="text-[0.75rem] text-[#b0a89c]">
                 wizard, status, recruit, coach, logs
               </div>
             </div>
@@ -659,7 +671,7 @@ function ArchitectureSection() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           How It Works
         </h2>
-        <p className="mb-12 text-center text-[#9b8e7e] italic">
+        <p className="mb-12 text-center text-[#b0a89c] italic">
           Mac is the brain, Railway is the body
         </p>
         <div className="mx-auto flex max-w-[700px] flex-col items-center justify-center gap-4 md:flex-row md:gap-8">

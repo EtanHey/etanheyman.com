@@ -50,7 +50,7 @@ Generates personalized daily coaching using Gemini Flash-Lite (free) with rule-b
 
 - `CoachProtocol` interface: sleep, body, career, schedule, huberman, coaching sections
 - `DEFAULT_PROTOCOL` from user's context (shoulder injury, sleep phase shift, etc.)
-- Stored at `~/.golems-zikaron/coach/protocol.json`
+- Stored at `~/.brainlayer/coach/protocol.json`
 - `loadProtocol()`, `saveProtocol()`
 
 ### Whoop Integration (via `@golems/shared/whoop/client`)
@@ -108,8 +108,8 @@ Data is synced from Whoop to `whoop_snapshots` Supabase table via Cloud Worker (
 - **Briefing** (`packages/services/src/briefing.ts`) imports from coach for morning plans
 - **Calendar** reuses Gmail OAuth2 credentials
 - **Whoop tokens** cached at `/tmp/whoop-tokens.json` (auth-server writes, client refreshes)
-- **Protocol** stored at `~/.golems-zikaron/coach/protocol.json`
-- **Compliance** stored in `~/.golems-zikaron/coach/compliance.json` (90-day retention)
+- **Protocol** stored at `~/.brainlayer/coach/protocol.json`
+- **Compliance** stored in `~/.brainlayer/coach/compliance.json` (90-day retention)
 - **Cloud Worker** syncs Whoop data to Supabase 5x daily (7am, 10am, 2pm, 5pm, 8pm)
 
 ## Dependencies

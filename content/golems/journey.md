@@ -28,7 +28,7 @@ Ralph proved that AI could work autonomously on structured tasks. The question b
 
 The project started with a question: *what if AI agents could remember?*
 
-Instead of building golems first, we built **Zikaron** — a memory layer using sqlite-vec and bge-large-en-v1.5 embeddings. The insight: memory enables everything else. Without it, every agent session starts from zero.
+Instead of building golems first, we built **BrainLayer** (originally Zikaron, Hebrew for "memory") — a memory layer using sqlite-vec and bge-large-en-v1.5 embeddings. The insight: memory enables everything else. Without it, every agent session starts from zero.
 
 **Key decisions:**
 - sqlite-vec over ChromaDB (stable, zero-dependency, local-first)
@@ -41,7 +41,7 @@ Instead of building golems first, we built **Zikaron** — a memory layer using 
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. Zikaron now indexes 291K+ conversation chunks and returns results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 291K+ conversation chunks and returns results in under 2 seconds.
 
 ### Jan 17: First Golem — Email Router
 
@@ -81,11 +81,11 @@ Built a file-based inter-session communication protocol before anyone else had o
 
 ```markdown
 ## From: golem-session @ 2026-01-26 01:35
-**Topic:** Integrating Zikaron Active Learning
+**Topic:** Integrating BrainLayer Active Learning
 Hey farther-steps Claude! I'm working on MP-128...
 
 ## From: farther-steps-session @ 2026-01-26 11:45
-**Re:** Integrating Zikaron Active Learning
+**Re:** Integrating BrainLayer Active Learning
 Hey! Just finished documenting farther-steps...
 ```
 
@@ -130,12 +130,12 @@ Three parallel Claude sessions coordinated via the collab protocol. Audit trail:
 
 > "Agents must check back MULTIPLE times, not just dump and leave. React to each other — this is collaboration, not parallel dumping."
 
-### Feb 2: Zikaron Proves Itself
+### Feb 2: BrainLayer Proves Itself
 
 The async collaboration protocol from Jan 26 was needed again. Instead of manually finding it:
 
 ```bash
-zikaron search "collaborative claudes parallel sessions coordination"
+brainlayer search "collaborative claudes parallel sessions coordination"
 # Found in ~2s, score: 0.715
 # Rediscovered claude-collab.md automatically
 ```
@@ -209,7 +209,7 @@ Designed a three-tier distribution model:
 
 **Tier 1 — Easy:** Install MCP servers, run `golems setup`. Job scraping, email routing, notifications work out of the box.
 
-**Tier 2 — Power User:** Feed your communication data to Zikaron, get a personalized style card. Customized golem personas, personalized outreach voice.
+**Tier 2 — Power User:** Feed your communication data to BrainLayer, get a personalized style card. Customized golem personas, personalized outreach voice.
 
 **Tier 3 — Developer:** Custom skills, new golems, modified contexts. Contribute back to the framework.
 
@@ -217,7 +217,7 @@ Designed a three-tier distribution model:
 
 ### Feb 7: Public vs Local Split
 
-Scrubbed personal data from the public repo. What ships: example contexts, MCP servers, skills framework, `golems setup` wizard, Docusaurus docs. What stays local: planning docs, style card, job preferences, Zikaron database, communication archives.
+Scrubbed personal data from the public repo. What ships: example contexts, MCP servers, skills framework, `golems setup` wizard, Docusaurus docs. What stays local: planning docs, style card, job preferences, BrainLayer database, communication archives.
 
 ---
 

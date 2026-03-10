@@ -274,7 +274,7 @@ export default async function SkillDetailPage({
         <p className="text-sm text-[#a69987]">
           {skill.evalCount} eval{skill.evalCount !== 1 ? "s" : ""} with{" "}
           <span className="font-medium text-[#28c840]">
-            {skill.assertionCount}/{skill.assertionCount} assertions passing
+            {skill.assertionCount} assertions passing
           </span>
           .
         </p>
@@ -293,7 +293,7 @@ export default async function SkillDetailPage({
                     {evalItem.name}
                   </span>
                   <span className="rounded-full bg-[#6ab0f315] px-2 py-0.5 text-[0.65rem] font-medium text-[#6ab0f3]">
-                    {evalItem.assertionCount}/{evalItem.assertionCount} passing
+                    {evalItem.assertionCount} passing
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -389,7 +389,7 @@ export default async function SkillDetailPage({
                     "var(--font-golems-mono), 'JetBrains Mono', monospace",
                 }}
               >
-                <span className="text-[#9b8e7e]">$</span> {installCommand}
+                <span className="text-[#b0a89c]">$</span> {installCommand}
               </code>
             </div>
             <CopyButton text={installCommand} />
@@ -402,7 +402,7 @@ export default async function SkillDetailPage({
             <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#28c84020] bg-[#28c84008] px-3.5 py-2">
               <span className="inline-block h-2 w-2 rounded-full bg-[#28c840]" />
               <span className="text-sm font-medium text-[#28c840]">
-                {skill.assertionCount}/{skill.assertionCount} assertions passing
+                {skill.assertionCount} assertions passing
               </span>
             </div>
           )}
@@ -434,7 +434,7 @@ export default async function SkillDetailPage({
         </div>
 
         {/* Last updated */}
-        <p className="text-sm text-[#9b8e7e]">Updated {relativeTime}</p>
+        <p className="text-sm text-[#b0a89c]">Updated {relativeTime}</p>
       </header>
 
       {/* ═══ Two Column Layout ═══ */}
@@ -484,7 +484,7 @@ export default async function SkillDetailPage({
                   {installCommand}
                 </pre>
               </div>
-              <p className="mb-2 text-xs text-[#9b8e7e]">
+              <p className="mb-2 text-xs text-[#b0a89c]">
                 Or paste into Claude Code:
               </p>
               <div className="group relative">
@@ -502,28 +502,28 @@ export default async function SkillDetailPage({
             <div className="rounded-xl border border-[#e5950014] bg-[#14120e]/90 p-5">
               <dl className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <dt className="text-[#9b8e7e]">Category</dt>
+                  <dt className="text-[#b0a89c]">Category</dt>
                   <dd className={catColors.text}>{skill.category}</dd>
                 </div>
                 {skill.evalCount > 0 && (
                   <div className="flex justify-between">
-                    <dt className="text-[#9b8e7e]">Evals</dt>
+                    <dt className="text-[#b0a89c]">Evals</dt>
                     <dd className="text-[#c0b8a8]">{skill.evalCount}</dd>
                   </div>
                 )}
                 {skill.assertionCount > 0 && (
                   <div className="flex justify-between">
-                    <dt className="text-[#9b8e7e]">Assertions</dt>
+                    <dt className="text-[#b0a89c]">Assertions</dt>
                     <dd className="font-medium text-[#28c840]">
-                      {skill.assertionCount}/{skill.assertionCount} passing
+                      {skill.assertionCount} passing
                     </dd>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <dt className="text-[#9b8e7e]">Fixtures</dt>
+                  <dt className="text-[#b0a89c]">Fixtures</dt>
                   <dd
                     className={
-                      skill.hasFixtures ? "text-[#28c840]" : "text-[#9b8e7e]"
+                      skill.hasFixtures ? "text-[#28c840]" : "text-[#b0a89c]"
                     }
                   >
                     {skill.hasFixtures ? "Included" : "None"}
@@ -531,12 +531,12 @@ export default async function SkillDetailPage({
                 </div>
                 {skill.workflows.length > 0 && (
                   <div className="flex justify-between">
-                    <dt className="text-[#9b8e7e]">Workflows</dt>
+                    <dt className="text-[#b0a89c]">Workflows</dt>
                     <dd className="text-[#c0b8a8]">{skill.workflows.length}</dd>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <dt className="text-[#9b8e7e]">Updated</dt>
+                  <dt className="text-[#b0a89c]">Updated</dt>
                   <dd className="text-[#c0b8a8]">{relativeTime}</dd>
                 </div>
               </dl>

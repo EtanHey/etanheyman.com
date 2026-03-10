@@ -8,16 +8,14 @@ import { ChevronRight } from "lucide-react";
 const sectionMap: Record<string, string> = {
   "golems/claude": "Agents",
   "golems/recruiter": "Agents",
-  "golems/teller": "Agents",
   "golems/coach": "Agents",
-  "packages/content": "Agents",
   "golems/email": "Tools & Layers",
-  "golems/job-golem": "Tools & Layers",
   "packages/shared": "Tools & Layers",
   skills: "Tools & Layers",
   "mcp-tools": "Tools & Layers",
   "packages/services": "Infrastructure",
-  "packages/zikaron": "Infrastructure",
+  "packages/zikaron": "Infrastructure", // BrainLayer (published name)
+  "packages/brainlayer": "Infrastructure",
   "packages/ralph": "Infrastructure",
   "cloud-worker": "Infrastructure",
   "per-repo-sessions": "Infrastructure",
@@ -42,7 +40,7 @@ export default function Breadcrumbs({ title }: { title: string }) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="mb-4 flex items-center gap-1.5 text-xs text-[#9b8e7e] md:mb-6"
+      className="mb-4 flex items-center gap-1.5 text-xs text-[#b0a89c] md:mb-6"
     >
       <Link href="/golems" className="transition-colors hover:text-[#c0b8a8]">
         Golems

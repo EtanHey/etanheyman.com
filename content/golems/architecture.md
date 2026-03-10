@@ -31,7 +31,7 @@ flowchart TB
     subgraph mac["Your Mac (Brain)"]
         direction LR
         T[Telegram Bot] ~~~ N[Night Shift]
-        NS[Notification Server] ~~~ Z[Zikaron Memory]
+        NS[Notification Server] ~~~ Z[BrainLayer Memory]
         RS[Render Service] ~~~ EN[Enrichment]
     end
     subgraph rail["Railway (Body)"]
@@ -71,9 +71,9 @@ Your Mac runs these always-on services:
 | **Telegram Bot** | Receive commands, send notifications | grammy.js |
 | **Night Shift** | Scan repos for improvements, auto-commit | Claude + Ralph |
 | **Notification Server** | Queue and send Telegram messages | HTTP server |
-| **Zikaron Memory** | Semantic search over past conversations | FastAPI + sqlite-vec |
+| **BrainLayer Memory** | Semantic search over past conversations | FastAPI + sqlite-vec |
 | **Render Service** | Remotion video rendering microservice | Bun + Remotion |
-| **Enrichment** | Process Zikaron chunks (tags, summaries) | GLM-4.7-Flash via Ollama |
+| **Enrichment** | Process BrainLayer chunks (tags, summaries) | GLM-4.7-Flash via Ollama |
 
 The local services have **direct compute access** — they run local GLM-4.7-Flash (via Ollama) or cloud models when needed.
 
@@ -108,7 +108,7 @@ export LLM_BACKEND=haiku      # Cloud: Haiku (paid fallback, optional)
 
 # State Storage: where data lives
 export STATE_BACKEND=supabase # Cloud: Supabase database
-export STATE_BACKEND=file     # Local: ~/.golems-zikaron/
+export STATE_BACKEND=file     # Local: ~/.brainlayer/
 
 # Notifications: where Telegram messages go
 export TELEGRAM_MODE=direct   # Cloud worker sends directly
@@ -166,7 +166,7 @@ All LLM calls are logged to a JSONL file:
 
 ```bash
 # Location (Mac):
-cat ~/.golems-zikaron/api_costs.jsonl
+cat ~/.brainlayer/api_costs.jsonl
 
 # Location (Cloud):
 curl https://your-service.up.railway.app/usage
@@ -207,7 +207,7 @@ curl https://your-service.up.railway.app/usage
 | `service_heartbeats` | Service health pings |
 | `service_runs` | Cron job execution logs |
 
-### Local File Storage (~/.golems-zikaron/)
+### Local File Storage (~/.brainlayer/)
 
 | File | Purpose |
 |------|---------|
@@ -217,7 +217,7 @@ curl https://your-service.up.railway.app/usage
 | `job-golem/seen-jobs.json` | Job scraper seen jobs tracking |
 | `style/semantic-style-data.json` | Your writing style profile |
 
-**Note:** `embeddings.db` belongs to the Zikaron package, not autonomous.
+**Note:** `embeddings.db` belongs to the BrainLayer package, not autonomous.
 
 ## Deployment Architecture
 
