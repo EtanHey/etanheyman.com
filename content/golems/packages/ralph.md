@@ -35,7 +35,7 @@ done
 
 ## Skills Library
 
-The ecosystem includes 55 reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
+The ecosystem includes 57 reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
 
 - **Development:** commit, create-pr, worktrees, test-plan, lsp
 - **Operations:** railway, 1password, convex, github
