@@ -2,9 +2,9 @@
 sidebar_position: 6
 ---
 
-# Dashboard
+# Docsite (Dashboard)
 
-The Golems Dashboard is a Next.js web application deployed on Vercel at `etanheyman.com`. It provides real-time visibility into the entire Golems ecosystem through a single interface.
+The Golems Docsite (formerly `dashboard`) is a Next.js web application deployed on Vercel at `etanheyman.com`. It provides real-time visibility into the entire Golems ecosystem through a single interface.
 
 ## Pages
 
@@ -80,7 +80,7 @@ Documentation pages are rendered from markdown files in `content/docs/`:
 ## Development
 
 ```bash
-cd packages/dashboard
+cd packages/docsite
 bun dev    # http://localhost:3000
 ```
 

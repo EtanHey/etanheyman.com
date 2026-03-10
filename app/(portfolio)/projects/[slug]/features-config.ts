@@ -289,7 +289,7 @@ const featuresData: Record<string, FeatureSection[]> = {
     {
       iconName: "Wrench",
       title: "MCP Server Ecosystem",
-      tagline: "8 servers, 60+ tools powering every golem",
+      tagline: "8 MCP servers powering every golem",
       description:
         "Each golem declares which MCP servers it needs. BrainLayer provides 7 memory + KG tools (brain_search, brain_store, brain_recall, brain_digest, brain_entity, brain_update, brain_get_person). The email server handles triage with 7 tools. VoiceLayer exposes 2 voice tools (voice_speak, voice_ask). Supabase provides database access. Exa handles web search, Sophtron connects to bank APIs, and a local GLM server provides free text generation. The orchestrator ensures all declared servers are running before spawning a golem.",
       highlights: [

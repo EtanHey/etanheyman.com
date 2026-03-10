@@ -3,7 +3,9 @@ title: "Orchestrator — n8n + Render Service"
 description: "n8n workflow orchestration and Bun render microservice for content pipeline automation."
 ---
 
-# Orchestrator
+# Orchestrator (Archived)
+
+> **Note:** The `@golems/orchestrator` package has been removed from the monorepo. Its render service functionality was absorbed into `@golems/content`. This page is preserved for reference.
 
 > n8n orchestration layer for content pipelines + Bun render microservice.
 
