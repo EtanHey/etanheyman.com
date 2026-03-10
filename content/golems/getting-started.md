@@ -6,12 +6,12 @@ sidebar_position: 1
 
 ## What is Golems?
 
-Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **11 packages** — 6 golems plus shared infrastructure, tools, and dashboards — each installable as a Claude Code plugin.
+Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **11 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure, tools, and dashboards — each installable as a Claude Code plugin.
 
 - **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
 - **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
 - **Infrastructure:** @golems/shared (foundation + email system), @golems/services (Night Shift, Cloud Worker, Briefing)
-- **Tools:** Ralph (autonomous coding loop), Zikaron (260K+ chunk memory layer with 10-field enrichment)
+- **Tools:** 55 reusable skills in `skills/golem-powers/`, BrainLayer (291K+ chunk memory layer with 10-field enrichment)
 - **Core Principle:** Golems are domain experts, not I/O channels — they own specific knowledge areas and produce specialized outputs
 
 ## Architecture Principle
@@ -111,14 +111,10 @@ golems/                              # Bun workspace monorepo
 ├── packages/content/                # ContentGolem — LinkedIn, Soltome
 ├── packages/coach/                  # CoachGolem — calendar, daily planning
 ├── packages/services/               # Night Shift, Briefing, Cloud Worker, Wizard
-├── packages/autonomous/             # Legacy (1-line re-exports for compatibility)
-├── packages/dashboard/              # Next.js web dashboard (Vercel)
+├── packages/docsite/                # Next.js web dashboard (Vercel)
 ├── packages/golems-tui/             # React Ink terminal dashboard
-├── packages/orchestrator/           # n8n orchestration + render microservice
-├── packages/ralph/                  # Autonomous coding loop (Zsh)
-│   └── skills/golem-powers/         # 30+ Claude Code skills
 ├── packages/tax-helper/             # Schedule C transaction categorization
-├── packages/zikaron/                # Memory layer (Python + sqlite-vec)
+├── skills/golem-powers/             # 55 reusable Claude Code skills
 ├── launchd/                         # macOS service plists
 ├── Dockerfile                       # Railway cloud worker image
 └── supabase/migrations/             # SQL schema changes

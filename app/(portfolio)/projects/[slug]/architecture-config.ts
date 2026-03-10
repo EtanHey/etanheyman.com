@@ -239,7 +239,7 @@ try {
     {
       title: "Monorepo Structure",
       description:
-        "13 packages in a Bun monorepo. @golems/shared is the foundation: Supabase client, multi-backend LLM routing, email processing, state management. Domain golems (jobs, recruiter, coach, teller, content) are self-contained Claude Code plugins. Ralph handles autonomous PRD execution. The dashboard is a Next.js 16 app with 3D brain visualization. Each package deploys independently but shares types and utilities through the foundation layer.",
+        "11 packages in a Bun monorepo. @golems/shared is the foundation: Supabase client, multi-backend LLM routing, email processing, state management. Domain golems (jobs, recruiter, coach, teller, content) are self-contained Claude Code plugins. The docsite is a Next.js 16 app with 3D brain visualization. Each package deploys independently but shares types and utilities through the foundation layer.",
       diagramNodes: [
         {
           icon: "Package",
@@ -330,7 +330,7 @@ const result = await runLLM(prompt);
     {
       title: "MCP Ecosystem",
       description:
-        "8 MCP servers, 60+ tools. BrainLayer: 7 tools (3 core memory + 4 knowledge graph). Email: 7 tools for triage. VoiceLayer: 2 voice tools. Plus Supabase for database, Exa for web search, Sophtron for financial data, GLM for local inference. Each golem declares which MCP servers it needs. The orchestrator makes sure they're available at session startup.",
+        "8 MCP servers powering every golem. BrainLayer: 7 tools (3 core memory + 4 knowledge graph). Email: 7 tools for triage. VoiceLayer: 2 voice tools. Plus Supabase for database, Exa for web search, Sophtron for financial data, GLM for local inference. Each golem declares which MCP servers it needs. The orchestrator makes sure they're available at session startup.",
       diagramNodes: [
         {
           icon: "Brain",
