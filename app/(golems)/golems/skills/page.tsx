@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CopyButton from "../components/CopyButton";
 import skillsManifest from "../lib/skills-manifest.json";
 
 interface SkillData {
@@ -36,7 +37,7 @@ export default function SkillsIndexPage() {
       <div className="mb-6">
         <Link
           href="/golems"
-          className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#a89078] transition-colors hover:text-[#e59500]"
+          className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#b0a89c] transition-colors hover:text-[#e59500]"
         >
           <svg
             className="h-4 w-4"
@@ -58,10 +59,37 @@ export default function SkillsIndexPage() {
       <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-[#f0ebe0] md:text-4xl">
         Skills Library
       </h1>
-      <p className="mb-10 text-[#b0a89c]">
+      <p className="mb-6 text-[#b0a89c]">
         {skills.length} reusable Claude Code skills. Click any skill for docs,
         eval results, and install prompt.
       </p>
+
+      {/* Terminal install hero */}
+      <div className="mb-10 overflow-hidden rounded-xl border border-[#e5950020] bg-[#0d0d0d]">
+        <div className="flex items-center gap-2 border-b border-[#e5950015] bg-[#14120e] px-4 py-2">
+          <span className="h-3 w-3 rounded-full bg-[#ff5f56]" />
+          <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
+          <span className="h-3 w-3 rounded-full bg-[#27c93f]" />
+          <span className="ml-2 font-mono text-xs text-[#b0a89c]">
+            golems-cli
+          </span>
+        </div>
+        <div className="group relative space-y-1 p-4 font-mono text-sm">
+          <div className="text-[#b0a89c]">
+            <span className="text-[#2dd4a8]">$</span> golems-cli skills list
+          </div>
+          <div className="text-[#b0a89c]">
+            Found <span className="text-[#e59500]">{skills.length}</span> skills
+            across <span className="text-[#e59500]">{categories.length}</span>{" "}
+            categories
+          </div>
+          <div className="mt-2 text-[#b0a89c]">
+            <span className="text-[#2dd4a8]">$</span> golems-cli skills install{" "}
+            <span className="text-[#6ab0f3]">&lt;skill-name&gt;</span>
+          </div>
+          <CopyButton text="golems-cli skills list" />
+        </div>
+      </div>
 
       {grouped.map(({ category, skills: catSkills }) => (
         <section key={category} className="mb-10">
