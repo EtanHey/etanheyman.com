@@ -1,6 +1,6 @@
 ---
 title: "Zikaron — Memory Layer"
-description: "Persistent memory for Claude Code. 260K+ indexed conversation chunks with semantic search, 10-field enrichment, and PII sanitization."
+description: "Persistent memory for Claude Code. 291K+ indexed conversation chunks with semantic search, 10-field enrichment, and PII sanitization."
 ---
 
 # Zikaron (Memory)
@@ -9,7 +9,7 @@ description: "Persistent memory for Claude Code. 260K+ indexed conversation chun
 
 ## What It Does
 
-Zikaron (Hebrew for "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 260K+ chunks indexed, searchable in under 2 seconds.
+Zikaron (Hebrew for "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 291K+ chunks indexed, searchable in under 2 seconds.
 
 ## Architecture
 
@@ -60,7 +60,7 @@ AST-aware chunking with tree-sitter for code (~500 tokens). Never splits stack t
 Uses `bge-large-en-v1.5` model (1024 dimensions). Runs locally via sentence-transformers with MPS acceleration on Apple Silicon.
 
 ### 5. Index
-sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 260K+ chunks.
+sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 291K+ chunks.
 
 ## Interfaces
 
@@ -139,4 +139,4 @@ Replacements use stable hash-based pseudonyms (`[PERSON_a1b2c3d4]`) and a revers
 
 ## Source
 
-[`packages/zikaron/`](https://github.com/EtanHey/golems/tree/master/packages/zikaron)
+Zikaron is now published as [BrainLayer](https://github.com/EtanHey/brainlayer) (`pip install brainlayer`). The core indexing and search engine remains the same.

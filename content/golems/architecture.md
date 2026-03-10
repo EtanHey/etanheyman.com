@@ -20,12 +20,9 @@ Golems is a **Bun workspace monorepo with 11 packages** — 7 golems (1 orchestr
 | `@golems/content` | Visual content factory (Remotion, ComfyUI, dataviz) + text publishing |
 | `@golems/coach` | Whoop biometrics, Huberman protocols, daily planning |
 | `@golems/services` | Night Shift, Briefing, Cloud Worker, Wizard, Doctor |
-| `@golems/orchestrator` | n8n orchestration, render microservice |
-| `dashboard` | Next.js web dashboard (brain view, ops, backlog, content, tokens) |
+| `docsite` | Next.js web dashboard (brain view, ops, backlog, content, tokens) |
 | `golems-tui` | React Ink terminal dashboard |
 | `tax-helper` | Schedule C transaction categorization (Sophtron MCP) |
-| `ralph` | Autonomous coding loop (PRD execution) |
-| `zikaron` | Memory layer (Python, 260K+ chunks, sqlite-vec) |
 
 ## Mac = Brain, Railway = Body
 
