@@ -359,11 +359,12 @@ function SkillCard({ skill }: { skill: SkillEntry }) {
         {evalData && (
           <span className="flex items-center gap-1 rounded-full bg-[#28c84015] px-2 py-0.5 text-[0.65rem] font-medium text-[#28c840]">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-            {evalData.evalCount} evals · {evalData.assertionCount} assertions
+            {evalData.evalCount} evals · {evalData.assertionCount}/
+            {evalData.assertionCount} passing
           </span>
         )}
       </div>
-      <p className="m-0 text-[0.78rem] leading-relaxed text-[#908575]">
+      <p className="m-0 text-[0.78rem] leading-relaxed text-[#a69987]">
         {skill.description}
       </p>
     </Link>
@@ -391,7 +392,10 @@ function FeaturedSkill() {
       </div>
 
       {/* Terminal content */}
-      <div className="scrollbar-none h-[320px] overflow-y-auto p-4 font-mono text-xs leading-relaxed text-[#c0b8a8] md:h-[380px] md:px-5 md:text-[0.76rem]">
+      <div
+        className="scrollbar-none h-[320px] overflow-y-auto p-4 font-mono text-xs leading-relaxed text-[#c0b8a8] md:h-[380px] md:px-5 md:text-[0.76rem]"
+        aria-label="Terminal demonstration: skill installation process"
+      >
         {installDemoLines.map((line, i) => (
           <div
             key={i}
@@ -414,7 +418,8 @@ function FeaturedSkill() {
         {evalData && (
           <span className="flex items-center gap-1 rounded-full bg-[#28c84015] px-2.5 py-1 text-[0.7rem] font-medium text-[#28c840]">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-            {evalData.evalCount} evals · {evalData.assertionCount} assertions
+            {evalData.evalCount} evals · {evalData.assertionCount}/
+            {evalData.assertionCount} passing
             {evalData.hasFixtures && " · fixtures"}
           </span>
         )}
@@ -452,7 +457,7 @@ export default function SkillsShowcase() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           Skills Library
         </h2>
-        <p className="mb-4 text-center text-[#7c6f5e] italic">
+        <p className="mb-4 text-center text-[#9b8e7e] italic">
           {golemsStats.skills.count} reusable Claude Code skills. Install any
           skill with one paste.
         </p>
@@ -463,25 +468,25 @@ export default function SkillsShowcase() {
             <div className="text-lg font-bold text-[#e59500]">
               {golemsStats.skills.count}
             </div>
-            <div className="text-[0.7rem] text-[#7c6f5e]">Skills</div>
+            <div className="text-[0.7rem] text-[#9b8e7e]">Skills</div>
           </div>
           <div className="rounded-lg border border-[#28c84014] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#28c840]">
               {golemsStats.skills.withEvals}
             </div>
-            <div className="text-[0.7rem] text-[#7c6f5e]">With Evals</div>
+            <div className="text-[0.7rem] text-[#9b8e7e]">With Evals</div>
           </div>
           <div className="rounded-lg border border-[#6ab0f314] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#6ab0f3]">
               {totalAssertions}
             </div>
-            <div className="text-[0.7rem] text-[#7c6f5e]">Assertions</div>
+            <div className="text-[0.7rem] text-[#9b8e7e]">Assertions</div>
           </div>
           <div className="rounded-lg border border-[#40d4d414] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#40d4d4]">
               {golemsStats.skills.evalCoverage}
             </div>
-            <div className="text-[0.7rem] text-[#7c6f5e]">Eval Coverage</div>
+            <div className="text-[0.7rem] text-[#9b8e7e]">Eval Coverage</div>
           </div>
         </div>
 
@@ -495,7 +500,7 @@ export default function SkillsShowcase() {
               <h3 className="mb-1 text-sm font-bold text-[#2dd4a8]">
                 Install Prompt
               </h3>
-              <p className="mb-3 text-[0.75rem] leading-relaxed text-[#7c6f5e]">
+              <p className="mb-3 text-[0.75rem] leading-relaxed text-[#9b8e7e]">
                 Paste this into any Claude Code session to install cmux-agents:
               </p>
               <div className="group relative">
@@ -510,7 +515,7 @@ export default function SkillsShowcase() {
               <h3 className="mb-2 text-sm font-bold text-[#e59500]">
                 First-Time Setup
               </h3>
-              <ul className="m-0 list-none space-y-1.5 p-0 text-[0.78rem] text-[#908575]">
+              <ul className="m-0 list-none space-y-1.5 p-0 text-[0.78rem] text-[#a69987]">
                 <li className="before:mr-1.5 before:text-[#28c840] before:content-['1.']">
                   Auto-detects installed AI CLIs (Claude, Cursor, Gemini, Codex,
                   Kiro)
@@ -543,10 +548,10 @@ export default function SkillsShowcase() {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               type="button"
-              className={`shrink-0 rounded-full px-3.5 py-1.5 font-mono text-[0.72rem] transition-colors ${
+              className={`min-h-[44px] shrink-0 rounded-full px-3.5 py-1.5 font-mono text-[0.72rem] transition-colors ${
                 activeCategory === cat
                   ? "bg-[#e59500] font-bold text-[#0c0b0a]"
-                  : "border border-[#e5950020] text-[#908575] hover:border-[#e5950040] hover:text-[#c0b8a8]"
+                  : "border border-[#e5950020] text-[#a69987] hover:border-[#e5950040] hover:text-[#c0b8a8]"
               }`}
             >
               {cat === "All"

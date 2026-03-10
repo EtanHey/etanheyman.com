@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import type { DocNavItem } from '../lib/docs-nav';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { DocNavItem } from "../lib/docs-nav";
 
 interface Props {
   nav: DocNavItem[];
@@ -11,15 +11,13 @@ interface Props {
 export default function Sidebar({ nav }: Props) {
   const pathname = usePathname();
 
-  const isDocsPage = pathname.startsWith('/golems/docs');
+  const isDocsPage = pathname.startsWith("/golems/docs");
 
   // Only show sidebar on doc pages
   if (!isDocsPage) return null;
 
   return (
-    <aside
-      className="hidden md:block w-64 shrink-0 sticky top-12 h-[calc(100vh-3rem)] overflow-y-auto scrollbar-none bg-[#0c0b0a] border-r border-[#e5950015]"
-    >
+    <aside className="scrollbar-none sticky top-12 hidden h-[calc(100vh-3rem)] w-64 shrink-0 overflow-y-auto border-r border-[#e5950015] bg-[#0c0b0a] md:block">
       <nav className="flex flex-col gap-6 p-4">
         {nav.map((section) => {
           // Top-level items without children = standalone page
@@ -30,10 +28,10 @@ export default function Sidebar({ nav }: Props) {
               <div key={section.slug}>
                 <Link
                   href={href}
-                  className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
+                  className={`block rounded-md px-3 py-1.5 text-sm transition-colors ${
                     isActive
-                      ? 'bg-[#e5950015] text-[#e59500] font-medium'
-                      : 'text-[#908575] hover:text-[#c0b8a8] hover:bg-[#ffffff08]'
+                      ? "bg-[#e5950015] font-medium text-[#e59500]"
+                      : "text-[#a69987] hover:bg-[#ffffff08] hover:text-[#c0b8a8]"
                   }`}
                 >
                   {section.title}
@@ -45,7 +43,7 @@ export default function Sidebar({ nav }: Props) {
           // Category with children
           return (
             <div key={section.slug}>
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-[#7c6f5e] mb-2">
+              <h3 className="mb-2 text-[10px] font-bold tracking-widest text-[#9b8e7e] uppercase">
                 {section.title}
               </h3>
               <ul className="space-y-0.5">
@@ -56,10 +54,10 @@ export default function Sidebar({ nav }: Props) {
                     <li key={item.slug}>
                       <Link
                         href={href}
-                        className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
+                        className={`block rounded-md px-3 py-1.5 text-sm transition-colors ${
                           isActive
-                            ? 'bg-[#e5950015] text-[#e59500] font-medium'
-                            : 'text-[#908575] hover:text-[#c0b8a8] hover:bg-[#ffffff08]'
+                            ? "bg-[#e5950015] font-medium text-[#e59500]"
+                            : "text-[#a69987] hover:bg-[#ffffff08] hover:text-[#c0b8a8]"
                         }`}
                       >
                         {item.title}

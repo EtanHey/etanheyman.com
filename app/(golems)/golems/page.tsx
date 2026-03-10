@@ -419,7 +419,7 @@ function HomepageHero() {
               <h1 className="m-0 bg-gradient-to-br from-[#f0ebe0] to-[#e59500] bg-clip-text text-xl leading-tight font-black tracking-tight text-transparent sm:text-2xl md:text-3xl">
                 Golems
               </h1>
-              <div className="flex flex-wrap items-center gap-1.5 font-mono text-[0.65rem] text-[#7c6f5e] sm:text-xs">
+              <div className="flex flex-wrap items-center gap-1.5 font-mono text-[0.65rem] text-[#9b8e7e] sm:text-xs">
                 <span className="text-[#a09080]">Spawn</span>
                 <span className="text-[#c46d3c] opacity-70">&rarr;</span>
                 <span className="text-[#a09080]">Work</span>
@@ -456,7 +456,7 @@ function HomepageHero() {
               {tabs.map((t, i) => (
                 <button
                   key={t.id}
-                  className={`flex cursor-pointer items-center gap-1.5 border-b-2 px-3.5 py-2 font-mono text-[0.72rem] whitespace-nowrap text-[#666] transition-colors ${
+                  className={`flex min-h-[44px] cursor-pointer items-center gap-1.5 border-b-2 px-3.5 py-2 font-mono text-[0.72rem] whitespace-nowrap text-[#666] transition-colors ${
                     i === activeTab
                       ? "border-[#e59500] bg-[#e595000f] text-[#e59500]"
                       : "border-transparent hover:bg-[#e5950007] hover:text-[#a09080]"
@@ -476,6 +476,7 @@ function HomepageHero() {
             <div
               className="scrollbar-none h-[260px] overflow-x-hidden overflow-y-auto p-4 font-mono text-xs leading-relaxed text-[#c0b8a8] sm:h-[340px] md:h-[420px] md:px-5 md:text-[0.76rem]"
               role="tabpanel"
+              aria-label={`Terminal demonstration: ${currentTab.label} command output`}
             >
               {currentTab.showMascot ? (
                 <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-[auto_1fr]">
@@ -533,7 +534,7 @@ function HomepageHero() {
             </Link>
             <Link
               href="https://github.com/EtanHey/golems"
-              className="flex min-h-12 w-full items-center justify-center rounded-lg border border-[#90857533] px-4 py-2 text-center text-[0.78rem] font-medium text-[#908575] no-underline transition-all hover:border-[#90857566] hover:bg-[#9085750f] hover:text-[#c0b8a8] sm:px-5 sm:py-2.5 sm:text-[0.85rem] md:inline-flex md:min-h-0 md:w-auto"
+              className="flex min-h-12 w-full items-center justify-center rounded-lg border border-[#a6998733] px-4 py-2 text-center text-[0.78rem] font-medium text-[#a69987] no-underline transition-all hover:border-[#a6998766] hover:bg-[#a699870f] hover:text-[#c0b8a8] sm:px-5 sm:py-2.5 sm:text-[0.85rem] md:inline-flex md:min-h-0 md:w-auto"
             >
               GitHub &rarr;
             </Link>
@@ -570,7 +571,7 @@ function GetStartedSection() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           Get Started in 60 Seconds
         </h2>
-        <p className="mb-12 text-center text-[#7c6f5e] italic">
+        <p className="mb-12 text-center text-[#9b8e7e] italic">
           Four commands. That&apos;s it.
         </p>
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
@@ -589,7 +590,7 @@ function GetStartedSection() {
               <code className="mb-2 block rounded-md border border-[#2dd4a81a] bg-black/40 px-2.5 py-1.5 font-mono text-[0.72rem] break-all text-[#2dd4a8]">
                 {s.command}
               </code>
-              <p className="m-0 text-[0.8rem] leading-snug text-[#7c6f5e]">
+              <p className="m-0 text-[0.8rem] leading-snug text-[#9b8e7e]">
                 {s.desc}
               </p>
             </div>
@@ -618,7 +619,7 @@ function GolemsSection() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           Meet the Golems
         </h2>
-        <p className="mb-12 text-center text-[#7c6f5e] italic">
+        <p className="mb-12 text-center text-[#9b8e7e] italic">
           7 domain agents + infrastructure. Each golem owns a domain, not an I/O
           channel.
         </p>
@@ -638,7 +639,7 @@ function GolemsSection() {
                   {g.name}
                 </div>
               </div>
-              <p className="m-0 text-sm leading-relaxed text-[#908575]">
+              <p className="m-0 text-sm leading-relaxed text-[#a69987]">
                 {g.desc}
               </p>
             </Link>
@@ -659,7 +660,7 @@ function ArchitectureSection() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           How It Works
         </h2>
-        <p className="mb-12 text-center text-[#7c6f5e] italic">
+        <p className="mb-12 text-center text-[#9b8e7e] italic">
           Mac is the brain, Railway is the body
         </p>
         <div className="mx-auto flex max-w-[700px] flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
@@ -676,7 +677,7 @@ function ArchitectureSection() {
               ].map((item) => (
                 <li
                   key={item}
-                  className="font-mono text-sm text-[#908575] before:text-[#c46d3c] before:content-['\\2022_']"
+                  className="font-mono text-sm text-[#a69987] before:text-[#c46d3c] before:content-['\\2022_']"
                 >
                   {item}
                 </li>
@@ -695,7 +696,7 @@ function ArchitectureSection() {
                 (item) => (
                   <li
                     key={item}
-                    className="font-mono text-sm text-[#908575] before:text-[#c46d3c] before:content-['\\2022_']"
+                    className="font-mono text-sm text-[#a69987] before:text-[#c46d3c] before:content-['\\2022_']"
                   >
                     {item}
                   </li>
