@@ -2,6 +2,7 @@
 // Separate from project-showcase-config to avoid bloating the shared config.
 
 import type { ArchitectureNode } from "./project-showcase-config";
+import golemsStats from "@/app/(golems)/golems/lib/golems-stats.json";
 
 export interface CodeExample {
   language: string;
@@ -81,7 +82,7 @@ return sorted(fused, reverse=True)[:n]`,
         "Raw chunks need structure. A local LLM (GLM-4.7-Flash or Qwen2.5-Coder-14B via MLX on Apple Silicon) enriches each chunk with 10 metadata fields: summary, tags, importance (1-10), intent, primary code symbols, a hypothetical query for HyDE retrieval, epistemic level, version scope, tech debt impact, and external deps. Batches of 50-100 chunks with 5-minute stall detection per chunk.",
       callout: {
         title: "Why local LLM?",
-        text: "328K+ chunks at ~$0.01/chunk via cloud API = $3,280. Local GLM-4.7-Flash costs $0. Quality is comparable for structured extraction tasks, and no data leaves the machine.",
+        text: `${golemsStats.brainlayer.chunksDisplay} chunks at ~$0.01/chunk via cloud API = $${Math.round(golemsStats.brainlayer.chunks * 0.01).toLocaleString()}. Local GLM-4.7-Flash costs \$0. Quality is comparable for structured extraction tasks, and no data leaves the machine.`,
       },
     },
     {

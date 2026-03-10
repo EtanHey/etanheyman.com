@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import golemsStats from "../lib/golems-stats.json";
 
 // Colors matching the docs site theme
 const C = {
@@ -43,7 +44,11 @@ const infra = [
     items: ["Email", "Jobs", "Briefing"],
   },
   { name: "Supabase", sub: "Postgres + RLS", color: C.cyan, glow: true },
-  { name: "Zikaron", sub: "328K+ chunks", color: C.pink },
+  {
+    name: "Zikaron",
+    sub: `${golemsStats.brainlayer.chunksDisplay} chunks`,
+    color: C.pink,
+  },
 ];
 
 // Animated flow dot component
@@ -319,16 +324,16 @@ export default function ArchitectureDiagram() {
         {/* Bottom stats */}
         <div className="flex justify-center gap-4 pt-4 pb-2">
           <span className="text-[9px]" style={{ color: C.amber, opacity: 0.5 }}>
-            7 agents
+            {golemsStats.agents.count} agents
           </span>
           <span className="text-[9px]" style={{ color: C.amber, opacity: 0.5 }}>
-            30+ skills
+            {golemsStats.skills.count} skills
           </span>
           <span className="text-[9px]" style={{ color: C.cyan, opacity: 0.5 }}>
-            6 MCP servers
+            {golemsStats.mcp.count} MCP servers
           </span>
           <span className="text-[9px]" style={{ color: C.pink, opacity: 0.5 }}>
-            328K+ chunks
+            {golemsStats.brainlayer.chunksDisplay} chunks
           </span>
         </div>
 

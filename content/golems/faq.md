@@ -54,7 +54,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## How many tests does Golems have?
 
-**1,199 tests** with **2,928 assertions** across 79 test files. The test suite covers all 14 packages and runs with `bun test` from the monorepo root.
+**995 tests** across 71 test files. The test suite covers all 11 packages and runs with `bun test` from the monorepo root.
 
 ## What's the tech stack?
 
@@ -72,7 +72,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## Can I use the skills without the full ecosystem?
 
-Yes. The 30+ skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
+Yes. The 55 skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
 
 ```bash
 # Just the commit skill
