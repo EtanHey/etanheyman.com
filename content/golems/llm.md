@@ -12,7 +12,7 @@ sidebar_position: 99
 
 ## 7 Golems + Infrastructure, 3 Environments
 
-Golems is a **Bun workspace monorepo with 11 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
+Golems is a **Bun workspace monorepo with 12 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
 
 | Package | Role |
 |---------|------|
@@ -1144,7 +1144,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## How many tests does Golems have?
 
-**995 tests** across 71 test files. The test suite covers all 11 packages and runs with `bun test` from the monorepo root.
+**995 tests** across 71 test files. The test suite covers all 12 packages and runs with `bun test` from the monorepo root.
 
 ## What's the tech stack?
 
@@ -1162,7 +1162,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## Can I use the skills without the full ecosystem?
 
-Yes. The 55 skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
+Yes. The 57 skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
 
 ```bash
 # Just the commit skill
@@ -1186,7 +1186,7 @@ Claude Code v2.1 or later. The plugin system, skill loading, and MCP server supp
 
 ## What is Golems?
 
-Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **11 packages** — 7 domain agents plus shared infrastructure and tools, each installable as a Claude Code plugin.
+Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **12 packages** — 7 domain agents plus shared infrastructure and tools, each installable as a Claude Code plugin.
 
 - **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
 - **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
@@ -3453,7 +3453,7 @@ done
 
 ## Skills Library
 
-Ralph manages 55 reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
+Ralph manages 57 reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
 
 - **Development:** commit, create-pr, worktrees, test-plan, lsp
 - **Operations:** railway, 1password, convex, github
@@ -3917,7 +3917,7 @@ This helps visually distinguish which Claude session is which when running multi
 
 # Skills Library
 
-> 55 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
+> 57 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
 
 ## What Are Skills?
 

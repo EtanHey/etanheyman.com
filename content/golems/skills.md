@@ -1,11 +1,11 @@
 ---
 title: "Skills Library"
-description: "55 reusable Claude Code skills covering development, operations, content, research, and quality workflows."
+description: "57 reusable Claude Code skills covering development, operations, content, research, and quality workflows."
 ---
 
 # Skills Library
 
-> 55 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
+> 57 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
 
 ## What Are Skills?
 

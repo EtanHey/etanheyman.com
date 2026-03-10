@@ -4,11 +4,11 @@ sidebar_position: 2
 
 # Architecture
 
-<img src="/docs/architecture-flow.svg" alt="Golems Architecture — Data flow between local Mac and Railway cloud" style="width:100%;border-radius:12px;margin:1.5rem 0" />
+![Golems Architecture — Data flow between local Mac and Railway cloud](/img/architecture-flow.svg)
 
 ## 7 Golems + Infrastructure, 3 Environments
 
-Golems is a **Bun workspace monorepo with 11 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
+Golems is a **Bun workspace monorepo with 12 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
 
 | Package | Role |
 |---------|------|
