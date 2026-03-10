@@ -355,8 +355,7 @@ function SkillCard({ skill }: { skill: SkillEntry }) {
         {evalData && (
           <span className="flex items-center gap-1 rounded-full bg-[#28c84015] px-2 py-0.5 text-[0.65rem] font-medium text-[#28c840]">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-            {evalData.evalCount} evals &middot; {evalData.assertionCount}{" "}
-            assertions
+            {evalData.evalCount} evals · {evalData.assertionCount} assertions
           </span>
         )}
       </div>
@@ -411,9 +410,8 @@ function FeaturedSkill() {
         {evalData && (
           <span className="flex items-center gap-1 rounded-full bg-[#28c84015] px-2.5 py-1 text-[0.7rem] font-medium text-[#28c840]">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-            {evalData.evalCount} evals &middot; {evalData.assertionCount}{" "}
-            assertions
-            {evalData.hasFixtures && " &middot; fixtures"}
+            {evalData.evalCount} evals · {evalData.assertionCount} assertions
+            {evalData.hasFixtures && " · fixtures"}
           </span>
         )}
         <span className="rounded-full bg-[#6ab0f315] px-2.5 py-1 text-[0.7rem] text-[#6ab0f3]">
