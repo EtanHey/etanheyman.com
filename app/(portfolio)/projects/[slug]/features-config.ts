@@ -209,18 +209,15 @@ const featuresData: Record<string, FeatureSection[]> = {
   golems: [
     {
       iconName: "Bot",
-      title: "7 Domain Agents",
+      title: "4 Domain Golems",
       tagline: "Specialized Claude Code plugins for every domain",
       description:
-        "Each golem is a self-contained Claude Code agent with its own tools, MCP servers, and domain knowledge. The Recruiter handles outreach and Elo-rated interview practice. Jobs scrapes Israeli job boards and scores matches. Coach manages calendar and daily planning with Whoop biometric integration. Teller tracks finances and categorizes expenses for tax. Content creates LinkedIn posts and manages publishing. Each declares its dependencies and the orchestrator ensures they're available.",
+        "Each golem is a self-contained Claude Code agent with its own tools, MCP servers, and domain knowledge. Coach is the primary golem — health, schedule, recruiting, content, admin, and daily planning with Whoop biometric integration. Recruiter handles job board scraping, outreach, and Elo-rated interview practice. Claude is the Telegram bot that routes commands and spawns sessions. Services runs Night Shift, Morning Briefing, and cloud workers.",
       highlights: [
-        "RecruiterGolem — outreach, Elo-rated practice, contact finder",
-        "JobGolem — scraping Drushim/SecretTLV, LLM match scoring",
-        "CoachGolem — calendar, planning, Whoop biometrics",
-        "TellerGolem — finances, subscriptions, tax categorization",
-        "ContentGolem — LinkedIn, Soltome, visual factory",
-        "Discovery Voice — silent assistant for client calls",
-        "QA Voice — voice-powered website testing",
+        "Coach — primary golem: health, schedule, recruiting, content, admin",
+        "Recruiter — job hunt, outreach, Elo-rated interview practice",
+        "Claude — Telegram bot, routing, session management",
+        "Services — Night Shift (4am), Morning Briefing, cloud workers",
       ],
     },
     {

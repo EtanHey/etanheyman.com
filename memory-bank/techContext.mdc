@@ -20,10 +20,10 @@ alwaysApply: true
 - **Node.js 20+** runtime
 
 ### Database Layer
-- **MongoDB Atlas** - Cloud-hosted NoSQL
-- **Prisma 6.x** - Type-safe ORM
-  - Singleton connection pattern
-  - MongoDB-specific features (@map, @db.ObjectId)
+- **Supabase** - Cloud-hosted PostgreSQL
+- **@supabase/supabase-js** + **@supabase/ssr** - Client libraries
+  - Server client (`@/lib/supabase/server`) for server components
+  - Browser client (`@/lib/supabase/client`) for client components
 
 ### Styling System
 - **Tailwind CSS v4** - Utility-first styling
@@ -65,7 +65,8 @@ alwaysApply: true
 
 ### Environment Variables
 ```
-DATABASE_URL        # MongoDB connection string
+NEXT_PUBLIC_SUPABASE_URL  # Supabase project URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY  # Supabase anon key
 UPLOADTHING_TOKEN   # File upload auth
 UPLOADTHING_SECRET  # File upload secret
 RESEND_API_KEY      # Email service key

@@ -14,7 +14,7 @@ All environment variables used by Golems v2. Store sensitive values in 1Password
 | `STATE_BACKEND` | `file` | State storage: `supabase` (cloud) or `file` (local) | Persistent state |
 | `TELEGRAM_MODE` | `local` | Notification mode: `direct` (cloud) or `local` (launchd) | Telegram notifications |
 | `TZ` | `UTC` | Timezone (only used in helpers-status.ts); cloud-worker hardcodes `Asia/Jerusalem` | Status display |
-| `GOLEMS_STATE_DIR` | `~/.golems-zikaron` | Override state directory for tests or alternate environments | Test isolation |
+| `GOLEMS_STATE_DIR` | `~/.brainlayer` | Override state directory for tests or alternate environments | Test isolation |
 
 ## LLM Configuration
 
@@ -72,7 +72,7 @@ Requires Ollama running locally on `http://localhost:11434`.
 | `OLLAMA_HOST` | `http://localhost:11434` | Ollama server URL | Local LLM calls |
 | `OLLAMA_URL` | `http://127.0.0.1:11434` | Alias for `OLLAMA_HOST` (sandboxed mode) | Sandboxed execution |
 | `OLLAMA_SANDBOXED` | — | Set to `1` to enable sandboxed Ollama execution | Sandboxed mode |
-| `VALIDATION_DIR` | `~/.golems-zikaron/validation-queue` | Directory for sandboxed validation queue | Sandboxed execution |
+| `VALIDATION_DIR` | `~/.brainlayer/validation-queue` | Directory for sandboxed validation queue | Sandboxed execution |
 
 ## Job Scraper Configuration
 
@@ -149,7 +149,7 @@ This ensures `.env` files are loaded before any code runs.
 
 ## API Cost Logging
 
-All LLM calls are logged to `~/.golems-zikaron/api_costs.jsonl` as JSONL:
+All LLM calls are logged to `~/.brainlayer/api_costs.jsonl` as JSONL:
 
 ```json
 {

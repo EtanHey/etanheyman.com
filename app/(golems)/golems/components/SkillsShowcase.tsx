@@ -315,7 +315,7 @@ Setup section in the SKILL.md.`;
 /* ── Terminal demo lines ─────────────────────────────────────── */
 
 const installDemoLines = [
-  "$ npx golem-skills install cmux-agents",
+  "$ golems-cli skills install cmux-agents",
   "",
   "\x1b[34m=== INSTALLING cmux-agents ===\x1b[0m",
   "",
@@ -363,7 +363,7 @@ function SkillCard({ skill }: { skill: SkillEntry }) {
           </span>
         )}
       </div>
-      <p className="m-0 text-[0.78rem] leading-relaxed text-[#908575]">
+      <p className="m-0 text-[0.78rem] leading-relaxed text-[#a69987]">
         {skill.description}
       </p>
     </Link>
@@ -385,13 +385,16 @@ function FeaturedSkill() {
           <span className="block h-2.5 w-2.5 rounded-full bg-[#28c840]" />
         </div>
         <span className="flex-1 text-center font-mono text-[0.72rem] text-[#666]">
-          golem-skills install cmux-agents
+          golems-cli skills install
         </span>
         <div className="w-12" />
       </div>
 
       {/* Terminal content */}
-      <div className="scrollbar-none h-[320px] overflow-y-auto p-4 font-mono text-xs leading-relaxed text-[#c0b8a8] md:h-[380px] md:px-5 md:text-[0.76rem]">
+      <div
+        className="scrollbar-none h-[320px] overflow-y-auto p-4 font-mono text-xs leading-relaxed text-[#c0b8a8] md:h-[380px] md:px-5 md:text-[0.76rem]"
+        aria-label="Terminal demonstration: skill installation process"
+      >
         {installDemoLines.map((line, i) => (
           <div
             key={i}
@@ -452,7 +455,7 @@ export default function SkillsShowcase() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           Skills Library
         </h2>
-        <p className="mb-4 text-center text-[#7c6f5e] italic">
+        <p className="mb-4 text-center text-[#b0a89c] italic">
           {golemsStats.skills.count} reusable Claude Code skills. Install any
           skill with one paste.
         </p>
@@ -463,25 +466,25 @@ export default function SkillsShowcase() {
             <div className="text-lg font-bold text-[#e59500]">
               {golemsStats.skills.count}
             </div>
-            <div className="text-[0.7rem] text-[#7c6f5e]">Skills</div>
+            <div className="text-[0.7rem] text-[#b0a89c]">Skills</div>
           </div>
           <div className="rounded-lg border border-[#28c84014] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#28c840]">
               {golemsStats.skills.withEvals}
             </div>
-            <div className="text-[0.7rem] text-[#7c6f5e]">With Evals</div>
+            <div className="text-[0.7rem] text-[#b0a89c]">With Evals</div>
           </div>
           <div className="rounded-lg border border-[#6ab0f314] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#6ab0f3]">
               {totalAssertions}
             </div>
-            <div className="text-[0.7rem] text-[#7c6f5e]">Assertions</div>
+            <div className="text-[0.7rem] text-[#b0a89c]">Assertions</div>
           </div>
           <div className="rounded-lg border border-[#40d4d414] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#40d4d4]">
               {golemsStats.skills.evalCoverage}
             </div>
-            <div className="text-[0.7rem] text-[#7c6f5e]">Eval Coverage</div>
+            <div className="text-[0.7rem] text-[#b0a89c]">Eval Coverage</div>
           </div>
         </div>
 
@@ -495,7 +498,7 @@ export default function SkillsShowcase() {
               <h3 className="mb-1 text-sm font-bold text-[#2dd4a8]">
                 Install Prompt
               </h3>
-              <p className="mb-3 text-[0.75rem] leading-relaxed text-[#7c6f5e]">
+              <p className="mb-3 text-[0.75rem] leading-relaxed text-[#b0a89c]">
                 Paste this into any Claude Code session to install cmux-agents:
               </p>
               <div className="group relative">
@@ -510,7 +513,7 @@ export default function SkillsShowcase() {
               <h3 className="mb-2 text-sm font-bold text-[#e59500]">
                 First-Time Setup
               </h3>
-              <ul className="m-0 list-none space-y-1.5 p-0 text-[0.78rem] text-[#908575]">
+              <ul className="m-0 list-none space-y-1.5 p-0 text-[0.78rem] text-[#a69987]">
                 <li className="before:mr-1.5 before:text-[#28c840] before:content-['1.']">
                   Auto-detects installed AI CLIs (Claude, Cursor, Gemini, Codex,
                   Kiro)
@@ -543,10 +546,10 @@ export default function SkillsShowcase() {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               type="button"
-              className={`shrink-0 rounded-full px-3.5 py-1.5 font-mono text-[0.72rem] transition-colors ${
+              className={`min-h-[44px] shrink-0 rounded-full px-3.5 py-1.5 font-mono text-[0.72rem] transition-colors ${
                 activeCategory === cat
                   ? "bg-[#e59500] font-bold text-[#0c0b0a]"
-                  : "border border-[#e5950020] text-[#908575] hover:border-[#e5950040] hover:text-[#c0b8a8]"
+                  : "border border-[#e5950020] text-[#a69987] hover:border-[#e5950040] hover:text-[#c0b8a8]"
               }`}
             >
               {cat === "All"

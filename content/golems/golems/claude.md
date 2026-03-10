@@ -67,7 +67,7 @@ Communication style:
 - **Tone:** Friendly with occasional sarcasm
 - **Projects:** songscript, zikaron, claude-golem
 
-State stored in `~/.golems-zikaron/state.json`, loaded on every session spawn.
+State stored in `~/.brainlayer/state.json`, loaded on every session spawn.
 
 ## Event Log Injection
 
@@ -88,7 +88,7 @@ When ClaudeGolem spawns, it receives:
 - #42: CodeRabbit flagged 2 issues (waiting review)
 - #38: Merged ✓
 
-## Zikaron
+## BrainLayer
 - Indexed 5 new conversations
 - Memory: 12.4k embeddings, 2.3GB
 ```
@@ -110,8 +110,8 @@ This comes from `event-log.json` maintained by infrastructure (last 24 hours via
 - `event-log.ts` — Event log for ClaudeGolem memory
 
 **State:**
-- `~/.golems-zikaron/state.json` — Night Shift target, session state
-- `~/.golems-zikaron/event-log.json` — Golem actions log
+- `~/.brainlayer/state.json` — Night Shift target, session state
+- `~/.brainlayer/event-log.json` — Golem actions log
 
 ## Running ClaudeGolem
 
@@ -162,7 +162,7 @@ export REPOS_PATH=~/Gits  # Base path for repos
 - **EmailGolem** — High-score emails trigger ClaudeGolem alerts for code/PR context
 - **RecruiterGolem** — ClaudeGolem provides writing feedback on outreach
 - **Telegram Bot** — ClaudeGolem session is the "brain" behind longer conversations
-- **Zikaron** — Memory queries enrich context during sessions
+- **BrainLayer** — Memory queries enrich context during sessions
 
 ## Database Schema
 
@@ -173,7 +173,7 @@ No dedicated tables — state stored in JSON:
   "session_id": "telegram-chat-2026-02-06",
   "started_at": "2026-02-06T09:15:00Z",
   "last_activity": "2026-02-06T09:45:00Z",
-  "context_loaded": ["event_log", "recent_prs", "zikaron_memory"],
+  "context_loaded": ["event_log", "recent_prs", "brainlayer_memory"],
   "posts_pending_approval": 2,
   "night_shift_last_run": "2026-02-06T04:00:00Z",
   "git_worktrees": [
@@ -186,7 +186,7 @@ No dedicated tables — state stored in JSON:
 }
 ```
 
-Stored in `~/.golems-zikaron/state.json`.
+Stored in `~/.brainlayer/state.json`.
 
 ## Troubleshooting
 
@@ -196,7 +196,7 @@ Stored in `~/.golems-zikaron/state.json`.
 pgrep -fl "telegram-bot"
 
 # Restart bot
-launchctl kickstart gui/$(id -u)/com.golemszikaron.telegram
+launchctl kickstart gui/$(id -u)/com.brainlayer.telegram
 # Or use CLI
 golems start telegram
 ```

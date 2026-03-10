@@ -76,7 +76,7 @@ All integration happens automatically with `processHotMatches()` after scoring.
 bun run src/job-golem/index.ts
 
 # View results
-cat ~/.golems-zikaron/job-golem/results/jobs-*.json
+cat ~/.brainlayer/job-golem/results/jobs-*.json
 
 # View matches in Telegram
 # /jobs command shows formatted list
@@ -133,7 +133,7 @@ Scheduling logic in `src/cloud-worker.ts`.
 
 ## Data Storage
 
-Results saved to `~/.golems-zikaron/job-golem/results/jobs-DATE-TIME.json`
+Results saved to `~/.brainlayer/job-golem/results/jobs-DATE-TIME.json`
 
 Database tables (if using Supabase):
 - `golem_jobs` — Job sync and storage

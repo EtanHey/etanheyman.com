@@ -17,7 +17,7 @@ The only hard dependency is `@golems/shared` for database and LLM access.
 
 ## What's the memory cost?
 
-Zikaron uses sqlite-vec with bge-large-en-v1.5 embeddings. For 291K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
+BrainLayer uses sqlite-vec with bge-large-en-v1.5 embeddings. For 291K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
 
 ## Does it work without Railway?
 
@@ -48,7 +48,7 @@ Running fully local with Ollama costs $0/mo (just electricity). Production switc
 
 Yes. RecruiterGolem includes a style adapter that matches tone and formality to each recipient. Your base writing style is exported to JSON and can be edited:
 
-- Style analysis from Zikaron session data
+- Style analysis from BrainLayer session data
 - Per-recipient adaptation (formal for enterprise, casual for startups)
 - Anti-AI writing patterns to avoid generic-sounding messages
 

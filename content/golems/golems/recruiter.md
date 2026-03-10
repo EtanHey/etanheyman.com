@@ -48,7 +48,7 @@ interface Contact {
 Stores contacts and conversation history (SQLite local or Supabase cloud):
 
 **Local (SQLite):**
-- `~/.golems-zikaron/recruiter/outreach.db`
+- `~/.brainlayer/recruiter/outreach.db`
 - Local `outreach_contacts` table (maps to Supabase during cloud sync)
 - Local `outreach_messages` table
 - Local `practice_questions` table
@@ -217,7 +217,7 @@ golems recruit --find
 - **EmailGolem** — Detects job offers and interview requests, routes to RecruiterGolem
 - **ClaudeGolem** — Provides writing feedback on outreach messages
 - **Telegram Bot** — Handles `/outreach`, `/practice` commands
-- **Zikaron** — Semantic search for past conversations with contacts
+- **BrainLayer** — Semantic search for past conversations with contacts
 
 ## Example: Full Outreach Workflow
 
