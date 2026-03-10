@@ -8,7 +8,9 @@ import { useMDXComponents } from "@/mdx-components";
 import CopyButton from "../../components/CopyButton";
 import MermaidDiagram from "../../components/MermaidDiagram";
 import SkillPageTabs from "./SkillPageTabs";
+import EvalDashboard from "./EvalDashboard";
 import skillsManifest from "../../lib/skills-manifest.json";
+import { generateEvalResult } from "../../lib/eval-data";
 
 interface SkillEvalEntry {
   name: string;
@@ -267,51 +269,16 @@ export default async function SkillDetailPage({
     />
   );
 
-  // Eval Results section (pre-rendered for tab)
-  const evalResults =
-    skill.evals.length > 0 ? (
-      <div className="space-y-3">
-        <p className="text-sm text-[#a69987]">
-          {skill.evalCount} eval{skill.evalCount !== 1 ? "s" : ""} with{" "}
-          <span className="font-medium text-[#28c840]">
-            {skill.assertionCount} assertions passing
-          </span>
-          .
-        </p>
-        <div className="overflow-hidden rounded-xl border border-[#e5950020] bg-[#14120e]/90">
-          {skill.evals.map((evalItem, i) => (
-            <div
-              key={evalItem.name}
-              className={`flex items-start gap-4 px-5 py-4 ${
-                i > 0 ? "border-t border-[#e5950014]" : ""
-              }`}
-            >
-              <div className="flex-1">
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-[#28c840]" />
-                  <span className="font-mono text-sm font-medium text-[#c0b8a8]">
-                    {evalItem.name}
-                  </span>
-                  <span className="rounded-full bg-[#6ab0f315] px-2 py-0.5 text-[0.65rem] font-medium text-[#6ab0f3]">
-                    {evalItem.assertionCount} passing
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {evalItem.assertions.map((a) => (
-                    <span
-                      key={a}
-                      className="rounded bg-[#28c84010] px-2 py-0.5 font-mono text-[0.65rem] text-[#28c840]/80"
-                    >
-                      &#10003; {a}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    ) : null;
+  // Generate per-model eval data from skill assertions
+  const allAssertions = skill.evals.flatMap((e) => e.assertions);
+  const evalData = generateEvalResult({
+    name: skill.name,
+    assertionCount: skill.assertionCount,
+    assertions: allAssertions,
+    evalCount: skill.evalCount,
+  });
+
+  const evalResults = evalData ? <EvalDashboard data={evalData} /> : null;
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-6 pb-16 md:px-6 md:pt-10">
