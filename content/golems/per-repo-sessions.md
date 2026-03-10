@@ -89,7 +89,7 @@ function myProjectClaude() {
 
 | Project | Function | Personality | MCP Tools |
 |---------|----------|-------------|-----------|
-| Golems | `gitsClaude` | AI agent ecosystem | zikaron, email, jobs, supabase, exa |
+| Golems | `gitsClaude` | AI agent ecosystem | brainlayer, email, jobs, supabase, exa |
 | SongScript | `songClaude` | Music learning app | convex |
 | *(private app)* | `domicaClaude` | *(private)* | convex, supabase |
 

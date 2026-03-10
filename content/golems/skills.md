@@ -48,7 +48,7 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 | Context7 | `/context7` | Library documentation lookup |
 | GitHub Research | `/github-research` | Explore and document repositories |
 | CLI Agents | `/cli-agents` | Run Gemini, Cursor, Codex, Kiro for research |
-| Zikaron | `/zikaron` | Search past solutions and session context |
+| BrainLayer | `/brainlayer` | Search past solutions and session context |
 | Catchup | `/catchup` | Full branch context recovery |
 | Catchup Recent | `/catchup-recent` | Quick context recovery |
 

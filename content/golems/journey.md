@@ -124,7 +124,7 @@ Solved the "fresh context" problem: use Claude Code's `--resume` flag per-golem.
 Three-Claude merge brought everything under one roof:
 - `packages/autonomous/` — All golems, Telegram bot, Night Shift
 - `packages/ralph/` — Autonomous coding loop (PRD-driven)
-- `packages/zikaron/` — Memory layer (Python + sqlite-vec)
+- `packages/zikaron/` — BrainLayer memory layer (Python + sqlite-vec)
 
 Three parallel Claude sessions coordinated via the collab protocol. Audit trail: 745 lines.
 
@@ -250,12 +250,12 @@ Built entirely with:
 - **Supabase** — PostgreSQL + auth + RLS
 - **Railway** — Cloud deployment
 - **Grammy** — Telegram bot framework
-- **sqlite-vec** — Local vector search (Zikaron)
+- **sqlite-vec** — Local vector search (BrainLayer)
 - **Next.js** — Documentation site (etanheyman.com/golems)
 
-### Feb 7: Zikaron sqlite-vec Migration
+### Feb 7: BrainLayer sqlite-vec Migration
 
-ChromaDB was too slow for real-time search (30s cold start). Migrated to **sqlite-vec** with APSW — search dropped to under 2 seconds. bge-large-en-v1.5 embeddings (1024 dims) with MPS acceleration on Apple Silicon. The daemon architecture (`/tmp/zikaron.sock`) keeps the model hot.
+ChromaDB was too slow for real-time search (30s cold start). Migrated to **sqlite-vec** with APSW — search dropped to under 2 seconds. bge-large-en-v1.5 embeddings (1024 dims) with MPS acceleration on Apple Silicon. The daemon architecture (`/tmp/brainlayer.sock`) keeps the model hot.
 
 ### Feb 7: TellerGolem — Tax Season Prep
 
@@ -306,7 +306,7 @@ With the foundation built, we created a **folder-based planning system** — eac
 
 Each golem tab in the docsite terminal hero now shows a real action demo instead of generic status lines:
 
-- **ClaudeGolem:** `$ claude -c --resume` — context-loaded session, Zikaron memory
+- **ClaudeGolem:** `$ claude -c --resume` — context-loaded session, BrainLayer memory
 - **EmailGolem:** `$ golems email --triage` — inbox scan, category routing, draft replies
 - **RecruiterGolem:** `$ golems recruit --find` — Exa search, scoring, outreach drafting, interview practice
 - **TellerGolem:** `$ golems teller --briefing` — spend tracking, category breakdown, tax deductions
@@ -359,7 +359,7 @@ Before:  1 package, ~890 tests, tightly coupled
 After:   14 packages, 1,148 tests, each golem independently installable
 ```
 
-6 golems (Claude orchestrator + Recruiter, Teller, Job, Coach, Content domain experts), plus @golems/shared (including the Email system), @golems/services, Ralph, and Zikaron.
+6 golems (Claude orchestrator + Recruiter, Teller, Job, Coach, Content domain experts), plus @golems/shared (including the Email system), @golems/services, Ralph, and BrainLayer.
 
 ---
 

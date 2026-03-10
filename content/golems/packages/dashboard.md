@@ -21,20 +21,20 @@ The Golems Docsite (formerly `dashboard`) is a Next.js web application deployed 
 | Coach | `/coach` | `whoop_snapshots` (recovery, sleep, strain) |
 | Content | `/content` | `pipeline_runs` |
 | Docs | `/docs` | Static markdown with shiki syntax highlighting |
-| Enrichment | `/enrichment` | Zikaron daemon `/api/stats/enrichment` |
+| Enrichment | `/enrichment` | BrainLayer daemon `/api/stats/enrichment` |
 | Tokens | `/tokens` | `llm_usage` |
-| Session | `/session` | Zikaron daemon `/api/session/:id` |
+| Session | `/session` | BrainLayer daemon `/api/session/:id` |
 | Settings | `/settings` | Supabase Auth + Storage |
 
 ## Architecture
 
-The dashboard queries Supabase directly for most pages (no daemon required on Vercel). Two pages (Enrichment and Session) require the local Zikaron daemon for real-time data.
+The dashboard queries Supabase directly for most pages (no daemon required on Vercel). Two pages (Enrichment and Session) require the local BrainLayer daemon for real-time data.
 
 ```mermaid
 flowchart TD
     V["Vercel<br/><small>Next.js SSR + SSG</small>"]
     V --> SB[("Supabase<br/><small>12 tables with RLS</small>")]
-    V -.->|"local dev only"| ZD["Zikaron Daemon<br/><small>:8787</small>"]
+    V -.->|"local dev only"| ZD["BrainLayer Daemon<br/><small>:8787</small>"]
     V --> SS["Supabase Storage<br/><small>brain-graphs/</small>"]
 ```
 
@@ -84,4 +84,4 @@ cd packages/docsite
 bun dev    # http://localhost:3000
 ```
 
-Requires `.env.local` with Supabase credentials. Set `ZIKARON_DAEMON_URL=http://localhost:8787` for enrichment and session pages.
+Requires `.env.local` with Supabase credentials. Set `BRAINLAYER_DAEMON_URL=http://localhost:8787` for enrichment and session pages.

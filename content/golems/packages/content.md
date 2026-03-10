@@ -73,13 +73,13 @@ Quality gates: CLIP Score >= 0.25, LAION Aesthetic >= 5.5, BRISQUE <= 40. Auto-r
 
 ## Data Visualization
 
-SVG-to-PNG infographics from live Supabase/Zikaron data:
+SVG-to-PNG infographics from live Supabase/BrainLayer data:
 
 | Fetcher | Source | Key Metrics |
 |---------|--------|-------------|
 | `jobs` | `golem_jobs`, `scrape_activity` | Top tags, weekly trends, scrape stats |
 | `finance` | `llm_usage`, `subscriptions` | LLM costs by model, daily costs |
-| `brain` | Zikaron SQLite | Chunk growth, project coverage, enrichment % |
+| `brain` | BrainLayer SQLite | Chunk growth, project coverage, enrichment % |
 | `activity` | `golem_events`, `service_runs` | Golem activity, service health |
 
 Templates: `linkedin-card` (1200x627), `instagram-square` (1080x1080), `story-format` (1080x1920).
