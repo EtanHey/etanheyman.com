@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import Link from "next/link";
 import golemsStats from "../lib/golems-stats.json";
 import CopyButton from "./CopyButton";
 
@@ -347,7 +348,10 @@ function SkillCard({ skill }: { skill: SkillEntry }) {
   const evalData = getEvalData(skill.name);
 
   return (
-    <div className="group relative rounded-lg border border-[#e5950014] bg-[#14120e]/90 p-4 transition-colors hover:border-[#e5950040]">
+    <Link
+      href={`/golems/skills/${skill.name}`}
+      className="group relative block rounded-lg border border-[#e5950014] bg-[#14120e]/90 p-4 no-underline transition-colors hover:border-[#e5950040]"
+    >
       <div className="mb-2 flex items-center justify-between gap-2">
         <code className="rounded bg-[#e595000f] px-2 py-0.5 font-mono text-xs font-bold text-[#e59500]">
           {skill.command}
@@ -362,7 +366,7 @@ function SkillCard({ skill }: { skill: SkillEntry }) {
       <p className="m-0 text-[0.78rem] leading-relaxed text-[#908575]">
         {skill.description}
       </p>
-    </div>
+    </Link>
   );
 }
 
@@ -438,7 +442,10 @@ export default function SkillsShowcase() {
       : SKILL_CATEGORIES[activeCategory] || [];
 
   return (
-    <section className="relative bg-gradient-to-b from-[#080807] to-[#0c0b0a] py-12 md:py-20">
+    <section
+      id="skills"
+      className="relative bg-gradient-to-b from-[#080807] to-[#0c0b0a] py-12 md:py-20"
+    >
       <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950033] to-transparent" />
       <div className="mx-auto max-w-[1100px] px-4 sm:px-6">
         {/* Header */}
