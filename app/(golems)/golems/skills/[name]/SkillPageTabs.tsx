@@ -59,7 +59,7 @@ export default function SkillPageTabs({
             className={`relative min-h-[44px] px-4 py-3 text-sm font-medium transition-colors ${
               i === safeActive
                 ? "text-[#e59500] after:absolute after:right-0 after:bottom-[-1px] after:left-0 after:h-0.5 after:bg-[#e59500]"
-                : "text-[#a89078] hover:text-[#c0b8a8]"
+                : "text-[#b0a89c] hover:text-[#c0b8a8]"
             }`}
           >
             {entry.label}

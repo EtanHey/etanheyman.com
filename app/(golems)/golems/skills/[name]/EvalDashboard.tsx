@@ -102,7 +102,7 @@ export default function EvalDashboard({ data }: Props) {
               className={`relative px-4 py-2.5 text-sm font-medium transition-colors ${
                 activeSubTab === tab.id
                   ? "text-[#e59500] after:absolute after:right-0 after:bottom-[-1px] after:left-0 after:h-0.5 after:bg-[#e59500]"
-                  : "text-[#a89078] hover:text-[#c0b8a8]"
+                  : "text-[#b0a89c] hover:text-[#c0b8a8]"
               }`}
             >
               {tab.label}
@@ -175,7 +175,7 @@ function KPICard({
       <p className="text-2xl font-bold" style={{ color }}>
         {value}
       </p>
-      <p className="mt-0.5 text-xs text-[#a69987]">{sub}</p>
+      <p className="mt-0.5 text-xs text-[#b8ad9e]">{sub}</p>
     </div>
   );
 }
@@ -396,7 +396,7 @@ function CostBreakdown({ models }: { models: SkillEvalResult["models"] }) {
             );
           })}
         </div>
-        <div className="mt-2 flex gap-4 text-xs text-[#a69987]">
+        <div className="mt-2 flex gap-4 text-xs text-[#b8ad9e]">
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-2.5 w-2.5 rounded bg-[#ffffff40]" />
             Input tokens

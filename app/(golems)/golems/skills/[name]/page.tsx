@@ -149,7 +149,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
   "Content & Communication": { bg: "bg-[#c084fc18]", text: "text-[#c084fc]" },
   Quality: { bg: "bg-[#28c84018]", text: "text-[#28c840]" },
   Domain: { bg: "bg-[#ff7eb318]", text: "text-[#ff7eb3]" },
-  Other: { bg: "bg-[#a8907818]", text: "text-[#a89078]" },
+  Other: { bg: "bg-[#a8907818]", text: "text-[#b0a89c]" },
 };
 
 /* ── Install prompt ──────────────────────────────────────── */
@@ -213,7 +213,7 @@ export default async function SkillDetailPage({
       return (
         <div className="group relative mb-4">
           <pre
-            className="scrollbar-none overflow-x-auto rounded-lg border border-[#e5950026] bg-[#0d0d0d] p-4 text-sm [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[inherit]"
+            className="scrollbar-thin overflow-x-auto rounded-lg border border-[#e5950026] bg-[#0d0d0d] p-4 text-sm [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[inherit]"
             style={{
               fontFamily:
                 "var(--font-golems-mono), 'JetBrains Mono', 'Fira Code', monospace",
@@ -250,23 +250,33 @@ export default async function SkillDetailPage({
   );
 
   const rawMdx = (
-    <MDXRemote
-      source={rawSource}
-      components={components}
-      options={{
-        mdxOptions: {
-          format: "md",
-          remarkPlugins: [remarkGfm],
-          rehypePlugins: [
-            rehypeSlug,
-            [
-              rehypePrettyCode,
-              { theme: "github-dark-dimmed", keepBackground: false },
-            ],
-          ],
-        },
-      }}
-    />
+    <div>
+      <div className="mb-4 rounded-lg border border-[#e5950020] bg-[#e5950008] px-4 py-2.5">
+        <p className="text-xs text-[#b0a89c]">
+          Full SKILL.md source — includes LLM directives, anti-patterns, and
+          technical instructions stripped from the Overview tab.
+        </p>
+      </div>
+      <div className="rounded-xl border border-[#e5950015] bg-[#0d0c0a] p-5">
+        <MDXRemote
+          source={rawSource}
+          components={components}
+          options={{
+            mdxOptions: {
+              format: "md",
+              remarkPlugins: [remarkGfm],
+              rehypePlugins: [
+                rehypeSlug,
+                [
+                  rehypePrettyCode,
+                  { theme: "github-dark-dimmed", keepBackground: false },
+                ],
+              ],
+            },
+          }}
+        />
+      </div>
+    </div>
   );
 
   // Generate per-model eval data from skill assertions
@@ -286,7 +296,7 @@ export default async function SkillDetailPage({
       <div className="mb-6 flex items-center justify-between">
         <Link
           href="/golems#skills"
-          className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#a89078] transition-colors hover:text-[#e59500]"
+          className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#b0a89c] transition-colors hover:text-[#e59500]"
         >
           <svg
             className="h-4 w-4"
@@ -305,7 +315,7 @@ export default async function SkillDetailPage({
         </Link>
         <a
           href={`https://github.com/EtanHey/golems/tree/master/skills/golem-powers/${skill.name}`}
-          className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#a89078] transition-colors hover:text-[#c0b8a8]"
+          className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#b0a89c] transition-colors hover:text-[#c0b8a8]"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -341,7 +351,7 @@ export default async function SkillDetailPage({
         </h1>
 
         {/* Description */}
-        <p className="mb-6 max-w-2xl text-base leading-relaxed text-[#a69987]">
+        <p className="mb-6 max-w-2xl text-base leading-relaxed text-[#b8ad9e]">
           {skill.description}
         </p>
 
@@ -365,11 +375,19 @@ export default async function SkillDetailPage({
 
         {/* Trust signal bar */}
         <div className="mb-4 flex flex-wrap gap-3">
+          {evalData && (
+            <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#28c84020] bg-[#28c84008] px-3.5 py-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-[#28c840]" />
+              <span className="text-sm font-medium text-[#28c840]">
+                {Math.round(evalData.bestPassRate * 100)}% best pass rate
+              </span>
+            </div>
+          )}
           {skill.assertionCount > 0 && (
             <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#28c84020] bg-[#28c84008] px-3.5 py-2">
               <span className="inline-block h-2 w-2 rounded-full bg-[#28c840]" />
               <span className="text-sm font-medium text-[#28c840]">
-                {skill.assertionCount} assertions passing
+                {skill.assertionCount} assertions
               </span>
             </div>
           )}
@@ -436,7 +454,7 @@ export default async function SkillDetailPage({
 
         {/* ═══ Sidebar ═══ */}
         <aside>
-          <div className="space-y-5 lg:sticky lg:top-20">
+          <div className="space-y-5 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
             {/* Quick Install */}
             <div className="rounded-xl border border-[#2dd4a826] bg-[#14120e]/90 p-5">
               <h3 className="mb-3 text-sm font-bold text-[#2dd4a8]">
@@ -511,7 +529,7 @@ export default async function SkillDetailPage({
               <div className="mt-4 border-t border-[#e5950014] pt-4">
                 <a
                   href={`https://github.com/EtanHey/golems/tree/master/skills/golem-powers/${skill.name}`}
-                  className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#a89078] transition-colors hover:text-[#c0b8a8]"
+                  className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#b0a89c] transition-colors hover:text-[#c0b8a8]"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -549,7 +567,7 @@ export default async function SkillDetailPage({
                       <code className="font-mono text-xs font-bold text-[#e59500]">
                         {rs.command}
                       </code>
-                      <p className="mt-1 text-[0.72rem] leading-snug text-[#a69987]">
+                      <p className="mt-1 text-[0.72rem] leading-snug text-[#b8ad9e]">
                         {rs.description.length > 80
                           ? rs.description.slice(0, 80) + "..."
                           : rs.description}
