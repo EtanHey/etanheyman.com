@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ## What is Golems?
 
-Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **14 packages** — 6 golems plus shared infrastructure, tools, and dashboards — each installable as a Claude Code plugin.
+Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **11 packages** — 6 golems plus shared infrastructure, tools, and dashboards — each installable as a Claude Code plugin.
 
 - **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
 - **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
@@ -49,7 +49,7 @@ Before you start, ensure you have:
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/golems.git
+git clone https://github.com/EtanHey/golems.git
 cd golems
 bun install
 ```

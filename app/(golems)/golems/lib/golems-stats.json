@@ -1,0 +1,249 @@
+{
+  "generatedAt": "2026-03-10T00:07:02Z",
+  "skills": {
+    "count": 55,
+    "withSkillMd": 54,
+    "withEvals": 36,
+    "evalCoverage": "65%"
+  },
+  "packages": {
+    "count": 11,
+    "list": "claude, coach, content, docsite, golems-tui, jobs, recruiter, services, shared, tax-helper, teller"
+  },
+  "tests": {
+    "passing": 995,
+    "failing": 1,
+    "skipped": 2,
+    "total": 998,
+    "files": 71
+  },
+  "brainlayer": {
+    "chunks": 291832,
+    "chunksDisplay": "291K+"
+  },
+  "mcp": {
+    "count": 8,
+    "servers": "brainlayer, context7, exa, golems-glm, kernel, sophtron, supabase, voicelayer"
+  },
+  "agents": {
+    "count": 7
+  },
+  "evals": [
+    {
+      "skill": "1password",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": false
+    },
+    {
+      "skill": "archive",
+      "evalCount": 2,
+      "assertionCount": 8,
+      "hasFixtures": true
+    },
+    {
+      "skill": "brainlayer",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": true
+    },
+    {
+      "skill": "brave",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": false
+    },
+    {
+      "skill": "catchup",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": true
+    },
+    {
+      "skill": "cli-agents",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": false
+    },
+    {
+      "skill": "cmux-agents",
+      "evalCount": 3,
+      "assertionCount": 18,
+      "hasFixtures": true
+    },
+    {
+      "skill": "cmux",
+      "evalCount": 3,
+      "assertionCount": 8,
+      "hasFixtures": false
+    },
+    {
+      "skill": "coach",
+      "evalCount": 14,
+      "assertionCount": 63,
+      "hasFixtures": false
+    },
+    {
+      "skill": "coderabbit",
+      "evalCount": 3,
+      "assertionCount": 8,
+      "hasFixtures": false
+    },
+    {
+      "skill": "commit",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": true
+    },
+    {
+      "skill": "context7",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": true
+    },
+    {
+      "skill": "contract-feedback",
+      "evalCount": 2,
+      "assertionCount": 13,
+      "hasFixtures": true
+    },
+    {
+      "skill": "convex",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "critique-waves",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "example-bash",
+      "evalCount": 3,
+      "assertionCount": 11,
+      "hasFixtures": false
+    },
+    {
+      "skill": "example-typescript",
+      "evalCount": 3,
+      "assertionCount": 11,
+      "hasFixtures": false
+    },
+    {
+      "skill": "figma-loop",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": false
+    },
+    {
+      "skill": "github-research",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "github",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "golem-install",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": false
+    },
+    {
+      "skill": "interview-practice",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": true
+    },
+    {
+      "skill": "large-plan",
+      "evalCount": 3,
+      "assertionCount": 11,
+      "hasFixtures": false
+    },
+    {
+      "skill": "never-fabricate",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": true
+    },
+    {
+      "skill": "obsidian",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": true
+    },
+    {
+      "skill": "pr-loop",
+      "evalCount": 3,
+      "assertionCount": 11,
+      "hasFixtures": true
+    },
+    {
+      "skill": "prd-manager",
+      "evalCount": 3,
+      "assertionCount": 7,
+      "hasFixtures": false
+    },
+    {
+      "skill": "prd",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "presentation-builder",
+      "evalCount": 3,
+      "assertionCount": 7,
+      "hasFixtures": false
+    },
+    {
+      "skill": "research",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": true
+    },
+    {
+      "skill": "skills",
+      "evalCount": 3,
+      "assertionCount": 12,
+      "hasFixtures": false
+    },
+    {
+      "skill": "test-plan",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": false
+    },
+    {
+      "skill": "video-showcase",
+      "evalCount": 3,
+      "assertionCount": 12,
+      "hasFixtures": false
+    },
+    {
+      "skill": "voice-sessions",
+      "evalCount": 3,
+      "assertionCount": 8,
+      "hasFixtures": false
+    },
+    {
+      "skill": "writing-skills",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": false
+    },
+    {
+      "skill": "youtube-pipeline",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": true
+    }
+  ]
+}

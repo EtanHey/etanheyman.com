@@ -8,7 +8,7 @@ sidebar_position: 2
 
 ## 7 Golems + Infrastructure, 3 Environments
 
-Golems is a **Bun workspace monorepo with 14 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
+Golems is a **Bun workspace monorepo with 11 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
 
 | Package | Role |
 |---------|------|
