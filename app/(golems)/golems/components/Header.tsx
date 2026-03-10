@@ -9,6 +9,7 @@ import type { DocNavItem } from "../lib/docs-nav";
 
 const navLinks = [
   { label: "Docs", href: "/golems/docs/getting-started" },
+  { label: "Skills", href: "/golems/skills" },
   { label: "Architecture", href: "/golems/docs/architecture" },
   { label: "Journey", href: "/golems/docs/journey" },
   { label: "For LLMs", href: "/golems/docs/llm" },
