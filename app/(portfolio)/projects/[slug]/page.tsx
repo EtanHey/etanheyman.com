@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import golemsStats from "@/app/(golems)/golems/lib/golems-stats.json";
 import AdminEditButton from "@/app/components/AdminEditButton";
 import { getProjectBySlugOrId, getAllProjects } from "@/lib/projects";
 import Image from "next/image";
@@ -26,12 +27,10 @@ import { getTerminalShowcaseData } from "./terminal-showcase-config";
 import { highlightCode } from "@/lib/highlight";
 
 const PROJECT_DESCRIPTIONS: Record<string, string> = {
-  brainlayer:
-    "Persistent memory layer for AI coding assistants. 328K+ indexed chunks, 7 intelligent tools (search, store, recall + knowledge graph), 43 KG entities, hybrid semantic search with sqlite-vec.",
+  brainlayer: `Persistent memory layer for AI coding assistants. ${golemsStats.brainlayer.chunksDisplay} indexed chunks, 7 intelligent tools (search, store, recall + knowledge graph), 43 KG entities, hybrid semantic search with sqlite-vec.`,
   voicelayer:
     "Voice I/O layer for AI assistants. Local TTS via edge-tts, STT via whisper.cpp (~300ms), session booking, 2 tools (voice_speak, voice_ask) with auto-mode detection.",
-  golems:
-    "Autonomous AI agent ecosystem. 14 packages, 7 domain agents, multi-LLM routing, Night Shift autonomous coding at 4am.",
+  golems: `Autonomous AI agent ecosystem. ${golemsStats.packages.count} packages, ${golemsStats.agents.count} domain agents, ${golemsStats.skills.count} skills, multi-LLM routing, Night Shift autonomous coding at 4am.`,
 };
 
 export function generateStaticParams() {

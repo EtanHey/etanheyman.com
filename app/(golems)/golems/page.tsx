@@ -7,6 +7,8 @@ import Image from "next/image";
 import TelegramMock from "./components/TelegramMock";
 import GolemMascot from "./components/GolemMascot";
 import CopyButton from "./components/CopyButton";
+import SkillsShowcase from "./components/SkillsShowcase";
+import golemsStats from "./lib/golems-stats.json";
 
 /* ── Tab content: real CLI flows ───────────────────────────────── */
 
@@ -74,10 +76,10 @@ const tabs: TerminalTab[] = [
       "\x1b[34mClaude Sessions:\x1b[0m 3 running",
       "\x1b[34mNight Shift Target:\x1b[0m songscript",
       "",
-      "\x1b[34mSkills:\x1b[0m 30+ loaded",
-      "\x1b[34mPackages:\x1b[0m 14 (shared, claude, jobs, recruiter, teller, content, coach, services, ralph, dashboard, docsite, golems-tui, orchestrator, tax-helper)",
-      "\x1b[34mTests:\x1b[0m 1199 passing (2928 assertions)",
-      "\x1b[34mMemory:\x1b[0m 328K+ chunks indexed",
+      `\x1b[34mSkills:\x1b[0m ${golemsStats.skills.count} loaded`,
+      `\x1b[34mPackages:\x1b[0m ${golemsStats.packages.count} (${golemsStats.packages.list})`,
+      `\x1b[34mTests:\x1b[0m ${golemsStats.tests.passing} passing`,
+      `\x1b[34mMemory:\x1b[0m ${golemsStats.brainlayer.chunksDisplay} chunks indexed`,
     ],
   },
   {
@@ -99,7 +101,7 @@ const tabs: TerminalTab[] = [
       "",
       "\x1b[36mFeedback:\x1b[0m",
       "  \x1b[32m\u2713\x1b[0m Strong opening with concrete system",
-      "  \x1b[33m\u25CB\x1b[0m Add metrics (1199 tests, 14 packages, 30+ skills)",
+      `  \x1b[33m\u25CB\x1b[0m Add metrics (${golemsStats.tests.passing} tests, ${golemsStats.packages.count} packages, ${golemsStats.skills.count} skills)`,
       "  \x1b[33m\u25CB\x1b[0m Mention the constraint: Mac + Railway split",
       "",
       "\x1b[34mScore: 7.2/10\x1b[0m | \x1b[33mElo: +15\x1b[0m",
@@ -277,7 +279,7 @@ const golems = [
   {
     emoji: "\uD83E\uDDE0",
     name: "Zikaron",
-    desc: "Memory layer. 328K+ indexed chunks across all sessions. Semantic search in under 2 seconds.",
+    desc: `Memory layer. ${golemsStats.brainlayer.chunksDisplay} indexed chunks across all sessions. Semantic search in under 2 seconds.`,
     link: "/golems/docs/packages/zikaron",
   },
 ];
@@ -723,6 +725,7 @@ export default function GolemsHome() {
       <HomepageHero />
       <GetStartedSection />
       <GolemsSection />
+      <SkillsShowcase />
       <ArchitectureSection />
     </>
   );
