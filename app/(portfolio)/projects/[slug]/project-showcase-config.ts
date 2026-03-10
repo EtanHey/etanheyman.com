@@ -48,7 +48,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "pip install brainlayer",
     isMiniSite: true,
     stats: [
-      { value: 328, suffix: "K+", label: "Indexed chunks" },
+      { value: 291, suffix: "K+", label: "Indexed chunks" },
       { value: 7, label: "MCP tools" },
       { value: 1024, label: "Vector dimensions" },
       { value: 43, label: "KG entities" },
@@ -165,10 +165,10 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     accent: { color: "#94A3B8", colorRgb: "148, 163, 184" },
     isMiniSite: true,
     stats: [
-      { value: 14, label: "Packages" },
+      { value: 11, label: "Packages" },
       { value: 7, label: "Domain agents" },
-      { value: 60, suffix: "+", label: "MCP tools" },
-      { value: 150, suffix: "+", label: "PRs merged" },
+      { value: 55, label: "Skills" },
+      { value: 261, suffix: "+", label: "PRs merged" },
     ],
     features: [
       {
@@ -206,7 +206,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         label: "Telegram Bot",
         command: "bun run packages/claude/src/telegram-bot.ts",
       },
-      { label: "Dashboard", command: "cd packages/dashboard && npm run dev" },
+      { label: "Docsite", command: "cd packages/docsite && bun dev" },
     ],
     architectureFlow: [
       { icon: "Send", title: "Telegram", subtitle: "User commands" },

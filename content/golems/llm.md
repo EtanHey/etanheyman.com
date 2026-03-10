@@ -29,7 +29,7 @@ Golems is a **Bun workspace monorepo with 11 packages** — 7 golems (1 orchestr
 | `golems-tui` | React Ink terminal dashboard |
 | `tax-helper` | Schedule C transaction categorization (Sophtron MCP) |
 | `ralph` | Autonomous coding loop (PRD execution) |
-| `zikaron` | Memory layer (Python, 260K+ chunks, sqlite-vec) |
+| `zikaron` | Memory layer (Python, 291K+ chunks, sqlite-vec) |
 
 ## Mac = Brain, Railway = Body
 
@@ -1106,7 +1106,7 @@ The only hard dependency is `@golems/shared` for database and LLM access.
 
 ## What's the memory cost?
 
-Zikaron uses sqlite-vec with bge-large-en-v1.5 embeddings. For 260K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
+Zikaron uses sqlite-vec with bge-large-en-v1.5 embeddings. For 291K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
 
 ## Does it work without Railway?
 
@@ -1144,7 +1144,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## How many tests does Golems have?
 
-**0 tests** across 71 test files. The test suite covers all 11 packages and runs with `bun test` from the monorepo root.
+**995 tests** across 71 test files. The test suite covers all 11 packages and runs with `bun test` from the monorepo root.
 
 ## What's the tech stack?
 
@@ -1191,7 +1191,7 @@ Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun wor
 - **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
 - **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
 - **Infrastructure:** @golems/shared (foundation + email system), @golems/services (Night Shift, Cloud Worker, Briefing)
-- **Tools:** Ralph (autonomous coding loop), Zikaron (260K+ chunk memory layer with 10-field enrichment)
+- **Tools:** Ralph (autonomous coding loop), Zikaron (291K+ chunk memory layer with 10-field enrichment)
 - **Core Principle:** Golems are domain experts, not I/O channels — they own specific knowledge areas and produce specialized outputs
 
 ## Architecture Principle
@@ -1293,7 +1293,7 @@ golems/                              # Bun workspace monorepo
 ├── packages/services/               # Night Shift, Briefing, Cloud Worker, Wizard
 ├── packages/autonomous/             # Legacy (1-line re-exports for compatibility)
 ├── packages/ralph/                  # Autonomous coding loop (Zsh)
-│   └── skills/golem-powers/         # 30+ Claude Code skills
+│   └── skills/golem-powers/         # 55 Claude Code skills
 ├── packages/zikaron/                # Memory layer (Python + sqlite-vec)
 ├── launchd/                         # macOS service plists
 ├── Dockerfile                       # Railway cloud worker image
@@ -2498,7 +2498,7 @@ Instead of building golems first, we built **Zikaron** — a memory layer using 
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. Zikaron now indexes 260K+ conversation chunks and returns results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database, instant queries. Zikaron now indexes 291K+ conversation chunks and returns results in under 2 seconds.
 
 ### Jan 17: First Golem — Email Router
 
@@ -2881,7 +2881,7 @@ Then in Claude Code: `/tools` or use `@golems-email` in any prompt.
 
 | Server | Command | Tools | Purpose |
 |--------|---------|-------|---------|
-| **zikaron** | `zikaron-mcp` | 8 | Memory layer — search 260K+ indexed conversation chunks |
+| **zikaron** | `zikaron-mcp` | 8 | Memory layer — search 291K+ indexed conversation chunks |
 | **golems-email** | `bun run packages/shared/src/email/mcp-server.ts` | 9 | Email triage + TellerGolem financial tools |
 | **golems-jobs** | `bun run packages/jobs/src/mcp-server.ts` | 5 | Job discovery, search, and stats |
 | **golems-glm** | `bun run packages/shared/src/glm/mcp-server.ts` | 2 | Local GLM-4.7-Flash — summarize, score/classify |
@@ -3094,7 +3094,7 @@ Quick job statistics.
 
 ## Memory Tools (zikaron)
 
-Zikaron provides persistent memory across Claude Code sessions — semantic search over 260K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec.
+Zikaron provides persistent memory across Claude Code sessions — semantic search over 291K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec.
 
 ### zikaron_search
 
@@ -3273,7 +3273,7 @@ Key capabilities: account listing, transaction history, identity verification.
 
 - **Email tools** use Supabase directly (cloud-first architecture)
 - **Job tools** query Supabase `golem_jobs` and `scrape_activity` tables
-- **Zikaron tools** query local sqlite-vec database (~1.4GB, 260K+ chunks)
+- **Zikaron tools** query local sqlite-vec database (~1.4GB, 291K+ chunks)
 - **GLM tools** run locally via Ollama (no network, ~3-8s per call on M1 Pro)
 - **Scoring:** Email scores 1-10 (10=urgent), Job scores 1-10 (8+=hot match)
 - **Categories:** Email categories are semantic (job, interview, subscription, tech-update, newsletter, promo, social, other)
@@ -3453,7 +3453,7 @@ done
 
 ## Skills Library
 
-Ralph manages 30+55 reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
+Ralph manages 55 reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
 
 - **Development:** commit, create-pr, worktrees, test-plan, lsp
 - **Operations:** railway, 1password, convex, github
@@ -3492,7 +3492,7 @@ packages/ralph/
 ├── lib/                   # Modular zsh library
 ├── ralph-ui/              # React Ink terminal dashboard
 ├── bun/                   # TypeScript story management
-├── skills/golem-powers/   # 30+ Claude Code skills
+├── skills/golem-powers/   # 55 Claude Code skills
 ├── rules-library/         # Exportable rules/context library
 └── prd-json/              # PRD story files
 ```
@@ -3678,7 +3678,7 @@ await setState("nightShiftTarget", "songscript");
 
 ## What It Does
 
-Zikaron (Hebrew for "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 260K+ chunks indexed, searchable in under 2 seconds.
+Zikaron (Hebrew for "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 291K+ chunks indexed, searchable in under 2 seconds.
 
 ## Architecture
 
@@ -3729,7 +3729,7 @@ AST-aware chunking with tree-sitter for code (~500 tokens). Never splits stack t
 Uses `bge-large-en-v1.5` model (1024 dimensions). Runs locally via sentence-transformers with MPS acceleration on Apple Silicon.
 
 ### 5. Index
-sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 260K+ chunks.
+sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 291K+ chunks.
 
 ## Interfaces
 
@@ -3917,7 +3917,7 @@ This helps visually distinguish which Claude session is which when running multi
 
 # Skills Library
 
-> 30+55 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
+> 55 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
 
 ## What Are Skills?
 

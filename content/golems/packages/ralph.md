@@ -35,7 +35,7 @@ done
 
 ## Skills Library
 
-Ralph manages 30+ reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
+The ecosystem includes 55 reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
 
 - **Development:** commit, create-pr, worktrees, test-plan, lsp
 - **Operations:** railway, 1password, convex, github
@@ -68,16 +68,7 @@ Every story's last two criteria are always:
 
 ## Architecture
 
-```
-packages/ralph/
-├── ralph.zsh              # Main entry point — ALL commands
-├── lib/                   # Modular zsh library
-├── ralph-ui/              # React Ink terminal dashboard
-├── bun/                   # TypeScript story management
-├── skills/golem-powers/   # 30+ Claude Code skills
-├── rules-library/         # Exportable rules/context library
-└── prd-json/              # PRD story files
-```
+Ralph is invoked via the `ralph-commit` skill or the `golems` CLI. Skills live at the monorepo root in `skills/golem-powers/` (55 skills).
 
 ## What Ralph Built
 
