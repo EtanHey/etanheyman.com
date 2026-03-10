@@ -315,7 +315,7 @@ Setup section in the SKILL.md.`;
 /* ── Terminal demo lines ─────────────────────────────────────── */
 
 const installDemoLines = [
-  "$ npx golems-cli skills install cmux-agents",
+  "$ golems-cli skills install cmux-agents",
   "",
   "\x1b[34m=== INSTALLING cmux-agents ===\x1b[0m",
   "",
@@ -385,7 +385,7 @@ function FeaturedSkill() {
           <span className="block h-2.5 w-2.5 rounded-full bg-[#28c840]" />
         </div>
         <span className="flex-1 text-center font-mono text-[0.72rem] text-[#666]">
-          golems-cli skills install cmux-agents
+          golems-cli skills install
         </span>
         <div className="w-12" />
       </div>

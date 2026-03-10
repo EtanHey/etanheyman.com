@@ -174,7 +174,7 @@ export default async function SkillDetailPage({
   const catColors = CATEGORY_COLORS[skill.category] || CATEGORY_COLORS.Other;
   const relativeTime = getRelativeTime(skill.lastModified);
   const relatedSkills = getRelatedSkills(skill, skills, 3);
-  const installCommand = `npx golems-cli skills install ${skill.name}`;
+  const installCommand = `golems-cli skills install ${skill.name}`;
   const installPrompt = getInstallPrompt(skill);
 
   // Strip first H1 + LLM-directive sections for Overview tab

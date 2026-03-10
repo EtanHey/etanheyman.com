@@ -1,11 +1,17 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, useMemo, type ReactNode } from "react";
 
 interface SkillPageTabsProps {
   overviewContent: ReactNode;
   rawContent: ReactNode;
   evalContent: ReactNode | null;
+}
+
+interface TabEntry {
+  id: string;
+  label: string;
+  content: ReactNode;
 }
 
 export default function SkillPageTabs({
@@ -15,17 +21,23 @@ export default function SkillPageTabs({
 }: SkillPageTabsProps) {
   const [activeTab, setActiveTab] = useState(0);
 
-  const tabs = [
-    { id: "overview", label: "Overview" },
-    { id: "skill-md", label: "SKILL.md" },
-    ...(evalContent ? [{ id: "eval-results", label: "Eval Results" }] : []),
-  ];
+  const entries: TabEntry[] = useMemo(() => {
+    const result: TabEntry[] = [
+      { id: "overview", label: "Overview", content: overviewContent },
+      { id: "skill-md", label: "SKILL.md", content: rawContent },
+    ];
+    if (evalContent) {
+      result.push({
+        id: "eval-results",
+        label: "Eval Results",
+        content: evalContent,
+      });
+    }
+    return result;
+  }, [overviewContent, rawContent, evalContent]);
 
-  const panels = [
-    overviewContent,
-    rawContent,
-    ...(evalContent ? [evalContent] : []),
-  ];
+  // Clamp active tab if entries shrink (e.g. evalContent removed)
+  const safeActive = activeTab < entries.length ? activeTab : 0;
 
   return (
     <div>
@@ -35,36 +47,36 @@ export default function SkillPageTabs({
         role="tablist"
         aria-label="Skill content"
       >
-        {tabs.map((tab, i) => (
+        {entries.map((entry, i) => (
           <button
-            key={tab.id}
+            key={entry.id}
             role="tab"
-            id={`tab-${tab.id}`}
-            aria-selected={i === activeTab}
-            aria-controls={`panel-${tab.id}`}
+            id={`tab-${entry.id}`}
+            aria-selected={i === safeActive}
+            aria-controls={`panel-${entry.id}`}
             onClick={() => setActiveTab(i)}
             type="button"
             className={`relative min-h-[44px] px-4 py-3 text-sm font-medium transition-colors ${
-              i === activeTab
+              i === safeActive
                 ? "text-[#e59500] after:absolute after:right-0 after:bottom-[-1px] after:left-0 after:h-0.5 after:bg-[#e59500]"
                 : "text-[#a89078] hover:text-[#c0b8a8]"
             }`}
           >
-            {tab.label}
+            {entry.label}
           </button>
         ))}
       </div>
 
       {/* Tab panels — all pre-rendered for SEO, hidden via CSS */}
-      {panels.map((content, i) => (
+      {entries.map((entry, i) => (
         <div
-          key={tabs[i].id}
+          key={entry.id}
           role="tabpanel"
-          id={`panel-${tabs[i].id}`}
-          aria-labelledby={`tab-${tabs[i].id}`}
-          className={i === activeTab ? "" : "hidden"}
+          id={`panel-${entry.id}`}
+          aria-labelledby={`tab-${entry.id}`}
+          className={i === safeActive ? "" : "hidden"}
         >
-          {content}
+          {entry.content}
         </div>
       ))}
     </div>

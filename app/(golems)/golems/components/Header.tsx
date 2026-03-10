@@ -101,8 +101,10 @@ export default function Header({ nav }: Props) {
                 setMobileOpen(!mobileOpen);
                 if (mobileOpen) setDocsExpanded(false);
               }}
-              className="p-1 text-[#e59500] md:hidden"
+              className="min-h-11 min-w-11 p-1 text-[#e59500] md:hidden"
               aria-label="Toggle navigation"
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-nav"
             >
               {mobileOpen ? (
                 <X className="h-5 w-5" />
@@ -116,6 +118,7 @@ export default function Header({ nav }: Props) {
         {/* Mobile dropdown — sits above the overlay via header's z-50 */}
         {mobileOpen && (
           <nav
+            id="mobile-nav"
             className="relative z-[51] max-h-[calc(100vh-3rem)] space-y-1 overflow-y-auto border-t border-[#e5950015] bg-[#0c0b0a] px-4 py-3 md:hidden"
             onClick={(e) => e.stopPropagation()}
           >
@@ -125,7 +128,7 @@ export default function Header({ nav }: Props) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`block rounded-md px-3 py-2 text-sm transition-colors ${
+                  className={`flex min-h-11 items-center rounded-md px-3 py-2 text-sm transition-colors ${
                     isActive
                       ? "bg-[#e5950015] text-[#e59500]"
                       : "text-[#a69987] hover:bg-[#ffffff08] hover:text-[#c0b8a8]"
