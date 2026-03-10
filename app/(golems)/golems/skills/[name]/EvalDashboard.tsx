@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Check, X } from "lucide-react";
 import type { SkillEvalResult, ModelId } from "../../lib/eval-types";
 import {
   MODEL_COLORS,
@@ -92,6 +93,7 @@ export default function EvalDashboard({ data }: Props) {
           {SUB_TABS.map((tab) => (
             <button
               key={tab.id}
+              id={`eval-tab-${tab.id}`}
               role="tab"
               aria-selected={activeSubTab === tab.id}
               aria-controls={`eval-panel-${tab.id}`}
@@ -315,33 +317,20 @@ function PassFailCell({ passed }: { passed: boolean }) {
       {passed ? (
         <span
           className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#28c84015] text-[#28c840]"
+          role="img"
           aria-label="Passed"
           title="Passed"
         >
-          <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M3 8.5L6.5 12L13 4"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <Check className="h-3.5 w-3.5" aria-hidden="true" />
         </span>
       ) : (
         <span
           className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ef444415] text-[#ef4444]"
+          role="img"
           aria-label="Failed"
           title="Failed"
         >
-          <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M4 4L12 12M12 4L4 12"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
+          <X className="h-3.5 w-3.5" aria-hidden="true" />
         </span>
       )}
     </td>

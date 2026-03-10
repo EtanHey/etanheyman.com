@@ -2,7 +2,9 @@ import type {
   SkillEvalResult,
   ModelResult,
   AssertionResult,
+  ModelId,
 } from "./eval-types";
+import { MODEL_LABELS } from "./eval-types";
 
 /**
  * Deterministic mock eval data generator.
@@ -11,8 +13,8 @@ import type {
  * the basic assertion data in skills-manifest.json. Uses a seeded PRNG
  * so output is stable across builds (same skill → same numbers).
  *
- * Replace this module with real data from golems-cli evals pipeline
- * once Tier-3 nightly cross-model runs are active.
+ * AIDEV-TODO: Replace this module with real data from golems-cli evals
+ * pipeline once Tier-3 nightly cross-model runs are active.
  */
 
 /* ── Seeded PRNG ──────────────────────────────────────────── */
@@ -70,12 +72,8 @@ export function generateEvalResult(skill: SkillInput): SkillEvalResult | null {
     };
   });
 
-  function buildModel(
-    model: "opus" | "sonnet" | "haiku",
-    label: string,
-    key: "opus" | "sonnet" | "haiku",
-  ): ModelResult {
-    const passed = assertions.filter((a) => a[key]).length;
+  function buildModel(model: ModelId): ModelResult {
+    const passed = assertions.filter((a) => a[model]).length;
     const total = assertions.length;
     const passRate = total > 0 ? passed / total : 0;
 
@@ -96,7 +94,7 @@ export function generateEvalResult(skill: SkillInput): SkillEvalResult | null {
 
     return {
       model,
-      label,
+      label: MODEL_LABELS[model],
       passRate,
       passed,
       failed: total - passed,
@@ -112,9 +110,9 @@ export function generateEvalResult(skill: SkillInput): SkillEvalResult | null {
   }
 
   const models: ModelResult[] = [
-    buildModel("opus", "Opus 4.6", "opus"),
-    buildModel("sonnet", "Sonnet 4.6", "sonnet"),
-    buildModel("haiku", "Haiku 4.5", "haiku"),
+    buildModel("opus"),
+    buildModel("sonnet"),
+    buildModel("haiku"),
   ];
 
   const bestPassRate = Math.max(...models.map((m) => m.passRate));
