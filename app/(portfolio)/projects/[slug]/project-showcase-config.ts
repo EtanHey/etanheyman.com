@@ -51,7 +51,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { value: 291, suffix: "K+", label: "Indexed chunks" },
       { value: 7, label: "MCP tools" },
       { value: 1024, label: "Vector dimensions" },
-      { value: 43, label: "KG entities" },
+      { value: 119, label: "KG entities" },
     ],
     features: [
       {
@@ -76,7 +76,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         iconName: "Brain",
         title: "Knowledge Graph",
         description:
-          "Entity extraction, relation mapping, person lookup, and sentiment analysis. 43 entities across people, projects, and technologies.",
+          "Entity extraction, relation mapping, person lookup, and sentiment analysis. 119 entities across people, projects, and technologies.",
       },
     ],
     installTabs: [
@@ -188,6 +188,12 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         title: "Autonomous Loop",
         description:
           "Night Shift runs improvements at 4am with CodeRabbit review gates. Morning Briefing at 8am.",
+      },
+      {
+        iconName: "Layers",
+        title: "AI-Agnostic Skills",
+        description:
+          "3-layer architecture: SKILL.md (universal) + adapters/ (per-CLI) + capabilities.yaml (routing). Validated across Claude, Codex, Gemini, and Kiro.",
       },
       {
         iconName: "Cloud",
