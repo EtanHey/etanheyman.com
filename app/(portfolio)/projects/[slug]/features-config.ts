@@ -291,10 +291,9 @@ const featuresData: Record<string, FeatureSection[]> = {
         "Skills are written once in universal SKILL.md format, then adapted for each AI CLI via a thin adapters/ layer. A capabilities.yaml file routes each skill to the right adapters based on what each CLI supports. This 3-layer architecture means skills work across any AI tool without rewriting — the adapter handles CLI-specific syntax and tool names.",
       highlights: [
         "SKILL.md — universal skill definition, CLI-agnostic",
-        "adapters/ — per-CLI wrappers (Claude, Codex, Gemini, Kiro)",
-        "capabilities.yaml — routing based on CLI capabilities",
-        "Cross-AI evals: Codex 8/10, Gemini 10/10, Kiro 9.5/10",
-        "4 skills adapted so far",
+        "adapters/ — per-CLI syntax for Claude, Codex, Gemini, Kiro",
+        "capabilities.yaml — automatic routing based on CLI capabilities",
+        "Validated across 3 AI CLIs with cross-platform eval suite",
       ],
     },
     {

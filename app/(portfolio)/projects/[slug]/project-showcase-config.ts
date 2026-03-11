@@ -193,7 +193,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         iconName: "Layers",
         title: "AI-Agnostic Skills",
         description:
-          "3-layer architecture: SKILL.md (universal) + adapters/ (per-CLI) + capabilities.yaml (routing). Codex 8/10, Gemini 10/10, Kiro 9.5/10 in cross-AI evals.",
+          "3-layer architecture: SKILL.md (universal) + adapters/ (per-CLI) + capabilities.yaml (routing). Validated across Claude, Codex, Gemini, and Kiro.",
       },
       {
         iconName: "Cloud",
