@@ -80,10 +80,10 @@ const featuresData: Record<string, FeatureSection[]> = {
       title: "Knowledge Graph",
       tagline: "Entities, relations, and person lookup across your codebase",
       description:
-        "BrainLayer builds a knowledge graph from your conversations. Bilingual entity extraction (English + Hebrew) with 3 strategies: GLiNER model, regex patterns, and seed entity matching. 43 entities across people, projects, and technologies, connected by typed relations. Person lookup returns entity profiles with scoped memories in a single call. Sentiment analysis per chunk adds emotional context to your development history.",
+        "BrainLayer builds a knowledge graph from your conversations. Bilingual entity extraction (English + Hebrew) with 3 strategies: GLiNER model, regex patterns, and seed entity matching. 119 entities across people, projects, and technologies, connected by typed relations. Person lookup returns entity profiles with scoped memories in a single call. Sentiment analysis per chunk adds emotional context to your development history.",
       highlights: [
         "Entity extraction — bilingual NER with 3 strategies",
-        "43 entities — people, projects, technologies",
+        "119 entities — people, projects, technologies",
         "Relation mapping — typed edges between entities",
         "Person lookup — profile + memories in <500ms",
         "Sentiment analysis — per-chunk emotional context",
@@ -281,6 +281,20 @@ const featuresData: Record<string, FeatureSection[]> = {
         "Cloud uses Gemini (free), local uses MLX (free)",
         "~$5/month total cloud infrastructure cost",
         "State: Supabase for cloud, local files for Mac",
+      ],
+    },
+    {
+      iconName: "Layers",
+      title: "AI-Agnostic Adapter Layer",
+      tagline: "Same skills, any CLI — Codex, Gemini, Kiro, Claude",
+      description:
+        "Skills are written once in universal SKILL.md format, then adapted for each AI CLI via a thin adapters/ layer. A capabilities.yaml file routes each skill to the right adapters based on what each CLI supports. This 3-layer architecture means skills work across any AI tool without rewriting — the adapter handles CLI-specific syntax and tool names.",
+      highlights: [
+        "SKILL.md — universal skill definition, CLI-agnostic",
+        "adapters/ — per-CLI wrappers (Claude, Codex, Gemini, Kiro)",
+        "capabilities.yaml — routing based on CLI capabilities",
+        "Cross-AI evals: Codex 8/10, Gemini 10/10, Kiro 9.5/10",
+        "4 skills adapted so far",
       ],
     },
     {
