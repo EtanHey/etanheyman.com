@@ -454,7 +454,7 @@ export default async function SkillDetailPage({
 
         {/* ═══ Sidebar ═══ */}
         <aside>
-          <div className="space-y-5 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
+          <div className="scrollbar-thin space-y-5 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-2">
             {/* Quick Install */}
             <div className="rounded-xl border border-[#2dd4a826] bg-[#14120e]/90 p-5">
               <h3 className="mb-3 text-sm font-bold text-[#2dd4a8]">

@@ -238,6 +238,13 @@ const SKILL_CATEGORIES: Record<string, SkillEntry[]> = {
       category: "Domain",
     },
     {
+      name: "figma-swarm",
+      command: "/figma-swarm",
+      description:
+        "Multi-agent Figma screen decomposition and component build pipeline",
+      category: "Domain",
+    },
+    {
       name: "cli-agents",
       command: "/cli-agents",
       description: "Run Gemini, Cursor, Codex, Kiro for research",

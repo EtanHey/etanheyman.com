@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-03-10T16:58:07Z",
+  "generatedAt": "2026-03-10T22:30:00Z",
   "skills": {
-    "count": 57,
-    "withSkillMd": 56,
-    "withEvals": 38,
+    "count": 59,
+    "withSkillMd": 57,
+    "withEvals": 39,
     "evalCoverage": "66%"
   },
   "packages": {
@@ -11,11 +11,11 @@
     "list": "claude, coach, content, docsite, golem-skills, golems-tui, jobs, recruiter, services, shared, tax-helper, teller"
   },
   "tests": {
-    "passing": 995,
+    "passing": 1073,
     "failing": 1,
     "skipped": 2,
-    "total": 998,
-    "files": 71
+    "total": 1076,
+    "files": 78
   },
   "brainlayer": {
     "chunks": 291898,
@@ -28,5 +28,240 @@
   "agents": {
     "count": 7
   },
-  "evals": [{"skill":"1password","evalCount":3,"assertionCount":10,"hasFixtures":false},{"skill":"archive","evalCount":2,"assertionCount":8,"hasFixtures":true},{"skill":"brainlayer","evalCount":3,"assertionCount":9,"hasFixtures":false},{"skill":"brave","evalCount":3,"assertionCount":13,"hasFixtures":false},{"skill":"catchup","evalCount":3,"assertionCount":10,"hasFixtures":false},{"skill":"cli-agents","evalCount":3,"assertionCount":13,"hasFixtures":false},{"skill":"cmux-agents","evalCount":3,"assertionCount":18,"hasFixtures":false},{"skill":"cmux","evalCount":3,"assertionCount":8,"hasFixtures":false},{"skill":"coach","evalCount":14,"assertionCount":63,"hasFixtures":false},{"skill":"coderabbit","evalCount":3,"assertionCount":8,"hasFixtures":false},{"skill":"commit","evalCount":3,"assertionCount":10,"hasFixtures":true},{"skill":"context7","evalCount":3,"assertionCount":9,"hasFixtures":false},{"skill":"contract-feedback","evalCount":2,"assertionCount":13,"hasFixtures":true},{"skill":"convex","evalCount":3,"assertionCount":9,"hasFixtures":false},{"skill":"critique-waves","evalCount":3,"assertionCount":9,"hasFixtures":false},{"skill":"example-bash","evalCount":3,"assertionCount":11,"hasFixtures":false},{"skill":"example-typescript","evalCount":3,"assertionCount":11,"hasFixtures":false},{"skill":"figma-loop","evalCount":3,"assertionCount":13,"hasFixtures":false},{"skill":"github-research","evalCount":3,"assertionCount":9,"hasFixtures":false},{"skill":"github","evalCount":3,"assertionCount":9,"hasFixtures":false},{"skill":"golem-install","evalCount":3,"assertionCount":10,"hasFixtures":false},{"skill":"interview-practice","evalCount":3,"assertionCount":13,"hasFixtures":false},{"skill":"large-plan","evalCount":3,"assertionCount":11,"hasFixtures":false},{"skill":"never-fabricate","evalCount":3,"assertionCount":9,"hasFixtures":true},{"skill":"nightly-docs-update","evalCount":4,"assertionCount":17,"hasFixtures":true},{"skill":"obsidian","evalCount":3,"assertionCount":9,"hasFixtures":false},{"skill":"pr-loop","evalCount":3,"assertionCount":11,"hasFixtures":true},{"skill":"prd-manager","evalCount":3,"assertionCount":7,"hasFixtures":false},{"skill":"prd","evalCount":3,"assertionCount":9,"hasFixtures":false},{"skill":"presentation-builder","evalCount":3,"assertionCount":7,"hasFixtures":false},{"skill":"research","evalCount":3,"assertionCount":10,"hasFixtures":true},{"skill":"skills","evalCount":3,"assertionCount":12,"hasFixtures":false},{"skill":"test-plan","evalCount":3,"assertionCount":13,"hasFixtures":false},{"skill":"video-showcase","evalCount":3,"assertionCount":12,"hasFixtures":false},{"skill":"voice-sessions","evalCount":3,"assertionCount":8,"hasFixtures":false},{"skill":"wizard","evalCount":18,"assertionCount":87,"hasFixtures":true},{"skill":"writing-skills","evalCount":3,"assertionCount":10,"hasFixtures":false},{"skill":"youtube-pipeline","evalCount":3,"assertionCount":10,"hasFixtures":false}]
+  "evals": [
+    {
+      "skill": "1password",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": false
+    },
+    {
+      "skill": "archive",
+      "evalCount": 2,
+      "assertionCount": 8,
+      "hasFixtures": true
+    },
+    {
+      "skill": "brainlayer",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "brave",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": false
+    },
+    {
+      "skill": "catchup",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": false
+    },
+    {
+      "skill": "cli-agents",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": false
+    },
+    {
+      "skill": "cmux",
+      "evalCount": 3,
+      "assertionCount": 8,
+      "hasFixtures": false
+    },
+    {
+      "skill": "cmux-agents",
+      "evalCount": 3,
+      "assertionCount": 18,
+      "hasFixtures": false
+    },
+    {
+      "skill": "coach",
+      "evalCount": 14,
+      "assertionCount": 63,
+      "hasFixtures": false
+    },
+    {
+      "skill": "coderabbit",
+      "evalCount": 3,
+      "assertionCount": 8,
+      "hasFixtures": false
+    },
+    {
+      "skill": "commit",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": true
+    },
+    {
+      "skill": "context7",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "contract-feedback",
+      "evalCount": 2,
+      "assertionCount": 13,
+      "hasFixtures": true
+    },
+    {
+      "skill": "convex",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "critique-waves",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "example-bash",
+      "evalCount": 3,
+      "assertionCount": 11,
+      "hasFixtures": false
+    },
+    {
+      "skill": "example-typescript",
+      "evalCount": 3,
+      "assertionCount": 11,
+      "hasFixtures": false
+    },
+    {
+      "skill": "figma-loop",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": false
+    },
+    {
+      "skill": "figma-swarm",
+      "evalCount": 3,
+      "assertionCount": 15,
+      "hasFixtures": false
+    },
+    {
+      "skill": "github",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "github-research",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "golem-install",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": false
+    },
+    {
+      "skill": "interview-practice",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": false
+    },
+    {
+      "skill": "large-plan",
+      "evalCount": 3,
+      "assertionCount": 11,
+      "hasFixtures": false
+    },
+    {
+      "skill": "never-fabricate",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": true
+    },
+    {
+      "skill": "nightly-docs-update",
+      "evalCount": 4,
+      "assertionCount": 17,
+      "hasFixtures": true
+    },
+    {
+      "skill": "obsidian",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "pr-loop",
+      "evalCount": 3,
+      "assertionCount": 11,
+      "hasFixtures": true
+    },
+    {
+      "skill": "prd",
+      "evalCount": 3,
+      "assertionCount": 9,
+      "hasFixtures": false
+    },
+    {
+      "skill": "prd-manager",
+      "evalCount": 3,
+      "assertionCount": 7,
+      "hasFixtures": false
+    },
+    {
+      "skill": "presentation-builder",
+      "evalCount": 3,
+      "assertionCount": 7,
+      "hasFixtures": false
+    },
+    {
+      "skill": "research",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": true
+    },
+    {
+      "skill": "skills",
+      "evalCount": 3,
+      "assertionCount": 12,
+      "hasFixtures": false
+    },
+    {
+      "skill": "test-plan",
+      "evalCount": 3,
+      "assertionCount": 13,
+      "hasFixtures": false
+    },
+    {
+      "skill": "video-showcase",
+      "evalCount": 3,
+      "assertionCount": 12,
+      "hasFixtures": false
+    },
+    {
+      "skill": "voice-sessions",
+      "evalCount": 3,
+      "assertionCount": 8,
+      "hasFixtures": false
+    },
+    {
+      "skill": "wizard",
+      "evalCount": 18,
+      "assertionCount": 87,
+      "hasFixtures": true
+    },
+    {
+      "skill": "writing-skills",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": false
+    },
+    {
+      "skill": "youtube-pipeline",
+      "evalCount": 3,
+      "assertionCount": 10,
+      "hasFixtures": false
+    }
+  ]
 }
