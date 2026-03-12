@@ -260,7 +260,7 @@ export function generateEvalResult(skill: SkillInput): SkillEvalResult | null {
 
   // Generate per-assertion results for all models
   const assertions: AssertionResult[] = skill.assertions.map((name) => {
-    const results: Record<string, boolean> = {};
+    const results: Partial<Record<ModelId, boolean>> = {};
     for (const id of allModelIds) {
       results[id] = rng() < baseRates[id];
     }

@@ -158,7 +158,7 @@ export default function EvalDashboard({ data }: Props) {
       <p className="text-xs text-[#b0a89c]">
         Last evaluated: {data.lastEvalDate} &middot;{" "}
         {data.source === "real"
-          ? "Real cross-AI portability eval · 3 CLIs tested across 8 scenarios"
+          ? `Real cross-AI portability eval · ${crossAIModels.length} CLIs tested across ${data.assertions.length} scenarios`
           : "Data is generated from skill assertions (real cross-model benchmarks coming soon)"}
       </p>
     </div>
@@ -354,10 +354,12 @@ function AssertionsTable({ data }: { data: SkillEvalResult }) {
   );
 }
 
-function PassFailCell({ passed }: { passed: boolean }) {
+function PassFailCell({ passed }: { passed: boolean | undefined }) {
   return (
     <td className="px-2 py-2.5 text-center">
-      {passed ? (
+      {passed === undefined ? (
+        <span className="text-xs text-[#b0a89c]">—</span>
+      ) : passed ? (
         <span
           className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#28c84015] text-[#28c840]"
           role="img"

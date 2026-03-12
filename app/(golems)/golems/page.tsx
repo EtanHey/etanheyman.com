@@ -848,13 +848,15 @@ function CrossAISection() {
             ))}
           </div>
           <p className="mt-3 text-xs text-[#b0a89c]">
-            8 evaluation scenarios per CLI · pass = 5/5, partial credit = 4/5 ·{" "}
+            Scores above are weighted rubric totals (partial credit for 4/5).
+            The{" "}
             <Link
               href="/golems/skills/cmux-agents"
               className="text-[#e59500] no-underline hover:underline"
             >
-              see full breakdown →
-            </Link>
+              detail page →
+            </Link>{" "}
+            shows binary assertion pass rates (pass = 5/5 only).
           </p>
         </div>
 

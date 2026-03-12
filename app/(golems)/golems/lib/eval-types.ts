@@ -29,7 +29,8 @@ export interface ModelResult {
 
 export interface AssertionResult {
   name: string;
-  results: Record<string, boolean>;
+  /** undefined = not tested for that model (e.g. partial eval run) */
+  results: Partial<Record<ModelId, boolean>>;
 }
 
 export interface SkillEvalResult {
