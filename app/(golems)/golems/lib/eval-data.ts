@@ -3,21 +3,137 @@ import type {
   ModelResult,
   AssertionResult,
   ModelId,
+  ModelGroup,
 } from "./eval-types";
-import { MODEL_LABELS } from "./eval-types";
+import { MODEL_LABELS, MODEL_REGISTRY } from "./eval-types";
+
+/* ------------------------------------------------------------------ */
+/* Real eval data (from actual cross-AI portability evals, Mar 2026)   */
+/* ------------------------------------------------------------------ */
 
 /**
- * Deterministic mock eval data generator.
+ * Cross-AI portability eval for cmux-agents.
  *
- * Generates realistic per-model (Opus/Sonnet/Haiku) eval results from
- * the basic assertion data in skills-manifest.json. Uses a seeded PRNG
- * so output is stable across builds (same skill → same numbers).
+ * Tested 8 scenarios (E1-E8) across 3 non-Claude CLIs:
+ *   Codex (GPT-5.4) — 7/8   Gemini 2.5 Pro  — 8/8 (perfect)
+ *   Kiro (default)  — 7/8
  *
- * AIDEV-TODO: Replace this module with real data from golems-cli evals
- * pipeline once Tier-3 nightly cross-model runs are active.
+ * Pass = score 5/5; Fail = score 4/5 (partial credit).
+ * Token / latency values are representative estimates (not recorded per-run).
+ */
+const CMUX_AGENTS_REAL: SkillEvalResult = {
+  skillName: "cmux-agents",
+  lastEvalDate: "2026-03-12",
+  source: "real",
+  assertions: [
+    // E1: Parallel Claude spawn
+    {
+      name: "parallel-claude-spawn",
+      results: { codex: true, gemini: true, kiro: true },
+    },
+    // E2: Cursor audit workflow
+    {
+      name: "cursor-audit-workflow",
+      results: { codex: true, gemini: true, kiro: true },
+    },
+    // E3: Codex worktree isolation
+    {
+      name: "codex-worktree-setup",
+      results: { codex: true, gemini: true, kiro: true },
+    },
+    // E4: Background monitoring — Codex used bash poller instead of universal fallback
+    {
+      name: "background-monitoring",
+      results: { codex: false, gemini: true, kiro: true },
+    },
+    // E5: Gemini research routing
+    {
+      name: "gemini-research-routing",
+      results: { codex: true, gemini: true, kiro: true },
+    },
+    // E6: Recovery / pane reuse
+    {
+      name: "pane-recovery-reuse",
+      results: { codex: true, gemini: true, kiro: true },
+    },
+    // E7: T3 thread-per-surface — Kiro missed the click-new-thread detail
+    {
+      name: "t3-thread-per-surface",
+      results: { codex: true, gemini: true, kiro: false },
+    },
+    // E8: CLI routing table
+    {
+      name: "cli-routing-table",
+      results: { codex: true, gemini: true, kiro: true },
+    },
+  ],
+  models: [
+    {
+      model: "codex",
+      label: "Codex",
+      passRate: 7 / 8,
+      passed: 7,
+      failed: 1,
+      total: 8,
+      costPerRun: 0.0285, // ~2,500 in × $5/M + ~800 out × $20/M
+      inputTokens: 2500,
+      outputTokens: 800,
+      latencyP50Ms: 3200,
+      latencyP95Ms: 5400,
+      group: "cross-ai",
+    },
+    {
+      model: "gemini",
+      label: "Gemini 2.5",
+      passRate: 8 / 8,
+      passed: 8,
+      failed: 0,
+      total: 8,
+      costPerRun: 0.0125, // ~2,200 in × $2.5/M + ~700 out × $10/M
+      inputTokens: 2200,
+      outputTokens: 700,
+      latencyP50Ms: 1900,
+      latencyP95Ms: 3100,
+      group: "cross-ai",
+    },
+    {
+      model: "kiro",
+      label: "Kiro",
+      passRate: 7 / 8,
+      passed: 7,
+      failed: 1,
+      total: 8,
+      costPerRun: 0.0156, // ~2,000 in × $3/M + ~600 out × $12/M
+      inputTokens: 2000,
+      outputTokens: 600,
+      latencyP50Ms: 2400,
+      latencyP95Ms: 4000,
+      group: "cross-ai",
+    },
+  ],
+  bestPassRate: 1.0, // Gemini 2.5 Pro: 8/8
+};
+
+/** Skills with real eval data — checked before generating mock data */
+const REAL_EVAL_OVERRIDES: Record<string, SkillEvalResult> = {
+  "cmux-agents": CMUX_AGENTS_REAL,
+};
+
+/* ------------------------------------------------------------------ */
+/* Mock eval generator (seeded PRNG, used for all other skills)        */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Generates deterministic per-model eval results from skill assertion data.
+ *
+ * Uses a seeded PRNG so output is stable across builds.
+ * For skills in REAL_EVAL_OVERRIDES, real data is returned instead.
+ *
+ * AIDEV-TODO: Replace per-skill mock entries with real data as nightly
+ * cross-model runs come online.
  */
 
-/* ── Seeded PRNG ──────────────────────────────────────────── */
+/* -- Seeded PRNG ---------------------------------------------------- */
 
 function hashStr(str: string): number {
   let h = 0;
@@ -35,12 +151,65 @@ function seededRandom(seed: number): () => number {
   };
 }
 
-/* ── Cost model (approximate Claude pricing) ──────────────── */
+/* -- Cost models ---------------------------------------------------- */
 
-const COST_PER_M_INPUT = { opus: 15, sonnet: 3, haiku: 0.25 } as const;
-const COST_PER_M_OUTPUT = { opus: 75, sonnet: 15, haiku: 1.25 } as const;
+const COST_PER_M_INPUT: Record<string, number> = {
+  opus: 15,
+  sonnet: 3,
+  haiku: 0.25,
+  codex: 5,
+  gemini: 2.5,
+  cursor: 4,
+  kiro: 3,
+};
 
-/* ── Generator ────────────────────────────────────────────── */
+const COST_PER_M_OUTPUT: Record<string, number> = {
+  opus: 75,
+  sonnet: 15,
+  haiku: 1.25,
+  codex: 20,
+  gemini: 10,
+  cursor: 16,
+  kiro: 12,
+};
+
+/* -- Base pass rate ranges per model -------------------------------- */
+
+const BASE_RATES: Record<string, [number, number]> = {
+  opus: [0.82, 0.18], // 82-100%
+  sonnet: [0.68, 0.27], // 68-95%
+  haiku: [0.45, 0.4], // 45-85%
+  codex: [0.6, 0.3], // 60-90%
+  gemini: [0.7, 0.25], // 70-95%
+  cursor: [0.55, 0.35], // 55-90%
+  kiro: [0.5, 0.35], // 50-85%
+};
+
+/* -- Token multipliers (relative to base) --------------------------- */
+
+const TOKEN_MULTIPLIERS: Record<string, number> = {
+  opus: 3.2,
+  sonnet: 1.8,
+  haiku: 1.0,
+  codex: 2.0,
+  gemini: 1.6,
+  cursor: 2.2,
+  kiro: 1.4,
+};
+
+/* -- Latency multipliers -------------------------------------------- */
+
+const LATENCY_MULTIPLIERS: Record<string, number> = {
+  opus: 2.5,
+  sonnet: 1.4,
+  haiku: 1.0,
+  codex: 1.8,
+  gemini: 1.2,
+  cursor: 1.6,
+  kiro: 1.3,
+};
+
+/* -- Generator ------------------------------------------------------ */
 
 interface SkillInput {
   name: string;
@@ -52,49 +221,77 @@ interface SkillInput {
 export function generateEvalResult(skill: SkillInput): SkillEvalResult | null {
   if (skill.evalCount === 0 || skill.assertionCount === 0) return null;
 
+  // Return real data if available
+  if (skill.name in REAL_EVAL_OVERRIDES) {
+    return REAL_EVAL_OVERRIDES[skill.name];
+  }
+
   const rng = seededRandom(hashStr(skill.name));
 
-  // Model base pass rates — Opus generally highest, Haiku lowest
-  const opusBase = 0.82 + rng() * 0.18; // 82–100%
-  const sonnetBase = 0.68 + rng() * 0.27; // 68–95%
-  const haikuBase = 0.45 + rng() * 0.4; // 45–85%
+  // Determine which cross-AI models this skill supports
+  // Use skill name hash to deterministically decide (about 60% of skills get cross-AI)
+  const skillHash = hashStr(skill.name + "-cross-ai");
+  const hasCrossAI = skillHash % 10 < 6; // 60% chance
 
-  // Generate per-assertion results
+  // Pick which cross-AI models are included (2-4 of them)
+  const crossAIModels: ModelId[] = [];
+  if (hasCrossAI) {
+    const crossAIPool: ModelId[] = ["codex", "gemini", "cursor", "kiro"];
+    for (const m of crossAIPool) {
+      if (hashStr(skill.name + m) % 10 < 6) {
+        crossAIModels.push(m);
+      }
+    }
+    // Ensure at least 2 if we're including cross-AI
+    if (crossAIModels.length < 2) {
+      crossAIModels.length = 0;
+      crossAIModels.push("codex", "gemini");
+    }
+  }
+
+  const allModelIds: ModelId[] = ["opus", "sonnet", "haiku", ...crossAIModels];
+
+  // Compute base pass rates for all included models
+  const baseRates: Record<string, number> = {};
+  for (const id of allModelIds) {
+    const [base, range] = BASE_RATES[id];
+    baseRates[id] = base + rng() * range;
+  }
+
+  // Generate per-assertion results for all models
   const assertions: AssertionResult[] = skill.assertions.map((name) => {
-    const r1 = rng();
-    const r2 = rng();
-    const r3 = rng();
-    return {
-      name,
-      opus: r1 < opusBase,
-      sonnet: r2 < sonnetBase,
-      haiku: r3 < haikuBase,
-    };
+    const results: Record<string, boolean> = {};
+    for (const id of allModelIds) {
+      results[id] = rng() < baseRates[id];
+    }
+    return { name, results };
   });
 
-  function buildModel(model: ModelId): ModelResult {
-    const passed = assertions.filter((a) => a[model]).length;
+  function buildModel(modelId: ModelId): ModelResult {
+    const passed = assertions.filter((a) => a.results[modelId]).length;
     const total = assertions.length;
     const passRate = total > 0 ? passed / total : 0;
 
-    // Token counts vary by model — Opus uses more reasoning tokens
+    const config = MODEL_REGISTRY.find((m) => m.id === modelId);
+    const group: ModelGroup = config?.group ?? "claude";
+
     const baseTokens = 800 + Math.floor(rng() * 2400);
-    const multiplier = model === "opus" ? 3.2 : model === "sonnet" ? 1.8 : 1;
+    const multiplier = TOKEN_MULTIPLIERS[modelId] ?? 1;
     const inputTokens = Math.floor(baseTokens * multiplier);
     const outputTokens = Math.floor(inputTokens * (0.6 + rng() * 0.8));
 
+    const costInput = COST_PER_M_INPUT[modelId] ?? 3;
+    const costOutput = COST_PER_M_OUTPUT[modelId] ?? 15;
     const costPerRun =
-      (inputTokens * COST_PER_M_INPUT[model]) / 1_000_000 +
-      (outputTokens * COST_PER_M_OUTPUT[model]) / 1_000_000;
+      (inputTokens * costInput) / 1_000_000 +
+      (outputTokens * costOutput) / 1_000_000;
 
-    // Latency — Opus slowest, Haiku fastest
     const baseLatency = 1200 + Math.floor(rng() * 3000);
-    const latencyMultiplier =
-      model === "opus" ? 2.5 : model === "sonnet" ? 1.4 : 1;
+    const latencyMult = LATENCY_MULTIPLIERS[modelId] ?? 1;
 
     return {
-      model,
-      label: MODEL_LABELS[model],
+      model: modelId,
+      label: MODEL_LABELS[modelId] ?? modelId,
       passRate,
       passed,
       failed: total - passed,
@@ -102,24 +299,19 @@ export function generateEvalResult(skill: SkillInput): SkillEvalResult | null {
       costPerRun: Math.round(costPerRun * 10000) / 10000,
       inputTokens,
       outputTokens,
-      latencyP50Ms: Math.floor(baseLatency * latencyMultiplier),
-      latencyP95Ms: Math.floor(
-        baseLatency * latencyMultiplier * (1.4 + rng() * 0.6),
-      ),
+      latencyP50Ms: Math.floor(baseLatency * latencyMult),
+      latencyP95Ms: Math.floor(baseLatency * latencyMult * (1.4 + rng() * 0.6)),
+      group,
     };
   }
 
-  const models: ModelResult[] = [
-    buildModel("opus"),
-    buildModel("sonnet"),
-    buildModel("haiku"),
-  ];
-
+  const models: ModelResult[] = allModelIds.map(buildModel);
   const bestPassRate = Math.max(...models.map((m) => m.passRate));
 
   return {
     skillName: skill.name,
-    lastEvalDate: "2026-03-09",
+    lastEvalDate: "2026-03-12",
+    source: "mock",
     models,
     assertions,
     bestPassRate,

@@ -8,6 +8,7 @@ import { useMDXComponents } from "@/mdx-components";
 import CopyButton from "../../components/CopyButton";
 import MermaidDiagram from "../../components/MermaidDiagram";
 import SkillPageTabs from "./SkillPageTabs";
+import OverviewCollapsible from "./OverviewCollapsible";
 import EvalDashboard from "./EvalDashboard";
 import skillsManifest from "../../lib/skills-manifest.json";
 import { generateEvalResult } from "../../lib/eval-data";
@@ -109,6 +110,35 @@ function stripLLMSections(content: string): string {
   return result.join("\n");
 }
 
+/** Split markdown into summary (first N ## sections) and the rest */
+function splitOverviewContent(
+  content: string,
+  maxSections = 3,
+): { summary: string; rest: string } {
+  const lines = content.split("\n");
+  let sectionCount = 0;
+  let splitIndex = -1;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (/^##\s+/.test(lines[i])) {
+      sectionCount++;
+      if (sectionCount > maxSections) {
+        splitIndex = i;
+        break;
+      }
+    }
+  }
+
+  if (splitIndex === -1) {
+    return { summary: content, rest: "" };
+  }
+
+  return {
+    summary: lines.slice(0, splitIndex).join("\n").trimEnd(),
+    rest: lines.slice(splitIndex).join("\n"),
+  };
+}
+
 function getRelativeTime(dateStr: string): string {
   const date = new Date(dateStr);
   const now = new Date();
@@ -183,6 +213,9 @@ export default async function SkillDetailPage({
   const overviewSource = stripLLMSections(
     skill.content.replace(/^#\s+.+\n?/m, ""),
   );
+  // Split overview into summary (first 3 sections) + rest for progressive disclosure
+  const { summary: overviewSummary, rest: overviewRest } =
+    splitOverviewContent(overviewSource);
   // Full content for SKILL.md tab (just strip first H1)
   const rawSource = skill.content.replace(/^#\s+.+\n?/m, "");
 
@@ -229,23 +262,42 @@ export default async function SkillDetailPage({
   };
 
   // Pre-render MDX for both tabs (server-rendered, toggled via CSS on client)
-  const overviewMdx = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rehype plugin tuple types
+  const mdxOpts: any = {
+    mdxOptions: {
+      format: "md",
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [
+        rehypeSlug,
+        [
+          rehypePrettyCode,
+          { theme: "github-dark-dimmed", keepBackground: false },
+        ],
+      ],
+    },
+  };
+
+  const summaryMdx = (
     <MDXRemote
-      source={overviewSource}
+      source={overviewSummary}
       components={components}
-      options={{
-        mdxOptions: {
-          format: "md",
-          remarkPlugins: [remarkGfm],
-          rehypePlugins: [
-            rehypeSlug,
-            [
-              rehypePrettyCode,
-              { theme: "github-dark-dimmed", keepBackground: false },
-            ],
-          ],
-        },
-      }}
+      options={mdxOpts}
+    />
+  );
+
+  const restMdx = overviewRest ? (
+    <MDXRemote
+      source={overviewRest}
+      components={components}
+      options={mdxOpts}
+    />
+  ) : null;
+
+  const overviewMdx = (
+    <OverviewCollapsible
+      summary={summaryMdx}
+      rest={restMdx}
+      hasMore={!!overviewRest}
     />
   );
 
