@@ -729,6 +729,159 @@ function ArchitectureSection() {
   );
 }
 
+/* ── Cross-AI Portability Section ──────────────────────────────── */
+
+function CrossAISection() {
+  const evals = [
+    {
+      cli: "Codex",
+      model: "GPT-5.4",
+      score: "8/10",
+      note: "Before universal fallbacks were added",
+      color: "#f97316",
+    },
+    {
+      cli: "Gemini",
+      model: "2.5 Pro",
+      score: "10/10",
+      note: "Perfect — read fallback table correctly",
+      color: "#4285f4",
+    },
+    {
+      cli: "Kiro",
+      model: "Default",
+      score: "9.5/10",
+      note: "One buried detail missed, now explicit",
+      color: "#ec4899",
+    },
+  ];
+
+  return (
+    <section className="relative bg-gradient-to-b from-[#0a0908] to-[#0c0b0a] py-12 md:py-20">
+      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#f9731626] to-transparent" />
+      <div className="mx-auto max-w-[1000px] px-4 sm:px-6">
+        <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
+          Skills Work on Any AI
+        </h2>
+        <p className="mb-10 text-center text-[#b0a89c] italic">
+          3-layer adapter architecture · validated across 3 non-Claude CLIs
+        </p>
+
+        {/* Architecture layers */}
+        <div className="mb-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {[
+            {
+              layer: "Layer 1",
+              title: "SKILL.md",
+              desc: "Universal best practices with platform-agnostic fallbacks. Any AI can follow it.",
+              color: "#e59500",
+            },
+            {
+              layer: "Layer 2",
+              title: "capabilities.yaml",
+              desc: "Machine-readable feature matrix. Routes tasks to the right CLI automatically.",
+              color: "#2dd4a8",
+            },
+            {
+              layer: "Layer 3",
+              title: "adapters/",
+              desc: "Exact flags, models, and syntax per CLI. One file per AI. 40-80 lines each.",
+              color: "#6ab0f3",
+            },
+          ].map((l) => (
+            <div
+              key={l.layer}
+              className="rounded-xl border p-4"
+              style={{
+                borderColor: `${l.color}20`,
+                backgroundColor: `${l.color}06`,
+              }}
+            >
+              <div
+                className="mb-1 font-mono text-xs font-bold"
+                style={{ color: l.color }}
+              >
+                {l.layer}
+              </div>
+              <div className="mb-1 text-sm font-bold text-[#e8e2d6]">
+                {l.title}
+              </div>
+              <div className="text-[0.75rem] leading-snug text-[#b0a89c]">
+                {l.desc}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Cross-AI eval results */}
+        <div className="mb-6">
+          <h3 className="mb-4 text-sm font-bold tracking-wider text-[#b0a89c] uppercase">
+            Cross-AI Portability Eval — cmux-agents (Mar 2026)
+          </h3>
+          <div className="space-y-2">
+            {evals.map((e) => (
+              <div
+                key={e.cli}
+                className="flex items-center gap-4 rounded-lg border px-4 py-3"
+                style={{
+                  borderColor: `${e.color}20`,
+                  backgroundColor: `${e.color}06`,
+                }}
+              >
+                <span
+                  className="w-16 shrink-0 font-mono text-sm font-bold"
+                  style={{ color: e.color }}
+                >
+                  {e.cli}
+                </span>
+                <span className="w-20 shrink-0 text-xs text-[#b0a89c]">
+                  {e.model}
+                </span>
+                <span
+                  className="w-14 shrink-0 text-center text-lg font-extrabold"
+                  style={{ color: e.color }}
+                >
+                  {e.score}
+                </span>
+                <span className="text-[0.75rem] text-[#b8ad9e]">{e.note}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-[#b0a89c]">
+            Scores above are weighted rubric totals (partial credit for 4/5).
+            The{" "}
+            <Link
+              href="/golems/skills/cmux-agents"
+              className="text-[#e59500] no-underline hover:underline"
+            >
+              detail page →
+            </Link>{" "}
+            shows binary assertion pass rates (pass = 5/5 only).
+          </p>
+        </div>
+
+        {/* Skills with adapters */}
+        <div className="rounded-xl border border-[#e5950014] bg-[#14120e]/90 px-5 py-4">
+          <p className="mb-2 text-xs font-bold tracking-wider text-[#b0a89c] uppercase">
+            Skills with adapter support
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {["cmux-agents", "pr-loop", "commit", "coach"].map((s) => (
+              <Link
+                key={s}
+                href={`/golems/skills/${s}`}
+                className="rounded-lg border border-[#e5950020] bg-[#e595000a] px-3 py-1.5 font-mono text-xs font-bold text-[#e59500] no-underline transition-colors hover:border-[#e5950060]"
+              >
+                /{s}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ── Page ──────────────────────────────────────────────────────── */
 
 export default function GolemsHome() {
@@ -738,6 +891,7 @@ export default function GolemsHome() {
       <GetStartedSection />
       <EcosystemSection />
       <SkillsShowcase />
+      <CrossAISection />
       <ArchitectureSection />
     </>
   );

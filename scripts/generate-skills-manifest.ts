@@ -140,7 +140,7 @@ function generateManifest() {
       evals: evalData.map((e, i) => ({
         name: e.name || `eval-${i + 1}`,
         assertionCount: e.assertions?.length || 0,
-        assertions: (e.assertions || []).map((a) => a.name),
+        assertions: (e.assertions || []).map((a) => a.name).filter(Boolean),
       })),
       workflows,
       lastModified: statSync(skillMdPath).mtime.toISOString().split("T")[0],

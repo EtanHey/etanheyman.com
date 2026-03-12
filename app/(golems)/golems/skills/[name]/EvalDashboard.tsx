@@ -2,15 +2,20 @@
 
 import { useState } from "react";
 import { Check, X } from "lucide-react";
-import type { SkillEvalResult, ModelId } from "../../lib/eval-types";
+import type {
+  SkillEvalResult,
+  ModelId,
+  ModelGroup,
+} from "../../lib/eval-types";
 import {
   MODEL_COLORS,
   MODEL_BG,
+  GROUP_LABELS,
   passRateColor,
   passRateLabel,
 } from "../../lib/eval-types";
 
-/* ── Sub-tab IDs ──────────────────────────────────────────── */
+/* -- Sub-tab IDs ---------------------------------------------------- */
 
 const SUB_TABS = [
   { id: "assertions", label: "Assertions" },
@@ -20,7 +25,7 @@ const SUB_TABS = [
 
 type SubTabId = (typeof SUB_TABS)[number]["id"];
 
-/* ── Component ────────────────────────────────────────────── */
+/* -- Component ------------------------------------------------------ */
 
 interface Props {
   data: SkillEvalResult;
@@ -39,9 +44,13 @@ export default function EvalDashboard({ data }: Props) {
     a.latencyP50Ms <= b.latencyP50Ms ? a : b,
   );
 
+  const claudeModels = data.models.filter((m) => m.group === "claude");
+  const crossAIModels = data.models.filter((m) => m.group === "cross-ai");
+  const hasCrossAI = crossAIModels.length > 0;
+
   return (
     <div className="space-y-6">
-      {/* ── KPI Stat Cards ──────────────────────────────────── */}
+      {/* -- KPI Stat Cards ------------------------------------------ */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <KPICard
           label="Best Pass Rate"
@@ -69,21 +78,25 @@ export default function EvalDashboard({ data }: Props) {
         />
       </div>
 
-      {/* ── Model Comparison Bars ───────────────────────────── */}
+      {/* -- Model Comparison Bars ----------------------------------- */}
       <section>
         <h3 className="mb-3 text-sm font-bold text-[#f0ebe0]">
           Pass Rate by Model
         </h3>
-        <div className="space-y-2.5">
-          {data.models
-            .sort((a, b) => b.passRate - a.passRate)
-            .map((m) => (
-              <ModelBar key={m.model} model={m} maxRate={1} />
-            ))}
-        </div>
+        {claudeModels.length > 0 && (
+          <ModelGroupBars label={GROUP_LABELS.claude} models={claudeModels} />
+        )}
+        {hasCrossAI && (
+          <div className={claudeModels.length > 0 ? "mt-4" : undefined}>
+            <ModelGroupBars
+              label={GROUP_LABELS["cross-ai"]}
+              models={crossAIModels}
+            />
+          </div>
+        )}
       </section>
 
-      {/* ── Sub-tabs ────────────────────────────────────────── */}
+      {/* -- Sub-tabs ------------------------------------------------ */}
       <div>
         <div
           className="flex gap-1 border-b border-[#e5950020]"
@@ -143,14 +156,16 @@ export default function EvalDashboard({ data }: Props) {
 
       {/* Eval date */}
       <p className="text-xs text-[#b0a89c]">
-        Last evaluated: {data.lastEvalDate} &middot; Data is generated from
-        skill assertions (real cross-model benchmarks coming soon)
+        Last evaluated: {data.lastEvalDate} &middot;{" "}
+        {data.source === "real"
+          ? `Real cross-AI portability eval · ${crossAIModels.length} CLIs tested across ${data.assertions.length} scenarios`
+          : "Data is generated from skill assertions (real cross-model benchmarks coming soon)"}
       </p>
     </div>
   );
 }
 
-/* ── KPI Card ─────────────────────────────────────────────── */
+/* -- KPI Card ------------------------------------------------------- */
 
 function KPICard({
   label,
@@ -180,7 +195,32 @@ function KPICard({
   );
 }
 
-/* ── Model Bar ────────────────────────────────────────────── */
+/* -- Model Group Bars ----------------------------------------------- */
+
+function ModelGroupBars({
+  label,
+  models,
+}: {
+  label: string;
+  models: SkillEvalResult["models"];
+}) {
+  return (
+    <div>
+      <p className="mb-2 text-xs font-medium tracking-wider text-[#b8ad9e] uppercase">
+        {label}
+      </p>
+      <div className="space-y-2.5">
+        {[...models]
+          .sort((a, b) => b.passRate - a.passRate)
+          .map((m) => (
+            <ModelBar key={m.model} model={m} maxRate={1} />
+          ))}
+      </div>
+    </div>
+  );
+}
+
+/* -- Model Bar ------------------------------------------------------ */
 
 function ModelBar({
   model,
@@ -195,15 +235,15 @@ function ModelBar({
   };
   maxRate: number;
 }) {
-  const color = MODEL_COLORS[model.model];
-  const bg = MODEL_BG[model.model];
+  const color = MODEL_COLORS[model.model] ?? "#b0a89c";
+  const bg = MODEL_BG[model.model] ?? "#b0a89c18";
   const pct = Math.round(model.passRate * 100);
   const widthPct = maxRate > 0 ? (model.passRate / maxRate) * 100 : 0;
 
   return (
     <div className="flex items-center gap-3">
       <span
-        className="w-20 shrink-0 text-right text-sm font-medium"
+        className="w-24 shrink-0 text-right text-sm font-medium"
         style={{ color }}
       >
         {model.label}
@@ -245,9 +285,11 @@ function ModelBar({
   );
 }
 
-/* ── Assertions Table ─────────────────────────────────────── */
+/* -- Assertions Table ----------------------------------------------- */
 
 function AssertionsTable({ data }: { data: SkillEvalResult }) {
+  const modelCount = data.models.length;
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
@@ -259,10 +301,10 @@ function AssertionsTable({ data }: { data: SkillEvalResult }) {
             {data.models.map((m) => (
               <th
                 key={m.model}
-                className="w-24 px-3 py-2 text-center font-medium"
-                style={{ color: MODEL_COLORS[m.model as ModelId] }}
+                className="w-20 px-2 py-2 text-center font-medium"
+                style={{ color: MODEL_COLORS[m.model] ?? "#b0a89c" }}
               >
-                {m.label}
+                <span className="text-xs">{m.label}</span>
               </th>
             ))}
             <th className="w-20 px-3 py-2 text-center font-medium text-[#b0a89c]">
@@ -272,8 +314,9 @@ function AssertionsTable({ data }: { data: SkillEvalResult }) {
         </thead>
         <tbody>
           {data.assertions.map((a) => {
-            const passCount =
-              (a.opus ? 1 : 0) + (a.sonnet ? 1 : 0) + (a.haiku ? 1 : 0);
+            const passCount = data.models.filter(
+              (m) => a.results[m.model],
+            ).length;
             return (
               <tr
                 key={a.name}
@@ -282,24 +325,24 @@ function AssertionsTable({ data }: { data: SkillEvalResult }) {
                 <td className="px-3 py-2.5 font-mono text-xs text-[#c0b8a8]">
                   {a.name}
                 </td>
-                <PassFailCell passed={a.opus} />
-                <PassFailCell passed={a.sonnet} />
-                <PassFailCell passed={a.haiku} />
+                {data.models.map((m) => (
+                  <PassFailCell key={m.model} passed={a.results[m.model]} />
+                ))}
                 <td className="px-3 py-2.5 text-center">
                   <span
                     className="text-xs font-medium"
                     style={{
                       color:
-                        passCount === 3
+                        passCount === modelCount
                           ? "#28c840"
-                          : passCount >= 2
+                          : passCount >= modelCount * 0.7
                             ? "#eab308"
-                            : passCount === 1
+                            : passCount >= modelCount * 0.3
                               ? "#f97316"
                               : "#ef4444",
                     }}
                   >
-                    {passCount}/3
+                    {passCount}/{modelCount}
                   </span>
                 </td>
               </tr>
@@ -311,10 +354,12 @@ function AssertionsTable({ data }: { data: SkillEvalResult }) {
   );
 }
 
-function PassFailCell({ passed }: { passed: boolean }) {
+function PassFailCell({ passed }: { passed: boolean | undefined }) {
   return (
-    <td className="px-3 py-2.5 text-center">
-      {passed ? (
+    <td className="px-2 py-2.5 text-center">
+      {passed === undefined ? (
+        <span className="text-xs text-[#b0a89c]">—</span>
+      ) : passed ? (
         <span
           className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#28c84015] text-[#28c840]"
           role="img"
@@ -337,7 +382,7 @@ function PassFailCell({ passed }: { passed: boolean }) {
   );
 }
 
-/* ── Cost Breakdown ───────────────────────────────────────── */
+/* -- Cost Breakdown ------------------------------------------------- */
 
 function CostBreakdown({ models }: { models: SkillEvalResult["models"] }) {
   const maxTokens = Math.max(
@@ -359,17 +404,16 @@ function CostBreakdown({ models }: { models: SkillEvalResult["models"] }) {
               maxTokens > 0 ? (m.inputTokens / maxTokens) * 100 : 0;
             const outputPct =
               maxTokens > 0 ? (m.outputTokens / maxTokens) * 100 : 0;
-            const color = MODEL_COLORS[m.model as ModelId];
+            const color = MODEL_COLORS[m.model] ?? "#b0a89c";
             return (
               <div key={m.model} className="flex items-center gap-3">
                 <span
-                  className="w-20 shrink-0 text-right text-sm font-medium"
+                  className="w-24 shrink-0 text-right text-sm font-medium"
                   style={{ color }}
                 >
                   {m.label}
                 </span>
                 <div className="relative h-7 flex-1 overflow-hidden rounded-lg bg-[#1a1816]">
-                  {/* Input tokens */}
                   <div
                     className="absolute inset-y-0 left-0 rounded-l-lg"
                     style={{
@@ -378,7 +422,6 @@ function CostBreakdown({ models }: { models: SkillEvalResult["models"] }) {
                     }}
                     title={`Input: ${m.inputTokens.toLocaleString()} tokens`}
                   />
-                  {/* Output tokens (stacked after input) */}
                   <div
                     className="absolute inset-y-0 rounded-r-lg"
                     style={{
@@ -416,11 +459,11 @@ function CostBreakdown({ models }: { models: SkillEvalResult["models"] }) {
         <div className="space-y-3">
           {models.map((m) => {
             const widthPct = maxCost > 0 ? (m.costPerRun / maxCost) * 100 : 0;
-            const color = MODEL_COLORS[m.model as ModelId];
+            const color = MODEL_COLORS[m.model] ?? "#b0a89c";
             return (
               <div key={m.model} className="flex items-center gap-3">
                 <span
-                  className="w-20 shrink-0 text-right text-sm font-medium"
+                  className="w-24 shrink-0 text-right text-sm font-medium"
                   style={{ color }}
                 >
                   {m.label}
@@ -472,7 +515,7 @@ function CostBreakdown({ models }: { models: SkillEvalResult["models"] }) {
               <tr key={m.model} className="border-b border-[#e5950010]">
                 <td
                   className="px-3 py-2 font-medium"
-                  style={{ color: MODEL_COLORS[m.model as ModelId] }}
+                  style={{ color: MODEL_COLORS[m.model] ?? "#b0a89c" }}
                 >
                   {m.label}
                 </td>
@@ -497,7 +540,7 @@ function CostBreakdown({ models }: { models: SkillEvalResult["models"] }) {
   );
 }
 
-/* ── Latency Breakdown ────────────────────────────────────── */
+/* -- Latency Breakdown ---------------------------------------------- */
 
 function LatencyBreakdown({ models }: { models: SkillEvalResult["models"] }) {
   const maxLatency = Math.max(...models.map((m) => m.latencyP95Ms));
@@ -515,11 +558,11 @@ function LatencyBreakdown({ models }: { models: SkillEvalResult["models"] }) {
             .map((m) => {
               const widthPct =
                 maxLatency > 0 ? (m.latencyP50Ms / maxLatency) * 100 : 0;
-              const color = MODEL_COLORS[m.model as ModelId];
+              const color = MODEL_COLORS[m.model] ?? "#b0a89c";
               return (
                 <div key={m.model} className="flex items-center gap-3">
                   <span
-                    className="w-20 shrink-0 text-right text-sm font-medium"
+                    className="w-24 shrink-0 text-right text-sm font-medium"
                     style={{ color }}
                   >
                     {m.label}
@@ -555,11 +598,11 @@ function LatencyBreakdown({ models }: { models: SkillEvalResult["models"] }) {
             .map((m) => {
               const widthPct =
                 maxLatency > 0 ? (m.latencyP95Ms / maxLatency) * 100 : 0;
-              const color = MODEL_COLORS[m.model as ModelId];
+              const color = MODEL_COLORS[m.model] ?? "#b0a89c";
               return (
                 <div key={m.model} className="flex items-center gap-3">
                   <span
-                    className="w-20 shrink-0 text-right text-sm font-medium"
+                    className="w-24 shrink-0 text-right text-sm font-medium"
                     style={{ color }}
                   >
                     {m.label}
@@ -613,7 +656,7 @@ function LatencyBreakdown({ models }: { models: SkillEvalResult["models"] }) {
                 <tr key={m.model} className="border-b border-[#e5950010]">
                   <td
                     className="px-3 py-2 font-medium"
-                    style={{ color: MODEL_COLORS[m.model as ModelId] }}
+                    style={{ color: MODEL_COLORS[m.model] ?? "#b0a89c" }}
                   >
                     {m.label}
                   </td>
@@ -636,7 +679,7 @@ function LatencyBreakdown({ models }: { models: SkillEvalResult["models"] }) {
   );
 }
 
-/* ── Helpers ───────────────────────────────────────────────── */
+/* -- Helpers -------------------------------------------------------- */
 
 function formatMs(ms: number): string {
   if (ms < 1000) return `${ms}ms`;
