@@ -14,68 +14,75 @@ const Footer = () => {
 
   return (
     <footer
-      className="h-fit w-full space-y-10 bg-blue-800 px-4.5 py-6"
+      className="relative z-10 w-full bg-blue-800 px-6 py-8 md:px-12 md:py-10"
       role="contentinfo"
       aria-label="Site footer"
     >
-      <nav aria-label="Footer navigation">
-        <div className="flex max-h-24 w-full flex-col flex-wrap place-content-start place-items-start items-start justify-start gap-x-6 gap-y-4">
-          <Link className="w-fit text-sm font-medium text-white" href="/">
+      <div className="mx-auto max-w-5xl">
+        {/* Nav Links — centered row */}
+        <nav
+          aria-label="Footer navigation"
+          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3"
+        >
+          <Link
+            className="text-sm font-medium text-white/80 transition-colors hover:text-white"
+            href="/"
+          >
             Home
           </Link>
-          <Link className="w-fit text-sm font-medium text-white" href="/about">
+          <Link
+            className="text-sm font-medium text-white/80 transition-colors hover:text-white"
+            href="/about"
+          >
             About
           </Link>
           <Link
-            className="w-fit text-sm font-medium text-white"
+            className="text-sm font-medium text-white/80 transition-colors hover:text-white"
+            href="/projects"
+          >
+            Projects
+          </Link>
+          <Link
+            className="text-sm font-medium text-white/80 transition-colors hover:text-white"
             href="/contact"
           >
-            Contact us
+            Contact
           </Link>
           <Link
-            className="w-fit text-sm font-medium text-white"
+            className="text-sm font-medium text-white/80 transition-colors hover:text-white"
             href="/privacy"
           >
-            Privacy Policy
+            Privacy
           </Link>
           <Link
-            className="w-fit text-sm font-medium text-white"
+            className="text-sm font-medium text-white/80 transition-colors hover:text-white"
             href="/accessibility"
           >
             Accessibility
           </Link>
-        </div>
-      </nav>
-      <div className="flex w-full flex-col flex-wrap place-content-start place-items-start items-start justify-start gap-2">
-        <div className="flex items-center justify-start gap-2">
+        </nav>
+
+        {/* Divider */}
+        <div className="my-6 border-t border-white/10" />
+
+        {/* Bottom row: social + credits */}
+        <div className="flex flex-col items-center gap-4 md:flex-row md:justify-between">
           <SocialLinks
-            className="flex items-center justify-start gap-2"
-            iconContainerClassName="flex items-center justify-center p-1 rounded-full bg-blue-50 shadow-[0px_1px_1px_0px_#00004326]"
+            className="flex items-center gap-3"
+            iconContainerClassName="flex items-center justify-center p-1.5 rounded-full bg-blue-50 shadow-[0px_1px_1px_0px_#00004326]"
           />
+          <p className="text-center text-xs font-medium text-white/50 md:text-right">
+            &copy; {new Date().getFullYear()} Etan Heyman &middot; Designed by{" "}
+            <Link
+              href="https://www.productdz.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/70 underline transition-colors hover:text-white"
+            >
+              ProductDZ
+            </Link>
+          </p>
         </div>
-        <p className="w-fit text-sm font-medium text-white">
-          All rights reserved @ 2025
-        </p>
-        <p className="w-fit text-sm font-medium text-white">
-          Designed by{" "}
-          <Link
-            href="https://www.productdz.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            ProductDZ
-          </Link>{" "}
-          | Developed by{" "}
-          <Link
-            href="https://www.linkedin.com/in/etanheyman"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            Etan Heyman
-          </Link>
-        </p>
       </div>
     </footer>
   );
