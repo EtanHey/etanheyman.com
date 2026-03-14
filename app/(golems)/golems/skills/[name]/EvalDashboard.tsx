@@ -14,6 +14,7 @@ import {
   passRateColor,
   passRateLabel,
 } from "../../lib/eval-types";
+import type { SkillGrade } from "../../lib/eval-data";
 
 /* -- Sub-tab IDs ---------------------------------------------------- */
 
@@ -25,13 +26,40 @@ const SUB_TABS = [
 
 type SubTabId = (typeof SUB_TABS)[number]["id"];
 
+/* -- Grade styles ---------------------------------------------------- */
+
+const GRADE_STYLES: Record<
+  SkillGrade,
+  { border: string; bg: string; text: string; dot: string }
+> = {
+  Golden: {
+    border: "border-[#fbbf2430]",
+    bg: "bg-[#fbbf2408]",
+    text: "text-[#fbbf24]",
+    dot: "bg-[#fbbf24]",
+  },
+  Good: {
+    border: "border-[#28c84030]",
+    bg: "bg-[#28c84008]",
+    text: "text-[#28c840]",
+    dot: "bg-[#28c840]",
+  },
+  Experimental: {
+    border: "border-[#e5950030]",
+    bg: "bg-[#e5950008]",
+    text: "text-[#e59500]",
+    dot: "bg-[#e59500]",
+  },
+};
+
 /* -- Component ------------------------------------------------------ */
 
 interface Props {
   data: SkillEvalResult;
+  grade?: SkillGrade | null;
 }
 
-export default function EvalDashboard({ data }: Props) {
+export default function EvalDashboard({ data, grade }: Props) {
   const [activeSubTab, setActiveSubTab] = useState<SubTabId>("assertions");
 
   const bestModel = data.models.reduce((a, b) =>
@@ -47,9 +75,26 @@ export default function EvalDashboard({ data }: Props) {
   const claudeModels = data.models.filter((m) => m.group === "claude");
   const crossAIModels = data.models.filter((m) => m.group === "cross-ai");
   const hasCrossAI = crossAIModels.length > 0;
+  const gradeStyle = grade ? GRADE_STYLES[grade] : null;
 
   return (
     <div className="space-y-6">
+      {/* -- Grade badge --------------------------------------------- */}
+      {grade && gradeStyle && (
+        <div
+          className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 ${gradeStyle.border} ${gradeStyle.bg}`}
+        >
+          <span
+            className={`inline-block h-1.5 w-1.5 rounded-full ${gradeStyle.dot}`}
+          />
+          <span
+            className={`text-xs font-semibold tracking-wider uppercase ${gradeStyle.text}`}
+          >
+            {grade}
+          </span>
+        </div>
+      )}
+
       {/* -- KPI Stat Cards ------------------------------------------ */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <KPICard
@@ -61,7 +106,7 @@ export default function EvalDashboard({ data }: Props) {
         <KPICard
           label="Assertions"
           value={String(totalAssertions)}
-          sub={`${data.models.length} models tested`}
+          sub={`${data.models.length} model${data.models.length !== 1 ? "s" : ""} tested`}
           color="#6ab0f3"
         />
         <KPICard
@@ -78,23 +123,38 @@ export default function EvalDashboard({ data }: Props) {
         />
       </div>
 
-      {/* -- Model Comparison Bars ----------------------------------- */}
-      <section>
-        <h3 className="mb-3 text-sm font-bold text-[#f0ebe0]">
-          Pass Rate by Model
-        </h3>
-        {claudeModels.length > 0 && (
-          <ModelGroupBars label={GROUP_LABELS.claude} models={claudeModels} />
-        )}
-        {hasCrossAI && (
-          <div className={claudeModels.length > 0 ? "mt-4" : undefined}>
+      {/* -- Behavior Evals section ---------------------------------- */}
+      {claudeModels.length > 0 && (
+        <section>
+          <div className="mb-3 flex flex-wrap items-baseline gap-2">
+            <h3 className="text-sm font-bold text-[#f0ebe0]">Behavior Evals</h3>
+            <span className="text-xs text-[#b0a89c]">
+              Phase 2 baseline — skill quality on Claude
+            </span>
+          </div>
+          <div className="rounded-lg border border-[#28c84015] bg-[#28c84005] p-3">
+            <ModelGroupBars label={GROUP_LABELS.claude} models={claudeModels} />
+          </div>
+        </section>
+      )}
+
+      {/* -- Adapter Evals section ----------------------------------- */}
+      {hasCrossAI && (
+        <section>
+          <div className="mb-3 flex flex-wrap items-baseline gap-2">
+            <h3 className="text-sm font-bold text-[#f0ebe0]">Adapter Evals</h3>
+            <span className="text-xs text-[#b0a89c]">
+              Phase 2C — cross-AI portability
+            </span>
+          </div>
+          <div className="rounded-lg border border-[#6ab0f315] bg-[#6ab0f305] p-3">
             <ModelGroupBars
               label={GROUP_LABELS["cross-ai"]}
               models={crossAIModels}
             />
           </div>
-        )}
-      </section>
+        </section>
+      )}
 
       {/* -- Sub-tabs ------------------------------------------------ */}
       <div>
@@ -158,7 +218,11 @@ export default function EvalDashboard({ data }: Props) {
       <p className="text-xs text-[#b0a89c]">
         Last evaluated: {data.lastEvalDate} &middot;{" "}
         {data.source === "real"
-          ? `Real cross-AI portability eval · ${crossAIModels.length} CLIs tested across ${data.assertions.length} scenarios`
+          ? claudeModels.length > 0 && hasCrossAI
+            ? `Real Phase 2 evals · behavior (Claude) + adapter (${crossAIModels.length} CLI${crossAIModels.length !== 1 ? "s" : ""})`
+            : claudeModels.length > 0
+              ? "Real Phase 2 behavior eval · Claude Sonnet baseline"
+              : `Real Phase 2C adapter eval · ${crossAIModels.length} CLI${crossAIModels.length !== 1 ? "s" : ""} tested`
           : "Data is generated from skill assertions (real cross-model benchmarks coming soon)"}
       </p>
     </div>

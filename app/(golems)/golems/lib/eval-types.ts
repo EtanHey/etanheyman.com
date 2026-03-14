@@ -118,8 +118,8 @@ export const MODEL_LABELS: Record<string, string> = Object.fromEntries(
 );
 
 export const GROUP_LABELS: Record<ModelGroup, string> = {
-  claude: "Claude Models",
-  "cross-ai": "Cross-AI Portability",
+  claude: "Behavior Baseline",
+  "cross-ai": "Adapter Portability",
 };
 
 /** Four-tier color system (SnitchBench-inspired) */

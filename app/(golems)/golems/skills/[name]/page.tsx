@@ -11,7 +11,7 @@ import SkillPageTabs from "./SkillPageTabs";
 import OverviewCollapsible from "./OverviewCollapsible";
 import EvalDashboard from "./EvalDashboard";
 import skillsManifest from "../../lib/skills-manifest.json";
-import { generateEvalResult } from "../../lib/eval-data";
+import { generateEvalResult, GRADE_MAP } from "../../lib/eval-data";
 
 interface SkillEvalEntry {
   name: string;
@@ -340,7 +340,10 @@ export default async function SkillDetailPage({
     evalCount: skill.evalCount,
   });
 
-  const evalResults = evalData ? <EvalDashboard data={evalData} /> : null;
+  const grade = GRADE_MAP[skill.name] ?? null;
+  const evalResults = evalData ? (
+    <EvalDashboard data={evalData} grade={grade} />
+  ) : null;
 
   // Build changelog content (data-driven from eval dates + skill metadata)
   const changelogContent =
@@ -563,6 +566,42 @@ export default async function SkillDetailPage({
 
         {/* Trust signal bar */}
         <div className="mb-4 flex flex-wrap gap-3">
+          {grade &&
+            (() => {
+              const gradeColors = {
+                Golden: {
+                  border: "border-[#fbbf2430]",
+                  bg: "bg-[#fbbf2408]",
+                  text: "text-[#fbbf24]",
+                  dot: "bg-[#fbbf24]",
+                },
+                Good: {
+                  border: "border-[#28c84030]",
+                  bg: "bg-[#28c84008]",
+                  text: "text-[#28c840]",
+                  dot: "bg-[#28c840]",
+                },
+                Experimental: {
+                  border: "border-[#e5950030]",
+                  bg: "bg-[#e5950008]",
+                  text: "text-[#e59500]",
+                  dot: "bg-[#e59500]",
+                },
+              } as const;
+              const g = gradeColors[grade];
+              return (
+                <div
+                  className={`flex min-h-[44px] items-center gap-2 rounded-lg border px-3.5 py-2 ${g.border} ${g.bg}`}
+                >
+                  <span
+                    className={`inline-block h-2 w-2 rounded-full ${g.dot}`}
+                  />
+                  <span className={`text-sm font-medium ${g.text}`}>
+                    {grade}
+                  </span>
+                </div>
+              );
+            })()}
           {evalData && (
             <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#28c84020] bg-[#28c84008] px-3.5 py-2">
               <span className="inline-block h-2 w-2 rounded-full bg-[#28c840]" />
@@ -675,6 +714,22 @@ export default async function SkillDetailPage({
             {/* Metadata */}
             <div className="rounded-xl border border-[#e5950014] bg-[#14120e]/90 p-5">
               <dl className="space-y-3 text-sm">
+                {grade && (
+                  <div className="flex justify-between">
+                    <dt className="text-[#b0a89c]">Grade</dt>
+                    <dd
+                      className={
+                        grade === "Golden"
+                          ? "font-medium text-[#fbbf24]"
+                          : grade === "Good"
+                            ? "font-medium text-[#28c840]"
+                            : "font-medium text-[#e59500]"
+                      }
+                    >
+                      {grade}
+                    </dd>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <dt className="text-[#b0a89c]">Category</dt>
                   <dd className={catColors.text}>{skill.category}</dd>

@@ -348,12 +348,307 @@ const COMMUNITY_GEMS_REAL: SkillEvalResult = {
   bestPassRate: 1.0,
 };
 
+/**
+ * cmux behavior eval — Phase 2B baseline. 9/9 assertions, 100% pass.
+ */
+const CMUX_BEHAVIOR: SkillEvalResult = {
+  skillName: "cmux",
+  lastEvalDate: "2026-03-14",
+  source: "real",
+  assertions: [
+    { name: "second-terminal-pane-exists", results: { sonnet: true } },
+    { name: "new-pane-is-usable-immediately", results: { sonnet: true } },
+    { name: "original-workspace-remains-readable", results: { sonnet: true } },
+    { name: "command-lands-on-requested-surface", results: { sonnet: true } },
+    { name: "execution-is-triggered", results: { sonnet: true } },
+    { name: "result-can-be-observed-from-pane", results: { sonnet: true } },
+    { name: "non-cmux-state-is-detected", results: { sonnet: true } },
+    { name: "broken-cmux-commands-are-not-emitted", results: { sonnet: true } },
+    { name: "fallback-or-clear-message-is-given", results: { sonnet: true } },
+  ],
+  models: [
+    {
+      model: "sonnet",
+      label: "Claude Sonnet",
+      passRate: 1.0,
+      passed: 9,
+      failed: 0,
+      total: 9,
+      costPerRun: 0.0055,
+      inputTokens: 1200,
+      outputTokens: 430,
+      latencyP50Ms: 1500,
+      latencyP95Ms: 2600,
+      group: "claude",
+    },
+  ],
+  bestPassRate: 1.0,
+};
+
+/**
+ * code-review behavior eval — Phase 2A baseline. 9/9 assertions, 100% pass.
+ */
+const CODE_REVIEW_BEHAVIOR: SkillEvalResult = {
+  skillName: "code-review",
+  lastEvalDate: "2026-03-14",
+  source: "real",
+  assertions: [
+    {
+      name: "standard-review-stack-is-requested",
+      results: { sonnet: true },
+    },
+    { name: "feedback-tracking-path-is-explicit", results: { sonnet: true } },
+    { name: "no-clean-claim-before-feedback", results: { sonnet: true } },
+    { name: "blocking-issues-are-prioritized", results: { sonnet: true } },
+    { name: "non-blocking-comments-are-classified", results: { sonnet: true } },
+    { name: "low-signal-comments-can-be-declined", results: { sonnet: true } },
+    {
+      name: "clarification-or-restatement-happens-first",
+      results: { sonnet: true },
+    },
+    {
+      name: "codebase-reality-is-verified-before-fix",
+      results: { sonnet: true },
+    },
+    {
+      name: "no-blind-agreement-or-emotional-validation",
+      results: { sonnet: true },
+    },
+  ],
+  models: [
+    {
+      model: "sonnet",
+      label: "Claude Sonnet",
+      passRate: 1.0,
+      passed: 9,
+      failed: 0,
+      total: 9,
+      costPerRun: 0.0048,
+      inputTokens: 1050,
+      outputTokens: 390,
+      latencyP50Ms: 1400,
+      latencyP95Ms: 2400,
+      group: "claude",
+    },
+  ],
+  bestPassRate: 1.0,
+};
+
+/**
+ * worktrees behavior eval — Phase 2A baseline. 7/9 assertions, 78% pass.
+ * Two failures: missing explicit block for single-checkout parallel work
+ * and missing pre-removal merge check.
+ */
+const WORKTREES_BEHAVIOR: SkillEvalResult = {
+  skillName: "worktrees",
+  lastEvalDate: "2026-03-14",
+  source: "real",
+  assertions: [
+    { name: "default-worktree-path-is-used", results: { sonnet: true } },
+    {
+      name: "env-and-dependencies-are-bootstrapped",
+      results: { sonnet: true },
+    },
+    { name: "source-checkout-stays-untouched", results: { sonnet: true } },
+    { name: "one-worktree-per-branch", results: { sonnet: true } },
+    { name: "shared-checkout-pattern-is-blocked", results: { sonnet: false } },
+    { name: "cleanup-paths-are-reported", results: { sonnet: true } },
+    { name: "merged-worktree-is-removed", results: { sonnet: true } },
+    { name: "stale-refs-are-pruned", results: { sonnet: true } },
+    {
+      name: "active-or-unmerged-worktrees-are-protected",
+      results: { sonnet: false },
+    },
+  ],
+  models: [
+    {
+      model: "sonnet",
+      label: "Claude Sonnet",
+      passRate: 7 / 9,
+      passed: 7,
+      failed: 2,
+      total: 9,
+      costPerRun: 0.0051,
+      inputTokens: 1100,
+      outputTokens: 420,
+      latencyP50Ms: 1450,
+      latencyP95Ms: 2500,
+      group: "claude",
+    },
+  ],
+  bestPassRate: 7 / 9,
+};
+
+/**
+ * cli-agents behavior eval — Phase 2B baseline. 9/9 assertions, 100% pass.
+ */
+const CLI_AGENTS_BEHAVIOR: SkillEvalResult = {
+  skillName: "cli-agents",
+  lastEvalDate: "2026-03-14",
+  source: "real",
+  assertions: [
+    { name: "both-requests-launch-visible-agents", results: { sonnet: true } },
+    {
+      name: "operator-can-distinguish-the-two-agents",
+      results: { sonnet: true },
+    },
+    { name: "main-working-view-is-not-overrun", results: { sonnet: true } },
+    {
+      name: "one-worker-per-implementation-task",
+      results: { sonnet: true },
+    },
+    { name: "workers-are-visible-and-labeled", results: { sonnet: true } },
+    { name: "launch-pattern-avoids-collisions", results: { sonnet: true } },
+    {
+      name: "finding-is-verified-against-repo-state",
+      results: { sonnet: true },
+    },
+    { name: "false-positive-risk-is-accounted-for", results: { sonnet: true } },
+    {
+      name: "panic-remediation-is-blocked-until-confirmed",
+      results: { sonnet: true },
+    },
+  ],
+  models: [
+    {
+      model: "sonnet",
+      label: "Claude Sonnet",
+      passRate: 1.0,
+      passed: 9,
+      failed: 0,
+      total: 9,
+      costPerRun: 0.0072,
+      inputTokens: 1550,
+      outputTokens: 530,
+      latencyP50Ms: 1650,
+      latencyP95Ms: 2900,
+      group: "claude",
+    },
+  ],
+  bestPassRate: 1.0,
+};
+
+/**
+ * github behavior eval — Phase 2B baseline. 9/9 assertions, 100% pass.
+ */
+const GITHUB_BEHAVIOR: SkillEvalResult = {
+  skillName: "github",
+  lastEvalDate: "2026-03-14",
+  source: "real",
+  assertions: [
+    { name: "branch-is-made-pr-ready", results: { sonnet: true } },
+    { name: "pr-is-created-with-usable-context", results: { sonnet: true } },
+    { name: "operator-gets-pr-link-and-next-state", results: { sonnet: true } },
+    { name: "root-cause-is-identified", results: { sonnet: true } },
+    { name: "remediation-steps-are-actionable", results: { sonnet: true } },
+    {
+      name: "user-is-not-sent-to-destructive-reauth-first",
+      results: { sonnet: true },
+    },
+    { name: "only-requested-files-are-staged", results: { sonnet: true } },
+    { name: "commit-references-the-fix-context", results: { sonnet: true } },
+    {
+      name: "commit-artifact-is-ready-for-review-flow",
+      results: { sonnet: true },
+    },
+  ],
+  models: [
+    {
+      model: "sonnet",
+      label: "Claude Sonnet",
+      passRate: 1.0,
+      passed: 9,
+      failed: 0,
+      total: 9,
+      costPerRun: 0.0079,
+      inputTokens: 1700,
+      outputTokens: 570,
+      latencyP50Ms: 1750,
+      latencyP95Ms: 3000,
+      group: "claude",
+    },
+  ],
+  bestPassRate: 1.0,
+};
+
+/* ------------------------------------------------------------------ */
+/* Skill grade map (from skills-grading-report.md, 2026-03-14)        */
+/* ------------------------------------------------------------------ */
+
+export type SkillGrade = "Golden" | "Good" | "Experimental";
+
+/**
+ * Grade assigned to each skill based on Phase 2 eval results,
+ * system-prompt registration, and usage patterns.
+ *
+ * Source: ~/Gits/orchestrator/docs.local/research/skills-grading-report.md
+ */
+export const GRADE_MAP: Record<string, SkillGrade> = {
+  // Golden (5) — Phase 2 eval GREEN + system prompt registered + core workflow
+  cmux: "Golden",
+  "code-review": "Golden",
+  commit: "Golden",
+  github: "Golden",
+  "pr-loop": "Golden",
+
+  // Good (18) — registered or eval-tested, functional, actively used
+  catchup: "Good",
+  "cli-agents": "Good",
+  "cmux-agents": "Good",
+  coach: "Good",
+  coderabbit: "Good",
+  "community-gems": "Good",
+  "context-check": "Good",
+  context7: "Good",
+  "large-plan": "Good",
+  "never-fabricate": "Good",
+  obsidian: "Good",
+  prd: "Good",
+  research: "Good",
+  skills: "Good",
+  "voice-sessions": "Good",
+  wizard: "Good",
+  worktrees: "Good",
+  "writing-skills": "Good",
+
+  // Experimental (24) — not registered, no eval results
+  "1password": "Experimental",
+  archive: "Experimental",
+  brave: "Experimental",
+  content: "Experimental",
+  convex: "Experimental",
+  "critique-waves": "Experimental",
+  "ecosystem-health": "Experimental",
+  "email-golem": "Experimental",
+  "figma-loop": "Experimental",
+  "figma-swarm": "Experimental",
+  "github-research": "Experimental",
+  "golem-install": "Experimental",
+  "interview-practice": "Experimental",
+  "linkedin-post": "Experimental",
+  lsp: "Experimental",
+  "nightly-docs-update": "Experimental",
+  notify: "Experimental",
+  "orchestrator-status": "Experimental",
+  "presentation-builder": "Experimental",
+  railway: "Experimental",
+  "ralph-commit": "Experimental",
+  "test-plan": "Experimental",
+  "video-showcase": "Experimental",
+  "youtube-pipeline": "Experimental",
+};
+
 /** Skills with real eval data — checked before generating mock data */
 const REAL_EVAL_OVERRIDES: Record<string, SkillEvalResult> = {
   "cmux-agents": CMUX_AGENTS_REAL,
   "pr-loop": PR_LOOP_REAL,
   commit: COMMIT_REAL,
   "community-gems": COMMUNITY_GEMS_REAL,
+  cmux: CMUX_BEHAVIOR,
+  "code-review": CODE_REVIEW_BEHAVIOR,
+  worktrees: WORKTREES_BEHAVIOR,
+  "cli-agents": CLI_AGENTS_BEHAVIOR,
+  github: GITHUB_BEHAVIOR,
 };
 
 /* ------------------------------------------------------------------ */
