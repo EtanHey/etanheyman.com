@@ -51,3 +51,6 @@ project-research/
 docs.local/
 supabase/.temp/
 .cursor/
+
+# MCP config (contains secrets)
+.mcp.json
