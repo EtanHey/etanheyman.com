@@ -129,7 +129,9 @@ export default function EvalDashboard({ data, grade }: Props) {
           <div className="mb-3 flex flex-wrap items-baseline gap-2">
             <h3 className="text-sm font-bold text-[#f0ebe0]">Behavior Evals</h3>
             <span className="text-xs text-[#b0a89c]">
-              Phase 2 baseline — skill quality on Claude
+              {data.source === "real-adapter"
+                ? "estimated — behavior eval not yet run"
+                : "Phase 2 baseline — skill quality on Claude"}
             </span>
           </div>
           <div className="rounded-lg border border-[#28c84015] bg-[#28c84005] p-3">
@@ -223,7 +225,9 @@ export default function EvalDashboard({ data, grade }: Props) {
             : claudeModels.length > 0
               ? "Real Phase 2 behavior eval · Claude Sonnet baseline"
               : `Real Phase 2C adapter eval · ${crossAIModels.length} CLI${crossAIModels.length !== 1 ? "s" : ""} tested`
-          : "Data is generated from skill assertions (real cross-model benchmarks coming soon)"}
+          : data.source === "real-adapter"
+            ? `Real Phase 2C adapter eval · behavior section estimated · ${crossAIModels.length} CLI${crossAIModels.length !== 1 ? "s" : ""} tested`
+            : "Data is generated from skill assertions (real cross-model benchmarks coming soon)"}
       </p>
     </div>
   );

@@ -39,8 +39,12 @@ export interface SkillEvalResult {
   models: ModelResult[];
   assertions: AssertionResult[];
   bestPassRate: number;
-  /** "real" = actual eval run data; "mock" = seeded PRNG estimate */
-  source?: "real" | "mock";
+  /**
+   * "real"         = actual eval run data for all sections
+   * "real-adapter" = adapter section is real data, behavior section is generated estimate
+   * "mock"         = all data is seeded PRNG estimate
+   */
+  source?: "real" | "real-adapter" | "mock";
 }
 
 /* -- Model registry -------------------------------------------------- */
