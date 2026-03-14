@@ -48,6 +48,7 @@ const CATEGORY_MAP: Record<string, string> = {
   archive: "Quality",
   "writing-skills": "Quality",
   skills: "Quality",
+  "community-gems": "Research & Context",
   coach: "Domain",
   "interview-practice": "Domain",
   prd: "Domain",

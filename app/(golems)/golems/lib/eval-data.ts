@@ -294,11 +294,66 @@ const COMMIT_REAL: SkillEvalResult = {
   bestPassRate: 1.0,
 };
 
+/**
+ * Community-gems benchmark eval (2026-03-13, iteration 1).
+ *
+ * Tested Sonnet 4.6 WITH and WITHOUT the skill across 10 assertions (2 eval types):
+ *   YouTube extraction (5 assertions): with_skill 5/5, without_skill 2/5
+ *   Blog extraction (5 assertions):    with_skill 5/5, without_skill 3/5
+ *   Aggregate:                          with 10/10 (100%), without 5/10 (50%) → +50pp
+ *
+ * Key differentiators (0% without skill → 100% with skill):
+ *   BrainLayer storage (brain_store with proper tags)
+ *   Gem type classification ([pattern], [architecture], etc.)
+ *   Cross-reference before storing (brain_search dedup)
+ *
+ * Token data from benchmark: with_skill mean 37,903 tokens, 192.2s duration.
+ * Without_skill mean: 42,724 tokens, 147.2s (faster but misses persistence steps).
+ */
+const COMMUNITY_GEMS_REAL: SkillEvalResult = {
+  skillName: "community-gems",
+  lastEvalDate: "2026-03-13",
+  source: "real",
+  assertions: [
+    // YouTube eval (5 assertions) — with: 5/5, without: 2/5
+    { name: "exa-for-youtube-not-webfetch", results: { sonnet: true } },
+    { name: "gem-type-classification", results: { sonnet: true } },
+    { name: "brain-store-with-gem-tag", results: { sonnet: true } },
+    { name: "top-3-gems-in-summary", results: { sonnet: true } },
+    { name: "gems-specific-not-generic", results: { sonnet: true } },
+    // Blog eval (5 assertions) — with: 5/5, without: 3/5
+    { name: "webfetch-for-blogs-not-exa", results: { sonnet: true } },
+    { name: "extracts-3-plus-gems", results: { sonnet: true } },
+    { name: "brain-store-per-source", results: { sonnet: true } },
+    { name: "gems-include-source-context", results: { sonnet: true } },
+    { name: "cross-reference-before-storing", results: { sonnet: true } },
+  ],
+  models: [
+    {
+      // Real benchmark: with_skill mean 37,903 tokens, 192.2s duration
+      model: "sonnet" as ModelId,
+      label: "Sonnet 4.6",
+      passRate: 1.0,
+      passed: 10,
+      failed: 0,
+      total: 10,
+      costPerRun: 0.0178,
+      inputTokens: 35400,
+      outputTokens: 2503,
+      latencyP50Ms: 192200,
+      latencyP95Ms: 247000,
+      group: "claude" as ModelGroup,
+    },
+  ],
+  bestPassRate: 1.0,
+};
+
 /** Skills with real eval data — checked before generating mock data */
 const REAL_EVAL_OVERRIDES: Record<string, SkillEvalResult> = {
   "cmux-agents": CMUX_AGENTS_REAL,
   "pr-loop": PR_LOOP_REAL,
   commit: COMMIT_REAL,
+  "community-gems": COMMUNITY_GEMS_REAL,
 };
 
 /* ------------------------------------------------------------------ */

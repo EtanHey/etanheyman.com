@@ -6,6 +6,7 @@ interface SkillPageTabsProps {
   overviewContent: ReactNode;
   rawContent: ReactNode;
   evalContent: ReactNode | null;
+  changelogContent: ReactNode | null;
 }
 
 interface TabEntry {
@@ -18,6 +19,7 @@ export default function SkillPageTabs({
   overviewContent,
   rawContent,
   evalContent,
+  changelogContent,
 }: SkillPageTabsProps) {
   const [activeTab, setActiveTab] = useState(0);
 
@@ -33,8 +35,15 @@ export default function SkillPageTabs({
         content: evalContent,
       });
     }
+    if (changelogContent) {
+      result.push({
+        id: "changelog",
+        label: "Changelog",
+        content: changelogContent,
+      });
+    }
     return result;
-  }, [overviewContent, rawContent, evalContent]);
+  }, [overviewContent, rawContent, evalContent, changelogContent]);
 
   // Clamp active tab if entries shrink (e.g. evalContent removed)
   const safeActive = activeTab < entries.length ? activeTab : 0;
