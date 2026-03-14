@@ -116,8 +116,7 @@ function getProjectAccent(project: Project): AccentName {
 function isSvgOrLogoAsset(imageUrl: string | null): imageUrl is string {
   if (!imageUrl) return false;
   return (
-    (imageUrl.toLowerCase().endsWith(".svg") &&
-      !imageUrl.includes("hand-detection")) ||
+    imageUrl.toLowerCase().endsWith(".svg") ||
     imageUrl.includes("#svg") ||
     imageUrl.includes("#logo")
   );
@@ -267,7 +266,7 @@ function ProjectCardBase({
                   fill
                   priority={priority}
                   sizes={sizes}
-                  className="object-cover object-center transition-transform duration-700 group-hover/card:scale-[1.04]"
+                  className="object-contain object-center transition-transform duration-700 group-hover/card:scale-[1.04]"
                 />
               )}
             </>
