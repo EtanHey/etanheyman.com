@@ -365,12 +365,11 @@ export default async function SkillDetailPage({
                   {evalData.lastEvalDate}
                 </span>
                 <span
-                  className="rounded-full px-2 py-0.5 text-[0.65rem] font-medium"
-                  style={{
-                    backgroundColor:
-                      evalData.source === "real" ? "#28c84015" : "#e5950015",
-                    color: evalData.source === "real" ? "#28c840" : "#e59500",
-                  }}
+                  className={`rounded-full px-2 py-0.5 text-[0.65rem] font-medium ${
+                    evalData.source === "real"
+                      ? "bg-[#28c84015] text-[#28c840]"
+                      : "bg-[#e5950015] text-[#e59500]"
+                  }`}
                 >
                   {evalData.source === "real" ? "real data" : "mock"}
                 </span>
@@ -435,7 +434,7 @@ export default async function SkillDetailPage({
             <div className="absolute top-1 -left-[1.4rem] h-3 w-3 rounded-full border-2 border-[#e59500] bg-[#0c0b0a]" />
             <div className="mb-1 flex items-center gap-3">
               <span className="font-mono text-xs font-bold text-[#e59500]">
-                v1.0 — Published
+                v1.0 — Last Updated
               </span>
               <span className="text-xs text-[#b0a89c]">
                 {skill.lastModified}
