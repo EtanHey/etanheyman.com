@@ -113,7 +113,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="overflow-x-hidden scroll-smooth">
       <body
         className={`${nutmeg.variable} relative -z-20 flex h-full min-h-screen flex-col justify-center overscroll-none antialiased *:text-white`}
       >
