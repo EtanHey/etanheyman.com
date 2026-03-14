@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 export const TopRightSvg = () => {
   return (
     <svg
-      width="135"
-      height="195"
-      viewBox="0 0 135 195"
+      width="195"
+      height="197"
+      viewBox="-2 -1 195 197"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
@@ -25,9 +25,9 @@ export const TopRightSvg = () => {
 export const TopLeftSvg = () => {
   return (
     <svg
-      width="116"
-      height="196"
-      viewBox="0 0 116 196"
+      width="192"
+      height="198"
+      viewBox="-77 -2 192 198"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
@@ -45,9 +45,9 @@ export const TopLeftSvg = () => {
 export const BottomRightSvg = () => {
   return (
     <svg
-      width="173"
-      height="196"
-      viewBox="0 0 173 196"
+      width="195"
+      height="198"
+      viewBox="-1 -1 195 198"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
@@ -64,9 +64,9 @@ export const BottomRightSvg = () => {
 export const BottomLeftSvg = () => {
   return (
     <svg
-      width="172"
-      height="195"
-      viewBox="0 0 172 195"
+      width="195"
+      height="197"
+      viewBox="-23 -2 195 197"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
@@ -133,7 +133,7 @@ const BottomMobileBgCover = () => {
 
   return (
     <div
-      className="pointer-events-none absolute bottom-0 left-0 h-fit w-full overflow-hidden"
+      className="pointer-events-none absolute bottom-0 left-0 h-fit w-full"
       aria-hidden="true"
     >
       {/* Bottom Right SVG */}
@@ -172,7 +172,7 @@ const TopMobileBgCover = () => {
 
   return (
     <div
-      className="pointer-events-none absolute top-0 left-0 h-fit w-full overflow-hidden"
+      className="pointer-events-none absolute top-0 left-0 h-fit w-full"
       aria-hidden="true"
     >
       {/* Top Right SVG - fixed position for all pages */}

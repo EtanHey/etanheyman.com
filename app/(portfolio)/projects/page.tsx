@@ -20,18 +20,18 @@ export default async function ProjectsPage() {
           All Projects
         </h1>
         <p className="font-[Nutmeg] text-[15px] leading-[1.2] font-light text-white/80 md:text-[20px]">
-          Explore my complete portfolio of web development, machine learning, and software engineering projects
+          Explore my complete portfolio of web development, machine learning,
+          and software engineering projects
         </p>
       </div>
 
       {/* Projects Grid */}
-      <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
         {projects.map((project, index) => (
           <ProjectCard
             key={project.id}
             project={project}
-            priority={index < 6}
-            className="h-[400px]"
+            priority={index < 4}
           />
         ))}
       </div>
