@@ -114,9 +114,191 @@ const CMUX_AGENTS_REAL: SkillEvalResult = {
   bestPassRate: 1.0, // Gemini 2.5 Pro: 8/8
 };
 
+/**
+ * PR-Loop eval: baseline (Claude Sonnet) 11/11, Codex adapter 7/9.
+ * Two Codex failures: overstated capability gap + missing fallback docs.
+ */
+const PR_LOOP_REAL: SkillEvalResult = {
+  skillName: "pr-loop",
+  lastEvalDate: "2026-03-12",
+  source: "real",
+  assertions: [
+    {
+      name: "mission-is-merged-not-pr-created",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "fresh-verification-before-shipping",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "review-is-read-before-merge",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "main-is-cleaned-up-after-merge",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "real-bugs-fixed-before-merge",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "review-comments-are-classified",
+      results: { sonnet: true, codex: true },
+    },
+    { name: "substantive-fixes-trigger-rereview", results: { sonnet: true } },
+    { name: "false-positives-are-not-blockers", results: { sonnet: true } },
+    {
+      name: "rejects-pr-created-as-done",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "review-remains-required-for-small-change",
+      results: { sonnet: true },
+    },
+    {
+      name: "completion-still-includes-merge-and-cleanup",
+      results: { sonnet: true },
+    },
+    {
+      name: "only-true-capability-gaps-are-marked-na",
+      results: { codex: false },
+    },
+    {
+      name: "manual-gh-comment-trigger-is-allowed-as-fallback",
+      results: { codex: false },
+    },
+    {
+      name: "brainlayer-postmerge-remains-a-real-gap",
+      results: { codex: true },
+    },
+    {
+      name: "polling-fallback-uses-real-cli-commands",
+      results: { codex: true },
+    },
+  ],
+  models: [
+    {
+      model: "sonnet",
+      label: "Claude Sonnet",
+      passRate: 11 / 11,
+      passed: 11,
+      failed: 0,
+      total: 11,
+      costPerRun: 0.0082,
+      inputTokens: 1800,
+      outputTokens: 600,
+      latencyP50Ms: 1800,
+      latencyP95Ms: 3200,
+      group: "claude",
+    },
+    {
+      model: "codex",
+      label: "Codex (GPT-5.4)",
+      passRate: 7 / 9,
+      passed: 7,
+      failed: 2,
+      total: 9,
+      costPerRun: 0.0245,
+      inputTokens: 2200,
+      outputTokens: 750,
+      latencyP50Ms: 2800,
+      latencyP95Ms: 4600,
+      group: "cross-ai",
+    },
+  ],
+  bestPassRate: 1.0,
+};
+
+/**
+ * Commit eval: baseline (Claude Sonnet) 11/11, Codex adapter 9/9.
+ * Perfect scores across both — commit workflow ports cleanly.
+ */
+const COMMIT_REAL: SkillEvalResult = {
+  skillName: "commit",
+  lastEvalDate: "2026-03-12",
+  source: "real",
+  assertions: [
+    {
+      name: "staged-diff-is-inspected-first",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "coderabbit-gates-the-commit",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "commit-message-follows-review-pass",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "coauthor-trailer-is-included",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "review-findings-are-surfaced",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "automatic-commit-is-blocked-on-fail",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "override-or-fix-choice-is-explicit",
+      results: { sonnet: true, codex: true },
+    },
+    { name: "does-not-claim-commit-success", results: { sonnet: true } },
+    {
+      name: "no-staged-diff-is-detected",
+      results: { sonnet: true, codex: true },
+    },
+    {
+      name: "review-is-not-run-without-staged-changes",
+      results: { sonnet: true },
+    },
+    { name: "user-is-told-to-stage-files-first", results: { sonnet: true } },
+    { name: "standard-commit-route-points-to-codex", results: { codex: true } },
+    { name: "ralph-mode-is-marked-unavailable", results: { codex: true } },
+  ],
+  models: [
+    {
+      model: "sonnet",
+      label: "Claude Sonnet",
+      passRate: 11 / 11,
+      passed: 11,
+      failed: 0,
+      total: 11,
+      costPerRun: 0.0068,
+      inputTokens: 1500,
+      outputTokens: 500,
+      latencyP50Ms: 1600,
+      latencyP95Ms: 2800,
+      group: "claude",
+    },
+    {
+      model: "codex",
+      label: "Codex (GPT-5.4)",
+      passRate: 9 / 9,
+      passed: 9,
+      failed: 0,
+      total: 9,
+      costPerRun: 0.0198,
+      inputTokens: 1800,
+      outputTokens: 650,
+      latencyP50Ms: 2400,
+      latencyP95Ms: 4200,
+      group: "cross-ai",
+    },
+  ],
+  bestPassRate: 1.0,
+};
+
 /** Skills with real eval data — checked before generating mock data */
 const REAL_EVAL_OVERRIDES: Record<string, SkillEvalResult> = {
   "cmux-agents": CMUX_AGENTS_REAL,
+  "pr-loop": PR_LOOP_REAL,
+  commit: COMMIT_REAL,
 };
 
 /* ------------------------------------------------------------------ */
