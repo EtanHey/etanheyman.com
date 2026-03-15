@@ -161,6 +161,140 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     ],
   },
 
+  cmuxlayer: {
+    accent: { color: "#10B981", colorRgb: "16, 185, 129" },
+    tagline: "@golems/cmux-mcp",
+    isMiniSite: true,
+    stats: [
+      { value: 20, label: "MCP tools" },
+      { value: 5, label: "Supported CLIs" },
+      { value: 259, label: "Test assertions" },
+      { value: 3, label: "API layers" },
+    ],
+    features: [
+      {
+        iconName: "Terminal",
+        title: "20 MCP Tools, 3 Layers",
+        description:
+          "10 core surface tools (split, read, send, rename), 8 agent lifecycle tools (spawn, wait, stop, send_to_agent), and 2 V2 facade tools (interact + kill).",
+      },
+      {
+        iconName: "Bot",
+        title: "Multi-CLI Agent Spawning",
+        description:
+          "Spawn Claude, Codex, Cursor, Gemini, or Kiro agents into terminal panes. Each gets a tracked state machine: spawning → booting → ready → working → done.",
+      },
+      {
+        iconName: "Zap",
+        title: "V2 Interact + Kill",
+        description:
+          "High-level facade over 8 agent tools. interact() handles send, interrupt, model switch, resume, skill invoke, usage query, and MCP check. kill() terminates one, many, or all agents.",
+      },
+      {
+        iconName: "GitBranch",
+        title: "Agent Hierarchy & Quality",
+        description:
+          "Parent-child tracking with spawn depth limits (max 2) and per-parent child caps (max 10). Quality field tracks verified/suspect/degraded agent output.",
+      },
+    ],
+    installTabs: [
+      {
+        label: "Clone",
+        command:
+          "git clone https://github.com/EtanHey/cmuxlayer.git\ncd cmuxlayer && npm install && npm run build",
+      },
+      {
+        label: "MCP Config",
+        command:
+          '{\n  "mcpServers": {\n    "cmux": {\n      "command": "node",\n      "args": ["path/to/cmuxlayer/dist/index.js"]\n    }\n  }\n}',
+      },
+    ],
+    architectureFlow: [
+      {
+        icon: "Terminal",
+        title: "CLI Command",
+        subtitle: "spawn / interact / kill",
+      },
+      { icon: "Wrench", title: "MCP Server", subtitle: "20 typed tools" },
+      { icon: "Monitor", title: "cmux Socket", subtitle: "Terminal control" },
+      {
+        icon: "Bot",
+        title: "Agent Engine",
+        subtitle: "State machine lifecycle",
+      },
+      {
+        icon: "Database",
+        title: "State Store",
+        subtitle: "JSON file persistence",
+      },
+    ],
+  },
+
+  "whatsapp-mcp": {
+    accent: { color: "#25D366", colorRgb: "37, 211, 102" },
+    tagline: "Fork of lharries/whatsapp-mcp",
+    isMiniSite: true,
+    stats: [
+      { value: 13, label: "MCP tools" },
+      { value: 2, label: "Bridge support" },
+      { value: 3, label: "Unicode search fixes" },
+      { value: 5.4, suffix: "K", label: "Upstream stars" },
+    ],
+    features: [
+      {
+        iconName: "Globe",
+        title: "Unicode/Hebrew Search",
+        description:
+          "Replaced SQLite LOWER()+LIKE (ASCII-only) with instr()-based matching. Works for Hebrew, Arabic, emoji, CJK — any Unicode text.",
+      },
+      {
+        iconName: "Smartphone",
+        title: "Dual-Bridge Support",
+        description:
+          "Auto-detects business bridge database. Run personal (port 8741) and business (port 8742) WhatsApp accounts simultaneously without manual config.",
+      },
+      {
+        iconName: "Shield",
+        title: "Self-Chat Safety",
+        description:
+          "Optional WHATSAPP_OWNER_JID restricts sends to your own Saved Messages. Safe for LLM interactions — Claude can read all chats but only send to you.",
+      },
+      {
+        iconName: "MessageSquare",
+        title: "13 MCP Tools",
+        description:
+          "9 read tools (search contacts, list messages, get chat, download media) + 4 write tools (send message, send file, send audio with auto Opus conversion).",
+      },
+    ],
+    installTabs: [
+      {
+        label: "Clone",
+        command:
+          "git clone https://github.com/EtanHey/whatsapp-mcp.git\ncd whatsapp-mcp && cd whatsapp-bridge && go build",
+      },
+      {
+        label: "MCP Config",
+        command:
+          '{\n  "mcpServers": {\n    "whatsapp": {\n      "command": "uv",\n      "args": ["--directory", "path/to/whatsapp-mcp-server", "run", "main.py"]\n    }\n  }\n}',
+      },
+    ],
+    architectureFlow: [
+      {
+        icon: "Smartphone",
+        title: "WhatsApp",
+        subtitle: "Personal + Business",
+      },
+      { icon: "Code", title: "Go Bridge", subtitle: "whatsmeow + REST API" },
+      { icon: "Database", title: "SQLite", subtitle: "Message store" },
+      {
+        icon: "Wrench",
+        title: "Python MCP",
+        subtitle: "13 tools, instr() search",
+      },
+      { icon: "Bot", title: "AI Agent", subtitle: "Claude / Cursor" },
+    ],
+  },
+
   golems: {
     accent: { color: "#94A3B8", colorRgb: "148, 163, 184" },
     isMiniSite: true,

@@ -30,11 +30,21 @@ const PROJECT_DESCRIPTIONS: Record<string, string> = {
   brainlayer: `Persistent memory layer for AI coding assistants. ${golemsStats.brainlayer.chunksDisplay} indexed chunks, 7 intelligent tools (search, store, recall + knowledge graph), 43 KG entities, hybrid semantic search with sqlite-vec.`,
   voicelayer:
     "Voice I/O layer for AI assistants. Local TTS via edge-tts, STT via whisper.cpp (~300ms), session booking, 2 tools (voice_speak, voice_ask) with auto-mode detection.",
+  cmuxlayer:
+    "MCP server for terminal agent lifecycle. 20 tools across 3 layers: surface control, agent lifecycle, and V2 facade. Spawn and orchestrate Claude, Codex, Cursor, Gemini, and Kiro agents in parallel. 259 test assertions.",
+  "whatsapp-mcp":
+    "Hebrew-compatible WhatsApp MCP fork. Fixed Unicode search (instr() over LOWER+LIKE), dual-bridge personal+business auto-detection, self-chat safety mode. 13 MCP tools for reading and sending messages.",
   golems: `Autonomous AI agent ecosystem. ${golemsStats.packages.count} packages, ${golemsStats.agents.count} domain agents, ${golemsStats.skills.count} skills, multi-LLM routing, Night Shift autonomous coding at 4am.`,
 };
 
 export function generateStaticParams() {
-  return [{ slug: "brainlayer" }, { slug: "voicelayer" }, { slug: "golems" }];
+  return [
+    { slug: "brainlayer" },
+    { slug: "voicelayer" },
+    { slug: "cmuxlayer" },
+    { slug: "whatsapp-mcp" },
+    { slug: "golems" },
+  ];
 }
 
 export async function generateMetadata({

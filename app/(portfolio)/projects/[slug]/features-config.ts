@@ -206,6 +206,204 @@ const featuresData: Record<string, FeatureSection[]> = {
     },
   ],
 
+  cmuxlayer: [
+    {
+      iconName: "Terminal",
+      title: "10 Core Surface Tools",
+      tagline: "Full terminal pane control through MCP",
+      description:
+        "list_surfaces, new_split, send_input, send_key, read_screen, rename_tab, set_status, set_progress, close_surface, and browser_surface. These wrap the cmux CLI socket into typed, validated tools. browser_surface alone handles 8 actions: open, navigate, snapshot, click, type, eval, wait, and url.",
+      highlights: [
+        "list_surfaces — enumerate all panes across workspaces",
+        "new_split — create terminal or browser panes",
+        "send_input / send_key — type text or press keys",
+        "read_screen — capture terminal content with scrollback",
+        "browser_surface — 8 browser control actions",
+        "set_status / set_progress — sidebar UI updates",
+      ],
+    },
+    {
+      iconName: "Bot",
+      title: "8 Agent Lifecycle Tools",
+      tagline: "Spawn, monitor, and communicate with AI agents",
+      description:
+        "spawn_agent launches a Claude, Codex, Cursor, Gemini, or Kiro CLI in a new pane with automatic boot detection. The agent transitions through spawning → booting → ready → working → done states. wait_for blocks until a target state is reached. send_to_agent and read_agent_output provide structured I/O with delimiter-based output extraction.",
+      codeExample: {
+        language: "typescript",
+        code: `// Spawn a Claude agent
+const agent = await spawn_agent({
+  cli: "claude",
+  repo: "brainlayer",
+  prompt: "Fix failing tests"
+});
+// agent.id: "agent-claude-brainlayer-x7k2"
+
+// Wait for it to be ready
+await wait_for({
+  agent_id: agent.id,
+  target_state: "ready"
+});`,
+        caption: "Spawn + wait lifecycle — fully typed with Zod validation",
+      },
+    },
+    {
+      iconName: "Zap",
+      title: "V2 Interact + Kill Facade",
+      tagline: "8 agent operations consolidated into 2 tools",
+      description:
+        "The V2 API reduces cognitive load. interact() accepts a flat action enum (send, interrupt, model, resume, skill, usage, mcp) with optional fields per action. kill() terminates agents by single ID, array, or 'all'. If an agent isn't alive when you interact, it auto-spawns, waits for ready, then sends — zero manual lifecycle management.",
+      codeExample: {
+        language: "typescript",
+        code: `// V2 interact — 7 action types
+interact({ agent: "x7k2", action: "send",
+           message: "Run tests" })
+interact({ agent: "x7k2", action: "interrupt" })
+interact({ agent: "x7k2", action: "skill",
+           skill: "/commit" })
+interact({ agent: "x7k2", action: "usage" })
+
+// V2 kill — flexible targeting
+kill({ target: "x7k2" })        // single
+kill({ target: ["x7k2","m3p1"]}) // batch
+kill({ target: "all" })          // everything`,
+        caption:
+          "Flat enum actions — no discriminated unions (MCP SDK limitation)",
+      },
+    },
+    {
+      iconName: "GitBranch",
+      title: "Agent Hierarchy & Quality",
+      tagline: "Parent-child tracking with spawn guards",
+      description:
+        "Agents can spawn child agents (K8s ownerRef pattern). parent_agent_id links child to parent. MAX_SPAWN_DEPTH=2 prevents unbounded recursion. MAX_CHILDREN_PER_AGENT=10 caps per-parent spawns. Each agent has a quality field (unknown → verified → suspect → degraded) for tracking output reliability. Sidebar sync pushes agent state to the cmux sidebar in real-time.",
+      highlights: [
+        "Parent-child links via parent_agent_id",
+        "Spawn depth limit: 2 (hard cap)",
+        "Per-parent child limit: 10 (configurable)",
+        "Quality tracking: unknown → verified → suspect → degraded",
+        "Sidebar sync for real-time agent status display",
+      ],
+    },
+    {
+      iconName: "Shield",
+      title: "Security Hardening",
+      tagline: "Command injection prevention + ID collision avoidance",
+      description:
+        "Repository names are sanitized before being passed to shell commands — only alphanumeric, hyphens, underscores, and dots are allowed. Agent IDs include a random suffix to prevent collision when spawning multiple agents for the same repo. Mode enforcement: manual mode makes all mutating tools read-only.",
+      highlights: [
+        "Repo name sanitization — blocks shell metacharacters",
+        "Random suffix on agent IDs — no collisions",
+        "Mode policy — manual mode = read-only surface tools",
+        "Input validation on all 20 tools via Zod schemas",
+      ],
+    },
+    {
+      iconName: "Clock",
+      title: "Roadmap (Coming Soon)",
+      tagline: "Phase 5 orchestration platform — design converged, code next",
+      description:
+        "The Phase 5 v2 design document (1676 lines, 22 converged decisions) is complete. Upcoming: events.jsonl append-only audit log for agent state transitions. BrainLayer session persistence at session end. Context degradation circuit breakers at 80% usage. Cost caps per agent. Agent trust scoring based on success history. Per-surface mode enforcement for workspace-level access control.",
+      highlights: [
+        "events.jsonl — durable agent state transition log (coming soon)",
+        "BrainLayer persist — session summaries at agent end (coming soon)",
+        "Context circuit breaker — auto-pause at 80% (coming soon)",
+        "Cost caps — maxCostPerAgent on spawn (coming soon)",
+        "Agent trust scoring — success_count tracking (coming soon)",
+      ],
+    },
+  ],
+
+  "whatsapp-mcp": [
+    {
+      iconName: "Globe",
+      title: "Unicode/Hebrew Search Fix",
+      tagline: "SQLite LOWER() only handles ASCII — instr() handles everything",
+      description:
+        "The upstream repo uses LOWER(column) LIKE LOWER(?) for text search. This silently breaks for Hebrew, Arabic, emoji, and CJK because SQLite's LOWER() only converts A-Z. Our fork replaces this with instr()-based matching: instr(LOWER(content), LOWER(?)) > 0 OR instr(content, ?) > 0. The dual check handles both case-insensitive Latin matches and direct Unicode byte-level matching. Applied to contact search, message content search, and chat listing.",
+      codeExample: {
+        language: "python",
+        code: `# Upstream (broken for Hebrew):
+WHERE LOWER(chats.name) LIKE LOWER(?)
+# → "שלום" passes through LOWER() unchanged
+# → LIKE fails to match substrings
+
+# Our fork (works for all Unicode):
+WHERE instr(LOWER(chats.name), LOWER(?)) > 0
+   OR instr(chats.name, ?) > 0
+# → instr() does byte-level substring match
+# → Works for Hebrew, Arabic, emoji, CJK`,
+        caption:
+          "The fix across 3 search functions: list_chats, list_messages, search_contacts",
+      },
+    },
+    {
+      iconName: "Smartphone",
+      title: "Dual-Bridge Auto-Detection",
+      tagline: "Personal and business WhatsApp from one MCP server",
+      description:
+        "The MCP server auto-detects which bridge database to use. If whatsapp-bridge-business/store/messages.db exists, it uses the business bridge. Otherwise it falls back to whatsapp-bridge/store/messages.db. Override with WHATSAPP_DB_PATH and WHATSAPP_API_URL env vars. Run both bridges simultaneously on different ports (8741 personal, 8742 business).",
+      codeExample: {
+        language: "python",
+        code: `def _default_db_path():
+    # Check for business bridge first
+    biz = "whatsapp-bridge-business/store/messages.db"
+    personal = "whatsapp-bridge/store/messages.db"
+    if os.path.exists(biz):
+        return biz
+    return personal
+
+# Override with env vars:
+# WHATSAPP_DB_PATH=".../messages.db"
+# WHATSAPP_API_URL="http://localhost:8742/api"`,
+        caption: "Auto-detection with env var override for explicit control",
+      },
+    },
+    {
+      iconName: "Shield",
+      title: "Self-Chat Safety Mode",
+      tagline: "Let Claude read everything, but only send to you",
+      description:
+        "Set WHATSAPP_OWNER_JID to your phone number to restrict all send operations (send_message, send_file, send_audio_message) to your own Saved Messages. Claude can read and search all chats for context, but can't accidentally message your contacts. Phone numbers are normalized (strips +, whitespace, appends @s.whatsapp.net).",
+      highlights: [
+        "WHATSAPP_OWNER_JID env var — your phone number",
+        "Applied to send_message, send_file, send_audio_message",
+        "Read access unrestricted — full chat history available",
+        "Phone number normalization for flexible input",
+      ],
+    },
+    {
+      iconName: "MessageSquare",
+      title: "13 MCP Tools",
+      tagline: "Full read + write access to WhatsApp",
+      description:
+        "9 query tools for reading messages, searching contacts, listing chats, getting context around specific messages, and downloading media. 4 write tools for sending text messages, files (images, videos, documents), and voice messages with automatic Opus/OGG conversion via FFmpeg.",
+      highlights: [
+        "search_contacts — Unicode-safe name + phone search",
+        "list_messages — by chat, sender, date range, content",
+        "list_chats — with optional last-message metadata",
+        "get_chat / get_direct_chat_by_contact / get_contact_chats",
+        "get_last_interaction / get_message_context",
+        "download_media — images, videos, audio from messages",
+        "send_message / send_file / send_audio_message",
+      ],
+    },
+    {
+      iconName: "Clock",
+      title: "Ideas & Roadmap",
+      tagline: "Community contribution opportunities",
+      description:
+        "Potential features for this fork or upstream contribution. Message reactions (send/receive emoji). Quote/reply with structured reply-to. Read receipts checking. Media type filtering (all images from chat X). Auto-translation between Hebrew and English via local LLM. Real-time webhooks instead of polling SQLite. Contact categorization and tagging.",
+      highlights: [
+        "Message reactions — emoji send/receive (coming soon)",
+        "Quote/reply — structured reply-to messages (coming soon)",
+        "Read receipts — check if messages were read (coming soon)",
+        "Media type filter — all images/videos from a chat (coming soon)",
+        "Auto-translation — Hebrew↔English via local LLM (coming soon)",
+        "Real-time webhooks — push instead of SQLite polling (coming soon)",
+      ],
+    },
+  ],
+
   golems: [
     {
       iconName: "Bot",

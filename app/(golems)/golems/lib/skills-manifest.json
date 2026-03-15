@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-03-14T13:44:39.356Z",
-  "skillCount": 59,
+  "generatedAt": "2026-03-15T10:56:39.229Z",
+  "skillCount": 57,
   "skills": {
     "1password": {
       "name": "1password",
       "command": "/1password",
       "description": "Use when managing secrets, credentials, API keys, or vault operations. Supports Environments (Beta) for .env mounting. Covers 1password, secrets, op, vault, migrate, credentials. NOT for: non-secret config (use regular config files).",
       "category": "Operations",
-      "content": "\n# 1Password Operations\n\n> Secret management skill using 1Password CLI (`op`). Routes to workflows for specific operations.\n\n## Prerequisites Check\n\nRun first:\n```bash\nop account list\n```\n\nIf \"not signed in\" or error: See [workflows/troubleshoot.md](workflows/troubleshoot.md)\n\n---\n\n## 🌟 PREFERRED: 1Password Environments (Beta)\n\n**For .env file management, use 1Password Environments instead of manual CLI migration.**\n\n[Official Docs →](https://developer.1password.com/docs/environments/) | [Full Workflow →](workflows/use-environment.md)\n\n### Key Insight: UI Creation, CLI Access\n\n**Environments are created in the 1Password desktop app UI - not via CLI.** However, once created, CLI tools can still interact with secrets via `op run` and `op inject`.\n\n```\n┌─────────────────────────────────────────────────────────────┐\n│                    ENVIRONMENTS WORKFLOW                     │\n├─────────────────────────────────────────────────────────────┤\n│                                                              │\n│  CREATION (UI Only)           ACCESS (Multiple Options)     │\n│  ─────────────────            ─────────────────────────     │\n│  1Password Desktop App   ──►  • Mounted .env (named pipe)   │\n│  • Developer > Environments   • op run (env vars)           │\n│  • NOT automatable            • op inject (config files)    │\n│                                                              │\n└─────────────────────────────────────────────────────────────┘\n```\n\n### Why Environments?\n\n- **Secrets never on disk** - Named pipe mount, not plaintext file\n- **Real-time sync** - Changes in 1Password instantly available\n- **Team sharing** - Grant access with granular permissions\n- **Multi-device** - Same environment works across all your machines\n\n### Setup Flow (One-Time in Desktop App)\n\n1. **Enable Developer features** → Settings > Developer > Enable Developer Experience\n2. **Create Environment** → Developer > Environments > New Environment\n3. **Import your .env** → Click Import or manually add variables\n4. **Set Mount Destination** → Destinations tab > Local .env file > Choose path\n5. **Authorize** → Confirm when prompted\n\n### Environments vs CLI: When to Use Each\n\n| Scenario | Use Environments | Use CLI (`op run`/`op inject`) |\n|----------|-----------------|-------------------------------|\n| Local development | ✅ Best choice | Works but more setup |\n| CI/CD pipelines | ❌ Can't automate creation | ✅ Service accounts |\n| Team secrets | ✅ Built-in sharing | Manual sync needed |\n| One-time scripts | Overkill | ✅ Quick and easy |\n| Template configs | N/A | ✅ `op inject` with `.tpl` |\n\n### Mounted .env vs op inject\n\n**Mounted .env (Environments):**\n```bash\n# App reads .env.local directly (named pipe, no real file)\nnpm run dev\n# Variables available automatically via dotenv\n```\n\n**op inject (CLI):**\n```bash\n# Template file with secret references (.env.template)\nDATABASE_URL=op://prod/db/url\nAPI_KEY=op://prod/api/key\n\n# Inject at runtime\nop inject -i .env.template -o .env && npm run build\n# Remember to delete .env after!\n```\n\n**op run (CLI):**\n```bash\n# Pass secrets as environment variables\nop run --env-file .env.template -- npm run build\n# No temp file created, secrets in process env only\n```\n\n### Working Example: songscript\n\nThe `songscript` project uses Environments with 9 variables mounted to `.env.local`:\n- Environment contains: `CONVEX_DEPLOY_KEY`, `ANTHROPIC_API_KEY`, etc.\n- Destination: `.env.local` (named pipe, not actual file)\n- Works seamlessly with `bun dev`, `npm run dev`, etc.\n\n### Centralized MCP Secrets (Recommended for Agents)\n\n**Problem:** Each MCP with `op://` refs triggers separate auth prompts.\n\n**Solution:** Centralize all secrets in one file, launch with `op run`.\n\n```\n~/.config/mcp-secrets/\n├── secrets.env          # All op:// refs (one auth loads all)\n└── secrets.env.example  # Template (safe to share)\n```\n\n**Wrapper scripts:**\n```bash\ncursor-secure   # op run --env-file secrets.env -- cursor\nclaude-secure   # op run --env-file secrets.env -- claude\nwith-secrets    # op run --env-file secrets.env -- <any command>\n```\n\n**MCP configs use empty env:**\n```json\n{ \"env\": {} }  // Inherits from parent process\n```\n\n### Example: Golems Configuration\n\nThe golems ecosystem uses Environments for sensitive settings:\n\n1. **Create Environment** in 1Password: `golems`\n2. **Add variables**: `NTFY_TOPIC`, `ANTHROPIC_API_KEY`, `LINEAR_API_KEY`\n3. **Mount to**: `~/.config/golems/.env`\n4. **Usage**: Scripts source the mounted file or use `op run`\n\n```bash\n# Option 1: Source mounted .env\nsource ~/.config/golems/.env\n\n# Option 2: Use op run with template\nop run --env-file ~/.config/golems/.env.template -- bun run start\n```\n\n### Important Limitations (Beta)\n\n| Limitation | Details |\n|------------|---------|\n| **UI-only creation** | Cannot create/edit environments via CLI |\n| **Platform support** | Mac and Linux only (no Windows) |\n| **Max mounts** | 10 enabled .env files per device |\n| **Concurrent reads** | May have conflicts with multiple processes |\n| **Edits in UI only** | Changes to mounted file are lost - edit in 1Password UI |\n| **Beta status** | Feature may change |\n\n### When to Use CLI Instead\n\nUse `op run` or `op inject` ([workflows/migrate-env.md](workflows/migrate-env.md)) when:\n- **CI/CD pipelines** - Need Service Accounts for automated access\n- **Scripted operations** - Creating items programmatically\n- **Template configs** - `.yml.tpl` or `.json.tpl` files with secret refs\n- **Windows** - Environments not available on Windows\n\n---\n\n## MCP Setup (One Command)\n\n**Generate `.mcp.json` from `.mcp.json.example` with `op://` references resolved:**\n\n```bash\n~/Gits/orchestrator/scripts/mcp-setup.sh ~/Gits/<repo-name>\n```\n\n- Reads `.mcp.json.example` (committed, has `op://` refs)\n- Resolves each `op://vault/item/field` via 1Password CLI\n- Writes `.mcp.json` (gitignored, has real secrets)\n- Verifies `.mcp.json` is in `.gitignore` (adds it if missing)\n\n### op:// Reference Map\n\n| Secret | op:// Reference |\n|--------|----------------|\n| Exa API key | `op://development/EXA_API_KEY/credential` |\n| Supabase MCP token | `op://development/mcp-supabase/ACCESS_TOKEN` |\n| Sophtron user | `op://development/Sophtron API/username` |\n| Sophtron key | `op://development/Sophtron API/password` |\n| Kernel API key | `op://Private/Kernel api key/password` |\n| Notion token | `op://development/notion-mcp/NOTION_TOKEN` |\n| Linear (Mehayom) | `op://development/mehayom-linear/LINEAR_API_KEY` |\n| Linear (Golems) | `op://development/LINEAR_API_KEY/credential` |\n\n### Wired Repos\n\n| Repo | Secrets |\n|------|---------|\n| golems | Exa, Supabase, Sophtron, Kernel |\n| domica | Exa, Supabase, Notion |\n| Mehayom-app | Linear |\n| etanheyman.com | Supabase |\n| brainlayer, voicelayer, golems-dashboard, 6pm-mini | None (local MCPs only) |\n\n### Servers That Need No Secrets\n\n`brainlayer-mcp`, `voicelayer-mcp` (local whisper.cpp), `context7`, `browser-tools`, `tempmail`, `figma` (localhost)\n\n---\n\n## Quick Actions\n\n| What you want to do | Workflow |\n|---------------------|----------|\n| Set up MCP for a repo | `~/Gits/orchestrator/scripts/mcp-setup.sh ~/Gits/<repo>` |\n| Use 1Password Environments | [workflows/use-environment.md](workflows/use-environment.md) |\n| List secrets in vault | [workflows/list-secrets.md](workflows/list-secrets.md) |\n| Add a new secret | [workflows/add-secret.md](workflows/add-secret.md) |\n| Migrate .env to 1Password | [workflows/migrate-env.md](workflows/migrate-env.md) |\n| Migrate MCP config secrets | [workflows/migrate-mcp.md](workflows/migrate-mcp.md) |\n| Fix auth/biometric issues | [workflows/troubleshoot.md](workflows/troubleshoot.md) |\n\n---\n\n## Available Scripts\n\nExecute directly - they handle errors and edge cases:\n\n| Script | Purpose | Usage |\n|--------|---------|-------|\n| `scripts/migrate-env.sh` | Migrate .env with project/service nesting | `bash ~/.claude/commands/1password/scripts/migrate-env.sh .env [--dry-run]` |\n| `scripts/scan-mcp-secrets.sh` | Find API keys in MCP configs | `bash ~/.claude/commands/1password/scripts/scan-mcp-secrets.sh` |\n\n---\n\n## Decision Tree\n\n**Setting up secrets for a project?**\n- PREFERRED: Use Environments (desktop app UI)\n- Use: [workflows/use-environment.md](workflows/use-environment.md)\n\n**Need to find a secret?**\n- Search by name, tag, or vault\n- Use: [workflows/list-secrets.md](workflows/list-secrets.md)\n\n**Adding credentials for a service?**\n- Create new item with password/API key\n- Use: [workflows/add-secret.md](workflows/add-secret.md)\n\n**Have a .env file to secure?**\n- For local dev: Use Environments (UI-based)\n- For CI/CD: Use [workflows/migrate-env.md](workflows/migrate-env.md) or `scripts/migrate-env.sh`\n\n**MCP configs have hardcoded keys?**\n- Scan and migrate to 1Password references\n- Use: [workflows/migrate-mcp.md](workflows/migrate-mcp.md)\n\n**Biometric timeout or auth problems?**\n- Token refresh, re-auth, session issues\n- Use: [workflows/troubleshoot.md](workflows/troubleshoot.md)\n\n---\n\n## Service Auto-Detection\n\nWhen migrating secrets, keys are auto-categorized:\n\n| Key prefix | Service folder |\n|------------|----------------|\n| `ANTHROPIC_*` | anthropic/ |\n| `OPENAI_*` | openai/ |\n| `SUPABASE_*` | supabase/ |\n| `DATABASE_*`, `DB_*` | db/ |\n| `STRIPE_*` | stripe/ |\n| `AWS_*` | aws/ |\n| `GITHUB_*` | github/ |\n| Other | misc/ |\n\nItem path format: `{project}/{service}/{key}`\n\n---\n\n## Vault Organization\n\n### Vault Types\n\n| Vault | Purpose | Example Items |\n|-------|---------|---------------|\n| `development` | Global dev tools | context7, github CLI tokens |\n| `Private` | Personal secrets | SSH keys, personal accounts |\n| `{project}` | Project-specific | linear API key, deploy keys |\n| `Shared` | Team secrets | Shared service accounts |\n\n### Creating Vaults\n\n```bash\n# Create project vault\nop vault create \"myproject\" --description \"MyProject secrets\" --icon buildings\n\n# Create tools vault\nop vault create \"development\" --description \"Global dev tools\" --icon gears\n```\n\n### Where to Put Secrets\n\n**Global dev tools** → `development` vault:\n- context7, MCP tools, IDE plugins\n- Used across all projects\n\n**Project-specific** → `{project}` vault:\n- Linear API keys (per workspace)\n- Deploy keys, CI/CD tokens\n- Database credentials\n\n**Personal** → `Private` vault:\n- SSH keys, personal tokens\n- Accounts only you use\n\n### Tagging Strategy\n\nUse tags for cross-vault searching and organization:\n\n```bash\n# Add tags when creating\nop item create --vault development --category \"API Credential\" \\\n  --title \"context7\" 'API_KEY[password]=xxx' \\\n  --tags \"dev-tools,mcp,documentation\"\n\n# Search by tag across all vaults\nop item list --tags \"mcp\"\nop item list --tags \"dev-tools\"\n```\n\n**Recommended tags:**\n| Tag | Use for |\n|-----|---------|\n| `dev-tools` | Development utilities |\n| `mcp` | MCP server credentials |\n| `ci-cd` | CI/CD pipeline secrets |\n| `api-key` | Third-party API keys |\n| `deploy` | Deployment credentials |\n| `{project}` | Project name for filtering |\n\n### Reference Format\n\n```bash\n# Vault/Item/Field\nop://development/context7/API_KEY\nop://myproject/linear/API_KEY\nop://Private/github/token\n```\n\n---\n\n## Safety Rules\n\n1. **Never log secret values** - Only show masked versions\n2. **Dry-run first** - Use `--dry-run` before actual migration\n3. **Don't delete .env files** - Migration creates .env.template alongside\n4. **Verify vault access** - Run `op vault list` before operations\n5. **Backup before bulk changes** - Export vault if doing large migrations\n",
+      "content": "\n# 1Password Operations\n\n> Secret management skill using 1Password CLI (`op`). Routes to workflows for specific operations.\n\n## Prerequisites Check\n\nRun first:\n```bash\nop account list\n```\n\nIf \"not signed in\" or error: See [workflows/troubleshoot.md](workflows/troubleshoot.md)\n\n---\n\n## 🌟 PREFERRED: 1Password Environments (Beta)\n\n**For .env file management, use 1Password Environments instead of manual CLI migration.**\n\n[Official Docs →](https://developer.1password.com/docs/environments/) | [Full Workflow →](workflows/use-environment.md)\n\n### Key Insight: UI Creation, CLI Access\n\n**Environments are created in the 1Password desktop app UI - not via CLI.** However, once created, CLI tools can still interact with secrets via `op run` and `op inject`.\n\n```\n┌─────────────────────────────────────────────────────────────┐\n│                    ENVIRONMENTS WORKFLOW                     │\n├─────────────────────────────────────────────────────────────┤\n│                                                              │\n│  CREATION (UI Only)           ACCESS (Multiple Options)     │\n│  ─────────────────            ─────────────────────────     │\n│  1Password Desktop App   ──►  • Mounted .env (named pipe)   │\n│  • Developer > Environments   • op run (env vars)           │\n│  • NOT automatable            • op inject (config files)    │\n│                                                              │\n└─────────────────────────────────────────────────────────────┘\n```\n\n### Why Environments?\n\n- **Secrets never on disk** - Named pipe mount, not plaintext file\n- **Real-time sync** - Changes in 1Password instantly available\n- **Team sharing** - Grant access with granular permissions\n- **Multi-device** - Same environment works across all your machines\n\n### Setup Flow (One-Time in Desktop App)\n\n1. **Enable Developer features** → Settings > Developer > Enable Developer Experience\n2. **Create Environment** → Developer > Environments > New Environment\n3. **Import your .env** → Click Import or manually add variables\n4. **Set Mount Destination** → Destinations tab > Local .env file > Choose path\n5. **Authorize** → Confirm when prompted\n\n### Environments vs CLI: When to Use Each\n\n| Scenario | Use Environments | Use CLI (`op run`/`op inject`) |\n|----------|-----------------|-------------------------------|\n| Local development | ✅ Best choice | Works but more setup |\n| CI/CD pipelines | ❌ Can't automate creation | ✅ Service accounts |\n| Team secrets | ✅ Built-in sharing | Manual sync needed |\n| One-time scripts | Overkill | ✅ Quick and easy |\n| Template configs | N/A | ✅ `op inject` with `.tpl` |\n\n### Mounted .env vs op inject\n\n**Mounted .env (Environments):**\n```bash\n# App reads .env.local directly (named pipe, no real file)\nnpm run dev\n# Variables available automatically via dotenv\n```\n\n**op inject (CLI):**\n```bash\n# Template file with secret references (.env.template)\nDATABASE_URL=op://prod/db/url\nAPI_KEY=op://prod/api/key\n\n# Inject at runtime\nop inject -i .env.template -o .env && npm run build\n# Remember to delete .env after!\n```\n\n**op run (CLI):**\n```bash\n# Pass secrets as environment variables\nop run --env-file .env.template -- npm run build\n# No temp file created, secrets in process env only\n```\n\n### Working Example: songscript\n\nThe `songscript` project uses Environments with 9 variables mounted to `.env.local`:\n- Environment contains: `CONVEX_DEPLOY_KEY`, `ANTHROPIC_API_KEY`, etc.\n- Destination: `.env.local` (named pipe, not actual file)\n- Works seamlessly with `bun dev`, `npm run dev`, etc.\n\n### Centralized MCP Secrets (Recommended for Agents)\n\n**Problem:** Each MCP with `op://` refs triggers separate auth prompts.\n\n**Solution:** Centralize all secrets in one file, launch with `op run`.\n\n```\n~/.config/mcp-secrets/\n├── secrets.env          # All op:// refs (one auth loads all)\n└── secrets.env.example  # Template (safe to share)\n```\n\n**Wrapper scripts:**\n```bash\ncursor-secure   # op run --env-file secrets.env -- cursor\nclaude-secure   # op run --env-file secrets.env -- claude\nwith-secrets    # op run --env-file secrets.env -- <any command>\n```\n\n**MCP configs use empty env:**\n```json\n{ \"env\": {} }  // Inherits from parent process\n```\n\n### Example: Golems Configuration\n\nThe golems ecosystem uses Environments for sensitive settings:\n\n1. **Create Environment** in 1Password: `golems`\n2. **Add variables**: `NTFY_TOPIC`, `ANTHROPIC_API_KEY`, `LINEAR_API_KEY`\n3. **Mount to**: `~/.config/golems/.env`\n4. **Usage**: Scripts source the mounted file or use `op run`\n\n```bash\n# Option 1: Source mounted .env\nsource ~/.config/golems/.env\n\n# Option 2: Use op run with template\nop run --env-file ~/.config/golems/.env.template -- bun run start\n```\n\n### Important Limitations (Beta)\n\n| Limitation | Details |\n|------------|---------|\n| **UI-only creation** | Cannot create/edit environments via CLI |\n| **Platform support** | Mac and Linux only (no Windows) |\n| **Max mounts** | 10 enabled .env files per device |\n| **Concurrent reads** | May have conflicts with multiple processes |\n| **Edits in UI only** | Changes to mounted file are lost - edit in 1Password UI |\n| **Beta status** | Feature may change |\n\n### When to Use CLI Instead\n\nUse `op run` or `op inject` ([workflows/migrate-env.md](workflows/migrate-env.md)) when:\n- **CI/CD pipelines** - Need Service Accounts for automated access\n- **Scripted operations** - Creating items programmatically\n- **Template configs** - `.yml.tpl` or `.json.tpl` files with secret refs\n- **Windows** - Environments not available on Windows\n\n---\n\n## Quick Actions\n\n| What you want to do | Workflow |\n|---------------------|----------|\n| Use 1Password Environments | [workflows/use-environment.md](workflows/use-environment.md) |\n| List secrets in vault | [workflows/list-secrets.md](workflows/list-secrets.md) |\n| Add a new secret | [workflows/add-secret.md](workflows/add-secret.md) |\n| Migrate .env to 1Password | [workflows/migrate-env.md](workflows/migrate-env.md) |\n| Migrate MCP config secrets | [workflows/migrate-mcp.md](workflows/migrate-mcp.md) |\n| Fix auth/biometric issues | [workflows/troubleshoot.md](workflows/troubleshoot.md) |\n\n---\n\n## Available Scripts\n\nExecute directly - they handle errors and edge cases:\n\n| Script | Purpose | Usage |\n|--------|---------|-------|\n| `scripts/migrate-env.sh` | Migrate .env with project/service nesting | `bash ~/.claude/commands/1password/scripts/migrate-env.sh .env [--dry-run]` |\n| `scripts/scan-mcp-secrets.sh` | Find API keys in MCP configs | `bash ~/.claude/commands/1password/scripts/scan-mcp-secrets.sh` |\n\n---\n\n## Decision Tree\n\n**Setting up secrets for a project?**\n- PREFERRED: Use Environments (desktop app UI)\n- Use: [workflows/use-environment.md](workflows/use-environment.md)\n\n**Need to find a secret?**\n- Search by name, tag, or vault\n- Use: [workflows/list-secrets.md](workflows/list-secrets.md)\n\n**Adding credentials for a service?**\n- Create new item with password/API key\n- Use: [workflows/add-secret.md](workflows/add-secret.md)\n\n**Have a .env file to secure?**\n- For local dev: Use Environments (UI-based)\n- For CI/CD: Use [workflows/migrate-env.md](workflows/migrate-env.md) or `scripts/migrate-env.sh`\n\n**MCP configs have hardcoded keys?**\n- Scan and migrate to 1Password references\n- Use: [workflows/migrate-mcp.md](workflows/migrate-mcp.md)\n\n**Biometric timeout or auth problems?**\n- Token refresh, re-auth, session issues\n- Use: [workflows/troubleshoot.md](workflows/troubleshoot.md)\n\n---\n\n## Service Auto-Detection\n\nWhen migrating secrets, keys are auto-categorized:\n\n| Key prefix | Service folder |\n|------------|----------------|\n| `ANTHROPIC_*` | anthropic/ |\n| `OPENAI_*` | openai/ |\n| `SUPABASE_*` | supabase/ |\n| `DATABASE_*`, `DB_*` | db/ |\n| `STRIPE_*` | stripe/ |\n| `AWS_*` | aws/ |\n| `GITHUB_*` | github/ |\n| Other | misc/ |\n\nItem path format: `{project}/{service}/{key}`\n\n---\n\n## Vault Organization\n\n### Vault Types\n\n| Vault | Purpose | Example Items |\n|-------|---------|---------------|\n| `development` | Global dev tools | context7, github CLI tokens |\n| `Private` | Personal secrets | SSH keys, personal accounts |\n| `{project}` | Project-specific | linear API key, deploy keys |\n| `Shared` | Team secrets | Shared service accounts |\n\n### Creating Vaults\n\n```bash\n# Create project vault\nop vault create \"myproject\" --description \"MyProject secrets\" --icon buildings\n\n# Create tools vault\nop vault create \"development\" --description \"Global dev tools\" --icon gears\n```\n\n### Where to Put Secrets\n\n**Global dev tools** → `development` vault:\n- context7, MCP tools, IDE plugins\n- Used across all projects\n\n**Project-specific** → `{project}` vault:\n- Linear API keys (per workspace)\n- Deploy keys, CI/CD tokens\n- Database credentials\n\n**Personal** → `Private` vault:\n- SSH keys, personal tokens\n- Accounts only you use\n\n### Tagging Strategy\n\nUse tags for cross-vault searching and organization:\n\n```bash\n# Add tags when creating\nop item create --vault development --category \"API Credential\" \\\n  --title \"context7\" 'API_KEY[password]=xxx' \\\n  --tags \"dev-tools,mcp,documentation\"\n\n# Search by tag across all vaults\nop item list --tags \"mcp\"\nop item list --tags \"dev-tools\"\n```\n\n**Recommended tags:**\n| Tag | Use for |\n|-----|---------|\n| `dev-tools` | Development utilities |\n| `mcp` | MCP server credentials |\n| `ci-cd` | CI/CD pipeline secrets |\n| `api-key` | Third-party API keys |\n| `deploy` | Deployment credentials |\n| `{project}` | Project name for filtering |\n\n### Reference Format\n\n```bash\n# Vault/Item/Field\nop://development/context7/API_KEY\nop://myproject/linear/API_KEY\nop://Private/github/token\n```\n\n---\n\n## Safety Rules\n\n1. **Never log secret values** - Only show masked versions\n2. **Dry-run first** - Use `--dry-run` before actual migration\n3. **Don't delete .env files** - Migration creates .env.template alongside\n4. **Verify vault access** - Run `op vault list` before operations\n5. **Backup before bulk changes** - Export vault if doing large migrations\n",
       "evalCount": 3,
       "assertionCount": 10,
       "hasFixtures": false,
@@ -86,7 +86,7 @@
         "archive-snapshot",
         "cleanup-completed"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "brainlayer": {
       "name": "brainlayer",
@@ -127,7 +127,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-12"
+      "lastModified": "2026-03-14"
     },
     "brave": {
       "name": "brave",
@@ -177,7 +177,7 @@
         "interaction",
         "navigation"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "catchup": {
       "name": "catchup",
@@ -219,7 +219,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "catchup-recent": {
       "name": "catchup-recent",
@@ -232,7 +232,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "cli-agents": {
       "name": "cli-agents",
@@ -277,7 +277,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "cmux": {
       "name": "cmux",
@@ -317,7 +317,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "cmux-agents": {
       "name": "cmux-agents",
@@ -405,7 +405,7 @@
       "workflows": [
         "prompt-audit"
       ],
-      "lastModified": "2026-03-12"
+      "lastModified": "2026-03-14"
     },
     "coach": {
       "name": "coach",
@@ -571,7 +571,7 @@
         "health",
         "recruit"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "code-review": {
       "name": "code-review",
@@ -584,7 +584,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "coderabbit": {
       "name": "coderabbit",
@@ -631,7 +631,7 @@
         "security",
         "verify"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "commit": {
       "name": "commit",
@@ -673,36 +673,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
-    },
-    "community-gems": {
-      "name": "community-gems",
-      "command": "/community-gems",
-      "description": "Extract actionable gems from YouTube videos, blog posts, and community content. Use when user shares a URL, says \"extract gems\", \"what did X say about Y\", or wants to capture insights from external content. Also use proactively when relevant content surfaces during research or browsing. Chains content extraction (exa for YouTube, WebFetch for blogs) -> gem identification -> BrainLayer storage -> optional file output.",
-      "category": "Research & Context",
-      "content": "\n# Community Gems\n\n> Extract signal from noise. Turn URLs into actionable knowledge.\n\n## The Iron Law\n\n**Every gem must be ACTIONABLE or QUOTABLE.** Generic summaries are not gems. \"AI is changing fast\" is not a gem. \"Theo uses cmux browser panes as view-only observation layer while Codex runs in terminal splits\" IS a gem — it's a specific pattern you can adopt or reference.\n\n## What Is a Gem?\n\nA gem is a discrete, reusable piece of knowledge extracted from community content:\n\n| Gem Type | Example | Why It's Valuable |\n|----------|---------|-------------------|\n| **Pattern** | \"Effect-TS uses dual-publish (CJS+ESM) with package.json exports map\" | Adoptable technique |\n| **Quote** | \"Code is cheap, SOFTWARE quality isn't\" — Theo | Citable insight |\n| **Decision** | \"Anthropic denied Day of Writing, OpenAI took it\" | Strategic context |\n| **Tool/Stack** | \"Trigger.dev uses Zod schemas for all job definitions\" | Concrete recommendation |\n| **Architecture** | \"T3 = presentation, cmux MCP = transport, Codex = execution\" | Design pattern |\n| **Anti-pattern** | \"All tools vibe-coded with AI = low quality bar\" | What to avoid |\n| **Data point** | \"GPT-5.4 parallel agents are 8-10x faster than single-agent estimates\" | Quantifiable claim |\n\n**Not gems:** Vague observations, restatements of common knowledge, marketing claims without substance, opinion without reasoning.\n\n## Workflow\n\n### Step 1: Identify Content Type\n\n| URL Pattern | Content Type | Extraction Method |\n|-------------|-------------|-------------------|\n| `youtube.com/watch`, `youtu.be/` | YouTube video | `web_search_exa` with full URL as query |\n| `*.substack.com`, `medium.com`, blog URLs | Blog post | `WebFetch` on the URL |\n| `twitter.com`, `x.com` thread | Twitter thread | `web_search_exa` with full URL |\n| `github.com/.../discussions`, `github.com/.../issues` | GitHub discussion | `WebFetch` on the URL |\n| `news.ycombinator.com` | HN discussion | `WebFetch` on the URL |\n| Podcast / audio-only | Audio content | `web_search_exa` with show name + episode title |\n| Other | General web | `WebFetch`, fall back to `web_search_exa` |\n\n### Step 2: Extract Content\n\n**YouTube (exa):**\n```\nweb_search_exa(query: \"<full YouTube URL>\", num_results: 1)\n```\nReturns: title, transcript, metadata, author, date.\n\n**IMPORTANT:** `WebFetch` does NOT work for YouTube. Always use exa. If exa returns the wrong video or no transcript, try `web_search_exa(\"<video title> <author> transcript\")` as fallback.\n\n**Blog/Web (WebFetch):**\n```\nWebFetch(url: \"<blog URL>\")\n```\nReturns: full page content. If paywalled or empty, fall back to `web_search_exa(\"<URL>\")`.\n\n### Step 3: Extract Gems\n\nRead through the content and identify gems using the type table above. For each gem, capture:\n\n1. **The gem itself** — the specific insight, pattern, quote, or data point\n2. **Source attribution** — who said it, where, when\n3. **Context** — what was being discussed (1 sentence max)\n4. **Relevance** — how it connects to our ecosystem (optional, only if obvious)\n\n**Extraction rules:**\n- Prefer SPECIFIC over GENERAL. \"Use output contracts for GPT-5.4\" beats \"prompting matters.\"\n- Prefer NOVEL over OBVIOUS. Skip things any experienced dev would already know.\n- Preserve the author's framing when quoting. Don't paraphrase a good quote into mediocrity.\n- 3-10 gems per video/post is typical. Don't force it — some content has 1 gem, some has 15.\n- For long content (1h+ videos, 5000+ word posts), focus on the densest sections. Skim transitions, intros, sponsor reads.\n\n### Step 4: Store in BrainLayer\n\nFor each gem (or batch them into one store call if from the same source):\n\n```\nbrain_store(\n  content: \"Gem from '<title>' by <author> (<date>)\\nURL: <url>\\nType: <pattern|quote|decision|tool|architecture|anti-pattern|data-point>\\n\\n<gem content>\\n\\nContext: <1-sentence context>\",\n  tags: [\"gem\", \"<author-slug>\", \"<topic-tags>\", \"<gem-type>\"],\n  importance: 6-8\n)\n```\n\n**Tag convention:**\n\n| Tag | Always | Example |\n|-----|--------|---------|\n| `gem` | Yes | — |\n| Author slug | Yes | `theo-browne`, `matt-pocock`, `primeagen`, `fireship` |\n| Topic tags | Yes (1-3) | `ai-agents`, `typescript`, `terminal-tools`, `career` |\n| Gem type | Yes | `pattern`, `quote`, `decision`, `tool`, `architecture`, `anti-pattern`, `data-point` |\n| Project tag | If relevant | `golem-terminal`, `brainlayer`, `voicelayer` |\n\n**Importance guide:**\n- 6: Interesting but tangential\n- 7: Relevant to current projects or decisions\n- 8: Directly actionable or highly quotable\n- 9: Changes how we think about something (rare)\n\n### Step 5: Write Gems File (Optional)\n\nIf the user wants a file artifact, or if the content has 5+ gems worth preserving:\n\nWrite to `docs.local/research/gems/<author-slug>-<date>-<slug>.md`:\n\n```markdown\n# Gems: <Title>\n\n**Source:** <URL>\n**Author:** <Name>\n**Date:** <YYYY-MM-DD>\n**Extracted:** <today's date>\n\n## Gems\n\n### 1. <Gem title> [<type>]\n\n> <The gem — quote or description>\n\n**Context:** <1 sentence>\n**Relevance:** <How it connects to our work>\n\n### 2. <Gem title> [<type>]\n\n...\n\n## Raw Notes\n\n<Any additional context, timestamps for video gems, section references for posts>\n```\n\nCreate the `docs.local/research/gems/` directory if it doesn't exist.\n\n### Step 6: Report to User\n\nSummarize:\n- Source title, author, date\n- Number of gems extracted\n- Top 3 gems (inline, not just \"see file\")\n- BrainLayer storage confirmation\n- File path (if written)\n- Cross-references to existing knowledge (if brain_search found related gems)\n\n## Batch Mode\n\nFor multiple URLs or \"process these videos\":\n\n1. Extract content from all URLs (parallel where possible)\n2. Extract gems from each source independently\n3. Store gems per-source in BrainLayer (separate brain_store per source)\n4. Write one combined gems file if requested\n5. Report all findings in a single summary, grouped by source\n\n## Integration Points\n\n| System | How Gems Connect |\n|--------|-----------------|\n| `/youtube-pipeline` | Gems is a superset — youtube-pipeline does full digest, gems extracts actionable bits |\n| `/research` | Research may surface content worth gem-extracting |\n| BrainLayer | All gems stored for future `brain_search(\"gem theo-browne cmux\")` |\n| Portfolio | Gems with `quote` type can feed into blog posts or portfolio content |\n| Skill development | Gems with `pattern` or `architecture` type inform skill design |\n\n## Tips\n\n- **Cross-reference before storing:** `brain_search(\"<topic>\")` — avoid storing a gem you already have from a different source.\n- **Exa quirks with YouTube:** Sometimes returns a different video with similar title. Verify the returned URL matches. If wrong, try with the video ID directly: `web_search_exa(\"VIDEO_ID youtube\")`.\n- **Long videos:** For 1h+ content, ask the user \"any specific topics to focus on?\" before extracting. Otherwise extract broadly.\n- **Author consistency:** Always use the same slug for an author. Check BrainLayer: `brain_search(\"gem <author-name>\")` to see how they've been tagged before.\n- **Gem density varies wildly.** A 10-minute focused tutorial might have 8 gems. A 2-hour podcast might have 3. Quality over quantity.\n- **Don't store the full transcript.** That's what youtube-pipeline is for. Gems are the distilled signal.\n",
-      "evalCount": 3,
-      "assertionCount": 15,
-      "hasFixtures": false,
-      "evals": [
-        {
-          "name": "eval-1",
-          "assertionCount": 5,
-          "assertions": []
-        },
-        {
-          "name": "eval-2",
-          "assertionCount": 5,
-          "assertions": []
-        },
-        {
-          "name": "eval-3",
-          "assertionCount": 5,
-          "assertions": []
-        }
-      ],
-      "workflows": [],
-      "lastModified": "2026-03-13"
+      "lastModified": "2026-03-14"
     },
     "content": {
       "name": "content",
@@ -717,7 +688,7 @@
       "workflows": [
         "draft"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "context-audit": {
       "name": "context-audit",
@@ -730,7 +701,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "context-check": {
       "name": "context-check",
@@ -743,7 +714,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-11"
+      "lastModified": "2026-03-14"
     },
     "context7": {
       "name": "context7",
@@ -786,46 +757,7 @@
       "workflows": [
         "lookup"
       ],
-      "lastModified": "2026-03-10"
-    },
-    "contract-feedback": {
-      "name": "contract-feedback",
-      "command": "/contract-feedback",
-      "description": "Generate branded Hebrew contract-feedback documents from freelance agreements. BrainLayer-backed with Israeli contract law context, pricing knowledge, and branded-doc.ts rendering. NDA-safe — gitignored.",
-      "category": "Other",
-      "content": "\n# Contract Feedback Generator\n\nGenerate professional RTL Hebrew contract-feedback documents using `branded-doc.ts`.\n\n## When to Use\n\n- User shares a freelance contract/agreement and wants feedback\n- User says \"review this contract\", \"contract feedback\", \"/contract-feedback\"\n- User is negotiating terms with a client\n\n## Workflow\n\n### 1. Gather Context from BrainLayer\n\n```\nbrain_search(\"freelance contract red flags Israeli law\")\nbrain_search(\"freelance pricing rates NIS\")\nbrain_search(\"contract negotiation <client-name>\")\n```\n\nLook for: past negotiations, pricing floors, red flags research, client-specific context.\n\n### 2. Analyze the Contract\n\nRead the contract (PDF, text, or pasted content). Flag issues using these categories:\n\n| Tag | Hebrew | When |\n|-----|--------|------|\n| `remove` | להסיר | Clause is harmful or one-sided |\n| `change` | לשנות | Clause needs modification |\n| `add` | להוסיף | Missing protection the freelancer needs |\n| `narrow` | לצמצם | Scope is too broad, needs boundaries |\n| `note` | הערה | Informational — not a change request |\n\n### 3. Key Red Flags (Israeli Freelance Context)\n\n- **IP assignment without limits** — all work product, even pre-existing, transfers to client\n- **Non-compete clauses** — overly broad geographic/time scope\n- **Payment terms > net-30** — standard in Israel is net+30, push for net+15 or milestones\n- **No termination clause** — both sides need 30-day notice minimum\n- **Unlimited revisions** — scope creep risk, cap revision rounds\n- **No late payment penalty** — Israeli law allows interest on late payments\n- **Liability without cap** — cap at contract value or 2x monthly retainer\n- **Work-for-hire without credit** — negotiate portfolio rights\n- **Missing force majeure** — standard clause, especially post-COVID\n\n### 4. Pricing Knowledge\n\nBase rates (configure in `~/.config/branded-doc.json`):\n\n| Tier | Context |\n|------|---------|\n| Floor | Absolute minimum, only for long retainers |\n| Retainer | 40+ hrs/month commitment |\n| Standard | Default hourly rate |\n| Starter | Short engagements (<20 hrs) |\n| Rush/Complex | Urgent work, complex architecture, AI/ML |\n\nSet your actual rates in `~/.config/branded-doc.json` under `pricing.tiers`. Package pricing: multiply hourly by estimated hours, add 15% buffer for scope creep.\n\n### 5. Generate the JSON\n\nCreate a JSON file matching `branded-doc.ts` schema:\n\n```json\n{\n  \"title\": \"משוב על הסכם שירותים — <שם לקוח>\",\n  \"date\": \"<תאריך בעברית>\",\n  \"recipient\": \"<שם — חברה>\",\n  \"intro\": [\n    \"היי <שם>,\",\n    \"עברתי על ההסכם ששלחת. הנה הערות מסודרות — חלקן קריטיות, חלקן שיפורים.\"\n  ],\n  \"sections\": [\n    {\n      \"num\": 1,\n      \"title\": \"<כותרת הסעיף>\",\n      \"tag\": \"change\",\n      \"body\": \"<הסבר מה לשנות ולמה>\"\n    }\n  ],\n  \"pricing\": {\n    \"title\": \"מחירון מוצע\",\n    \"headers\": [\"מסלול\", \"תעריף\", \"שעות\", \"סה\\\"כ\"],\n    \"rows\": [[\"Standard\", \"XXX ₪/שעה\", \"40 שעות\", \"X,XXX ₪\"]],\n    \"note\": \"* מחירים לא כוללים מע\\\"מ\"\n  },\n  \"availability\": \"מיידי לאחר חתימה.\",\n  \"closing\": \"אשמח לדון בכל נקודה. אפשר לקבוע שיחה או להמשיך בכתב.\",\n  \"output\": \"~/Documents/freelance/feedback-<client>.html\"\n}\n```\n\n### 6. Render\n\n```bash\nbun scripts/branded-doc.ts /tmp/contract-feedback.json ~/Documents/freelance/feedback-<client>.html\n```\n\nThen open in browser: `open ~/Documents/freelance/feedback-<client>.html`\n\n### 7. Store Decision in BrainLayer\n\nAfter generating feedback:\n\n```\nbrain_store(\n  content: \"[<date>] Generated contract feedback for <client>. Key issues: <summary>. Proposed rate: <rate> NIS/hr.\",\n  tags: [\"contract-feedback\", \"freelance\", \"<client>\", \"agent:coachClaude\"],\n  importance: 7\n)\n```\n\n## Tone\n\n- Hebrew, professional but casual (formality 3/10)\n- Direct — don't hedge. \"This clause is problematic\" not \"you might want to consider\"\n- Protective of the freelancer's interests\n- Never reveal pricing floors to the client — feedback doc shows proposed rates only\n\n## Branding Config\n\nThe script reads `~/.config/branded-doc.json` for personal branding. If missing, defaults apply.\nOverride per-document via the `branding` field in JSON input.\n\n## Safety\n\n- This skill is **gitignored** — never commit client-specific pricing or contract details\n- Don't share exact rate floors in client-facing documents\n- BrainLayer stores are tagged `nda` when client-specific\n",
-      "evalCount": 2,
-      "assertionCount": 13,
-      "hasFixtures": true,
-      "evals": [
-        {
-          "name": "eval-1",
-          "assertionCount": 8,
-          "assertions": [
-            "outputs-hebrew-content",
-            "flags-ip-overreach",
-            "flags-noncompete-scope",
-            "flags-below-floor-rate",
-            "flags-payment-terms",
-            "uses-skill-tags",
-            "generates-branded-doc-json",
-            "searches-brainlayer-for-context"
-          ]
-        },
-        {
-          "name": "eval-2",
-          "assertionCount": 5,
-          "assertions": [
-            "flags-moral-rights-waiver",
-            "flags-on-call-requirement",
-            "flags-asymmetric-termination",
-            "proposes-rate-correction",
-            "stores-decision-in-brainlayer"
-          ]
-        }
-      ],
-      "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "convex": {
       "name": "convex",
@@ -875,7 +807,7 @@
         "troubleshooting",
         "user-deletion"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "create-pr": {
       "name": "create-pr",
@@ -888,7 +820,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "critique-waves": {
       "name": "critique-waves",
@@ -933,7 +865,7 @@
         "run-wave",
         "setup"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "ecosystem-health": {
       "name": "ecosystem-health",
@@ -946,7 +878,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-13"
+      "lastModified": "2026-03-14"
     },
     "email-golem": {
       "name": "email-golem",
@@ -959,7 +891,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "example-bash": {
       "name": "example-bash",
@@ -1002,7 +934,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "example-typescript": {
       "name": "example-typescript",
@@ -1045,7 +977,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "figma-loop": {
       "name": "figma-loop",
@@ -1094,7 +1026,7 @@
         "iterate",
         "setup"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "figma-swarm": {
       "name": "figma-swarm",
@@ -1129,7 +1061,7 @@
         "screen-agent",
         "setup"
       ],
-      "lastModified": "2026-03-11"
+      "lastModified": "2026-03-14"
     },
     "github": {
       "name": "github",
@@ -1170,7 +1102,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "github-research": {
       "name": "github-research",
@@ -1211,7 +1143,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "golem-install": {
       "name": "golem-install",
@@ -1305,7 +1237,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "large-plan": {
       "name": "large-plan",
@@ -1365,7 +1297,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "linkedin-post": {
       "name": "linkedin-post",
@@ -1384,7 +1316,7 @@
         "schedule",
         "topic"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "lsp": {
       "name": "lsp",
@@ -1397,7 +1329,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "never-fabricate": {
       "name": "never-fabricate",
@@ -1438,7 +1370,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "nightly-docs-update": {
       "name": "nightly-docs-update",
@@ -1493,7 +1425,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-12"
+      "lastModified": "2026-03-14"
     },
     "notify": {
       "name": "notify",
@@ -1506,7 +1438,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "ntfy": {
       "name": "ntfy",
@@ -1522,7 +1454,7 @@
         "send",
         "subscribe"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "obsidian": {
       "name": "obsidian",
@@ -1568,7 +1500,7 @@
         "search",
         "write"
       ],
-      "lastModified": "2026-03-11"
+      "lastModified": "2026-03-14"
     },
     "orchestrator-status": {
       "name": "orchestrator-status",
@@ -1581,7 +1513,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "pr-comments": {
       "name": "pr-comments",
@@ -1594,16 +1526,16 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "pr-loop": {
       "name": "pr-loop",
       "command": "/pr-loop",
       "description": "The complete PR loop — branch, implement, test, commit, push, PR, WAIT FOR REVIEW, fix, merge, cleanup. Includes PR creation and review comment fetching. Use whenever creating a PR or finishing work. This is NOT optional. Every change goes through this loop. No exceptions.",
       "category": "Development",
-      "content": "\n# PR Loop\n\n> The full loop. Not \"create PR.\" Not \"push and move on.\" The FULL loop through MERGED.\n\n## The Iron Law\n\n```\nMISSION = MERGED\nNot \"tests pass.\" Not \"PR created.\" Not \"pushed.\"\nDone = PR merged + branch deleted + main pulled.\n```\n\n## The Full Loop\n\n```\n1. BRANCH    git checkout main && git pull && git checkout -b feat/name\n2. IMPLEMENT Write code (invoke /superpowers:test-driven-development)\n3. TEST      Run full test suite — ALL must pass\n4. VERIFY    Invoke /superpowers:verification-before-completion\n5. COMMIT    git add <specific files> && git commit (invoke /commit)\n6. PUSH      git push -u origin feat/name\n7. PR        Create PR (see \"Creating the PR\" below)\n8. REVIEW    Fetch + read review comments (see \"Reading Reviews\" below)\n9. FIX       Address real bugs from review\n10. MERGE    gh pr merge <N> --squash --delete-branch\n11. CLEANUP  git checkout main && git pull\n```\n\n---\n\n## Step 7: Creating the PR\n\n### Prerequisites\n\n- `gh` CLI installed (`brew install gh`)\n- Authenticated: `gh auth login`\n- On a feature/fix branch (not main/master/dev)\n- All changes committed\n\n### Create the PR\n\n```bash\n# Push branch first\ngit push -u origin HEAD\n\n# Create PR with structured body\ngh pr create --title \"feat: description\" --body \"$(cat <<'EOF'\n## Summary\n- What changed and why\n\n## Test plan\n- [ ] Tests pass\n- [ ] Manual verification done\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n)\"\n```\n\n### Edge Cases\n\n- **On main/dev/master**: Don't create PR. Switch to a branch first.\n- **Uncommitted changes**: Commit first.\n- **PR already exists**: Use `gh pr view` to check, don't create duplicate.\n- **Custom base branch**: `gh pr create --base dev`\n\n---\n\n## Step 8: REVIEW (The Critical Step)\n\n**This is NOT optional. This is NOT \"auto-merge.\"**\n\n### For private repos (no bot reviewers):\n\n```bash\n# Option A: Use coderabbit:code-reviewer subagent\nAgent(subagent_type=\"coderabbit:code-reviewer\", prompt=\"Review PR #N\")\n\n# Option B: Use cr CLI\ncr review --plain\n```\n\n### For public repos (bot reviewers configured):\n\n```bash\n# Option A (preferred): Use /loop to poll for review comments\n# /loop 2m gh pr view <N> --comments | tail -20\n\n# Option B: Use CronCreate to schedule review checks\n# CronCreate(schedule=\"*/2 * * * *\", command=\"gh pr view <N> --comments | tail -20\")\n\n# Option C (manual): Wait and check once\nsleep 90\ngh pr view <N> --comments\n```\n\n### Reading Review Comments\n\nFetch comments from all review sources with full context:\n\n```bash\n# Quick view of all comments\ngh pr view <N> --comments\n\n# Detailed: get review comments with diff context\ngh api repos/{owner}/{repo}/pulls/{N}/comments\n```\n\n**Review sources (coverage stack):**\n\n| Source | Type | How to Trigger / Check |\n|--------|------|----------------------|\n| CodeRabbit | AI review + auto-summaries | Auto on PR. Also: CodeRabbit plugin or `cr review --plain` |\n| Codex Cloud | AI code review (GPT-5.2-codex) | `gh pr comment <N> --body \"@codex review\"` or comment manually on GitHub. Auto-reviews if enabled in Codex settings. Reads AGENTS.md \"Review guidelines\". Flags P0/P1 by default. |\n| Cursor Bugbot | Bug detection | `gh pr comment <N> --body \"@cursor @bugbot review\"` or comment manually on GitHub. For re-review after fixes: `gh pr comment <N> --body \"@cursor @bugbot re-review\"`. Bot responds as `cursor[bot]`. |\n| Greptile | AI review + codebase understanding | Greptile Claude Code plugin: `list_merge_request_comments` (trial may expire) |\n| DeepSource | Static analysis | Check via CI status |\n\n**IMPORTANT: Trigger BOTH Codex Cloud AND Cursor Bugbot on EVERY PR.** Comment `@codex review` and `@cursor @bugbot review` on the PR. Don't wait for auto-detection. After fixing review feedback, trigger `@codex review` and `@cursor @bugbot re-review` for another pass.\n\n```bash\n# Shell fallback for CLIs without native review-bot tools\ngh pr comment <N> --body \"@codex review\"\ngh pr comment <N> --body \"@cursor @bugbot review\"\n\n# After review fixes, request another pass\ngh pr comment <N> --body \"@codex review\"\ngh pr comment <N> --body \"@cursor @bugbot re-review\"\n```\n\n**Codex Cloud is enabled on:** EtanHey/voicelayer, EtanHey/orchestrator, EtanHey/golems, EtanHey/brainlayer.\n\n### Classify each review comment:\n\n| Type | Action |\n|------|--------|\n| **Real bug** | FIX immediately. Push fix. Re-review. |\n| **Security issue** | FIX immediately. This is critical. |\n| **Style preference** | Fix if genuinely better. Skip if bikeshed. |\n| **Over-engineering suggestion** | SKIP. Note why in PR comment. |\n| **False positive** | SKIP. Note why. |\n\n**Severity assessment:**\n- **HIGH** = real bug → must fix before merge\n- **MEDIUM** = valid improvement → fix if straightforward\n- **LOW** = style/nitpick → fix only if genuinely better\n- **INFO** = skip\n\nMax 3 review-fix rounds — skip persistent nitpicks after that.\n\n### After addressing reviews:\n\n```bash\ngit add <files> && git commit -m \"fix: address review feedback\"\ngit push\n# Wait for another review cycle if changes were significant\n```\n\n### Only THEN merge:\n\n```bash\ngh pr merge <N> --squash --delete-branch\ngit checkout main && git pull\n```\n\n### After Merge: Update Tracking (MANDATORY)\n\n**Every merged PR MUST update its tracking. No exceptions.**\n\n1. **Collab file** — If this PR is part of a collab, update the task board status to ✅ Done with PR number\n2. **Roadmap** — If this PR completes a roadmap phase, update `~/Gits/orchestrator/roadmap/README.md`\n3. **BrainLayer** — `brain_store` what changed and why (tagged `pr-merged`, `<project>`)\n\n```\nWRONG: Merge PR, exit silently               ← Tracking drift!\nWRONG: \"I'll update the collab later\"         ← You won't. Do it NOW.\nWRONG: Only update one of collab/roadmap/BL   ← Update ALL relevant trackers.\n```\n\nIf you are an autonomous agent, this step is NON-NEGOTIABLE. The orchestrator should NEVER discover completed work by accident.\n\n---\n\n## What NOT To Do\n\n```\nWRONG: gh pr create && gh pr merge --auto    ← No review!\nWRONG: gh pr create && gh pr merge --squash  ← Same message, no review!\nWRONG: \"PR created, done!\"                   ← Mission is MERGED, not created\nWRONG: Skip review \"because it's a small change\" ← Small changes break things too\n```\n\n## Finishing a Branch (Alternative Endings)\n\nNot every branch goes through the full PR flow. When implementation is done:\n\n1. **Verify tests pass** before offering options\n2. **Present options:**\n\n| Option | When to Use | Commands |\n|--------|-------------|----------|\n| **Create PR** (default) | Most cases — full review loop | Continue with steps 7-11 above |\n| **Merge locally** | Small team, already reviewed | `git checkout main && git merge <branch> && git branch -d <branch>` |\n| **Keep as-is** | Need to park work | Just stop. Worktree preserved. |\n| **Discard** | Wrong approach, start over | Requires typed \"discard\" confirmation. `git branch -D <branch>` |\n\n**Worktree cleanup:** For options 1 (after merge), 3 (never), and 4 (after discard):\n```bash\n# Check if in worktree\ngit worktree list | grep $(git branch --show-current)\n# If yes, after merging/discarding:\ngit worktree remove <worktree-path>\n```\n\n---\n\n---\n\n## After Merge: Store Component Reasoning\n\nFor every NEW file > 50 lines created in this PR:\n1. Read `~/Gits/orchestrator/standards/component-reasoning-template.md`\n2. Fill in the schema for the new component\n3. Run `brain_store` with the filled schema\n4. Tag: `[\"component-reasoning\", \"{repo}\", \"{file-slug}\", \"pr-{number}\"]`\n\n**Why this matters:** Future Claude sessions spend zero time opening files to understand \"why was X built this way.\" The reasoning is in BrainLayer, queryable in <1 second.\n\n**Threshold:** Files > 50 lines or files with non-obvious architecture decisions (why pure function? why no LLM calls? why merged instead of split?).\n\n---\n\n## Composability\n\nThis skill is referenced by:\n- `/large-plan` — every phase goes through this loop\n- `/commit` — commit is step 5, this skill is the FULL loop\n- Collab files — all autonomous work requires this loop\n\nThis skill references:\n- `/commit` — step 5 (commit with CodeRabbit review)\n- `/superpowers:test-driven-development` — step 2 (implement with TDD)\n- `/superpowers:verification-before-completion` — step 4 (verify before claiming)\n- `/never-fabricate` — never claim review is green without reading it\n\n## Quick Reference\n\n```bash\n# The whole loop in commands:\ngit checkout main && git pull\ngit checkout -b feat/my-feature\n# ... implement with TDD ...\nbun test  # or npm test\ngit add src/changed-file.ts tests/new-test.ts\ngit commit -m \"feat: description\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\"\ngit push -u origin feat/my-feature\ngh pr create --title \"feat: description\" --body \"## Summary\\n...\"\n# WAIT for review (60-90s for bots, or run coderabbit:code-reviewer)\ngh pr view <N> --comments  # READ the review\n# Fix any real bugs, push again if needed\ngh pr merge <N> --squash --delete-branch\ngit checkout main && git pull\n```\n",
-      "evalCount": 3,
-      "assertionCount": 11,
+      "content": "\n# PR Loop\n\n> The full loop. Not \"create PR.\" Not \"push and move on.\" The FULL loop through MERGED.\n\n## The Iron Law\n\n```\nMISSION = MERGED\nNot \"tests pass.\" Not \"PR created.\" Not \"pushed.\"\nDone = PR merged + branch deleted + main pulled.\n```\n\n## The Full Loop\n\n```\n1. BRANCH    git checkout main && git pull && git checkout -b feat/name\n2. IMPLEMENT Write code (invoke /superpowers:test-driven-development)\n3. TEST      Run full test suite — ALL must pass\n4. VERIFY    Invoke /superpowers:verification-before-completion\n5. COMMIT    git add <specific files> && git commit (invoke /commit)\n6. PUSH      git push -u origin feat/name\n7. PR        Create PR (see \"Creating the PR\" below)\n8. REVIEW    Fetch + read review comments (see \"Reading Reviews\" below)\n9. FIX       Address real bugs from review\n10. MERGE    gh pr merge <N> --squash --delete-branch\n11. CLEANUP  git checkout main && git pull\n```\n\n---\n\n## Step 7: Creating the PR\n\n### Prerequisites\n\n- `gh` CLI installed (`brew install gh`)\n- Authenticated: `gh auth login`\n- On a feature/fix branch (not main/master/dev)\n- All changes committed\n\n### Create the PR\n\n```bash\n# Push branch first\ngit push -u origin HEAD\n\n# Create PR with structured body\ngh pr create --title \"feat: description\" --body \"$(cat <<'EOF'\n## Summary\n- What changed and why\n\n## Test plan\n- [ ] Tests pass\n- [ ] Manual verification done\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n)\"\n```\n\n### Edge Cases\n\n- **On main/dev/master**: Don't create PR. Switch to a branch first.\n- **Uncommitted changes**: Commit first.\n- **PR already exists**: Use `gh pr view` to check, don't create duplicate.\n- **Custom base branch**: `gh pr create --base dev`\n\n---\n\n## Step 8: REVIEW (The Critical Step)\n\n**This is NOT optional. This is NOT \"auto-merge.\"**\n\n### NEVER Merge With 0 Reviews\n\n```bash\n# Check BEFORE merging — empty reviewDecision + <2 comments = nobody looked\ngh pr view <N> --json reviewDecision,comments\n\n# CLEAN status with no reviews ≠ approved. It means NOBODY LOOKED.\n# Wait minimum 10-15 min after requesting reviews before considering merge.\n```\n\n| Bot | Expected time | Notes |\n|-----|--------------|-------|\n| CodeRabbit | 2-5 min | Auto-reviews on push |\n| Greptile | Needs OSS approval | Manual activation |\n| Macroscope | Needs activation | Auto-reviews once installed |\n\n**If `reviewDecision` is empty and `comments < 2` → DO NOT MERGE.**\n\n### Step 8a: Invoke Reviewers\n\nAlways explicitly request reviews. Don't wait for auto-detection.\n\n```bash\n# Invoke all available reviewers (do this right after PR creation)\ngh pr comment <N> --body \"@coderabbitai review\"\ngh pr comment <N> --body \"@greptileai review\"\ngh pr comment <N> --body \"@codex review\"\ngh pr comment <N> --body \"@cursor @bugbot review\"\n```\n\n### For private repos (no bot reviewers):\n\n```bash\n# Option A: Use coderabbit:code-reviewer subagent\nAgent(subagent_type=\"coderabbit:code-reviewer\", prompt=\"Review PR #N\")\n\n# Option B: Use cr CLI\ncr review --plain\n```\n\n### For public repos (bot reviewers configured):\n\n```bash\n# Option A (preferred): Use /loop to poll for review comments\n# /loop 2m gh pr view <N> --comments | tail -20\n\n# Option B: Use CronCreate to schedule review checks\n# CronCreate(schedule=\"*/2 * * * *\", command=\"gh pr view <N> --comments | tail -20\")\n\n# Option C (manual): Wait and check once\nsleep 90\ngh pr view <N> --comments\n```\n\n### Reading Review Comments\n\nFetch comments from all review sources with full context:\n\n```bash\n# Quick view of all comments\ngh pr view <N> --comments\n\n# Detailed: get review comments with diff context\ngh api repos/{owner}/{repo}/pulls/{N}/comments\n```\n\n**Review sources (coverage stack):**\n\n| Source | Type | How to Trigger / Check |\n|--------|------|----------------------|\n| CodeRabbit | AI review + auto-summaries | Auto on PR. Also: CodeRabbit plugin or `cr review --plain` |\n| Codex Cloud | AI code review (GPT-5.2-codex) | `gh pr comment <N> --body \"@codex review\"` or comment manually on GitHub. Auto-reviews if enabled in Codex settings. Reads AGENTS.md \"Review guidelines\". Flags P0/P1 by default. |\n| Cursor Bugbot | Bug detection | `gh pr comment <N> --body \"@cursor @bugbot review\"` or comment manually on GitHub. For re-review after fixes: `gh pr comment <N> --body \"@cursor @bugbot re-review\"`. Bot responds as `cursor[bot]`. |\n| Greptile | AI review + codebase understanding | Comment `@greptileai review`. Needs OSS activation. |\n| DeepSource | Static analysis | Check via CI status |\n\n**After fixing review feedback, trigger re-review on every reviewer:**\n\n```bash\ngh pr comment <N> --body \"@coderabbitai review\"\ngh pr comment <N> --body \"@codex review\"\ngh pr comment <N> --body \"@cursor @bugbot re-review\"\n```\n\n**Codex Cloud is enabled on:** EtanHey/voicelayer, EtanHey/orchestrator, EtanHey/golems, EtanHey/brainlayer.\n\n### Classify each review comment:\n\n| Type | Action |\n|------|--------|\n| **MAJOR** (real bug, security) | FIX immediately. Push fix. Re-review. |\n| **TRIVIAL** (style, nitpick) | Fix if genuinely better. Skip if bikeshed. |\n| **OUT OF CONTEXT** (wrong assumption, misunderstood design) | Reply with design rationale. Do NOT blindly fix. |\n\nPush back on wrong suggestions with evidence. Blind agreement wastes time and corrupts the codebase.\n\n**Severity assessment:**\n- **HIGH** = real bug → must fix before merge\n- **MEDIUM** = valid improvement → fix if straightforward\n- **LOW** = style/nitpick → fix only if genuinely better\n- **INFO** = skip\n\n### Teaching Each Reviewer (permanent compounding knowledge)\n\nEvery PR is an opportunity to make reviewers smarter. Use the right format for each.\n\n| Reviewer | How it learns | Reply format | What persists |\n|----------|--------------|--------------|--------------|\n| **CodeRabbit** | `@coderabbitai` replies → explicit Learnings | `@coderabbitai [explain design]. See [doc]. Please learn this for future reviews.` | Permanent Learning applied to ALL future reviews on this repo |\n| **Greptile** | Observes all reply patterns passively | Any plain reply explaining the design decision | Updates internal preference model — stops flagging dismissed patterns |\n| **Macroscope** | `macroscope.md` file in repo root (no reply-learning) | Add rule to `macroscope.md` file | Persists as a repo-level rule, referenced in every future review |\n\n**CodeRabbit** (explicit — most powerful):\n```\n@coderabbitai This uses child→parent references (K8s ownerReferences pattern).\nSee phase5-v2-synthesis.md Decision 2. The parent is reconstructed from children,\nnot stored as a separate record. Please learn this for future reviews.\n\n# Bad format — teaches nothing:\nI'll leave this as-is.   ← CodeRabbit will flag it again on the next PR.\n```\n\n**Greptile** (passive — just reply naturally):\n```\nIn our domain layer, we prefer detailed functions for clarity — length rules don't apply here.\n# Greptile reads this and stops flagging long functions in domain/ going forward.\n```\n\n**Macroscope** (file-based — add to `macroscope.md`):\n```markdown\n## macroscope.md\n- Child→parent references are intentional (K8s ownerReferences pattern)\n- Domain layer functions may be long for clarity — don't flag length in src/domain/\n- We don't document internal utilities with JSDoc\n```\n\n**Rule:** When any reviewer comments on intentional design → always reply with context. Never just \"I'll leave this.\" The reply compounds knowledge across every future PR.\n\n### Multi-Round Loop (minimum 2 rounds before merge)\n\n```\nRound 1: Push fixes → request re-review from all bots\nRound 2: Read re-review → fix any new issues found\nRound 3+: Only if new issues surfaced. Max 3 rounds for nitpicks.\n```\n\nCodeRabbit auto-re-reviews on new pushes. For others, comment `@bot re-review` explicitly.\n\n**If reviewer finds new issues in round 2 → fix and go to round 3. Never merge with open issues.**\n\n### Sanitize Before PR (CRITICAL)\n\nNever put real client data in public PRs:\n- ❌ Real phone numbers, JIDs, group names, client names\n- ❌ Real Supabase row IDs or user UUIDs\n- ✅ Realistic but fake examples: `+1-555-0123`, `client-abc-123`, `Group: Example Co`\n\nSanitize in PR description, code comments, test fixtures, and commit messages.\n\n### After addressing reviews:\n\n```bash\ngit add <files> && git commit -m \"fix: address review feedback\"\ngit push\n# Wait for re-review — CodeRabbit auto-triggers, others need manual @mention\n```\n\n### Only THEN merge (after minimum 2 review rounds):\n\n```bash\n# Verify reviews are actually in before merging\ngh pr view <N> --json reviewDecision,comments\n\ngh pr merge <N> --squash --delete-branch\ngit checkout main && git pull\n```\n\n### After Merge: Update Tracking (MANDATORY)\n\n**Every merged PR MUST update its tracking. No exceptions.**\n\n1. **Collab file** — If this PR is part of a collab, update the task board status to ✅ Done with PR number\n2. **Roadmap** — If this PR completes a roadmap phase, update `~/Gits/orchestrator/roadmap/README.md`\n3. **BrainLayer** — `brain_store` what changed and why (tagged `pr-merged`, `<project>`)\n\n```\nWRONG: Merge PR, exit silently               ← Tracking drift!\nWRONG: \"I'll update the collab later\"         ← You won't. Do it NOW.\nWRONG: Only update one of collab/roadmap/BL   ← Update ALL relevant trackers.\n```\n\nIf you are an autonomous agent, this step is NON-NEGOTIABLE. The orchestrator should NEVER discover completed work by accident.\n\n---\n\n## What NOT To Do\n\n```\nWRONG: gh pr create && gh pr merge --auto    ← No review!\nWRONG: gh pr create && gh pr merge --squash  ← Same message, no review!\nWRONG: \"PR created, done!\"                   ← Mission is MERGED, not created\nWRONG: Skip review \"because it's a small change\" ← Small changes break things too\n```\n\n## Finishing a Branch (Alternative Endings)\n\nNot every branch goes through the full PR flow. When implementation is done:\n\n1. **Verify tests pass** before offering options\n2. **Present options:**\n\n| Option | When to Use | Commands |\n|--------|-------------|----------|\n| **Create PR** (default) | Most cases — full review loop | Continue with steps 7-11 above |\n| **Merge locally** | Small team, already reviewed | `git checkout main && git merge <branch> && git branch -d <branch>` |\n| **Keep as-is** | Need to park work | Just stop. Worktree preserved. |\n| **Discard** | Wrong approach, start over | Requires typed \"discard\" confirmation. `git branch -D <branch>` |\n\n**Worktree cleanup:** For options 1 (after merge), 3 (never), and 4 (after discard):\n```bash\n# Check if in worktree\ngit worktree list | grep $(git branch --show-current)\n# If yes, after merging/discarding:\ngit worktree remove <worktree-path>\n```\n\n---\n\n---\n\n## After Merge: Store Component Reasoning\n\nFor every NEW file > 50 lines created in this PR:\n1. Read `~/Gits/orchestrator/standards/component-reasoning-template.md`\n2. Fill in the schema for the new component\n3. Run `brain_store` with the filled schema\n4. Tag: `[\"component-reasoning\", \"{repo}\", \"{file-slug}\", \"pr-{number}\"]`\n\n**Why this matters:** Future Claude sessions spend zero time opening files to understand \"why was X built this way.\" The reasoning is in BrainLayer, queryable in <1 second.\n\n**Threshold:** Files > 50 lines or files with non-obvious architecture decisions (why pure function? why no LLM calls? why merged instead of split?).\n\n---\n\n## Composability\n\nThis skill is referenced by:\n- `/large-plan` — every phase goes through this loop\n- `/commit` — commit is step 5, this skill is the FULL loop\n- Collab files — all autonomous work requires this loop\n\nThis skill references:\n- `/commit` — step 5 (commit with CodeRabbit review)\n- `/superpowers:test-driven-development` — step 2 (implement with TDD)\n- `/superpowers:verification-before-completion` — step 4 (verify before claiming)\n- `/never-fabricate` — never claim review is green without reading it\n\n## Quick Reference\n\n```bash\n# The whole loop in commands:\ngit checkout main && git pull\ngit checkout -b feat/my-feature\n# ... implement with TDD ...\nbun test  # or npm test\ngit add src/changed-file.ts tests/new-test.ts\ngit commit -m \"feat: description\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\"\ngit push -u origin feat/my-feature\ngh pr create --title \"feat: description\" --body \"## Summary\\n...\"\n# WAIT for review (60-90s for bots, or run coderabbit:code-reviewer)\ngh pr view <N> --comments  # READ the review\n# Fix any real bugs, push again if needed\ngh pr merge <N> --squash --delete-branch\ngit checkout main && git pull\n```\n",
+      "evalCount": 6,
+      "assertionCount": 21,
       "hasFixtures": true,
       "evals": [
         {
@@ -1634,10 +1566,38 @@
             "review-required-even-for-small-changes",
             "does-not-stop-at-pr-creation"
           ]
+        },
+        {
+          "name": "eval-4",
+          "assertionCount": 3,
+          "assertions": [
+            "refuses-merge-with-zero-reviews",
+            "distinguishes-clean-from-approved",
+            "waits-or-invokes-reviewers"
+          ]
+        },
+        {
+          "name": "eval-5",
+          "assertionCount": 4,
+          "assertions": [
+            "uses-coderabbitai-mention",
+            "includes-design-rationale",
+            "requests-learning-for-future-reviews",
+            "does-not-just-dismiss"
+          ]
+        },
+        {
+          "name": "eval-6",
+          "assertionCount": 3,
+          "assertions": [
+            "does-not-merge-immediately-after-fix-push",
+            "requests-re-review-after-fixes",
+            "enforces-minimum-two-rounds"
+          ]
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-14"
+      "lastModified": "2026-03-15"
     },
     "prd": {
       "name": "prd",
@@ -1678,7 +1638,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "prd-manager": {
       "name": "prd-manager",
@@ -1717,7 +1677,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "presentation-builder": {
       "name": "presentation-builder",
@@ -1756,7 +1716,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "project-context": {
       "name": "project-context",
@@ -1769,7 +1729,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "railway": {
       "name": "railway",
@@ -1788,7 +1748,7 @@
         "status",
         "variables"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "ralph-commit": {
       "name": "ralph-commit",
@@ -1801,7 +1761,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "research": {
       "name": "research",
@@ -1843,7 +1803,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "skills": {
       "name": "skills",
@@ -1887,7 +1847,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "test-plan": {
       "name": "test-plan",
@@ -1932,7 +1892,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "video-showcase": {
       "name": "video-showcase",
@@ -1976,7 +1936,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "voice-sessions": {
       "name": "voice-sessions",
@@ -2023,7 +1983,7 @@
         "quick",
         "review"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "wizard": {
       "name": "wizard",
@@ -2232,7 +2192,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "worktrees": {
       "name": "worktrees",
@@ -2258,7 +2218,7 @@
       "command": "/writing-skills",
       "description": "Use when creating new golem-powers skills, editing existing skills, or verifying skills work. Covers create skill, write skill, skill template, skill structure. NOT for: using existing skills (invoke them directly), superpowers skills (different structure).",
       "category": "Quality",
-      "content": "\n# Writing Golem-Powers Skills\n\n> Meta-skill for creating executable skills. Skills are tools that Claude can invoke and automatically execute.\n\n## Skill Structure\n\nEvery golem-powers skill MUST have this structure:\n\n```\nskills/golem-powers/<skill-name>/\n├── SKILL.md              # REQUIRED: Frontmatter + documentation\n├── CLAUDE.md             # OPTIONAL: Environment requirements, complex setup\n├── scripts/              # REQUIRED: Executable files\n│   ├── default.sh        # Pattern A: Bash script\n│   └── run.sh            # Pattern B: Wrapper for TypeScript\n├── src/                  # OPTIONAL: TypeScript source (Pattern B)\n│   └── index.ts\n├── package.json          # OPTIONAL: Required if using TypeScript\n├── bun.lock              # OPTIONAL: Required if using TypeScript\n└── workflows/            # OPTIONAL: Multi-step procedures\n    ├── create.md\n    └── verify.md\n```\n\n### SKILL.md Frontmatter (REQUIRED)\n\n```yaml\n---\nname: <skill-name>\ndescription: <when to use this skill - shown in skill discovery>\nexecute: scripts/default.sh  # Path to script Claude runs on invocation\n---\n```\n\nThe `execute:` field is what makes a skill executable. When Claude loads a skill with `execute:` frontmatter, it MUST run that script IMMEDIATELY via Bash before any other action.\n\n---\n\n## Dual Execution Patterns\n\n### Pattern A: Bash Script\n\nBest for: Simple CLI wrappers, no dependencies, quick operations.\n\n**Frontmatter:**\n```yaml\nexecute: scripts/review.sh\n```\n\n**Structure:**\n```\nskill-name/\n├── SKILL.md\n└── scripts/\n    └── review.sh    # chmod +x\n```\n\n**Script conventions:**\n- Scripts output Markdown for Claude to parse\n- Use `set -euo pipefail` for safety\n- Exit 0 on success, non-zero on failure\n- Print errors to stderr, results to stdout\n- **MUST use BASH_SOURCE for path detection** (see Path Standard below)\n\n**Example script:**\n```bash\n#!/usr/bin/env bash\nset -euo pipefail\n\n# REQUIRED: Self-detect script location (works from any cwd)\nSCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nSKILL_DIR=\"$(dirname \"$SCRIPT_DIR\")\"\n\necho \"## Review Results\"\necho \"\"\nsome-cli-tool review --format markdown\n```\n\n---\n\n### Pattern B: TypeScript/Bun\n\nBest for: Complex logic, API calls, type safety, structured data processing.\n\n**Frontmatter:**\n```yaml\nexecute: scripts/run.sh --action=default\n```\n\n**Structure:**\n```\nskill-name/\n├── SKILL.md\n├── scripts/\n│   └── run.sh       # Wrapper that calls bun\n├── src/\n│   └── index.ts     # Main TypeScript file\n├── package.json\n└── bun.lock\n```\n\n**The wrapper script (scripts/run.sh):**\n```bash\n#!/usr/bin/env bash\nset -euo pipefail\n\n# REQUIRED: Self-detect script location (works from any cwd)\nSCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nSKILL_DIR=\"$(dirname \"$SCRIPT_DIR\")\"\n\ncd \"$SKILL_DIR\"\nbun run src/index.ts \"$@\"\n```\n\n**TypeScript requirements:**\n- Use Bun runtime (fast, TypeScript-native)\n- Accept CLI arguments via `process.argv`\n- Output Markdown or JSON to stdout\n- Handle errors gracefully with exit codes\n\n---\n\n## CLI Pattern (for TypeScript skills)\n\nUse flags to support multiple operations in one skill:\n\n### --action Flag\n\n```bash\nexecute: scripts/run.sh --action=default\n```\n\nAvailable actions defined in your TypeScript:\n```typescript\nconst action = process.argv.find(a => a.startsWith('--action='))?.split('=')[1] || 'default';\n\nswitch (action) {\n  case 'default':\n    // Main skill behavior\n    break;\n  case 'verify':\n    // Verification mode\n    break;\n  case 'list':\n    // List mode\n    break;\n}\n```\n\n### --env Flag\n\nFor environment selection:\n```bash\nscripts/run.sh --action=deploy --env=prod\n```\n\n```typescript\nconst env = process.argv.find(a => a.startsWith('--env='))?.split('=')[1] || 'dev';\n```\n\n---\n\n## Execution Rule\n\n**CRITICAL:** When loading a golem-powers skill with `execute:` frontmatter, Claude MUST run that script IMMEDIATELY via Bash before any other action.\n\nThis means:\n1. Claude loads the skill SKILL.md\n2. Claude sees `execute: scripts/foo.sh`\n3. Claude IMMEDIATELY runs `bash ~/.claude/commands/<skill>/scripts/foo.sh`\n4. Claude reads the output\n5. Only THEN does Claude proceed with other actions\n\nThis ensures skills are executable tools, not just documentation.\n\n---\n\n## Quick Actions\n\n| What you want | Workflow |\n|---------------|----------|\n| Create a new skill | [workflows/create.md](workflows/create.md) |\n| Audit skill structure | [workflows/audit.md](workflows/audit.md) |\n\n---\n\n## Template Generator\n\nUse the included script to scaffold new skills:\n\n```bash\nbash ~/.claude/commands/writing-skills/scripts/create-skill.sh \\\n  --name=my-skill \\\n  --type=bash\n```\n\nOptions:\n- `--name=<skill-name>` (required): Name for the new skill\n- `--type=bash|typescript` (required): Execution pattern\n- `--output=<path>` (optional): Output directory (default: ./skills/golem-powers/)\n\nThis creates:\n- Pattern A (bash): `SKILL.md`, `scripts/default.sh`\n- Pattern B (typescript): `SKILL.md`, `scripts/run.sh`, `src/index.ts`, `package.json`\n\n---\n\n## Examples\n\nSee working examples in this repo:\n- `skills/golem-powers/example-bash/` - Simple bash skill\n- `skills/golem-powers/example-typescript/` - TypeScript/Bun skill\n\n---\n\n## Safety Rules\n\n1. **Always chmod +x** - All scripts must be executable\n2. **Test before commit** - Run `shellcheck` on all .sh files\n3. **Output Markdown** - Scripts should return Markdown Claude can parse\n4. **Exit codes matter** - 0 = success, non-zero = failure\n5. **Use BASH_SOURCE pattern** - All scripts MUST self-detect their location\n\n## Path Standard (CRITICAL)\n\nAll skill scripts MUST use this pattern for portability:\n\n```bash\n#!/usr/bin/env bash\nset -euo pipefail\n\n# REQUIRED: Self-detect script location (works from any cwd)\nSCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nSKILL_DIR=\"$(dirname \"$SCRIPT_DIR\")\"\n\n# Now use absolute paths relative to skill\nsource \"$SKILL_DIR/config.sh\"  # If needed\n```\n\n**For project detection** (when script needs prd-json/, package.json, etc.):\n\n```bash\n# Walk up from cwd to find project root\nfind_project_root() {\n    local dir=\"$PWD\"\n    while [[ ! -d \"$dir/prd-json\" && \"$dir\" != \"/\" ]]; do\n        dir=\"$(dirname \"$dir\")\"\n    done\n    if [[ -d \"$dir/prd-json\" ]]; then\n        echo \"$dir\"\n    else\n        echo \"\"\n    fi\n}\n\nPROJECT_ROOT=\"$(find_project_root)\"\nif [[ -z \"$PROJECT_ROOT\" ]]; then\n    echo \"Error: Cannot find prd-json/ directory\" >&2\n    exit 1\nfi\n```\n\n**Why this matters:**\n- Skills are symlinked in `~/.claude/commands/` but users run Claude from project directories\n- Relative paths like `./scripts/foo.sh` fail when cwd != skill directory\n- BASH_SOURCE provides reliable self-location regardless of invocation context\n\nSee `contexts/skill-authoring.md` for full details.\n",
+      "content": "\n# Writing Golem-Powers Skills\n\n> Meta-skill for creating executable skills. Skills are tools that Claude can invoke and automatically execute.\n\n## Skill Structure\n\nEvery golem-powers skill MUST have this structure:\n\n```\nskills/golem-powers/<skill-name>/\n├── SKILL.md              # REQUIRED: Frontmatter + documentation\n├── CLAUDE.md             # OPTIONAL: Environment requirements, complex setup\n├── scripts/              # REQUIRED: Executable files\n│   ├── default.sh        # Pattern A: Bash script\n│   └── run.sh            # Pattern B: Wrapper for TypeScript\n├── src/                  # OPTIONAL: TypeScript source (Pattern B)\n│   └── index.ts\n├── package.json          # OPTIONAL: Required if using TypeScript\n├── bun.lock              # OPTIONAL: Required if using TypeScript\n└── workflows/            # OPTIONAL: Multi-step procedures\n    ├── create.md\n    └── verify.md\n```\n\n### SKILL.md Frontmatter (REQUIRED)\n\n```yaml\n---\nname: <skill-name>\ndescription: <when to use this skill - shown in skill discovery>\nexecute: scripts/default.sh  # Path to script Claude runs on invocation\n---\n```\n\nThe `execute:` field is what makes a skill executable. When Claude loads a skill with `execute:` frontmatter, it MUST run that script IMMEDIATELY via Bash before any other action.\n\n---\n\n## Dual Execution Patterns\n\n### Pattern A: Bash Script\n\nBest for: Simple CLI wrappers, no dependencies, quick operations.\n\n**Frontmatter:**\n```yaml\nexecute: scripts/review.sh\n```\n\n**Structure:**\n```\nskill-name/\n├── SKILL.md\n└── scripts/\n    └── review.sh    # chmod +x\n```\n\n**Script conventions:**\n- Scripts output Markdown for Claude to parse\n- Use `set -euo pipefail` for safety\n- Exit 0 on success, non-zero on failure\n- Print errors to stderr, results to stdout\n- **MUST use BASH_SOURCE for path detection** (see Path Standard below)\n\n**Example script:**\n```bash\n#!/usr/bin/env bash\nset -euo pipefail\n\n# REQUIRED: Self-detect script location (works from any cwd)\nSCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nSKILL_DIR=\"$(dirname \"$SCRIPT_DIR\")\"\n\necho \"## Review Results\"\necho \"\"\nsome-cli-tool review --format markdown\n```\n\n---\n\n### Pattern B: TypeScript/Bun\n\nBest for: Complex logic, API calls, type safety, structured data processing.\n\n**Frontmatter:**\n```yaml\nexecute: scripts/run.sh --action=default\n```\n\n**Structure:**\n```\nskill-name/\n├── SKILL.md\n├── scripts/\n│   └── run.sh       # Wrapper that calls bun\n├── src/\n│   └── index.ts     # Main TypeScript file\n├── package.json\n└── bun.lock\n```\n\n**The wrapper script (scripts/run.sh):**\n```bash\n#!/usr/bin/env bash\nset -euo pipefail\n\n# REQUIRED: Self-detect script location (works from any cwd)\nSCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nSKILL_DIR=\"$(dirname \"$SCRIPT_DIR\")\"\n\ncd \"$SKILL_DIR\"\nbun run src/index.ts \"$@\"\n```\n\n**TypeScript requirements:**\n- Use Bun runtime (fast, TypeScript-native)\n- Accept CLI arguments via `process.argv`\n- Output Markdown or JSON to stdout\n- Handle errors gracefully with exit codes\n\n---\n\n## CLI Pattern (for TypeScript skills)\n\nUse flags to support multiple operations in one skill:\n\n### --action Flag\n\n```bash\nexecute: scripts/run.sh --action=default\n```\n\nAvailable actions defined in your TypeScript:\n```typescript\nconst action = process.argv.find(a => a.startsWith('--action='))?.split('=')[1] || 'default';\n\nswitch (action) {\n  case 'default':\n    // Main skill behavior\n    break;\n  case 'verify':\n    // Verification mode\n    break;\n  case 'list':\n    // List mode\n    break;\n}\n```\n\n### --env Flag\n\nFor environment selection:\n```bash\nscripts/run.sh --action=deploy --env=prod\n```\n\n```typescript\nconst env = process.argv.find(a => a.startsWith('--env='))?.split('=')[1] || 'dev';\n```\n\n---\n\n## Execution Rule\n\n**CRITICAL:** When loading a golem-powers skill with `execute:` frontmatter, the agent MUST run that script IMMEDIATELY before any other action.\n\nThis means:\n1. Agent loads the skill SKILL.md\n2. Agent sees `execute: scripts/foo.sh`\n3. Agent IMMEDIATELY runs the script via shell — path depends on CLI:\n   - **Claude Code**: `bash ~/.claude/commands/<skill>/scripts/foo.sh`\n   - **Codex / Cursor / Gemini**: `bash ~/.agents/skills/<skill>/scripts/foo.sh`\n4. Agent reads the output\n5. Only THEN does the agent proceed with other actions\n\nThis ensures skills are executable tools, not just documentation.\n\n---\n\n## Quick Actions\n\n| What you want | Workflow |\n|---------------|----------|\n| Create a new skill | [workflows/create.md](workflows/create.md) |\n| Audit skill structure | [workflows/audit.md](workflows/audit.md) |\n\n---\n\n## Template Generator\n\nUse the included script to scaffold new skills:\n\n```bash\n# Claude Code\nbash ~/.claude/commands/writing-skills/scripts/create-skill.sh \\\n  --name=my-skill \\\n  --type=bash\n\n# Codex / Cursor / Gemini\nbash ~/.agents/skills/writing-skills/scripts/create-skill.sh \\\n  --name=my-skill \\\n  --type=bash\n```\n\nOptions:\n- `--name=<skill-name>` (required): Name for the new skill\n- `--type=bash|typescript` (required): Execution pattern\n- `--output=<path>` (optional): Output directory (default: ./skills/golem-powers/)\n\nThis creates:\n- Pattern A (bash): `SKILL.md`, `scripts/default.sh`\n- Pattern B (typescript): `SKILL.md`, `scripts/run.sh`, `src/index.ts`, `package.json`\n\n---\n\n## Examples\n\nSee working examples in this repo:\n- `skills/golem-powers/example-bash/` - Simple bash skill\n- `skills/golem-powers/example-typescript/` - TypeScript/Bun skill\n\n---\n\n## Safety Rules\n\n1. **Always chmod +x** - All scripts must be executable\n2. **Test before commit** - Run `shellcheck` on all .sh files\n3. **Output Markdown** - Scripts should return Markdown Claude can parse\n4. **Exit codes matter** - 0 = success, non-zero = failure\n5. **Use BASH_SOURCE pattern** - All scripts MUST self-detect their location\n\n## Path Standard (CRITICAL)\n\nAll skill scripts MUST use this pattern for portability:\n\n```bash\n#!/usr/bin/env bash\nset -euo pipefail\n\n# REQUIRED: Self-detect script location (works from any cwd)\nSCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nSKILL_DIR=\"$(dirname \"$SCRIPT_DIR\")\"\n\n# Now use absolute paths relative to skill\nsource \"$SKILL_DIR/config.sh\"  # If needed\n```\n\n**For project detection** (when script needs prd-json/, package.json, etc.):\n\n```bash\n# Walk up from cwd to find project root\nfind_project_root() {\n    local dir=\"$PWD\"\n    while [[ ! -d \"$dir/prd-json\" && \"$dir\" != \"/\" ]]; do\n        dir=\"$(dirname \"$dir\")\"\n    done\n    if [[ -d \"$dir/prd-json\" ]]; then\n        echo \"$dir\"\n    else\n        echo \"\"\n    fi\n}\n\nPROJECT_ROOT=\"$(find_project_root)\"\nif [[ -z \"$PROJECT_ROOT\" ]]; then\n    echo \"Error: Cannot find prd-json/ directory\" >&2\n    exit 1\nfi\n```\n\n**Why this matters:**\n- Skills are symlinked into a CLI-specific directory, but agents run from project directories:\n  - Claude Code: `~/.claude/commands/<skill>/`\n  - Codex / Cursor / Gemini: `~/.agents/skills/<skill>/`\n- Relative paths like `./scripts/foo.sh` fail when cwd != skill directory\n- BASH_SOURCE provides reliable self-location regardless of invocation context or CLI\n\nSee `contexts/skill-authoring.md` for full details.\n",
       "evalCount": 3,
       "assertionCount": 10,
       "hasFixtures": false,
@@ -2296,7 +2256,7 @@
         "audit",
         "create"
       ],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     },
     "youtube-pipeline": {
       "name": "youtube-pipeline",
@@ -2338,7 +2298,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-03-10"
+      "lastModified": "2026-03-14"
     }
   }
 }
