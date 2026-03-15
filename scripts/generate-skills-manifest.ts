@@ -13,7 +13,7 @@ const SKILLS_DIR = join(
   "Gits/golems/skills/golem-powers",
 );
 const OUTPUT = join(
-  __dirname,
+  import.meta.dirname,
   "../app/(golems)/golems/lib/skills-manifest.json",
 );
 

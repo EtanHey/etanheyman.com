@@ -62,7 +62,10 @@ const gettingStartedData: Record<string, GettingStartedStep[]> = {
       title: "Full documentation",
       description:
         "Comprehensive docs with API reference, enrichment fields, search filters, and configuration options.",
-      link: { href: "https://etanhey.github.io/brainlayer", label: "View BrainLayer Docs" },
+      link: {
+        href: "https://etanhey.github.io/brainlayer",
+        label: "View BrainLayer Docs",
+      },
     },
   ],
 
@@ -105,7 +108,8 @@ const gettingStartedData: Record<string, GettingStartedStep[]> = {
       title: "Try your first voice command",
       description:
         "Use the announce mode for a quick fire-and-forget test. The agent will speak the message aloud.",
-      command: '// In a Claude Code session:\nvoice_speak("Hello from VoiceLayer!")',
+      command:
+        '// In a Claude Code session:\nvoice_speak("Hello from VoiceLayer!")',
       language: "typescript",
     },
     {
@@ -113,7 +117,115 @@ const gettingStartedData: Record<string, GettingStartedStep[]> = {
       title: "Full documentation",
       description:
         "Complete reference for voice_speak and voice_ask, environment variables, STT backends, and session management.",
-      link: { href: "https://etanhey.github.io/voicelayer", label: "View VoiceLayer Docs" },
+      link: {
+        href: "https://etanhey.github.io/voicelayer",
+        label: "View VoiceLayer Docs",
+      },
+    },
+  ],
+
+  cmuxlayer: [
+    {
+      step: 1,
+      title: "Clone and build",
+      description:
+        "Clone the repository and build the TypeScript source. Requires Node.js 20+.",
+      command:
+        "git clone https://github.com/EtanHey/cmuxlayer.git\ncd cmuxlayer && npm install && npm run build",
+      note: "The build compiles TypeScript to dist/index.js — the MCP server entry point.",
+    },
+    {
+      step: 2,
+      title: "Configure MCP",
+      description:
+        "Add cmuxlayer to your Claude Code MCP configuration. The server exposes all 20 tools automatically.",
+      command: `// ~/.claude/settings.json
+{
+  "mcpServers": {
+    "cmux": {
+      "command": "node",
+      "args": ["/path/to/cmuxlayer/dist/index.js"]
+    }
+  }
+}`,
+      language: "json",
+    },
+    {
+      step: 3,
+      title: "Spawn your first agent",
+      description:
+        "Use the spawn_agent tool to launch a Claude instance in a new terminal pane. The agent goes through spawning → booting → ready states automatically.",
+      command: 'spawn_agent(cli: "claude", repo: "my-project")',
+      note: "Supported CLIs: claude, codex, cursor, gemini, kiro. Each spawns in its own pane with state tracking.",
+    },
+    {
+      step: 4,
+      title: "Interact with agents (V2)",
+      description:
+        "The V2 interact tool consolidates 8 agent operations into a single tool with action types: send, interrupt, model, resume, skill, usage, mcp.",
+      command:
+        'interact(agent: "agent-claude-my-project-x7k2", action: "send", message: "Run tests")',
+    },
+    {
+      step: 5,
+      title: "Run tests",
+      description:
+        "259 test assertions across 15 test files verify tool registration, agent lifecycle, V2 semantics, hierarchy, and quality tracking.",
+      command: "npm test",
+      note: "Uses Vitest. All tests run locally with mocked cmux client.",
+    },
+  ],
+
+  "whatsapp-mcp": [
+    {
+      step: 1,
+      title: "Clone the fork",
+      description:
+        "Clone this fork — it includes Unicode search fixes and dual-bridge support not in the upstream repo.",
+      command:
+        "git clone https://github.com/EtanHey/whatsapp-mcp.git\ncd whatsapp-mcp",
+    },
+    {
+      step: 2,
+      title: "Build and start the Go bridge",
+      description:
+        "The Go bridge authenticates with WhatsApp Web and stores messages in SQLite. First run shows a QR code — scan it with your phone.",
+      command: "cd whatsapp-bridge && go build && ./whatsapp-bridge",
+      note: "Default port: 8741 (personal). For business: WHATSAPP_BRIDGE_PORT=8742 go run main.go",
+    },
+    {
+      step: 3,
+      title: "Start the Python MCP server",
+      description:
+        "The MCP server connects to the SQLite database and exposes 13 tools. Auto-detects business bridge if present.",
+      command: "cd whatsapp-mcp-server && uv run main.py",
+      note: "Requires Python 3.11+ and uv. Set WHATSAPP_OWNER_JID to restrict sends to self only.",
+    },
+    {
+      step: 4,
+      title: "Configure MCP",
+      description: "Add the WhatsApp MCP server to Claude Code or Cursor.",
+      command: `// ~/.claude/settings.json
+{
+  "mcpServers": {
+    "whatsapp": {
+      "command": "uv",
+      "args": [
+        "--directory", "/path/to/whatsapp-mcp-server",
+        "run", "main.py"
+      ]
+    }
+  }
+}`,
+      language: "json",
+    },
+    {
+      step: 5,
+      title: "Search your messages",
+      description:
+        "Try a Hebrew search to verify Unicode support. The instr()-based queries work for any script.",
+      command: 'search_contacts(query: "שלום")',
+      note: "Also works: list_messages, get_chat, list_chats, download_media, send_message, send_file, send_audio_message.",
     },
   ],
 

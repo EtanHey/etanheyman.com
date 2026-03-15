@@ -13,6 +13,8 @@ export function generateStaticParams() {
   return [
     { slug: "brainlayer" },
     { slug: "voicelayer" },
+    { slug: "cmuxlayer" },
+    { slug: "whatsapp-mcp" },
     { slug: "golems" },
   ];
 }
@@ -65,7 +67,10 @@ export default async function FeaturesPage({
     sections.map(async (section) => ({
       ...section,
       codeHighlightedHtml: section.codeExample
-        ? await highlightCode(section.codeExample.code, section.codeExample.language)
+        ? await highlightCode(
+            section.codeExample.code,
+            section.codeExample.language,
+          )
         : undefined,
     })),
   );
@@ -80,7 +85,7 @@ export default async function FeaturesPage({
         <h1 className="mb-3 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
           Features
         </h1>
-        <p className="max-w-[600px] break-words font-[Nutmeg] text-[22px] font-bold leading-tight text-white md:text-[36px]">
+        <p className="max-w-[600px] font-[Nutmeg] text-[22px] leading-tight font-bold break-words text-white md:text-[36px]">
           What {project.title} can do
         </p>
       </section>

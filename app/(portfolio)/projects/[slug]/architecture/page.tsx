@@ -14,7 +14,13 @@ import { ToolList } from "../components/ToolList";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
-  return [{ slug: "brainlayer" }, { slug: "voicelayer" }, { slug: "golems" }];
+  return [
+    { slug: "brainlayer" },
+    { slug: "voicelayer" },
+    { slug: "cmuxlayer" },
+    { slug: "whatsapp-mcp" },
+    { slug: "golems" },
+  ];
 }
 
 export async function generateMetadata({
