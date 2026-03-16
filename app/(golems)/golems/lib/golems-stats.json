@@ -68,7 +68,7 @@
     {
       "skill": "cmux-agents",
       "evalCount": 9,
-      "assertionCount": 40,
+      "assertionCount": 23,
       "hasFixtures": true
     },
     {
@@ -122,7 +122,7 @@
     {
       "skill": "figma-swarm",
       "evalCount": 3,
-      "assertionCount": 15,
+      "assertionCount": 0,
       "hasFixtures": false
     },
     {
