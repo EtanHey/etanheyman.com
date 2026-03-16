@@ -108,7 +108,9 @@ function generateManifest() {
     let hasFixtures = false;
     if (existsSync(evalsPath)) {
       const evalsRaw = JSON.parse(readFileSync(evalsPath, "utf-8"));
-      evalData = evalsRaw.evals || [];
+      evalData = Array.isArray(evalsRaw)
+        ? evalsRaw
+        : (evalsRaw && typeof evalsRaw === "object" && evalsRaw.evals) || [];
       hasFixtures = existsSync(join(skillDir, "evals", "fixtures"));
     }
 
@@ -121,7 +123,8 @@ function generateManifest() {
       : [];
 
     const totalAssertions = evalData.reduce(
-      (sum, e) => sum + (e.assertions?.length || 0),
+      (sum, e) =>
+        sum + (e.assertions || []).map((a) => a.name).filter(Boolean).length,
       0,
     );
 
@@ -138,11 +141,16 @@ function generateManifest() {
       evalCount: evalData.length,
       assertionCount: totalAssertions,
       hasFixtures,
-      evals: evalData.map((e, i) => ({
-        name: e.name || `eval-${i + 1}`,
-        assertionCount: e.assertions?.length || 0,
-        assertions: (e.assertions || []).map((a) => a.name).filter(Boolean),
-      })),
+      evals: evalData.map((e, i) => {
+        const namedAssertions = (e.assertions || [])
+          .map((a) => a.name)
+          .filter(Boolean);
+        return {
+          name: e.name || `eval-${i + 1}`,
+          assertionCount: namedAssertions.length,
+          assertions: namedAssertions,
+        };
+      }),
       workflows,
       lastModified: statSync(skillMdPath).mtime.toISOString().split("T")[0],
     };
