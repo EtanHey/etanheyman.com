@@ -108,7 +108,9 @@ function generateManifest() {
     let hasFixtures = false;
     if (existsSync(evalsPath)) {
       const evalsRaw = JSON.parse(readFileSync(evalsPath, "utf-8"));
-      evalData = Array.isArray(evalsRaw) ? evalsRaw : evalsRaw.evals || [];
+      evalData = Array.isArray(evalsRaw)
+        ? evalsRaw
+        : (evalsRaw && typeof evalsRaw === "object" && evalsRaw.evals) || [];
       hasFixtures = existsSync(join(skillDir, "evals", "fixtures"));
     }
 
