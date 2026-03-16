@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-03-12T00:00:00Z",
+  "generatedAt": "2026-03-16T00:00:00Z",
   "skills": {
-    "count": 58,
-    "withSkillMd": 58,
-    "withEvals": 39,
-    "evalCoverage": "67%"
+    "count": 46,
+    "withSkillMd": 46,
+    "withEvals": 35,
+    "evalCoverage": "76%"
   },
   "packages": {
     "count": 12,
@@ -42,12 +42,6 @@
       "hasFixtures": true
     },
     {
-      "skill": "brainlayer",
-      "evalCount": 3,
-      "assertionCount": 9,
-      "hasFixtures": false
-    },
-    {
       "skill": "brave",
       "evalCount": 3,
       "assertionCount": 13,
@@ -73,9 +67,9 @@
     },
     {
       "skill": "cmux-agents",
-      "evalCount": 3,
-      "assertionCount": 18,
-      "hasFixtures": false
+      "evalCount": 9,
+      "assertionCount": 40,
+      "hasFixtures": true
     },
     {
       "skill": "coach",
@@ -96,16 +90,16 @@
       "hasFixtures": true
     },
     {
+      "skill": "context-check",
+      "evalCount": 4,
+      "assertionCount": 0,
+      "hasFixtures": false
+    },
+    {
       "skill": "context7",
       "evalCount": 3,
       "assertionCount": 9,
       "hasFixtures": false
-    },
-    {
-      "skill": "contract-feedback",
-      "evalCount": 2,
-      "assertionCount": 13,
-      "hasFixtures": true
     },
     {
       "skill": "convex",
@@ -117,18 +111,6 @@
       "skill": "critique-waves",
       "evalCount": 3,
       "assertionCount": 9,
-      "hasFixtures": false
-    },
-    {
-      "skill": "example-bash",
-      "evalCount": 3,
-      "assertionCount": 11,
-      "hasFixtures": false
-    },
-    {
-      "skill": "example-typescript",
-      "evalCount": 3,
-      "assertionCount": 11,
       "hasFixtures": false
     },
     {
@@ -193,20 +175,14 @@
     },
     {
       "skill": "pr-loop",
-      "evalCount": 3,
-      "assertionCount": 11,
+      "evalCount": 7,
+      "assertionCount": 25,
       "hasFixtures": true
     },
     {
       "skill": "prd",
       "evalCount": 3,
       "assertionCount": 9,
-      "hasFixtures": false
-    },
-    {
-      "skill": "prd-manager",
-      "evalCount": 3,
-      "assertionCount": 7,
       "hasFixtures": false
     },
     {

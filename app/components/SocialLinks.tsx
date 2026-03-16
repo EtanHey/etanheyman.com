@@ -48,7 +48,7 @@ export function SocialLinks({
       isRegionDependent: false,
     },
     {
-      href: "https://github.com/etanhey",
+      href: "https://github.com/EtanHey",
       icon: <GithubIcon />,
       label: "GitHub",
       isRegionDependent: false,
