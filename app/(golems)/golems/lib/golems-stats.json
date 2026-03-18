@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-03-17T00:00:00Z",
+  "generatedAt": "2026-03-18T00:00:00Z",
   "skills": {
-    "count": 45,
-    "withSkillMd": 45,
+    "count": 47,
+    "withSkillMd": 47,
     "withEvals": 35,
-    "evalCoverage": "78%",
+    "evalCoverage": "74%",
     "adapterLayer": "AI-agnostic (Claude, Cursor, Gemini, Codex, Kiro)"
   },
   "packages": {
@@ -19,10 +19,10 @@
     "files": 78
   },
   "brainlayer": {
-    "chunks": 312000,
-    "chunksDisplay": "312K+",
+    "chunks": 321297,
+    "chunksDisplay": "321K+",
     "mcpTools": 8,
-    "pythonTests": 846,
+    "pythonTests": 1030,
     "swiftTests": 28,
     "daemon": "BrainBar (209KB native binary)"
   },

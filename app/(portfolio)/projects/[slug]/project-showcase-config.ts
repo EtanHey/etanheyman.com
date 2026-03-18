@@ -48,8 +48,8 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "pip install brainlayer",
     isMiniSite: true,
     stats: [
-      { value: 291, suffix: "K+", label: "Indexed chunks" },
-      { value: 7, label: "MCP tools" },
+      { value: 321, suffix: "K+", label: "Indexed chunks" },
+      { value: 8, label: "MCP tools" },
       { value: 1024, label: "Vector dimensions" },
       { value: 119, label: "KG entities" },
     ],
@@ -68,9 +68,9 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
       {
         iconName: "Database",
-        title: "7 MCP Tools",
+        title: "8 MCP Tools",
         description:
-          "3 core (search, store, recall) + 4 knowledge graph (digest, entity, update, person lookup). Consolidated from 14 to 7. Old names still work via aliases.",
+          "3 core (search, store, recall) + 5 knowledge graph (digest, entity, update, expand, tags). Consolidated from 14 to 8. Old names still work via aliases.",
       },
       {
         iconName: "Brain",
@@ -112,7 +112,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { value: 2, label: "MCP tools" },
       { value: 2, label: "STT backends" },
       { value: 300, suffix: "ms", prefix: "~", label: "STT latency" },
-      { value: 236, label: "Tests passing" },
+      { value: 308, label: "Tests passing" },
     ],
     features: [
       {
@@ -299,10 +299,10 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     accent: { color: "#94A3B8", colorRgb: "148, 163, 184" },
     isMiniSite: true,
     stats: [
-      { value: 11, label: "Packages" },
+      { value: 12, label: "Packages" },
       { value: 4, label: "Domain golems" },
-      { value: 55, label: "Skills" },
-      { value: 261, suffix: "+", label: "PRs merged" },
+      { value: 47, label: "Skills" },
+      { value: 317, suffix: "+", label: "PRs merged" },
     ],
     features: [
       {
