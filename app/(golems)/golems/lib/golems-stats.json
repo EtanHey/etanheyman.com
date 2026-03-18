@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-03-16T00:00:00Z",
+  "generatedAt": "2026-03-17T00:00:00Z",
   "skills": {
-    "count": 46,
-    "withSkillMd": 46,
+    "count": 45,
+    "withSkillMd": 45,
     "withEvals": 35,
-    "evalCoverage": "76%"
+    "evalCoverage": "78%",
+    "adapterLayer": "AI-agnostic (Claude, Cursor, Gemini, Codex, Kiro)"
   },
   "packages": {
     "count": 12,
@@ -18,8 +19,24 @@
     "files": 78
   },
   "brainlayer": {
-    "chunks": 297536,
-    "chunksDisplay": "297K+"
+    "chunks": 312000,
+    "chunksDisplay": "312K+",
+    "mcpTools": 8,
+    "pythonTests": 846,
+    "swiftTests": 28,
+    "daemon": "BrainBar (209KB native binary)"
+  },
+  "voicelayer": {
+    "daemon": "MCP daemon, dual-protocol (NDJSON + MCP Content-Length)"
+  },
+  "cmuxlayer": {
+    "tests": 221,
+    "socketSpeedup": "1,423x",
+    "nativeMcp": true
+  },
+  "daemons": {
+    "count": 3,
+    "list": "BrainBar, VoiceBar MCP, cmux native MCP"
   },
   "mcp": {
     "count": 8,
