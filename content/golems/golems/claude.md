@@ -34,7 +34,7 @@ bun src/night-shift.ts
 ```
 
 **Per-repo sessions:**
-- Repository rotation: `songscript` → `zikaron` → `claude-golem`
+- Repository rotation: `songscript` → `brainlayer` → `claude-golem`
 - Scans for TODOs, linting issues, test gaps
 - Creates worktrees for isolated changes
 - Commits with auto-generated messages
@@ -65,7 +65,7 @@ Communication style:
 - **Formality:** 2/10 (very casual)
 - **Languages:** Hebrew ↔ English code-switching
 - **Tone:** Friendly with occasional sarcasm
-- **Projects:** songscript, zikaron, claude-golem
+- **Projects:** songscript, brainlayer, claude-golem
 
 State stored in `~/.brainlayer/state.json`, loaded on every session spawn.
 

@@ -8,43 +8,39 @@ Complete reference of all MCP tools exposed by the Golems ecosystem. Use these i
 
 ## Setup
 
-Add to `.mcp.json` in your Claude Code project:
+The three daemon MCPs (brainlayer, voicelayer, cmuxlayer) run as persistent macOS LaunchAgents. Other MCP servers are configured in `.mcp.json`:
 
 ```json
 {
-  "golems-email": {
-    "command": "bun",
-    "args": ["run", "packages/shared/src/email/mcp-server.ts"]
+  "brainlayer": {
+    "command": "brainlayer-mcp"
   },
-  "golems-jobs": {
-    "command": "bun",
-    "args": ["run", "packages/jobs/src/mcp-server.ts"]
+  "voicelayer": {
+    "command": "voicelayer-mcp"
   },
   "golems-glm": {
     "command": "bun",
     "args": ["run", "packages/shared/src/glm/mcp-server.ts"]
-  },
-  "brainlayer": {
-    "command": "brainlayer-mcp"
   }
 }
 ```
 
-Additional MCP servers (supabase, exa, sophtron) are configured globally in `~/.claude/.mcp.json`.
+Additional MCP servers (supabase, exa, context7, whatsapp-mcp) are configured globally in `~/.claude/.mcp.json`.
 
-Then in Claude Code: `/tools` or use `@golems-email` in any prompt.
+Then in Claude Code: `/tools` or use `@brainlayer` in any prompt.
 
 ## All MCP Servers
 
 | Server | Command | Tools | Purpose |
 |--------|---------|-------|---------|
-| **brainlayer** | `brainlayer-mcp` | 8 | Memory layer — search 291K+ indexed conversation chunks |
-| **golems-email** | `bun run packages/shared/src/email/mcp-server.ts` | 9 | Email triage + TellerGolem financial tools |
-| **golems-jobs** | `bun run packages/jobs/src/mcp-server.ts` | 5 | Job discovery, search, and stats |
-| **golems-glm** | `bun run packages/shared/src/glm/mcp-server.ts` | 2 | Local GLM-4.7-Flash — summarize, score/classify |
+| **brainlayer** | `brainlayer-mcp` | 8 | Memory layer — search 224K+ indexed conversation chunks |
+| **voicelayer** | `voicelayer-mcp` | 6 | Voice I/O — TTS + STT via VoiceBar daemon |
+| **cmuxlayer** | native MCP daemon | 10+ | Terminal multiplexer — panes, splits, agent orchestration |
+| **golems-glm** | `bun run packages/shared/src/glm/mcp-server.ts` | 2 | Local GLM-4.7-Flash — summarize, score/classify (experimental) |
 | **supabase** | `@supabase/mcp-server-supabase` | 20+ | Database access, SQL, migrations, types |
 | **exa** | `exa-mcp-server` | 3 | Web search, code context, company research |
-| **sophtron** | `@sophtron/sophtron-mcp-server` | 6 | Bank accounts, transactions, identity |
+| **context7** | `context7-mcp` | 2 | Library documentation lookup |
+| **whatsapp-mcp** | `whatsapp-mcp` | 10+ | WhatsApp messaging — send, read, search contacts |
 
 ---
 
@@ -251,7 +247,7 @@ Quick job statistics.
 
 ## Memory Tools (brainlayer)
 
-BrainLayer provides persistent memory across Claude Code sessions — semantic search over 291K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec.
+BrainLayer provides persistent memory across Claude Code sessions — semantic search over 224K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec.
 
 ### brainlayer_search
 
@@ -378,14 +374,6 @@ Key capabilities: semantic web search, code context retrieval, company research.
 
 ---
 
-## Banking Tools (sophtron)
-
-Bank account and transaction access via `@sophtron/sophtron-mcp-server`. Used by TellerGolem for transaction categorization and tax preparation.
-
-Key capabilities: account listing, transaction history, identity verification.
-
----
-
 ## Example Workflows
 
 ### Find Urgent Items to Handle Now
@@ -430,7 +418,7 @@ Key capabilities: account listing, transaction history, identity verification.
 
 - **Email tools** use Supabase directly (cloud-first architecture)
 - **Job tools** query Supabase `golem_jobs` and `scrape_activity` tables
-- **BrainLayer tools** query local sqlite-vec database (~1.4GB, 291K+ chunks)
+- **BrainLayer tools** query local sqlite-vec database (224K+ chunks, FTS5 + vector hybrid search)
 - **GLM tools** run locally via Ollama (no network, ~3-8s per call on M1 Pro)
 - **Scoring:** Email scores 1-10 (10=urgent), Job scores 1-10 (8+=hot match)
 - **Categories:** Email categories are semantic (job, interview, subscription, tech-update, newsletter, promo, social, other)

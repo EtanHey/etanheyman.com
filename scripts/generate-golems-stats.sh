@@ -9,7 +9,7 @@
 set -euo pipefail
 
 GOLEMS_DIR="${GOLEMS_DIR:-$HOME/Gits/golems}"
-BRAINLAYER_DB="${BRAINLAYER_DB:-$HOME/.local/share/zikaron/zikaron.db}"
+BRAINLAYER_DB="${BRAINLAYER_DB:-$HOME/.local/share/brainlayer/brainlayer.db}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 OUTPUT="$REPO_ROOT/app/(golems)/golems/lib/golems-stats.json"

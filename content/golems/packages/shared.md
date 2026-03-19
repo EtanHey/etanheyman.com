@@ -110,7 +110,7 @@ Dual-backend state storage:
 
 ```bash
 STATE_BACKEND=supabase   # Cloud: Supabase database
-STATE_BACKEND=file       # Local: ~/.golems-zikaron/
+STATE_BACKEND=file       # Local: ~/.golems/
 ```
 
 ```typescript

@@ -41,7 +41,7 @@ Instead of building golems first, we built **BrainLayer** (originally Zikaron, H
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 291K+ conversation chunks and returns results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 224K+ conversation chunks (post-dedup from 326K) and returns results in under 2 seconds.
 
 ### Jan 17: First Golem — Email Router
 
@@ -124,7 +124,7 @@ Solved the "fresh context" problem: use Claude Code's `--resume` flag per-golem.
 Three-Claude merge brought everything under one roof:
 - `packages/autonomous/` — All golems, Telegram bot, Night Shift
 - `packages/ralph/` — Autonomous coding loop (PRD-driven)
-- `packages/zikaron/` — BrainLayer memory layer (Python + sqlite-vec)
+- `packages/brainlayer/` — BrainLayer memory layer (Python + sqlite-vec)
 
 Three parallel Claude sessions coordinated via the collab protocol. Audit trail: 745 lines.
 
@@ -363,24 +363,42 @@ After:   14 packages, 1,148 tests, each golem independently installable
 
 ---
 
+## March 2026: Architecture Maturity
+
+### Three-Daemon Architecture
+BrainBar (Swift, 209KB), VoiceBar (Swift, LaunchAgent), and cmux native MCP — three persistent macOS daemons providing memory, voice, and terminal orchestration. All communicate via Unix domain sockets.
+
+### Planning Topology (R31 Discovery)
+Multi-agent debate **degrades** sequential reasoning by 39-70% (Google DeepMind, Dec 2025). The ecosystem now uses **planner-worker topology**: one agent plans, domain experts provide intel, workers execute independently. No flat debate.
+
+### Compaction Defense System
+Claude Code compacts (compresses) long conversations, losing context. The defense: Compact Instructions in CLAUDE.md survive compaction, a PreCompact hook auto-stores state to BrainLayer, and a SessionStart hook re-injects relevant memories.
+
+### Enrichment v2
+Faceted tag schema (`dom:`, `act:`, `object:`) replaces flat activity-based tags. 98% pilot success rate on 100-chunk sample. Enables topic-aware search instead of keyword-only.
+
+### BrainLayer Dedup
+326K → 223K chunks (-32%). UNIQUE index on content_hash prevents future duplicates. FTS5 rebuilt, search 20-30% faster.
+
+---
+
 ## What's Next
 
 ### Active
-- Next.js dashboard at etanheyman.com — brain view, ops, tokens, docs, backlog
-- Whoop biometrics integration (CoachGolem health-aware planning)
-- Content pipeline with Remotion video generation
-- Token usage tracking across all LLM sources
+- Skill hardening: measured RED/GREEN remediation across 46 skills
+- Agent autonomy: overnight unattended work with checkpoint recovery
+- BrainLayer HTTP API + claude.ai connector (R32)
+- Hook visibility UX: show injected memories to users (R30)
 
 ### Medium-term
-- NightShift self-healing (retry strategies, hang detection)
-- ContentGolem visual factory (ComfyUI, dataviz, animations)
-- Service management dashboard (launchd + Railway controls)
-- Expanded token tracking (CLI sessions, embeddings, content pipeline)
+- Eval-backed portfolio pages with real skill scores
+- Hebrew STT fine-tuning (Whisper large-v3-turbo + CoreML)
+- VoiceLayer iPhone app (Hebrew "thinking" dictation)
+- Agent communication via BrainLayer message queue (R31)
 
 ### Long-term
 - Plugin marketplace for Claude Code extensions
 - MCP server distribution (works in Zed, Cursor, VS Code)
-- Mobile dashboard (Expo + React Native)
 - Multi-tenant golems (serve multiple users from one deployment)
 
 ---
