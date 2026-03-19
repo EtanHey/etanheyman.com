@@ -29,7 +29,7 @@ Golems is a **Bun workspace monorepo with 12 packages** — 7 golems (1 orchestr
 | `golems-tui` | React Ink terminal dashboard |
 | `tax-helper` | Schedule C transaction categorization (Sophtron MCP) |
 | `ralph` | Autonomous coding loop (PRD execution) |
-| `zikaron` | Memory layer (Python, 291K+ chunks, sqlite-vec) |
+| `brainlayer` | Memory layer (Python, 224K+ chunks post-dedup, sqlite-vec + FTS5) |
 
 ## Mac = Brain, Railway = Body
 
@@ -38,7 +38,7 @@ flowchart TB
     subgraph mac["Your Mac (Brain)"]
         direction LR
         T[Telegram Bot] ~~~ N[Night Shift]
-        NS[Notification Server] ~~~ Z[Zikaron Memory]
+        NS[Notification Server] ~~~ Z[BrainLayer]
         RS[Render Service] ~~~ EN[Enrichment]
     end
     subgraph rail["Railway (Body)"]
@@ -77,9 +77,9 @@ Your Mac runs these always-on services:
 | **Telegram Bot** | Receive commands, send notifications | grammy.js |
 | **Night Shift** | Scan repos for improvements, auto-commit | Claude + Ralph |
 | **Notification Server** | Queue and send Telegram messages | HTTP server |
-| **Zikaron Memory** | Semantic search over past conversations | FastAPI + sqlite-vec |
+| **BrainLayer** | Persistent memory — 224K+ chunks, hybrid search | BrainBar (Swift daemon) + sqlite-vec |
 | **Render Service** | Remotion video rendering microservice | Bun + Remotion |
-| **Enrichment** | Process Zikaron chunks (tags, summaries) | GLM-4.7-Flash via Ollama |
+| **Enrichment** | Process BrainLayer chunks (faceted tags, summaries) | Gemini Flash (primary) or MLX locally |
 
 The local services have **direct compute access** — they run local GLM-4.7-Flash (via Ollama) or cloud models when needed.
 
@@ -114,7 +114,7 @@ export LLM_BACKEND=haiku      # Cloud: Haiku (paid fallback, optional)
 
 # State Storage: where data lives
 export STATE_BACKEND=supabase # Cloud: Supabase database
-export STATE_BACKEND=file     # Local: ~/.golems-zikaron/
+export STATE_BACKEND=file     # Local: ~/.golems/
 
 # Notifications: where Telegram messages go
 export TELEGRAM_MODE=direct   # Cloud worker sends directly
@@ -172,7 +172,7 @@ All LLM calls are logged to a JSONL file:
 
 ```bash
 # Location (Mac):
-cat ~/.golems-zikaron/api_costs.jsonl
+cat ~/.golems/api_costs.jsonl
 
 # Location (Cloud):
 curl https://your-service.up.railway.app/usage
@@ -213,7 +213,7 @@ curl https://your-service.up.railway.app/usage
 | `service_heartbeats` | Service health pings |
 | `service_runs` | Cron job execution logs |
 
-### Local File Storage (~/.golems-zikaron/)
+### Local File Storage (~/.golems/)
 
 | File | Purpose |
 |------|---------|
@@ -223,7 +223,7 @@ curl https://your-service.up.railway.app/usage
 | `job-golem/seen-jobs.json` | Job scraper seen jobs tracking |
 | `style/semantic-style-data.json` | Your writing style profile |
 
-**Note:** `embeddings.db` belongs to the Zikaron package, not autonomous.
+**Note:** `embeddings.db` belongs to the BrainLayer package, not autonomous.
 
 ## Deployment Architecture
 
@@ -336,7 +336,7 @@ All environment variables used by Golems v2. Store sensitive values in 1Password
 | `STATE_BACKEND` | `file` | State storage: `supabase` (cloud) or `file` (local) | Persistent state |
 | `TELEGRAM_MODE` | `local` | Notification mode: `direct` (cloud) or `local` (launchd) | Telegram notifications |
 | `TZ` | `UTC` | Timezone (only used in helpers-status.ts); cloud-worker hardcodes `Asia/Jerusalem` | Status display |
-| `GOLEMS_STATE_DIR` | `~/.golems-zikaron` | Override state directory for tests or alternate environments | Test isolation |
+| `GOLEMS_STATE_DIR` | `~/.golems-brainlayer` | Override state directory for tests or alternate environments | Test isolation |
 
 ## LLM Configuration
 
@@ -389,7 +389,7 @@ Requires Ollama running locally on `http://localhost:11434`.
 | `OLLAMA_HOST` | `http://localhost:11434` | Ollama server URL | Local LLM calls |
 | `OLLAMA_URL` | `http://127.0.0.1:11434` | Alias for `OLLAMA_HOST` (sandboxed mode) | Sandboxed execution |
 | `OLLAMA_SANDBOXED` | — | Set to `1` to enable sandboxed Ollama execution | Sandboxed mode |
-| `VALIDATION_DIR` | `~/.golems-zikaron/validation-queue` | Directory for sandboxed validation queue | Sandboxed execution |
+| `VALIDATION_DIR` | `~/.golems/validation-queue` | Directory for sandboxed validation queue | Sandboxed execution |
 
 ## Job Scraper Configuration
 
@@ -466,7 +466,7 @@ This ensures `.env` files are loaded before any code runs.
 
 ## API Cost Logging
 
-All LLM calls are logged to `~/.golems-zikaron/api_costs.jsonl` as JSONL:
+All LLM calls are logged to `~/.golems/api_costs.jsonl` as JSONL:
 
 ```json
 {
@@ -1106,7 +1106,7 @@ The only hard dependency is `@golems/shared` for database and LLM access.
 
 ## What's the memory cost?
 
-Zikaron uses sqlite-vec with bge-large-en-v1.5 embeddings. For 291K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
+BrainLayer uses sqlite-vec with bge-large-en-v1.5 embeddings. For 224K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
 
 ## Does it work without Railway?
 
@@ -1138,7 +1138,7 @@ Running fully local with Ollama costs $0/mo (just electricity).
 
 Yes. RecruiterGolem includes a style adapter that matches tone and formality to each recipient. Your base writing style is exported to JSON and can be edited:
 
-- Style analysis from Zikaron session data
+- Style analysis from BrainLayer session data
 - Per-recipient adaptation (formal for enterprise, casual for startups)
 - Anti-AI writing patterns to avoid generic-sounding messages
 
@@ -1191,7 +1191,7 @@ Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun wor
 - **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
 - **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
 - **Infrastructure:** @golems/shared (foundation + email system), @golems/services (Night Shift, Cloud Worker, Briefing)
-- **Tools:** Ralph (autonomous coding loop), Zikaron (291K+ chunk memory layer with 10-field enrichment)
+- **Tools:** Ralph (autonomous coding loop), BrainLayer (224K+ chunk memory layer with 10-field enrichment)
 - **Core Principle:** Golems are domain experts, not I/O channels — they own specific knowledge areas and produce specialized outputs
 
 ## Architecture Principle
@@ -1218,7 +1218,7 @@ Each golem operates independently and only depends on `@golems/shared`. ClaudeGo
 Before you start, ensure you have:
 
 - **Bun** (v1.0+) — runtime and package manager
-- **Python** 3.10+ — required for Zikaron package (semantic search)
+- **Python** 3.10+ — required for BrainLayer package (semantic search)
 - **1Password CLI** (`op` command) — secret management
 - **Claude Code** — the IDE
 - **GitHub** — repo access (SSH key configured)
@@ -1294,7 +1294,7 @@ golems/                              # Bun workspace monorepo
 ├── packages/autonomous/             # Legacy (1-line re-exports for compatibility)
 ├── packages/ralph/                  # Autonomous coding loop (Zsh)
 │   └── skills/golem-powers/         # 55 Claude Code skills
-├── packages/zikaron/                # Memory layer (Python + sqlite-vec)
+├── packages/brainlayer/                # Memory layer (Python + sqlite-vec)
 ├── launchd/                         # macOS service plists
 ├── Dockerfile                       # Railway cloud worker image
 └── supabase/migrations/             # SQL schema changes
@@ -1373,7 +1373,7 @@ bun src/night-shift.ts
 ```
 
 **Per-repo sessions:**
-- Repository rotation: `songscript` → `zikaron` → `claude-golem`
+- Repository rotation: `songscript` → `brainlayer` → `claude-golem`
 - Scans for TODOs, linting issues, test gaps
 - Creates worktrees for isolated changes
 - Commits with auto-generated messages
@@ -1404,9 +1404,9 @@ Communication style:
 - **Formality:** 2/10 (very casual)
 - **Languages:** Hebrew ↔ English code-switching
 - **Tone:** Friendly with occasional sarcasm
-- **Projects:** songscript, zikaron, claude-golem
+- **Projects:** songscript, brainlayer, claude-golem
 
-State stored in `~/.golems-zikaron/state.json`, loaded on every session spawn.
+State stored in `~/.golems/state.json`, loaded on every session spawn.
 
 ## Event Log Injection
 
@@ -1427,7 +1427,7 @@ When ClaudeGolem spawns, it receives:
 - #42: CodeRabbit flagged 2 issues (waiting review)
 - #38: Merged ✓
 
-## Zikaron
+## BrainLayer
 - Indexed 5 new conversations
 - Memory: 12.4k embeddings, 2.3GB
 ```
@@ -1444,8 +1444,8 @@ This comes from `event-log.json` maintained by infrastructure (last 24 hours via
 - `src/cloud-worker.ts` — Railway entry point for all cloud golems
 
 **State:**
-- `~/.golems-zikaron/state.json` — Night Shift target, session state
-- `~/.golems-zikaron/event-log.json` — Golem actions log
+- `~/.golems/state.json` — Night Shift target, session state
+- `~/.golems/event-log.json` — Golem actions log
 
 ## Running ClaudeGolem
 
@@ -1496,7 +1496,7 @@ export REPOS_PATH=~/Gits  # Base path for repos
 - **EmailGolem** — High-score emails trigger ClaudeGolem alerts for code/PR context
 - **RecruiterGolem** — ClaudeGolem provides writing feedback on outreach
 - **Telegram Bot** — ClaudeGolem session is the "brain" behind longer conversations
-- **Zikaron** — Memory queries enrich context during sessions
+- **BrainLayer** — Memory queries enrich context during sessions
 
 ## Database Schema
 
@@ -1507,7 +1507,7 @@ No dedicated tables — state stored in JSON:
   "session_id": "telegram-chat-2026-02-06",
   "started_at": "2026-02-06T09:15:00Z",
   "last_activity": "2026-02-06T09:45:00Z",
-  "context_loaded": ["event_log", "recent_prs", "zikaron_memory"],
+  "context_loaded": ["event_log", "recent_prs", "brainlayer_memory"],
   "posts_pending_approval": 2,
   "night_shift_last_run": "2026-02-06T04:00:00Z",
   "git_worktrees": [
@@ -1520,7 +1520,7 @@ No dedicated tables — state stored in JSON:
 }
 ```
 
-Stored in `~/.golems-zikaron/state.json`.
+Stored in `~/.golems/state.json`.
 
 ## Troubleshooting
 
@@ -1530,7 +1530,7 @@ Stored in `~/.golems-zikaron/state.json`.
 pgrep -fl "telegram-bot"
 
 # Restart bot
-launchctl kickstart gui/$(id -u)/com.golemszikaron.telegram
+launchctl kickstart gui/$(id -u)/com.golems.telegram
 # Or use CLI
 golems start telegram
 ```
@@ -1608,7 +1608,7 @@ Evening:
 
 - **Briefing** (`@golems/services`) imports `generateDailyPlan` and `formatPlanForTelegram` from Coach
 - **Calendar** reuses Gmail OAuth2 credentials
-- **Compliance tracking** stored in `~/.golems-zikaron/coach/compliance.json` (90-day retention)
+- **Compliance tracking** stored in `~/.golems/coach/compliance.json` (90-day retention)
 
 ## Dependencies
 
@@ -1887,7 +1887,7 @@ All integration happens automatically with `processHotMatches()` after scoring.
 bun run src/job-golem/index.ts
 
 # View results
-cat ~/.golems-zikaron/job-golem/results/jobs-*.json
+cat ~/.golems/job-golem/results/jobs-*.json
 
 # View matches in Telegram
 # /jobs command shows formatted list
@@ -1944,7 +1944,7 @@ Scheduling logic in `src/cloud-worker.ts`.
 
 ## Data Storage
 
-Results saved to `~/.golems-zikaron/job-golem/results/jobs-DATE-TIME.json`
+Results saved to `~/.golems/job-golem/results/jobs-DATE-TIME.json`
 
 Database tables (if using Supabase):
 - `golem_jobs` — Job sync and storage
@@ -2014,7 +2014,7 @@ interface Contact {
 Stores contacts and conversation history (SQLite local or Supabase cloud):
 
 **Local (SQLite):**
-- `~/.golems-zikaron/recruiter/outreach.db`
+- `~/.golems/recruiter/outreach.db`
 - Local `outreach_contacts` table (maps to Supabase during cloud sync)
 - Local `outreach_messages` table
 - Local `practice_questions` table
@@ -2181,7 +2181,7 @@ golems recruit --find
 - **EmailGolem** — Detects job offers and interview requests, routes to RecruiterGolem
 - **ClaudeGolem** — Provides writing feedback on outreach messages
 - **Telegram Bot** — Handles `/outreach`, `/practice` commands
-- **Zikaron** — Semantic search for past conversations with contacts
+- **BrainLayer** — Semantic search for past conversations with contacts
 
 ## Example: Full Outreach Workflow
 
@@ -2485,7 +2485,7 @@ Ralph proved that AI could work autonomously on structured tasks. The question b
 
 The project started with a question: *what if AI agents could remember?*
 
-Instead of building golems first, we built **Zikaron** — a memory layer using sqlite-vec and bge-large-en-v1.5 embeddings. The insight: memory enables everything else. Without it, every agent session starts from zero.
+Instead of building golems first, we built **BrainLayer** — a memory layer using sqlite-vec and bge-large-en-v1.5 embeddings. The insight: memory enables everything else. Without it, every agent session starts from zero.
 
 **Key decisions:**
 - sqlite-vec over ChromaDB (stable, zero-dependency, local-first)
@@ -2498,7 +2498,7 @@ Instead of building golems first, we built **Zikaron** — a memory layer using 
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. Zikaron now indexes 291K+ conversation chunks and returns results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 224K+ conversation chunks and returns results in under 2 seconds.
 
 ### Jan 17: First Golem — Email Router
 
@@ -2538,11 +2538,11 @@ Built a file-based inter-session communication protocol before anyone else had o
 
 ```markdown
 ## From: golem-session @ 2026-01-26 01:35
-**Topic:** Integrating Zikaron Active Learning
+**Topic:** Integrating BrainLayer Active Learning
 Hey farther-steps Claude! I'm working on MP-128...
 
 ## From: farther-steps-session @ 2026-01-26 11:45
-**Re:** Integrating Zikaron Active Learning
+**Re:** Integrating BrainLayer Active Learning
 Hey! Just finished documenting farther-steps...
 ```
 
@@ -2581,18 +2581,18 @@ Solved the "fresh context" problem: use Claude Code's `--resume` flag per-golem.
 Three-Claude merge brought everything under one roof:
 - `packages/autonomous/` — All golems, Telegram bot, Night Shift
 - `packages/ralph/` — Autonomous coding loop (PRD-driven)
-- `packages/zikaron/` — Memory layer (Python + sqlite-vec)
+- `packages/brainlayer/` — Memory layer (Python + sqlite-vec)
 
 Three parallel Claude sessions coordinated via the collab protocol. Audit trail: 745 lines.
 
 > "Agents must check back MULTIPLE times, not just dump and leave. React to each other — this is collaboration, not parallel dumping."
 
-### Feb 2: Zikaron Proves Itself
+### Feb 2: BrainLayer Proves Itself
 
 The async collaboration protocol from Jan 26 was needed again. Instead of manually finding it:
 
 ```bash
-zikaron search "collaborative claudes parallel sessions coordination"
+brainlayer search "collaborative claudes parallel sessions coordination"
 # Found in ~2s, score: 0.715
 # Rediscovered claude-collab.md automatically
 ```
@@ -2666,7 +2666,7 @@ Designed a three-tier distribution model:
 
 **Tier 1 — Easy:** Install MCP servers, run `golems setup`. Job scraping, email routing, notifications work out of the box.
 
-**Tier 2 — Power User:** Feed your communication data to Zikaron, get a personalized style card. Customized golem personas, personalized outreach voice.
+**Tier 2 — Power User:** Feed your communication data to BrainLayer, get a personalized style card. Customized golem personas, personalized outreach voice.
 
 **Tier 3 — Developer:** Custom skills, new golems, modified contexts. Contribute back to the framework.
 
@@ -2674,7 +2674,7 @@ Designed a three-tier distribution model:
 
 ### Feb 7: Public vs Local Split
 
-Scrubbed personal data from the public repo. What ships: example contexts, MCP servers, skills framework, `golems setup` wizard, Docusaurus docs. What stays local: planning docs, style card, job preferences, Zikaron database, communication archives.
+Scrubbed personal data from the public repo. What ships: example contexts, MCP servers, skills framework, `golems setup` wizard, Docusaurus docs. What stays local: planning docs, style card, job preferences, BrainLayer database, communication archives.
 
 ---
 
@@ -2707,12 +2707,12 @@ Built entirely with:
 - **Supabase** — PostgreSQL + auth + RLS
 - **Railway** — Cloud deployment
 - **Grammy** — Telegram bot framework
-- **sqlite-vec** — Local vector search (Zikaron)
+- **sqlite-vec** — Local vector search (BrainLayer)
 - **Next.js** — Documentation site (etanheyman.com/golems)
 
-### Feb 7: Zikaron sqlite-vec Migration
+### Feb 7: BrainLayer sqlite-vec Migration
 
-ChromaDB was too slow for real-time search (30s cold start). Migrated to **sqlite-vec** with APSW — search dropped to under 2 seconds. bge-large-en-v1.5 embeddings (1024 dims) with MPS acceleration on Apple Silicon. The daemon architecture (`/tmp/zikaron.sock`) keeps the model hot.
+ChromaDB was too slow for real-time search (30s cold start). Migrated to **sqlite-vec** with APSW — search dropped to under 2 seconds. bge-large-en-v1.5 embeddings (1024 dims) with MPS acceleration on Apple Silicon. The daemon architecture (`/tmp/brainlayer.sock`) keeps the model hot.
 
 ### Feb 7: TellerGolem — Tax Season Prep
 
@@ -2763,7 +2763,7 @@ With the foundation built, we created a **folder-based planning system** — eac
 
 Each golem tab in the docsite terminal hero now shows a real action demo instead of generic status lines:
 
-- **ClaudeGolem:** `$ claude -c --resume` — context-loaded session, Zikaron memory
+- **ClaudeGolem:** `$ claude -c --resume` — context-loaded session, BrainLayer memory
 - **EmailGolem:** `$ golems email --triage` — inbox scan, category routing, draft replies
 - **RecruiterGolem:** `$ golems recruit --find` — Exa search, scoring, outreach drafting, interview practice
 - **TellerGolem:** `$ golems teller --briefing` — spend tracking, category breakdown, tax deductions
@@ -2816,7 +2816,7 @@ Before:  1 package, ~890 tests, tightly coupled
 After:   10 packages, 1,179 tests, each golem independently installable
 ```
 
-6 golems (Claude orchestrator + Recruiter, Teller, Job, Coach, Content domain experts), plus @golems/shared (including the Email system), @golems/services, Ralph, and Zikaron.
+6 golems (Claude orchestrator + Recruiter, Teller, Job, Coach, Content domain experts), plus @golems/shared (including the Email system), @golems/services, Ralph, and BrainLayer.
 
 ---
 
@@ -2851,43 +2851,39 @@ Complete reference of all MCP tools exposed by the Golems ecosystem. Use these i
 
 ## Setup
 
-Add to `.mcp.json` in your Claude Code project:
+The three daemon MCPs (brainlayer, voicelayer, cmuxlayer) run as persistent macOS LaunchAgents. Other MCP servers are configured in `.mcp.json`:
 
 ```json
 {
-  "golems-email": {
-    "command": "bun",
-    "args": ["run", "packages/shared/src/email/mcp-server.ts"]
+  "brainlayer": {
+    "command": "brainlayer-mcp"
   },
-  "golems-jobs": {
-    "command": "bun",
-    "args": ["run", "packages/jobs/src/mcp-server.ts"]
+  "voicelayer": {
+    "command": "voicelayer-mcp"
   },
   "golems-glm": {
     "command": "bun",
     "args": ["run", "packages/shared/src/glm/mcp-server.ts"]
-  },
-  "zikaron": {
-    "command": "zikaron-mcp"
   }
 }
 ```
 
-Additional MCP servers (supabase, exa, sophtron) are configured globally in `~/.claude/.mcp.json`.
+Additional MCP servers (supabase, exa, context7, whatsapp-mcp) are configured globally in `~/.claude/.mcp.json`.
 
-Then in Claude Code: `/tools` or use `@golems-email` in any prompt.
+Then in Claude Code: `/tools` or use `@brainlayer` in any prompt.
 
 ## All MCP Servers
 
 | Server | Command | Tools | Purpose |
 |--------|---------|-------|---------|
-| **zikaron** | `zikaron-mcp` | 8 | Memory layer — search 291K+ indexed conversation chunks |
-| **golems-email** | `bun run packages/shared/src/email/mcp-server.ts` | 9 | Email triage + TellerGolem financial tools |
-| **golems-jobs** | `bun run packages/jobs/src/mcp-server.ts` | 5 | Job discovery, search, and stats |
-| **golems-glm** | `bun run packages/shared/src/glm/mcp-server.ts` | 2 | Local GLM-4.7-Flash — summarize, score/classify |
+| **brainlayer** | `brainlayer-mcp` | 8 | Memory layer — search 224K+ indexed conversation chunks |
+| **voicelayer** | `voicelayer-mcp` | 6 | Voice I/O — TTS + STT via VoiceBar daemon |
+| **cmuxlayer** | native MCP daemon | 10+ | Terminal multiplexer — panes, splits, agent orchestration |
+| **golems-glm** | `bun run packages/shared/src/glm/mcp-server.ts` | 2 | Local GLM-4.7-Flash — summarize, score/classify (experimental) |
 | **supabase** | `@supabase/mcp-server-supabase` | 20+ | Database access, SQL, migrations, types |
 | **exa** | `exa-mcp-server` | 3 | Web search, code context, company research |
-| **sophtron** | `@sophtron/sophtron-mcp-server` | 6 | Bank accounts, transactions, identity |
+| **context7** | `context7-mcp` | 2 | Library documentation lookup |
+| **whatsapp-mcp** | `whatsapp-mcp` | 10+ | WhatsApp messaging — send, read, search contacts |
 
 ---
 
@@ -3092,11 +3088,11 @@ Quick job statistics.
 
 ---
 
-## Memory Tools (zikaron)
+## Memory Tools (brainlayer)
 
-Zikaron provides persistent memory across Claude Code sessions — semantic search over 291K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec.
+BrainLayer provides persistent memory across Claude Code sessions — semantic search over 224K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec.
 
-### zikaron_search
+### brainlayer_search
 
 Semantic + keyword hybrid search across all past Claude Code sessions.
 
@@ -3112,7 +3108,7 @@ Semantic + keyword hybrid search across all past Claude Code sessions.
 
 **Returns:** Matching chunks with content, score, project, and timestamp
 
-### zikaron_context
+### brainlayer_context
 
 Get surrounding conversation context for a search result.
 
@@ -3123,19 +3119,19 @@ Get surrounding conversation context for a search result.
 
 **Returns:** The chunk plus surrounding conversation turns for full context
 
-### zikaron_stats
+### brainlayer_stats
 
 Knowledge base statistics.
 
 **Returns:** Total chunks, projects indexed, database size, content type breakdown
 
-### zikaron_list_projects
+### brainlayer_list_projects
 
 List all indexed projects.
 
 **Returns:** Project paths with chunk counts
 
-### zikaron_file_timeline
+### brainlayer_file_timeline
 
 Get the interaction timeline for a specific file across sessions.
 
@@ -3146,7 +3142,7 @@ Get the interaction timeline for a specific file across sessions.
 
 **Returns:** Chronological list of all sessions that read, edited, or wrote to the file
 
-### zikaron_operations
+### brainlayer_operations
 
 Get logical operation groups for a session (read-edit-test cycles, research chains, debug sequences).
 
@@ -3155,7 +3151,7 @@ Get logical operation groups for a session (read-edit-test cycles, research chai
 
 **Returns:** Grouped operations with types and file lists
 
-### zikaron_regression
+### brainlayer_regression
 
 Analyze a file for regressions — shows the last successful operation and all changes after it.
 
@@ -3165,7 +3161,7 @@ Analyze a file for regressions — shows the last successful operation and all c
 
 **Returns:** Last success point and subsequent changes
 
-### zikaron_plan_links
+### brainlayer_plan_links
 
 Query plan-linked sessions — which plan/phase a session belongs to, or all sessions for a plan.
 
@@ -3273,7 +3269,9 @@ Key capabilities: account listing, transaction history, identity verification.
 
 - **Email tools** use Supabase directly (cloud-first architecture)
 - **Job tools** query Supabase `golem_jobs` and `scrape_activity` tables
-- **Zikaron tools** query local sqlite-vec database (~1.4GB, 291K+ chunks)
+- **BrainLayer tools** query local sqlite-vec database (224K+ chunks, FTS5 + vector hybrid search)
+- **VoiceLayer tools** communicate with VoiceBar daemon via Unix socket
+- **cmuxlayer tools** control terminal panes via native MCP daemon
 - **GLM tools** run locally via Ollama (no network, ~3-8s per call on M1 Pro)
 - **Scoring:** Email scores 1-10 (10=urgent), Job scores 1-10 (8+=hot match)
 - **Categories:** Email categories are semantic (job, interview, subscription, tech-update, newsletter, promo, social, other)
@@ -3314,7 +3312,7 @@ Supporting services in `@golems/services`:
 
 ## Writing Voice
 
-Key traits for the GolemsZikaron persona:
+Key traits for the Golems content persona:
 - Casual, but with technical depth
 - Collaborative researcher tone
 - Open source evangelist
@@ -3357,20 +3355,20 @@ The Golems Dashboard is a Next.js web application deployed on Vercel at `etanhey
 | Teller | `/teller` | `subscriptions`, `payments` |
 | Content | `/content` | `pipeline_runs` |
 | Docs | `/docs` | Static markdown with shiki syntax highlighting |
-| Enrichment | `/enrichment` | Zikaron daemon `/api/stats/enrichment` |
+| Enrichment | `/enrichment` | BrainLayer daemon `/api/stats/enrichment` |
 | Tokens | `/tokens` | `llm_usage` |
-| Session | `/session` | Zikaron daemon `/api/session/:id` |
+| Session | `/session` | BrainLayer daemon `/api/session/:id` |
 | Settings | `/settings` | Supabase Auth + Storage |
 
 ## Architecture
 
-The dashboard queries Supabase directly for most pages (no daemon required on Vercel). Two pages (Enrichment and Session) require the local Zikaron daemon for real-time data.
+The dashboard queries Supabase directly for most pages (no daemon required on Vercel). Two pages (Enrichment and Session) require the local BrainLayer daemon for real-time data.
 
 ```mermaid
 flowchart TD
     V["Vercel<br/><small>Next.js SSR + SSG</small>"]
     V --> SB[("Supabase<br/><small>12 tables with RLS</small>")]
-    V -.->|"local dev only"| ZD["Zikaron Daemon<br/><small>:8787</small>"]
+    V -.->|"local dev only"| ZD["BrainLayer Daemon<br/><small>:8787</small>"]
     V --> SS["Supabase Storage<br/><small>brain-graphs/</small>"]
 ```
 
@@ -3417,7 +3415,7 @@ cd packages/dashboard
 bun dev    # http://localhost:3000
 ```
 
-Requires `.env.local` with Supabase credentials. Set `ZIKARON_DAEMON_URL=http://localhost:8787` for enrichment and session pages.
+Requires `.env.local` with Supabase credentials. Set `BRAINLAYER_DAEMON_URL=http://localhost:8787` for enrichment and session pages.
 
 ---
 
@@ -3460,7 +3458,7 @@ Ralph manages 57 reusable Claude Code skills in `skills/golem-powers/`. These ar
 - **Content:** linkedin-post, content, writing-skills
 - **Research:** context7, github-research, cli-agents
 - **Quality:** coderabbit, critique-waves, pr-comments
-- **Memory:** zikaron, catchup, learn-mistake
+- **Memory:** brainlayer, catchup, learn-mistake
 
 See the [Skills Library](/golems/docs/skills) page for the full catalog.
 
@@ -3527,7 +3525,7 @@ Runs daily at 4am via macOS launchd. For each target repo:
 6. Creates PR automatically
 7. Sends morning briefing with results
 
-Target repos rotate: songscript > zikaron > golems. Configurable via `/tonight` Telegram command.
+Target repos rotate: songscript > brainlayer > golems. Configurable via `/tonight` Telegram command.
 
 ## Morning Briefing (8am)
 
@@ -3565,7 +3563,7 @@ Single Railway service running all cloud golems on timezone-aware schedules (Isr
 
 ## Additional Services
 
-- **Session Archiver** — Archives Claude Code session transcripts for Zikaron indexing
+- **Session Archiver** — Archives Claude Code session transcripts for BrainLayer indexing
 - **Bedtime Guardian** — Evening wind-down reminders
 - **Health Check** — 9am service health verification
 - **CLI Helpers** — Wrappers for Cursor, Gemini, Kiro CLI agents
@@ -3650,7 +3648,7 @@ Dual-backend state storage:
 
 ```bash
 STATE_BACKEND=supabase   # Cloud: Supabase database
-STATE_BACKEND=file       # Local: ~/.golems-zikaron/
+STATE_BACKEND=file       # Local: ~/.golems/
 ```
 
 ```typescript
@@ -3672,13 +3670,13 @@ await setState("nightShiftTarget", "songscript");
 
 ---
 
-# Zikaron (Memory)
+# BrainLayer (Memory)
 
 > Persistent memory for Claude Code conversations. Index, search, and retrieve knowledge from past coding sessions.
 
 ## What It Does
 
-Zikaron (Hebrew for "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 291K+ chunks indexed, searchable in under 2 seconds.
+BrainLayer (Hebrew for "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 224K+ chunks indexed, searchable in under 2 seconds.
 
 ## Architecture
 
@@ -3690,7 +3688,7 @@ Zikaron (Hebrew for "memory") is a **knowledge pipeline** that indexes every Cla
                                   bge-large sqlite-vec
                                   1024 dims   fast DB
         |
-~/.local/share/zikaron/zikaron.db   # Storage (~1.4GB)
+~/.local/share/brainlayer/brainlayer.db   # Storage (~1.4GB)
         |
   POST-PROCESSING
   Enrichment (10 fields)    PII Sanitization    Brain Graph
@@ -3699,7 +3697,7 @@ Zikaron (Hebrew for "memory") is a **knowledge pipeline** that indexes every Cla
         |
   INTERFACES
   CLI            FastAPI Daemon      MCP Server      Dashboard
-  search         :8787 / socket      zikaron-mcp     Next.js
+  search         :8787 / socket      brainlayer-mcp     Next.js
 ```
 
 ## Pipeline Stages
@@ -3729,31 +3727,31 @@ AST-aware chunking with tree-sitter for code (~500 tokens). Never splits stack t
 Uses `bge-large-en-v1.5` model (1024 dimensions). Runs locally via sentence-transformers with MPS acceleration on Apple Silicon.
 
 ### 5. Index
-sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 291K+ chunks.
+sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 224K+ chunks.
 
 ## Interfaces
 
 ### CLI
 ```bash
-zikaron search "how did I implement auth"
-zikaron enrich                                 # Run local LLM enrichment
-zikaron index                                  # Re-index conversations
-zikaron dashboard                              # Interactive TUI
+brainlayer search "how did I implement auth"
+brainlayer enrich                                 # Run local LLM enrichment
+brainlayer index                                  # Re-index conversations
+brainlayer dashboard                              # Interactive TUI
 ```
 
 ### MCP Server
-Exposed to Claude Code as `zikaron-mcp` (8 tools):
+Exposed to Claude Code as `brainlayer-mcp` (8 tools):
 
 | Tool | Description |
 |------|-------------|
-| `zikaron_search` | Semantic search across all sessions (with project, content_type, tag, intent, importance filters) |
-| `zikaron_context` | Get surrounding conversation chunks for a search result |
-| `zikaron_stats` | Index statistics (chunk count, projects, content types) |
-| `zikaron_list_projects` | List all indexed projects |
-| `zikaron_file_timeline` | File interaction history across sessions |
-| `zikaron_operations` | Logical operation groups (read/edit/test cycles) |
-| `zikaron_regression` | What changed since a file last worked |
-| `zikaron_plan_links` | Session to plan/phase linkage |
+| `brainlayer_search` | Semantic search across all sessions (with project, content_type, tag, intent, importance filters) |
+| `brainlayer_context` | Get surrounding conversation chunks for a search result |
+| `brainlayer_stats` | Index statistics (chunk count, projects, content types) |
+| `brainlayer_list_projects` | List all indexed projects |
+| `brainlayer_file_timeline` | File interaction history across sessions |
+| `brainlayer_operations` | Logical operation groups (read/edit/test cycles) |
+| `brainlayer_regression` | What changed since a file last worked |
+| `brainlayer_plan_links` | Session to plan/phase linkage |
 
 ### FastAPI Daemon
 HTTP server at `:8787` (or Unix socket) with 25+ endpoints. Powers the Next.js dashboard enrichment and session pages.
@@ -3808,7 +3806,7 @@ Replacements use stable hash-based pseudonyms (`[PERSON_a1b2c3d4]`) and a revers
 
 ## Source
 
-[`packages/zikaron/`](https://github.com/EtanHey/golems/tree/master/packages/zikaron)
+[`packages/brainlayer/`](https://github.com/EtanHey/golems/tree/master/packages/brainlayer)
 
 ---
 
@@ -3897,7 +3895,7 @@ function myProjectClaude() {
 
 | Project | Function | Personality | MCP Tools |
 |---------|----------|-------------|-----------|
-| Golems | `gitsClaude` | AI agent ecosystem | zikaron, email, jobs, supabase, exa |
+| Golems | `orcClaude` | AI agent ecosystem | brainlayer, voicelayer, cmuxlayer, supabase, exa |
 | SongScript | `songClaude` | Music learning app | convex |
 | *(private app)* | `domicaClaude` | *(private)* | convex, supabase |
 
@@ -3960,7 +3958,7 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 | Context7 | `/context7` | Library documentation lookup |
 | GitHub Research | `/github-research` | Explore and document repositories |
 | CLI Agents | `/cli-agents` | Run Gemini, Cursor, Codex, Kiro for research |
-| Zikaron | `/zikaron` | Search past solutions and session context |
+| BrainLayer | `/brainlayer` | Search past solutions and session context |
 | Catchup | `/catchup` | Full branch context recovery |
 | Catchup Recent | `/catchup-recent` | Quick context recovery |
 
