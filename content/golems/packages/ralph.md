@@ -42,7 +42,7 @@ The ecosystem includes 57 reusable Claude Code skills in `skills/golem-powers/`.
 - **Content:** linkedin-post, content, writing-skills
 - **Research:** context7, github-research, cli-agents
 - **Quality:** coderabbit, critique-waves, pr-comments
-- **Memory:** zikaron, catchup, learn-mistake
+- **Memory:** brainlayer, catchup, learn-mistake
 
 See the [Skills Library](/golems/docs/skills) page for the full catalog.
 

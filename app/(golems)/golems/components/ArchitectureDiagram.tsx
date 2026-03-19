@@ -45,7 +45,7 @@ const infra = [
   },
   { name: "Supabase", sub: "Postgres + RLS", color: C.cyan, glow: true },
   {
-    name: "Zikaron",
+    name: "BrainLayer",
     sub: `${golemsStats.brainlayer.chunksDisplay} chunks`,
     color: C.pink,
   },

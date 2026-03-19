@@ -23,7 +23,7 @@ Runs daily at 4am via macOS launchd. For each target repo:
 6. Creates PR automatically
 7. Sends morning briefing with results
 
-Target repos rotate: songscript > zikaron > golems. Configurable via `/tonight` Telegram command.
+Target repos rotate: songscript > brainlayer > golems. Configurable via `/tonight` Telegram command.
 
 ## Morning Briefing (8am)
 
@@ -62,7 +62,7 @@ Single Railway service running all cloud golems on timezone-aware schedules (Isr
 
 ## Additional Services
 
-- **Session Archiver** — Archives Claude Code session transcripts for Zikaron indexing
+- **Session Archiver** — Archives Claude Code session transcripts for BrainLayer indexing
 - **Bedtime Guardian** — Evening wind-down reminders
 - **Health Check** — 9am service health verification
 - **CLI Helpers** — Wrappers for Cursor, Gemini, Kiro CLI agents

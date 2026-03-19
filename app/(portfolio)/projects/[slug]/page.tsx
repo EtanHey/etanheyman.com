@@ -27,11 +27,11 @@ import { getTerminalShowcaseData } from "./terminal-showcase-config";
 import { highlightCode } from "@/lib/highlight";
 
 const PROJECT_DESCRIPTIONS: Record<string, string> = {
-  brainlayer: `Persistent memory layer for AI coding assistants. ${golemsStats.brainlayer.chunksDisplay} indexed chunks, 7 intelligent tools (search, store, recall + knowledge graph), 43 KG entities, hybrid semantic search with sqlite-vec.`,
+  brainlayer: `Persistent memory layer for AI coding assistants. ${golemsStats.brainlayer.chunksDisplay} deduplicated chunks, 9 MCP tools (search, store, recall + knowledge graph), 119 KG entities, hybrid semantic search with sqlite-vec. Faceted enrichment v2 with Gemini 2.5 Flash.`,
   voicelayer:
-    "Voice I/O layer for AI assistants. Local TTS via edge-tts, STT via whisper.cpp (~300ms), session booking, 2 tools (voice_speak, voice_ask) with auto-mode detection.",
+    "Bi-directional voice I/O layer for AI assistants. VoiceBar daemon with LaunchAgent auto-start. TTS via edge-tts + Qwen3, STT via whisper.cpp + Wispr Flow (~300ms). 2 tools (voice_speak, voice_ask) with auto-mode detection. 308 tests.",
   cmuxlayer:
-    "MCP server for terminal agent lifecycle. 20 tools across 3 layers: surface control, agent lifecycle, and V2 facade. Spawn and orchestrate Claude, Codex, Cursor, Gemini, and Kiro agents in parallel. 259 test assertions.",
+    "Terminal orchestration for AI agents. 20 MCP tools across 3 layers: surface control, agent lifecycle (spawn_agent, stop_agent, send_to_agent), and V2 facade. Playwright browser surfaces. 1,423x socket speedup via native MCP.",
   "whatsapp-mcp":
     "Hebrew-compatible WhatsApp MCP fork. Fixed Unicode search (instr() over LOWER+LIKE), dual-bridge personal+business auto-detection, self-chat safety mode. 13 MCP tools for reading and sending messages.",
   golems: `Autonomous AI agent ecosystem. ${golemsStats.packages.count} packages, ${golemsStats.agents.count} domain agents, ${golemsStats.skills.count} skills, multi-LLM routing, Night Shift autonomous coding at 4am.`,

@@ -596,7 +596,8 @@ function EcosystemSection() {
           The Ecosystem
         </h2>
         <p className="mb-10 text-center text-[#b0a89c] italic">
-          4 domain golems, {golemsStats.skills.count} skills, 2 MCPs, and a CLI.
+          4 domain golems, {golemsStats.skills.count} skills, 3 daemon MCPs, and
+          a CLI.
         </p>
 
         {/* Golems — compact list */}
@@ -638,11 +639,13 @@ function EcosystemSection() {
               </div>
             </Link>
             <div className="rounded-lg border border-[#2dd4a814] bg-[#14120e]/90 px-4 py-3">
-              <div className="text-lg font-bold text-[#2dd4a8]">2</div>
-              <div className="text-sm font-medium text-[#e8e2d6]">MCPs</div>
+              <div className="text-lg font-bold text-[#2dd4a8]">3</div>
+              <div className="text-sm font-medium text-[#e8e2d6]">
+                Daemon MCPs
+              </div>
               <div className="text-[0.75rem] text-[#b0a89c]">
                 BrainLayer ({golemsStats.brainlayer.chunksDisplay} chunks) +
-                VoiceLayer
+                VoiceLayer + cmuxlayer
               </div>
             </div>
             <div className="rounded-lg border border-[#6ab0f314] bg-[#14120e]/90 px-4 py-3">
@@ -655,6 +658,53 @@ function EcosystemSection() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Agents */}
+        <div className="mt-10">
+          <h3 className="mb-4 text-base font-bold text-[#f97316]">Agents</h3>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {[
+              {
+                name: "coachClaude",
+                desc: "Health, schedule, recruiting, daily planning",
+              },
+              {
+                name: "orcClaude",
+                desc: "Cross-repo orchestrator, multi-agent sprints",
+              },
+              {
+                name: "maintenanceClaude",
+                desc: "README, docs, portfolio updates with verification",
+              },
+              {
+                name: "publicistClaude",
+                desc: "LinkedIn, content creation, showcase videos",
+              },
+              {
+                name: "contentClaude",
+                desc: "ClaudeGolem brand content across platforms",
+              },
+              {
+                name: "interviewClaude",
+                desc: "7-mode interview practice with Elo tracking",
+              },
+            ].map((a) => (
+              <div
+                key={a.name}
+                className="flex items-center gap-3 rounded-lg border border-[#f9731620] bg-[#14120e]/90 px-4 py-3"
+              >
+                <span className="font-mono text-sm font-bold text-[#f97316]">
+                  {a.name}
+                </span>
+                <span className="text-[0.78rem] text-[#b0a89c]">{a.desc}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-xs text-[#b0a89c]">
+            Agents are skills loaded as persistent identities via{" "}
+            <code className="text-[#6ab0f3]">claude --agent</code>
+          </p>
         </div>
       </div>
     </section>

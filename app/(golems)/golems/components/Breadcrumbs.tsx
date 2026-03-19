@@ -14,7 +14,7 @@ const sectionMap: Record<string, string> = {
   skills: "Tools & Layers",
   "mcp-tools": "Tools & Layers",
   "packages/services": "Infrastructure",
-  "packages/zikaron": "Infrastructure", // BrainLayer (published name)
+  "packages/zikaron": "Infrastructure", // legacy route, redirects to BrainLayer
   "packages/brainlayer": "Infrastructure",
   "packages/ralph": "Infrastructure",
   "cloud-worker": "Infrastructure",
