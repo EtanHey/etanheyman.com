@@ -39,10 +39,10 @@ const featuresData: Record<string, FeatureSection[]> = {
     },
     {
       iconName: "Cpu",
-      title: "Local LLM Enrichment",
-      tagline: "10-field metadata without cloud APIs",
+      title: "Faceted Enrichment v2",
+      tagline: "Topic-specific tags via Gemini 2.5 Flash",
       description:
-        "A local LLM (GLM-4.7-Flash or Qwen2.5-Coder-14B via MLX) analyzes every chunk and generates structured metadata. Summary, 5 tags, importance score (1-10), intent classification, primary code symbols, a hypothetical search query, epistemic confidence level, version scope, tech debt impact, and external dependencies. All computed locally — no data leaves your machine.",
+        "Three enrichment backends (Groq, MLX, Ollama) analyze every chunk and generate structured metadata. Enrichment v2 uses a faceted tag schema: topic tags (brainlayer-search-quality, cmux-terminal-orchestration), activity tags (act:debugging, act:implementing), domain tags (dom:python, dom:sql), and confidence scores. 98% valid JSON in 100-chunk pilot with 204 unique topic tags generated.",
       codeExample: {
         language: "json",
         code: `{
@@ -60,11 +60,11 @@ const featuresData: Record<string, FeatureSection[]> = {
     },
     {
       iconName: "Wrench",
-      title: "7 MCP Tools",
+      title: "9 MCP Tools",
       tagline:
-        "Powerful memory layer with 7 intelligent tools that understand what you need",
+        "Powerful memory layer with 9 intelligent tools that understand what you need",
       description:
-        "From 14 specialized tools to 7 that just work. 3 core memory tools (brain_search, brain_store, brain_recall) plus 4 knowledge graph tools (brain_digest, brain_entity, brain_update, brain_get_person). Backward-compat aliases keep existing workflows intact.",
+        "From 14 specialized tools to 9 that just work. 3 core memory tools (brain_search, brain_store, brain_recall) plus 6 knowledge graph tools (brain_digest, brain_entity, brain_update, brain_expand, brain_tags, brain_get_person). Backward-compat aliases keep existing workflows intact.",
       highlights: [
         "brain_search — hybrid query, 7 filter dimensions, understands intent",
         "brain_store — persist decisions, learnings, with entity linking",
@@ -72,6 +72,8 @@ const featuresData: Record<string, FeatureSection[]> = {
         "brain_digest — ingest content, extract entities and relations",
         "brain_entity — knowledge graph lookup with evidence",
         "brain_update — update, archive, or merge memories",
+        "brain_expand — drill into search results with surrounding context",
+        "brain_tags — discover, search, and suggest tags across knowledge base",
         "brain_get_person — person profile + scoped memories in <500ms",
       ],
     },
@@ -410,9 +412,9 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
       title: "4 Domain Golems",
       tagline: "Specialized Claude Code plugins for every domain",
       description:
-        "Each golem is a self-contained Claude Code agent with its own tools, MCP servers, and domain knowledge. Coach is the primary golem — health, schedule, recruiting, content, admin, and daily planning with Whoop biometric integration. Recruiter handles job board scraping, outreach, and Elo-rated interview practice. Claude is the Telegram bot that routes commands and spawns sessions. Services runs Night Shift, Morning Briefing, and cloud workers.",
+        "Each golem is a self-contained Claude Code agent with its own tools, MCP servers, and domain knowledge. Coach is the primary golem — health coaching with WHOOP integration, daily briefing, adaptive workout scheduling. Skill iteration 2 achieves 96% eval score with skill vs 69% without. Recruiter handles job board scraping, outreach, and Elo-rated interview practice. Claude is the Telegram bot that routes commands and spawns sessions. Services runs Night Shift, Morning Briefing, and cloud workers.",
       highlights: [
-        "Coach — primary golem: health, schedule, recruiting, content, admin",
+        "Coach — primary golem: WHOOP integration, daily briefing, 96% skill eval score",
         "Recruiter — job hunt, outreach, Elo-rated interview practice",
         "Claude — Telegram bot, routing, session management",
         "Services — Night Shift (4am), Morning Briefing, cloud workers",
@@ -501,7 +503,7 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
       description:
         "Each golem declares which MCP servers it needs. BrainLayer provides 7 memory + KG tools (brain_search, brain_store, brain_recall, brain_digest, brain_entity, brain_update, brain_get_person). The email server handles triage with 7 tools. VoiceLayer exposes 2 voice tools (voice_speak, voice_ask). Supabase provides database access. Exa handles web search, Sophtron connects to bank APIs, and a local GLM server provides free text generation. The orchestrator ensures all declared servers are running before spawning a golem.",
       highlights: [
-        "BrainLayer — 7 memory + KG tools",
+        "BrainLayer — 9 memory + KG tools",
         "Email — 7 triage & draft tools",
         "VoiceLayer — 2 voice tools",
         "Supabase — SQL & DDL access",

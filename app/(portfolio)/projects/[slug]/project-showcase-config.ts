@@ -48,9 +48,9 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "pip install brainlayer",
     isMiniSite: true,
     stats: [
-      { value: 321, suffix: "K+", label: "Indexed chunks" },
-      { value: 8, label: "MCP tools" },
-      { value: 1024, label: "Vector dimensions" },
+      { value: 224, suffix: "K", label: "Indexed chunks" },
+      { value: 9, label: "MCP tools" },
+      { value: 958, label: "Tests passing" },
       { value: 119, label: "KG entities" },
     ],
     features: [
@@ -58,19 +58,19 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         iconName: "Search",
         title: "Hybrid Search",
         description:
-          "Semantic vectors (bge-large-en-v1.5) + FTS5 keyword search, fused with Reciprocal Rank Fusion.",
+          "Semantic vectors (bge-large-en-v1.5) + FTS5 keyword search, fused with Reciprocal Rank Fusion. Content-hash dedup with UNIQUE index eliminates duplicates at ingest.",
       },
       {
         iconName: "Cpu",
-        title: "Local LLM Enrichment",
+        title: "Faceted Enrichment v2",
         description:
-          "GLM-4.7-Flash generates summaries, tags, importance scores, and intent classification per chunk.",
+          "Gemini 2.5 Flash generates topic-specific tags (brainlayer-search-quality, cmux-terminal-orchestration), activity classification, domain tags, and confidence scores. 98% valid JSON in 100-chunk pilot.",
       },
       {
         iconName: "Database",
-        title: "8 MCP Tools",
+        title: "9 MCP Tools",
         description:
-          "3 core (search, store, recall) + 5 knowledge graph (digest, entity, update, expand, tags). Consolidated from 14 to 8. Old names still work via aliases.",
+          "3 core (search, store, recall) + 6 knowledge graph (digest, entity, update, expand, tags, get_person). Consolidated from 14. Old names still work via aliases.",
       },
       {
         iconName: "Brain",
@@ -100,7 +100,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { icon: "FileText", title: "Indexing", subtitle: "Chunk + deduplicate" },
       { icon: "Binary", title: "Embedding", subtitle: "bge-large 1024-dim" },
       { icon: "Search", title: "Hybrid Search", subtitle: "Vec + FTS5 + RRF" },
-      { icon: "Wrench", title: "MCP Tools", subtitle: "7 tools for agents" },
+      { icon: "Wrench", title: "MCP Tools", subtitle: "9 tools for agents" },
     ],
   },
 
@@ -117,27 +117,27 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     features: [
       {
         iconName: "Mic",
-        title: "2 Tools, Auto Mode",
+        title: "Bi-directional TTS + STT",
         description:
-          "voice_speak and voice_ask cover the full range: fire-and-forget TTS to interactive Q&A, with automatic mode detection.",
+          "voice_speak and voice_ask cover the full range: fire-and-forget TTS to interactive Q&A, with automatic mode detection. VoiceBar daemon (renamed from FlowBar) handles both directions.",
       },
       {
         iconName: "Radio",
         title: "Local STT",
         description:
-          "whisper.cpp transcription at ~300ms. No cloud APIs, no data leaving your machine.",
+          "whisper.cpp and Wispr Flow backends at ~300ms. No cloud APIs, no data leaving your machine.",
       },
       {
-        iconName: "Lock",
-        title: "Session Booking",
+        iconName: "Zap",
+        title: "LaunchAgent Auto-Start",
         description:
-          'Lockfile-based mic mutex. Other sessions see "line busy". No conflicts.',
+          "VoiceBar MCP daemon auto-starts via macOS LaunchAgent. Always available, zero manual setup after install.",
       },
       {
         iconName: "Volume2",
-        title: "Edge-TTS",
+        title: "Edge-TTS + Qwen3",
         description:
-          "Neural-quality text-to-speech. Free, local, multiple voices. User-controlled stop.",
+          "Neural-quality text-to-speech with edge-tts and local Qwen3. Free, local, multiple voices. User-controlled stop via session booking.",
       },
     ],
     installTabs: [
@@ -176,19 +176,19 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         iconName: "Terminal",
         title: "20 MCP Tools, 3 Layers",
         description:
-          "10 core surface tools (split, read, send, rename), 8 agent lifecycle tools (spawn, wait, stop, send_to_agent), and 2 V2 facade tools (interact + kill).",
+          "10 core surface tools (split, read, send, rename), 8 agent lifecycle tools (spawn_agent, stop_agent, send_to_agent, wait_for), and 2 V2 facade tools (interact + kill).",
       },
       {
         iconName: "Bot",
-        title: "Multi-CLI Agent Spawning",
+        title: "Terminal Orchestration for AI",
         description:
-          "Spawn Claude, Codex, Cursor, Gemini, or Kiro agents into terminal panes. Each gets a tracked state machine: spawning → booting → ready → working → done.",
+          "Spawn Claude, Codex, Cursor, Gemini, or Kiro agents into terminal panes. Each gets a tracked state machine: spawning → booting → ready → working → done. Native MCP with 1,423x socket speedup.",
       },
       {
-        iconName: "Zap",
-        title: "V2 Interact + Kill",
+        iconName: "Globe",
+        title: "Playwright Browser Surface",
         description:
-          "High-level facade over 8 agent tools. interact() handles send, interrupt, model switch, resume, skill invoke, usage query, and MCP check. kill() terminates one, many, or all agents.",
+          "browser_surface tool opens Playwright-controlled browser panes alongside terminal agents. Enables visual verification, screenshot capture, and automated testing within the same orchestration flow.",
       },
       {
         iconName: "GitBranch",
@@ -301,8 +301,8 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     stats: [
       { value: 12, label: "Packages" },
       { value: 4, label: "Domain golems" },
-      { value: 47, label: "Skills" },
-      { value: 317, suffix: "+", label: "PRs merged" },
+      { value: 46, label: "Skills" },
+      { value: 319, suffix: "+", label: "PRs merged" },
     ],
     features: [
       {
