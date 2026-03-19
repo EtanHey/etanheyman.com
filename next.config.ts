@@ -12,7 +12,10 @@ const withMDX = createMDX({
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [{ hostname: "utfs.io" }],
+    remotePatterns: [
+      { hostname: "utfs.io" },
+      { hostname: "mkijzwkuubtfjqcemorx.supabase.co" },
+    ],
   },
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 };
