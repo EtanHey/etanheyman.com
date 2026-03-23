@@ -41,7 +41,7 @@ Instead of building golems first, we built **BrainLayer** (originally Zikaron, H
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 224K+ conversation chunks (post-dedup from 326K) and returns results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 312K+ conversation chunks and returns results in under 2 seconds.
 
 ### Jan 17: First Golem — Email Router
 
@@ -382,19 +382,41 @@ Faceted tag schema (`dom:`, `act:`, `object:`) replaces flat activity-based tags
 
 ---
 
+## Late March 2026: Ecosystem Velocity
+
+### brain_digest Ships
+The long-awaited `brain_digest` tool is fully operational — extracts entities, relations, and action items from raw content in three modes (auto, conversation, document). Combined with `brain_store`, `brain_entity`, and `brain_expand`, BrainLayer now has 11 MCP tools. The knowledge base has grown to 312K+ chunks.
+
+### QA Video Pipeline
+The `/qa-video` skill ships — a video-based QA pipeline where screen recordings with narration are processed into structured findings. The "stalker pipeline" captures video, correlates click events with screen state, and produces actionable bug reports. Multi-round iteration: record, process, fix, retest.
+
+### OrcClaude v2.0
+The orchestrator agent reaches v2.0: sprint management, cross-repo coordination via cmux, background agent spawning and monitoring, research dispatch, and collab kickoffs. The planner-worker topology from R31 is now the default: orcClaude plans, domain experts provide intel, workers execute independently.
+
+### 60+ Skills with Eval Coverage
+The skill library grows from 46 to 60+ skills. 40 skills have eval suites with structured assertions. The adapter layer makes every skill AI-agnostic — the same skill works across Claude Code, Cursor, Gemini CLI, Codex, and Kiro.
+
+### Dashboard Momentum
+The Golems Dashboard receives 15 PRs in rapid succession: 2D canvas knowledge graph (d3-force), enrichment observatory, wiki synthesis, entity detail panel, and community clustering. The dashboard evolves from a status page to an interactive knowledge exploration tool.
+
+### Multi-Agent Docs Sweep
+For the first time, the portfolio site itself is updated by a multi-agent collab: orcClaude orchestrates, Agent A updates `/projects` pages, Agent B updates `/golems` docs. Both agents work in parallel on separate branches, coordinated via the collab file protocol. The ecosystem is self-documenting.
+
+---
+
 ## What's Next
 
 ### Active
-- Skill hardening: measured RED/GREEN remediation across 46 skills
+- Skill hardening: measured RED/GREEN remediation across 60+ skills
 - Agent autonomy: overnight unattended work with checkpoint recovery
 - BrainLayer HTTP API + claude.ai connector (R32)
 - Hook visibility UX: show injected memories to users (R30)
 
 ### Medium-term
-- Eval-backed portfolio pages with real skill scores
+- Eval-backed portfolio pages with real skill scores (partially shipped — skills page has assertion counts)
 - Hebrew STT fine-tuning (Whisper large-v3-turbo + CoreML)
 - VoiceLayer iPhone app (Hebrew "thinking" dictation)
-- Agent communication via BrainLayer message queue (R31)
+- Agent communication via BrainLayer pubsub (brain_subscribe/brain_unsubscribe shipped)
 
 ### Long-term
 - Plugin marketplace for Claude Code extensions

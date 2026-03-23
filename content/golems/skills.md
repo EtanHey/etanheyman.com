@@ -1,11 +1,11 @@
 ---
 title: "Skills Library"
-description: "57 reusable Claude Code skills covering development, operations, content, research, and quality workflows."
+description: "60+ reusable Claude Code skills covering development, operations, content, research, and quality workflows — 40 with eval coverage."
 ---
 
 # Skills Library
 
-> 57 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
+> 60+ reusable Claude Code skills with eval coverage across 40 skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
 
 ## What Are Skills?
 
@@ -18,10 +18,12 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 | Skill | Command | What It Does |
 |-------|---------|-------------|
 | Commit | `/commit` | CodeRabbit review + conventional commit |
-| Create PR | `/create-pr` | Draft PR with summary and test plan |
+| PR Loop | `/pr-loop` | Full PR loop — branch, test, commit, push, PR, review, fix, merge |
 | Worktrees | `/worktrees` | Git worktree management (create, switch, cleanup) |
 | Test Plan | `/test-plan` | Generate test plan from requirements |
-| LSP | `/lsp` | Code intelligence via Language Server Protocol |
+| Large Plan | `/large-plan` | Multi-phase plan scaffolding and execution |
+| Code Review | `/code-review` | Dispatch reviewers, read feedback, implement fixes |
+| GitHub | `/github` | Git ops, PRs, issues via `gh` CLI |
 | Ralph Commit | `/ralph-commit` | Atomic commit with story validation |
 
 ### Operations
@@ -31,7 +33,9 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 | Railway | `/railway` | Deploy, logs, restart, env vars for cloud worker |
 | 1Password | `/1password` | Secret management, env migration, vault ops |
 | Convex | `/convex` | Schema, deploy, data import/export, troubleshooting |
-| GitHub | `/github` | Issues, PRs, checks, releases via `gh` CLI |
+| Ecosystem Health | `/ecosystem-health` | MCP connections, BrainLayer stats, skill evals, friction scans |
+| Context Check | `/context-check` | Audit per-project AI context hygiene, report wasted tokens |
+| Maintenance | `/maintenance` | System maintenance and cleanup workflows |
 
 ### Content
 
@@ -39,27 +43,28 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 |-------|---------|-------------|
 | LinkedIn Post | `/linkedin-post` | Topic discovery, drafting, scheduling, review |
 | Content | `/content` | Multi-platform content creation and publishing |
-| Writing Skills | `/writing-skills` | Create and validate new skills |
+| Nightly Docs Update | `/nightly-docs-update` | Automated documentation updates |
+| YouTube Pipeline | `/youtube-pipeline` | YouTube content processing pipeline |
 
 ### Research & Context
 
 | Skill | Command | What It Does |
 |-------|---------|-------------|
+| Research | `/research` | Deep web research orchestrator — routes to best backend |
 | Context7 | `/context7` | Library documentation lookup |
 | GitHub Research | `/github-research` | Explore and document repositories |
 | CLI Agents | `/cli-agents` | Run Gemini, Cursor, Codex, Kiro for research |
-| BrainLayer | `/brainlayer` | Search past solutions and session context |
-| Catchup | `/catchup` | Full branch context recovery |
-| Catchup Recent | `/catchup-recent` | Quick context recovery |
+| Claude Web Research | `/claude-web-research` | Self-contained research prompts for Claude Web |
+| Catchup | `/catchup` | Auto-depth context recovery (short break vs long break) |
 
 ### Quality
 
 | Skill | Command | What It Does |
 |-------|---------|-------------|
 | CodeRabbit | `/coderabbit` | AI code review with multiple workflows |
+| QA Video | `/qa-video` | Video-based QA pipeline — screen recording processed into structured findings |
 | Critique Waves | `/critique-waves` | Parallel verification agents for consensus |
-| PR Comments | `/pr-comments` | Fetch and display PR review comments |
-| Learn Mistake | `/learn-mistake` | Record mistakes for nightly aggregation |
+| Never Fabricate | `/never-fabricate` | Mandatory verification before reporting on file contents or results |
 
 ### Domain
 
@@ -67,25 +72,35 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 |-------|---------|-------------|
 | Interview Practice | `/interview-practice` | 7-mode practice with Elo tracking |
 | Email Golem | `/email-golem` | Email status, manual triage, recent scores |
-| Tax Helper | `/tax-helper` | Transaction categorization for Schedule C |
+| Nightly Journal | `/nightly-journal` | End-of-day sweep — comms, client activity, diary |
 | Obsidian | `/obsidian` | Search, read, write Obsidian vault notes |
+| Voice Sessions | `/voice-sessions` | Voice I/O workflows via VoiceLayer |
+
+### Orchestration
+
+| Skill | Command | What It Does |
+|-------|---------|-------------|
+| Orc | `/orc` | Multi-agent sprint orchestration, cross-repo coordination |
+| Orchestrator Status | `/orchestrator-status` | Ecosystem-wide status and orientation |
+| cmux Agents | `/cmux-agents` | Spawn AI agents in cmux panes — Claude, Cursor, Gemini, Codex, Kiro |
+| cmux | `/cmux` | Control cmux panes, splits, browser, sidebar, agent-to-agent messaging |
 
 ### Project Management
 
 | Skill | Command | What It Does |
 |-------|---------|-------------|
 | PRD | `/prd` | Generate Product Requirement Documents |
-| PRD Manager | `/prd-manager` | Manage PRD stories and status |
-| Large Plan | `/large-plan` | Multi-phase plan scaffolding and execution |
 | Archive | `/archive` | Archive completed PRD stories |
-| Project Context | `/project-context` | Auto-detect and load project context |
+| Writing Skills | `/writing-skills` | Create and validate new golem-powers skills |
+| Skills | `/skills` | List and discover installed skills |
 
-### Browser & UI
+### Browser & Presentation
 
 | Skill | Command | What It Does |
 |-------|---------|-------------|
 | Brave | `/brave` | Brave browser management (navigation, inspection, debugging) |
-| Ralph Install | `/ralph-install` | Guided installation wizard |
+| Presentation Builder | `/presentation-builder` | Generate slide decks from content |
+| Video Showcase | `/video-showcase` | Create video showcases of features |
 
 ## Using Skills
 
@@ -97,6 +112,18 @@ In any Claude Code session with golem-powers installed:
 /railway logs        # Check Railway deployment logs
 ```
 
+## Adapter Layer
+
+Skills are **AI-agnostic** — each skill can include adapters for different AI CLI tools:
+
+| CLI | Adapter |
+|-----|---------|
+| Claude Code | `adapters/claude.md` |
+| Cursor | `adapters/cursor.md` |
+| Gemini CLI | `adapters/gemini.md` |
+| Codex CLI | `adapters/codex.md` |
+| Kiro | `adapters/kiro.md` |
+
 ## Installing Skills
 
 Skills are available as a Claude Code plugin:
@@ -107,6 +134,10 @@ claude --plugin-dir ~/Gits/golems/skills/golem-powers
 ```
 
 Or symlink into your project's `.claude/commands/` directory for per-project access.
+
+## Eval Coverage
+
+40 of 60+ skills have eval suites with structured assertions. Evals verify that skills trigger correctly and produce the expected behavior. See individual skill pages for eval details.
 
 ## Source
 
