@@ -48,9 +48,9 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "pip install brainlayer",
     isMiniSite: true,
     stats: [
-      { value: 224, suffix: "K", label: "Indexed chunks" },
-      { value: 9, label: "MCP tools" },
-      { value: 958, label: "Tests passing" },
+      { value: 312, suffix: "K+", label: "Indexed chunks" },
+      { value: 11, label: "MCP tools" },
+      { value: 1111, label: "Tests passing" },
       { value: 119, label: "KG entities" },
     ],
     features: [
@@ -62,21 +62,21 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
       {
         iconName: "Cpu",
-        title: "Faceted Enrichment v2",
+        title: "BrainBar Daemon",
         description:
-          "Gemini 2.5 Flash generates topic-specific tags (brainlayer-search-quality, cmux-terminal-orchestration), activity classification, domain tags, and confidence scores. 98% valid JSON in 100-chunk pilot.",
+          "Native macOS Swift daemon (209KB) providing MCP over Unix socket. Real-time indexing hooks capture prompt/response pairs as they happen. Always-on recall without starting a separate server.",
       },
       {
         iconName: "Database",
-        title: "9 MCP Tools",
+        title: "11 MCP Tools",
         description:
-          "3 core (search, store, recall) + 6 knowledge graph (digest, entity, update, expand, tags, get_person). Consolidated from 14. Old names still work via aliases.",
+          "3 core (search, store, recall) + 8 knowledge graph (digest, entity, update, expand, tags, subscribe, unsubscribe, stats). Consolidated from 14. Old names still work via aliases.",
       },
       {
         iconName: "Brain",
-        title: "Knowledge Graph",
+        title: "3-Mode Enrichment",
         description:
-          "Entity extraction, relation mapping, person lookup, and sentiment analysis. 119 entities across people, projects, and technologies.",
+          "Unified brain_digest with 3 modes: full content ingestion, faceted tag generation via Gemini 2.5 Flash, and tiered selectivity (T0-T3 classifier). 312K+ chunks enriched with structured metadata.",
       },
     ],
     installTabs: [
@@ -100,7 +100,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { icon: "FileText", title: "Indexing", subtitle: "Chunk + deduplicate" },
       { icon: "Binary", title: "Embedding", subtitle: "bge-large 1024-dim" },
       { icon: "Search", title: "Hybrid Search", subtitle: "Vec + FTS5 + RRF" },
-      { icon: "Wrench", title: "MCP Tools", subtitle: "9 tools for agents" },
+      { icon: "Wrench", title: "BrainBar", subtitle: "11 tools, Unix socket" },
     ],
   },
 
@@ -129,15 +129,15 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
       {
         iconName: "Zap",
-        title: "LaunchAgent Auto-Start",
+        title: "MCP Daemon + LaunchAgent",
         description:
-          "VoiceBar MCP daemon auto-starts via macOS LaunchAgent. Always available, zero manual setup after install.",
+          "Singleton voice service via socat with dual-protocol support (NDJSON + MCP Content-Length). Auto-starts via macOS LaunchAgent. Always available, zero manual setup after install.",
       },
       {
         iconName: "Volume2",
-        title: "Edge-TTS + Qwen3",
+        title: "Edge-TTS + Smart Chunking",
         description:
-          "Neural-quality text-to-speech with edge-tts and local Qwen3. Free, local, multiple voices. User-controlled stop via session booking.",
+          "Neural-quality TTS with word-boundary text splitting for long messages. Auto-chunks at sentence boundaries to avoid truncation. Free, local, multiple voices.",
       },
     ],
     installTabs: [
@@ -300,40 +300,40 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     isMiniSite: true,
     stats: [
       { value: 12, label: "Packages" },
-      { value: 4, label: "Domain golems" },
-      { value: 46, label: "Skills" },
-      { value: 319, suffix: "+", label: "PRs merged" },
+      { value: 60, suffix: "+", label: "Skills" },
+      { value: 5, label: "Supported CLIs" },
+      { value: 321, suffix: "+", label: "PRs merged" },
     ],
     features: [
       {
-        iconName: "Zap",
-        title: "Multi-LLM Routing",
+        iconName: "Layers",
+        title: "AI-Agnostic Skills",
         description:
-          "Claude Opus/Sonnet/Haiku, Gemini Flash-Lite, local GLM-4.7-Flash. Cost-optimized backend switching.",
+          "60+ skills with 3-layer architecture: SKILL.md (universal) + adapters/ (per-CLI) + capabilities.yaml (routing). Validated across Claude, Codex, Cursor, Gemini, and Kiro.",
+      },
+      {
+        iconName: "Shield",
+        title: "Eval Framework",
+        description:
+          "40 skill eval packs with 480+ assertions and fixture-based testing. 96% pass rate. Skills are measured, not assumed to work.",
       },
       {
         iconName: "Bot",
-        title: "4 Domain Golems",
+        title: "OrcClaude v2.0",
         description:
-          "Coach (primary), Claude (telegram), Recruiter (job hunt), Services (infra). Each is a self-contained CC plugin.",
+          "Orchestrator agent with planning topology, response markers, and multi-agent sprint coordination. Spawns and monitors parallel Claude workers.",
       },
       {
         iconName: "Package",
         title: "Autonomous Loop",
         description:
-          "Night Shift runs improvements at 4am with CodeRabbit review gates. Morning Briefing at 8am.",
-      },
-      {
-        iconName: "Layers",
-        title: "AI-Agnostic Skills",
-        description:
-          "3-layer architecture: SKILL.md (universal) + adapters/ (per-CLI) + capabilities.yaml (routing). Validated across Claude, Codex, Gemini, and Kiro.",
+          "Night Shift runs improvements at 4am with CodeRabbit review gates. PR loop v2 enforces review on every commit. Morning Briefing at 8am.",
       },
       {
         iconName: "Cloud",
         title: "Cloud + Local Split",
         description:
-          "Railway for cloud worker (email, jobs, briefings). Mac for Telegram bot, memory, voice.",
+          "Railway for cloud worker (email, jobs, briefings). Mac for Telegram bot, memory, voice. ~$5/month total.",
       },
     ],
     installTabs: [
@@ -350,14 +350,14 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     ],
     architectureFlow: [
       { icon: "Send", title: "Telegram", subtitle: "User commands" },
-      { icon: "Bot", title: "Orchestrator", subtitle: "Route to golems" },
+      { icon: "Bot", title: "OrcClaude v2", subtitle: "Multi-agent sprints" },
       {
-        icon: "Zap",
-        title: "Domain Agents",
-        subtitle: "4 specialized golems",
-        children: ["Coach", "Claude", "Recruiter", "Services"],
+        icon: "Layers",
+        title: "60+ Skills",
+        subtitle: "5 CLI adapters",
+        children: ["Claude", "Codex", "Cursor", "Gemini", "Kiro"],
       },
-      { icon: "Binary", title: "LLM Router", subtitle: "Multi-model cost opt" },
+      { icon: "Shield", title: "Eval Framework", subtitle: "480+ assertions" },
       { icon: "Cloud", title: "Cloud + Local", subtitle: "Railway + Mac" },
     ],
   },
