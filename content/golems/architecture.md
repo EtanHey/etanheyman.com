@@ -71,7 +71,7 @@ Your Mac runs these always-on services:
 | **Telegram Bot** | Receive commands, send notifications | grammy.js |
 | **Night Shift** | Scan repos for improvements, auto-commit | Claude + Ralph |
 | **Notification Server** | Queue and send Telegram messages | HTTP server |
-| **BrainLayer Memory** | Semantic search over past conversations | FastAPI + sqlite-vec |
+| **BrainLayer Memory** | 312K+ chunks, 11 MCP tools, semantic search + brain_digest | FastAPI + sqlite-vec + BrainBar daemon |
 | **Render Service** | Remotion video rendering microservice | Bun + Remotion |
 | **Enrichment** | Process BrainLayer chunks (tags, summaries) | GLM-4.7-Flash via Ollama |
 

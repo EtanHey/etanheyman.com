@@ -33,7 +33,7 @@ Then in Claude Code: `/tools` or use `@brainlayer` in any prompt.
 
 | Server | Command | Tools | Purpose |
 |--------|---------|-------|---------|
-| **brainlayer** | `brainlayer-mcp` | 8 | Memory layer — search 224K+ indexed conversation chunks |
+| **brainlayer** | `brainlayer-mcp` | 11 | Memory layer — search, store, digest 312K+ indexed conversation chunks |
 | **voicelayer** | `voicelayer-mcp` | 6 | Voice I/O — TTS + STT via VoiceBar daemon |
 | **cmuxlayer** | native MCP daemon | 10+ | Terminal multiplexer — panes, splits, agent orchestration |
 | **golems-glm** | `bun run packages/shared/src/glm/mcp-server.ts` | 2 | Local GLM-4.7-Flash — summarize, score/classify (experimental) |
@@ -247,7 +247,7 @@ Quick job statistics.
 
 ## Memory Tools (brainlayer)
 
-BrainLayer provides persistent memory across Claude Code sessions — semantic search over 224K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec.
+BrainLayer provides persistent memory across Claude Code sessions — semantic search over 312K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec. BrainBar daemon (209KB native Swift binary) provides real-time indexing via hooks.
 
 ### brainlayer_search
 
@@ -328,6 +328,71 @@ Query plan-linked sessions — which plan/phase a session belongs to, or all ses
 - `project` (string, optional) — Filter by project
 
 **Returns:** Plan/phase associations for sessions
+
+### brain_store
+
+Store a new memory chunk with tags and importance scoring.
+
+**Parameters:**
+- `content` (string, required) — Text content to store
+- `tags` (array, optional) — Tags for categorization (e.g., `["decision", "6pm-mini"]`)
+- `importance` (number, optional) — Importance score 1-10
+
+**Returns:** Stored chunk ID and confirmation
+
+### brain_digest
+
+Digest large content into structured knowledge — extracts entities, relations, and action items. Three modes: auto (detect content type), conversation (Claude Code sessions), document (reports, research).
+
+**Parameters:**
+- `raw_content` (string, required) — Raw text to digest
+- `mode` (enum, optional) — `auto`, `conversation`, or `document`
+
+**Returns:** Extracted entities, relations, and action items stored in BrainLayer
+
+### brain_entity
+
+Query a specific entity by name — returns all known facts, relations, and mentions.
+
+**Parameters:**
+- `name` (string, required) — Entity name to look up
+
+**Returns:** Entity details with relations and source chunks
+
+### brain_expand
+
+Expand a search result with related knowledge — follows entity relations to surface connected information.
+
+**Parameters:**
+- `chunk_id` (string, required) — Starting chunk ID
+- `depth` (number, default: 1) — How many relation hops to follow
+
+**Returns:** Related chunks and entities
+
+### brain_tags
+
+List all tags in the knowledge base with counts.
+
+**Returns:** Tag list with frequency counts
+
+### brain_subscribe / brain_unsubscribe
+
+Subscribe to real-time updates for a topic or entity. Notifications arrive via the pubsub system.
+
+**Parameters:**
+- `topic` (string, required) — Topic or entity name to watch
+
+### brain_update
+
+Update an existing chunk's content, tags, or importance.
+
+**Parameters:**
+- `chunk_id` (string, required) — Chunk ID to update
+- `content` (string, optional) — New content
+- `tags` (array, optional) — Updated tags
+- `importance` (number, optional) — Updated importance score
+
+**Returns:** Updated chunk confirmation
 
 ---
 
@@ -418,7 +483,7 @@ Key capabilities: semantic web search, code context retrieval, company research.
 
 - **Email tools** use Supabase directly (cloud-first architecture)
 - **Job tools** query Supabase `golem_jobs` and `scrape_activity` tables
-- **BrainLayer tools** query local sqlite-vec database (224K+ chunks, FTS5 + vector hybrid search)
+- **BrainLayer tools** query local sqlite-vec database (312K+ chunks, FTS5 + vector hybrid search, faceted tag schema)
 - **GLM tools** run locally via Ollama (no network, ~3-8s per call on M1 Pro)
 - **Scoring:** Email scores 1-10 (10=urgent), Job scores 1-10 (8+=hot match)
 - **Categories:** Email categories are semantic (job, interview, subscription, tech-update, newsletter, promo, social, other)
