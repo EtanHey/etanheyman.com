@@ -15,7 +15,7 @@ const terminalData: Record<string, { tabs: TerminalTab[]; title: string }> = {
         lines: [
           '\x1b[90m$\x1b[0m brainlayer search \x1b[33m"how did I implement auth"\x1b[0m',
           "",
-          "\x1b[1;34mBrainLayer Search\x1b[0m  \x1b[90m·\x1b[0m  291,000+ chunks indexed",
+          "\x1b[1;34mBrainLayer Search\x1b[0m  \x1b[90m·\x1b[0m  312,000+ chunks indexed",
           "",
           "\x1b[32mFound 12 results across 3 projects\x1b[0m",
           "",
@@ -98,7 +98,7 @@ const terminalData: Record<string, { tabs: TerminalTab[]; title: string }> = {
           "  tags: \x1b[33m[sqlite, concurrency, bug-fix]\x1b[0m  importance: \x1b[32m9\x1b[0m",
           "  intent: \x1b[35mdebugging\x1b[0m",
           "",
-          "\x1b[90mProgress: 142,892 / 291,000+ (enriched)\x1b[0m",
+          "\x1b[90mProgress: 245,000 / 312,000+ (enriched)\x1b[0m",
         ],
       },
     ],

@@ -115,7 +115,7 @@ return sorted(fused, reverse=True)[:n]`,
     {
       title: "MCP Integration",
       description:
-        "7 MCP tools expose BrainLayer's full capability to any Claude Code session. 3 core memory tools handle search, persistence, and recall. 4 knowledge graph tools add entity extraction, lookup, updates, and person profiles. Started at 14 specialized tools, consolidated to 7 that cover every use case. Old names still work through backward-compat aliases.",
+        "11 MCP tools expose BrainLayer's full capability to any Claude Code session. 3 core memory tools handle search, persistence, and recall. 8 knowledge graph and lifecycle tools add entity extraction, digestion with 3 modes, real-time pubsub, and database stats. Started at 14 specialized tools, refined to 11 that cover every use case. BrainBar daemon provides MCP over Unix socket for always-on access.",
       toolList: [
         {
           name: "brain_search",
@@ -135,7 +135,7 @@ return sorted(fused, reverse=True)[:n]`,
         {
           name: "brain_digest",
           description:
-            "Ingest raw content and extract entities, relations, action items",
+            "3-mode ingestion: full content, faceted tags (Gemini 2.5 Flash), tiered selectivity (T0-T3)",
         },
         {
           name: "brain_entity",
@@ -147,8 +147,24 @@ return sorted(fused, reverse=True)[:n]`,
           description: "Update, archive, or merge existing memory chunks",
         },
         {
-          name: "brain_get_person",
-          description: "Retrieve person profiles with interaction history",
+          name: "brain_expand",
+          description:
+            "Drill into search results with surrounding context from the same session",
+        },
+        {
+          name: "brain_tags",
+          description:
+            "Discover, search, and suggest tags across the knowledge base",
+        },
+        {
+          name: "brain_subscribe / brain_unsubscribe",
+          description:
+            "Pubsub for real-time memory update notifications across sessions",
+        },
+        {
+          name: "brain_stats",
+          description:
+            "Database statistics, chunk counts, enrichment progress, and health metrics",
         },
       ],
     },
@@ -239,7 +255,7 @@ try {
     {
       title: "Monorepo Structure",
       description:
-        "11 packages in a Bun monorepo. @golems/shared is the foundation: Supabase client, multi-backend LLM routing, email processing, state management. Domain golems (jobs, recruiter, coach, teller, content) are self-contained Claude Code plugins. The docsite is a Next.js 16 app with 3D brain visualization. Each package deploys independently but shares types and utilities through the foundation layer.",
+        "12 packages in a Bun monorepo. @golems/shared is the foundation: Supabase client, multi-backend LLM routing, email processing, state management. Domain golems (jobs, recruiter, coach, teller, content) are self-contained Claude Code plugins. 60+ AI-agnostic skills with eval framework. The dashboard is a Next.js app with 2D canvas knowledge graph and Neural Observatory. Each package deploys independently but shares types and utilities through the foundation layer.",
       diagramNodes: [
         {
           icon: "Package",
@@ -254,14 +270,15 @@ try {
           children: ["Jobs", "Recruiter", "Coach", "Teller", "Content"],
         },
         {
-          icon: "Zap",
-          title: "Autonomy",
-          subtitle: "Ralph + Night Shift",
+          icon: "Layers",
+          title: "Skills",
+          subtitle: "60+ AI-agnostic",
+          children: ["SKILL.md", "Adapters", "Evals"],
         },
         {
           icon: "Monitor",
           title: "Dashboard",
-          subtitle: "Next.js 16 + Three.js",
+          subtitle: "KG Canvas + Observatory",
         },
         {
           icon: "Send",
@@ -314,13 +331,13 @@ const result = await runLLM(prompt);
     {
       title: "Autonomous Loop",
       description:
-        "Ralph turns PRD stories into working code without human intervention. The /prd skill creates structured stories with acceptance criteria. Ralph spawns a fresh Claude instance per story, implements the code, and gates every commit behind CodeRabbit AI review. Failed reviews trigger automatic fix-iterate-review cycles (max 3 attempts). Night Shift extends this at 4am: scans repos for TODOs, creates worktrees, ships PRs while the developer sleeps.",
+        "Ralph turns PRD stories into working code without human intervention. PR Loop v2 enforces CodeRabbit AI review on every commit. Failed reviews trigger automatic fix-iterate-review cycles (max 3 attempts). Night Shift extends this at 4am: scans repos for TODOs, creates worktrees, ships PRs while the developer sleeps. OrcClaude v2.0 coordinates multi-agent sprints with planning topology and structured response markers.",
       diagramNodes: [
         { icon: "FileText", title: "PRD", subtitle: "Stories + criteria" },
-        { icon: "Bot", title: "Ralph", subtitle: "Spawn Claude" },
-        { icon: "Wrench", title: "Implement", subtitle: "Code generation" },
+        { icon: "Bot", title: "OrcClaude", subtitle: "Coordinate agents" },
+        { icon: "Wrench", title: "Implement", subtitle: "Parallel workers" },
         { icon: "Shield", title: "CodeRabbit", subtitle: "AI review gate" },
-        { icon: "GitBranch", title: "Commit", subtitle: "Auto-merge" },
+        { icon: "GitBranch", title: "PR Loop v2", subtitle: "Review-enforced" },
       ],
       callout: {
         title: "CodeRabbit as quality gate",
@@ -330,15 +347,15 @@ const result = await runLLM(prompt);
     {
       title: "MCP Ecosystem",
       description:
-        "8 MCP servers powering every golem. BrainLayer: 7 tools (3 core memory + 4 knowledge graph). Email: 7 tools for triage. VoiceLayer: 2 voice tools. Plus Supabase for database, Exa for web search, Sophtron for financial data, GLM for local inference. Each golem declares which MCP servers it needs. The orchestrator makes sure they're available at session startup.",
+        "8 MCP servers powering every golem. BrainLayer: 11 tools (3 core memory + 8 knowledge graph/lifecycle) with BrainBar daemon. Email: 7 tools for triage. VoiceLayer: 2 voice tools with MCP daemon. Plus Supabase for database, Exa for web search, Sophtron for financial data, GLM for local inference. Each golem declares which MCP servers it needs via context profiles.",
       diagramNodes: [
         {
           icon: "Brain",
           title: "BrainLayer",
-          subtitle: "7 tools",
+          subtitle: "11 tools + daemon",
         },
         { icon: "Mail", title: "Email", subtitle: "7 tools" },
-        { icon: "Mic", title: "VoiceLayer", subtitle: "2 tools" },
+        { icon: "Mic", title: "VoiceLayer", subtitle: "2 tools + daemon" },
         { icon: "Database", title: "Supabase", subtitle: "SQL + DDL" },
         {
           icon: "Wrench",
