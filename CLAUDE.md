@@ -68,7 +68,7 @@ Professional portfolio website showcasing Etan Heyman's work with Next.js 15.
 
 ### Technical Stack
 ```yaml
-framework: Next.js 15.3.0-canary.40
+framework: Next.js 15 (App Router, Turbopack)
 language: TypeScript 5.x (strict mode)
 styling: Tailwind CSS v4
 database: Supabase (PostgreSQL)
@@ -78,7 +78,8 @@ deployment: Vercel
 
 ### Key Dependencies
 - UI: @radix-ui/*, shadcn/ui
-- Forms: react-hook-form, zod
+- Animations: framer-motion
+- Content: next-mdx-remote, rehype, remark
 - Files: uploadthing
 - Email: resend
 - Icons: lucide-react
@@ -87,11 +88,11 @@ deployment: Vercel
 ### Directory Structure
 ```
 app/
-├── (routes)/         # Pages: about/, contact/, projects/
-├── api/              # API routes
-├── components/       # ui/, tech-icons/, navigation/, etc.
-└── lib/              # supabase/, utils.ts, types.ts
-types/                # database.types.ts (generated)
+├── (portfolio)/      # Pages: about/, contact/, projects/, admin/
+├── (golems)/         # Golems docs site: golems/docs/, golems/skills/
+├── components/       # ui/, tech-icons/, navigation/, contact/
+└── lib/              # supabase/
+types/                # database.types.ts (generated), auth.ts
 ```
 
 ---
