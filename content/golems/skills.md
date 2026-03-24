@@ -45,6 +45,7 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 | Content | `/content` | Multi-platform content creation and publishing |
 | Nightly Docs Update | `/nightly-docs-update` | Automated documentation updates |
 | YouTube Pipeline | `/youtube-pipeline` | YouTube content processing pipeline |
+| Video Extract | `/video-extract` | Extract gems from YouTube or process QA recordings — two workflows, one entry point |
 
 ### Research & Context
 
