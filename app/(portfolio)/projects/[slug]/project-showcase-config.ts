@@ -215,7 +215,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         title: "CLI Command",
         subtitle: "spawn / interact / kill",
       },
-      { icon: "Wrench", title: "MCP Server", subtitle: "20 typed tools" },
+      { icon: "Wrench", title: "MCP Server", subtitle: "21 typed tools" },
       { icon: "Monitor", title: "cmux Socket", subtitle: "Terminal control" },
       {
         icon: "Bot",
@@ -289,7 +289,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       {
         icon: "Wrench",
         title: "Python MCP",
-        subtitle: "13 tools, instr() search",
+        subtitle: "12 tools, instr() search",
       },
       { icon: "Bot", title: "AI Agent", subtitle: "Claude / Cursor" },
     ],
