@@ -10,13 +10,14 @@ A modern, performant portfolio website built with Next.js 15, TypeScript, and Su
 
 | Layer | Technology |
 |-------|-----------|
-| **Framework** | Next.js 15.3.0 (App Router) |
+| **Framework** | Next.js 15 (App Router, Turbopack) |
 | **Language** | TypeScript 5.x (strict mode) |
 | **Styling** | Tailwind CSS v4 |
 | **Database** | Supabase (PostgreSQL) |
 | **Auth** | NextAuth.js (GitHub OAuth) |
 | **UI Components** | Radix UI + shadcn/ui |
-| **Forms** | react-hook-form + Zod validation |
+| **Animations** | Framer Motion |
+| **Content** | MDX (next-mdx-remote, rehype, remark) |
 | **File Uploads** | Uploadthing |
 | **Email** | Resend |
 | **Icons** | lucide-react |
@@ -26,11 +27,10 @@ A modern, performant portfolio website built with Next.js 15, TypeScript, and Su
 ```json
 {
   "@radix-ui/*": "Latest",
-  "@shadcn/ui": "Latest",
   "@supabase/supabase-js": "Latest",
   "@supabase/ssr": "Latest",
-  "react-hook-form": "Latest",
-  "zod": "Latest",
+  "framer-motion": "Latest",
+  "next-mdx-remote": "Latest",
   "lucide-react": "Latest",
   "next-auth": "Latest",
   "uploadthing": "Latest",
@@ -44,29 +44,31 @@ A modern, performant portfolio website built with Next.js 15, TypeScript, and Su
 
 ```
 app/
-├── (routes)/              # Main routes
+├── (portfolio)/          # Portfolio routes
 │   ├── about/            # About page
 │   ├── contact/          # Contact form
-│   └── projects/         # Project showcase
-├── api/                  # API routes & webhooks
+│   ├── projects/         # Project showcase (list, [slug], add)
+│   ├── admin/            # Admin panel
+│   ├── api/              # API routes (auth, projects, uploadthing)
+│   └── unauthorized/     # Auth error page
+├── (golems)/             # Golems documentation site
+│   └── golems/           # Docs, skills browser
 ├── components/
 │   ├── ui/              # UI components (Button, Card, etc)
 │   ├── tech-icons/      # Technology badges
 │   ├── navigation/      # Header/footer components
-│   └── forms/           # Form components
+│   └── contact/         # Contact form components
 ├── layout.tsx           # Root layout with nav/footer
 └── lib/
-    ├── supabase/       # Client & server Supabase instances
-    ├── auth/           # NextAuth configuration
-    └── utils.ts        # Helper functions
+    └── supabase/        # Client & server Supabase instances
 
 types/
 ├── database.types.ts    # Auto-generated from Supabase
-└── index.ts            # Type definitions
+├── auth.ts              # Auth type definitions
+└── next-auth.d.ts       # NextAuth type augmentations
 
 supabase/
-├── migrations/         # SQL migration files
-└── functions/          # Postgres functions
+└── migrations/          # SQL migration files
 ```
 
 ---
@@ -75,9 +77,10 @@ supabase/
 
 ### Pages
 
-**`app/(routes)/about`** - Personal bio and skills showcase
-**`app/(routes)/projects`** - Dynamic project portfolio from Supabase
-**`app/(routes)/contact`** - Contact form with spam protection
+**`app/(portfolio)/about`** — Personal bio and skills showcase
+**`app/(portfolio)/projects`** — Dynamic project portfolio from Supabase (with per-project architecture, docs, features sub-pages)
+**`app/(portfolio)/contact`** — Contact form with spam protection
+**`app/(golems)/golems`** — Golems ecosystem documentation and skills browser
 
 ### Database Schema
 
