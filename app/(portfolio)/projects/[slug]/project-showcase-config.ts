@@ -112,7 +112,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { value: 2, label: "MCP tools" },
       { value: 2, label: "STT backends" },
       { value: 300, suffix: "ms", prefix: "~", label: "STT latency" },
-      { value: 308, label: "Tests passing" },
+      { value: 314, label: "Tests passing" },
     ],
     features: [
       {
