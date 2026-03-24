@@ -255,7 +255,7 @@ try {
     {
       title: "MCP Tool Layers",
       description:
-        "21 tools organized into three layers. Layer 1: 11 core surface tools for terminal pane control (list, split, read, send, rename, status, progress, notify, close, browser). Layer 2: 8 agent lifecycle tools (spawn, stop, send_to, read_output, wait_for, wait_for_all, list, get_state). Layer 3: 2 V2 facade tools (interact + kill) that consolidate all agent operations into a clean, flat API.",
+        "21 tools organized into three layers. Layer 1: 11 core surface tools for terminal pane control (list, split, read, send, send_key, rename, status, progress, notify, close, browser). Layer 2: 8 agent lifecycle tools (spawn, stop, send_to, read_output, wait_for, wait_for_all, list, get_state). Layer 3: 2 V2 facade tools (interact + kill) that consolidate all agent operations into a clean, flat API.",
       diagramNodes: [
         {
           icon: "Terminal",
