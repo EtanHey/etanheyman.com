@@ -168,7 +168,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     stats: [
       { value: 21, label: "MCP tools" },
       { value: 5, label: "Supported CLIs" },
-      { value: 259, label: "Test assertions" },
+      { value: 278, label: "Test assertions" },
       { value: 3, label: "API layers" },
     ],
     features: [

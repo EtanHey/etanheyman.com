@@ -170,7 +170,7 @@ const gettingStartedData: Record<string, GettingStartedStep[]> = {
       step: 5,
       title: "Run tests",
       description:
-        "259 test assertions across 15 test files verify tool registration, agent lifecycle, V2 semantics, hierarchy, and quality tracking.",
+        "278 test assertions across 15 test files verify tool registration, agent lifecycle, V2 semantics, hierarchy, and quality tracking.",
       command: "npm test",
       note: "Uses Vitest. All tests run locally with mocked cmux client.",
     },
