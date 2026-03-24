@@ -166,7 +166,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "@golems/cmux-mcp",
     isMiniSite: true,
     stats: [
-      { value: 20, label: "MCP tools" },
+      { value: 21, label: "MCP tools" },
       { value: 5, label: "Supported CLIs" },
       { value: 259, label: "Test assertions" },
       { value: 3, label: "API layers" },
@@ -174,9 +174,9 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     features: [
       {
         iconName: "Terminal",
-        title: "20 MCP Tools, 3 Layers",
+        title: "21 MCP Tools, 3 Layers",
         description:
-          "10 core surface tools (split, read, send, rename), 8 agent lifecycle tools (spawn_agent, stop_agent, send_to_agent, wait_for), and 2 V2 facade tools (interact + kill).",
+          "11 core surface tools (split, read, send, send_key, notify, rename), 8 agent lifecycle tools (spawn_agent, stop_agent, send_to_agent, wait_for), and 2 V2 facade tools (interact + kill).",
       },
       {
         iconName: "Bot",
@@ -235,7 +235,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "Fork of lharries/whatsapp-mcp",
     isMiniSite: true,
     stats: [
-      { value: 13, label: "MCP tools" },
+      { value: 12, label: "MCP tools" },
       { value: 2, label: "Bridge support" },
       { value: 3, label: "Unicode search fixes" },
       { value: 5.4, suffix: "K", label: "Upstream stars" },
@@ -261,9 +261,9 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
       {
         iconName: "MessageSquare",
-        title: "13 MCP Tools",
+        title: "12 MCP Tools",
         description:
-          "9 read tools (search contacts, list messages, get chat, download media) + 4 write tools (send message, send file, send audio with auto Opus conversion).",
+          "9 read tools (search contacts, list messages, get chat, download media) + 3 write tools (send message, send file, send audio with auto Opus conversion).",
       },
     ],
     installTabs: [

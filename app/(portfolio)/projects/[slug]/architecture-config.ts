@@ -115,7 +115,7 @@ return sorted(fused, reverse=True)[:n]`,
     {
       title: "MCP Integration",
       description:
-        "11 MCP tools expose BrainLayer's full capability to any Claude Code session. 3 core memory tools handle search, persistence, and recall. 8 knowledge graph and lifecycle tools add entity extraction, digestion with 3 modes, real-time pubsub, and database stats. Started at 14 specialized tools, refined to 11 that cover every use case. BrainBar daemon provides MCP over Unix socket for always-on access.",
+        "10 MCP tools expose BrainLayer's full capability to any Claude Code session. 3 core memory tools handle search, persistence, and recall. 7 knowledge graph and lifecycle tools add entity extraction, digestion with 3 modes, and real-time pubsub. Started at 14 specialized tools, refined to 10 that cover every use case. BrainBar daemon provides MCP over Unix socket for always-on access.",
       toolList: [
         {
           name: "brain_search",
@@ -160,11 +160,6 @@ return sorted(fused, reverse=True)[:n]`,
           name: "brain_subscribe / brain_unsubscribe",
           description:
             "Pubsub for real-time memory update notifications across sessions",
-        },
-        {
-          name: "brain_stats",
-          description:
-            "Database statistics, chunk counts, enrichment progress, and health metrics",
         },
       ],
     },
