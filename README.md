@@ -410,7 +410,7 @@ export async function GET() {
 ### Server Actions
 
 ```typescript
-// app/(portfolio)/contact/actions.ts
+// Simplified from app/(portfolio)/contact/actions.ts
 'use server';
 
 import { Resend } from 'resend';

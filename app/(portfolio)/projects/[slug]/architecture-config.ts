@@ -255,19 +255,19 @@ try {
     {
       title: "MCP Tool Layers",
       description:
-        "20 tools organized into three layers. Layer 1: 10 core surface tools for terminal pane control (list, split, read, send, rename, status, progress, close, browser). Layer 2: 8 agent lifecycle tools (spawn, stop, send_to, read_output, wait_for, list, get_state, set_progress). Layer 3: 2 V2 facade tools (interact + kill) that consolidate all agent operations into a clean, flat API.",
+        "21 tools organized into three layers. Layer 1: 11 core surface tools for terminal pane control (list, split, read, send, rename, status, progress, notify, close, browser). Layer 2: 8 agent lifecycle tools (spawn, stop, send_to, read_output, wait_for, wait_for_all, list, get_state). Layer 3: 2 V2 facade tools (interact + kill) that consolidate all agent operations into a clean, flat API.",
       diagramNodes: [
         {
           icon: "Terminal",
           title: "Surface Layer",
-          subtitle: "10 core tools",
-          children: ["list", "split", "read", "send", "browser"],
+          subtitle: "11 core tools",
+          children: ["list", "split", "read", "send", "notify", "browser"],
         },
         {
           icon: "Bot",
           title: "Agent Layer",
           subtitle: "8 lifecycle tools",
-          children: ["spawn", "stop", "send_to", "wait_for"],
+          children: ["spawn", "stop", "send_to", "wait_for_all"],
         },
         {
           icon: "Zap",
@@ -326,7 +326,7 @@ socket.write(JSON.stringify({
     {
       title: "Security & Quality Guards",
       description:
-        "Repository names are sanitized before shell execution — only alphanumeric characters, hyphens, underscores, and dots pass through. Agent IDs include random suffixes to prevent collision when spawning multiple agents for the same repo. All 20 tools validate input via Zod schemas. Mode enforcement: manual mode makes all mutating tools read-only. Agent quality tracking (unknown → verified → suspect → degraded) lets orchestrators filter unreliable output.",
+        "Repository names are sanitized before shell execution — only alphanumeric characters, hyphens, underscores, and dots pass through. Agent IDs include random suffixes to prevent collision when spawning multiple agents for the same repo. All 21 tools validate input via Zod schemas. Mode enforcement: manual mode makes all mutating tools read-only. Agent quality tracking (unknown → verified → suspect → degraded) lets orchestrators filter unreliable output.",
       comparisonTable: {
         headers: ["Guard", "Mechanism", "Why"],
         rows: [
@@ -334,7 +334,7 @@ socket.write(JSON.stringify({
           ["ID collision", "Random suffix", "Safe parallel spawns"],
           [
             "Input validation",
-            "Zod schemas on all 20 tools",
+            "Zod schemas on all 21 tools",
             "Type-safe at boundary",
           ],
           ["Mode enforcement", "Manual = read-only", "Safe observation mode"],
@@ -408,14 +408,14 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
         {
           icon: "Wrench",
           title: "Python MCP",
-          subtitle: "13 tools",
+          subtitle: "12 tools",
         },
       ],
     },
     {
       title: "MCP Tool Organization",
       description:
-        "13 tools split into query (9) and mutation (4) categories. Query tools cover every read pattern: search contacts by name or phone, list messages with filters (chat, sender, date range, content), get chat metadata, fetch message context around a specific message, and download media (images, videos, audio). Mutation tools handle sending: text messages, files with captions, and voice messages with automatic Opus/OGG conversion via FFmpeg.",
+        "12 tools split into query (9) and mutation (3) categories. Query tools cover every read pattern: search contacts by name or phone, list messages with filters (chat, sender, date range, content), get chat metadata, fetch message context around a specific message, and download media (images, videos, audio). Mutation tools handle sending: text messages, files with captions, and voice messages with automatic Opus/OGG conversion via FFmpeg.",
       toolList: [
         {
           name: "search_contacts",
