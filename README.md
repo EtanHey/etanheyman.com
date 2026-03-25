@@ -407,33 +407,25 @@ export async function GET() {
 }
 ```
 
-### Form Handling
+### Server Actions
 
 ```typescript
-'use client';
+// Simplified from app/(portfolio)/contact/actions.ts
+'use server';
 
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { Resend } from 'resend';
 
-const schema = z.object({
-  email: z.string().email(),
-  message: z.string().min(10),
-});
+export async function submitContactForm(data: ContactFormData) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
-export default function ContactForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(schema),
+  await resend.emails.send({
+    from: 'Portfolio <noreply@etanheyman.com>',
+    to: process.env.CONTACT_EMAIL!,
+    subject: `Contact from ${data.fullName}`,
+    react: EmailTemplate(data),
   });
 
-  const onSubmit = async (data) => {
-    // Handle submission
-  };
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* form fields */}
-    </form>
-  );
+  return { success: true };
 }
 ```
 

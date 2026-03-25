@@ -226,7 +226,7 @@ const featuresData: Record<string, FeatureSection[]> = {
   cmuxlayer: [
     {
       iconName: "Terminal",
-      title: "10 Core Surface Tools",
+      title: "11 Core Surface Tools",
       tagline: "Full terminal pane control through MCP",
       description:
         "list_surfaces, new_split, send_input, send_key, read_screen, rename_tab, set_status, set_progress, close_surface, and browser_surface. These wrap the cmux CLI socket into typed, validated tools. browser_surface alone handles 8 actions: open, navigate, snapshot, click, type, eval, wait, and url.",
@@ -311,7 +311,7 @@ kill({ target: "all" })          // everything`,
         "Repo name sanitization — blocks shell metacharacters",
         "Random suffix on agent IDs — no collisions",
         "Mode policy — manual mode = read-only surface tools",
-        "Input validation on all 20 tools via Zod schemas",
+        "Input validation on all 21 tools via Zod schemas",
       ],
     },
     {

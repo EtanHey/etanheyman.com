@@ -115,7 +115,7 @@ return sorted(fused, reverse=True)[:n]`,
     {
       title: "MCP Integration",
       description:
-        "11 MCP tools expose BrainLayer's full capability to any Claude Code session. 3 core memory tools handle search, persistence, and recall. 8 knowledge graph and lifecycle tools add entity extraction, digestion with 3 modes, real-time pubsub, and database stats. Started at 14 specialized tools, refined to 11 that cover every use case. BrainBar daemon provides MCP over Unix socket for always-on access.",
+        "10 MCP tools expose BrainLayer's full capability to any Claude Code session. 3 core memory tools handle search, persistence, and recall. 7 knowledge graph and lifecycle tools add entity extraction, digestion with 3 modes, and real-time pubsub. Started at 14 specialized tools, refined to 10 that cover every use case. BrainBar daemon provides MCP over Unix socket for always-on access.",
       toolList: [
         {
           name: "brain_search",
@@ -160,11 +160,6 @@ return sorted(fused, reverse=True)[:n]`,
           name: "brain_subscribe / brain_unsubscribe",
           description:
             "Pubsub for real-time memory update notifications across sessions",
-        },
-        {
-          name: "brain_stats",
-          description:
-            "Database statistics, chunk counts, enrichment progress, and health metrics",
         },
       ],
     },
@@ -247,6 +242,224 @@ try {
       callout: {
         title: "Why lockfile over semaphore?",
         text: "Lockfiles work across process boundaries without kernel objects or special privileges. Dead process detection via signal-zero is a Unix classic. Simple and reliable.",
+      },
+    },
+  ],
+
+  cmuxlayer: [
+    {
+      title: "MCP Tool Layers",
+      description:
+        "21 tools organized into three layers. Layer 1: 11 core surface tools for terminal pane control (list, split, read, send, send_key, rename, status, progress, notify, close, browser). Layer 2: 8 agent lifecycle tools (spawn, stop, send_to, read_output, wait_for, wait_for_all, list, get_state). Layer 3: 2 V2 facade tools (interact + kill) that consolidate all agent operations into a clean, flat API.",
+      diagramNodes: [
+        {
+          icon: "Terminal",
+          title: "Surface Layer",
+          subtitle: "11 core tools",
+          children: ["list", "split", "read", "send", "notify", "browser"],
+        },
+        {
+          icon: "Bot",
+          title: "Agent Layer",
+          subtitle: "8 lifecycle tools",
+          children: ["spawn", "stop", "send_to", "wait_for_all"],
+        },
+        {
+          icon: "Zap",
+          title: "V2 Facade",
+          subtitle: "interact + kill",
+        },
+      ],
+    },
+    {
+      title: "Agent State Machine",
+      description:
+        "Each spawned agent transitions through a deterministic state machine: spawning → booting → ready → working → done. Boot detection uses screen content polling to determine when the CLI has finished loading. State transitions are event-driven — wait_for blocks until the target state is reached. Stale agents are detected via PID liveness checks.",
+      diagramNodes: [
+        { icon: "Loader", title: "Spawning", subtitle: "tmux pane created" },
+        { icon: "Clock", title: "Booting", subtitle: "CLI loading" },
+        { icon: "CheckCircle", title: "Ready", subtitle: "Boot detected" },
+        { icon: "Wrench", title: "Working", subtitle: "Prompt sent" },
+        { icon: "Check", title: "Done", subtitle: "Output extracted" },
+      ],
+      callout: {
+        title: "Why state machines?",
+        text: "Without lifecycle tracking, orchestrating multiple agents is guesswork. The state machine lets OrcClaude spawn 5 agents, wait_for each to reach 'ready', then send prompts — all with deterministic ordering.",
+      },
+    },
+    {
+      title: "cmux Socket Protocol",
+      description:
+        "CmuxLayer communicates with cmux via a Unix domain socket, achieving 1,423x speedup over CLI subprocess spawning. Every tool call serializes to a JSON command, sends it through the socket, and receives a typed response. The socket path is auto-discovered from the CMUX_SOCKET environment variable or defaults to the standard cmux socket location.",
+      codeExample: {
+        language: "typescript",
+        code: `// Socket command flow
+const socket = net.connect(CMUX_SOCKET);
+socket.write(JSON.stringify({
+  type: "new_split",
+  direction: "horizontal",
+  command: "claude --dangerously-skip-permissions"
+}));
+
+// Response: { id: "surface-42", ok: true }
+// 1,423x faster than: child_process.exec("cmux split ...")`,
+        caption: "Native MCP over Unix socket — no CLI subprocess overhead",
+      },
+    },
+    {
+      title: "Browser Surface Integration",
+      description:
+        "The browser_surface tool opens Playwright-controlled browser instances as cmux panes. A single tool with 8 action types: open (launch browser), navigate (go to URL), snapshot (capture visible state), click (element interaction), type (text input), eval (run JavaScript), wait (element/timeout), and url (get current URL). Enables visual verification alongside terminal agents in the same orchestration flow.",
+      diagramNodes: [
+        { icon: "Globe", title: "Open", subtitle: "Launch Playwright" },
+        { icon: "Navigation", title: "Navigate", subtitle: "Go to URL" },
+        { icon: "Camera", title: "Snapshot", subtitle: "Capture state" },
+        { icon: "MousePointer", title: "Interact", subtitle: "Click + type" },
+        { icon: "Code", title: "Evaluate", subtitle: "Run JavaScript" },
+      ],
+    },
+    {
+      title: "Security & Quality Guards",
+      description:
+        "Repository names are sanitized before shell execution — only alphanumeric characters, hyphens, underscores, and dots pass through. Agent IDs include random suffixes to prevent collision when spawning multiple agents for the same repo. All 21 tools validate input via Zod schemas. Mode enforcement: manual mode makes all mutating tools read-only. Agent quality tracking (unknown → verified → suspect → degraded) lets orchestrators filter unreliable output.",
+      comparisonTable: {
+        headers: ["Guard", "Mechanism", "Why"],
+        rows: [
+          ["Repo sanitization", "Regex allowlist", "Prevents shell injection"],
+          ["ID collision", "Random suffix", "Safe parallel spawns"],
+          [
+            "Input validation",
+            "Zod schemas on all 21 tools",
+            "Type-safe at boundary",
+          ],
+          ["Mode enforcement", "Manual = read-only", "Safe observation mode"],
+          ["Spawn depth", "MAX_SPAWN_DEPTH=2", "Prevents recursion bombs"],
+          ["Child cap", "MAX_CHILDREN_PER_AGENT=10", "Resource limits"],
+        ],
+      },
+    },
+  ],
+
+  "whatsapp-mcp": [
+    {
+      title: "Go Bridge Architecture",
+      description:
+        "The Go bridge uses whatsmeow to authenticate with WhatsApp Web via QR code scan. Messages are stored in a local SQLite database. A REST API on port 8741 (personal) or 8742 (business) exposes send operations. The bridge runs as a long-lived process that maintains the WhatsApp Web session.",
+      diagramNodes: [
+        { icon: "Smartphone", title: "WhatsApp Web", subtitle: "QR auth" },
+        { icon: "Code", title: "whatsmeow", subtitle: "Go client library" },
+        { icon: "Database", title: "SQLite", subtitle: "Message store" },
+        { icon: "Server", title: "REST API", subtitle: "Port 8741/8742" },
+      ],
+    },
+    {
+      title: "Unicode Search Fix",
+      description:
+        "SQLite's built-in LOWER() function only handles ASCII characters (A-Z → a-z). For Hebrew, Arabic, emoji, and CJK text, LOWER() is a no-op — the text passes through unchanged. The upstream repo's LOWER(column) LIKE LOWER(?) pattern silently fails for non-Latin scripts. Our fork replaces this with instr()-based matching: a dual check that handles both case-insensitive Latin and direct Unicode byte-level matching.",
+      codeExample: {
+        language: "python",
+        code: `# Upstream (broken for Hebrew/Arabic/CJK):
+WHERE LOWER(chats.name) LIKE LOWER(?)
+# → LOWER("שלום") returns "שלום" unchanged
+# → LIKE "%שלום%" may fail on substring match
+
+# Our fork (works for all Unicode):
+WHERE instr(LOWER(chats.name), LOWER(?)) > 0
+   OR instr(chats.name, ?) > 0
+# → instr() does byte-level substring matching
+# → Dual check: case-insensitive Latin + direct Unicode`,
+        caption: "Applied to list_chats, list_messages, and search_contacts",
+      },
+      callout: {
+        title: "Why not ICU extension?",
+        text: "SQLite can load the ICU extension for proper Unicode collation, but it requires a C library dependency and isn't available in all environments. instr() is built-in, zero-dependency, and works everywhere SQLite runs.",
+      },
+    },
+    {
+      title: "Dual-Bridge Auto-Detection",
+      description:
+        "The Python MCP server checks for a business bridge database at whatsapp-bridge-business/store/messages.db. If it exists, it connects to the business bridge. Otherwise it falls back to the personal bridge at whatsapp-bridge/store/messages.db. Environment variables WHATSAPP_DB_PATH and WHATSAPP_API_URL override auto-detection for custom setups.",
+      diagramNodes: [
+        {
+          icon: "Smartphone",
+          title: "Personal Bridge",
+          subtitle: "Port 8741",
+        },
+        {
+          icon: "Briefcase",
+          title: "Business Bridge",
+          subtitle: "Port 8742",
+        },
+        {
+          icon: "GitBranch",
+          title: "Auto-Detect",
+          subtitle: "Check file existence",
+        },
+        {
+          icon: "Database",
+          title: "SQLite DB",
+          subtitle: "Shared schema",
+        },
+        {
+          icon: "Wrench",
+          title: "Python MCP",
+          subtitle: "12 tools",
+        },
+      ],
+    },
+    {
+      title: "MCP Tool Organization",
+      description:
+        "12 tools split into query (9) and mutation (3) categories. Query tools cover every read pattern: search contacts by name or phone, list messages with filters (chat, sender, date range, content), get chat metadata, fetch message context around a specific message, and download media (images, videos, audio). Mutation tools handle sending: text messages, files with captions, and voice messages with automatic Opus/OGG conversion via FFmpeg.",
+      toolList: [
+        {
+          name: "search_contacts",
+          description: "Unicode-safe name + phone search",
+        },
+        {
+          name: "list_messages",
+          description: "Filter by chat, sender, date, content",
+        },
+        {
+          name: "list_chats",
+          description: "All chats with optional last-message preview",
+        },
+        { name: "get_chat", description: "Chat metadata by JID" },
+        {
+          name: "get_direct_chat_by_contact",
+          description: "Find DM chat for a contact",
+        },
+        {
+          name: "get_contact_chats",
+          description: "All chats involving a contact",
+        },
+        {
+          name: "get_last_interaction",
+          description: "Most recent message with a contact",
+        },
+        {
+          name: "get_message_context",
+          description: "Messages around a specific message ID",
+        },
+        {
+          name: "download_media",
+          description: "Images, videos, audio from messages",
+        },
+        { name: "send_message", description: "Text message to a JID" },
+        { name: "send_file", description: "File with optional caption" },
+        {
+          name: "send_audio_message",
+          description: "Voice message with FFmpeg Opus conversion",
+        },
+      ],
+    },
+    {
+      title: "Self-Chat Safety",
+      description:
+        "When WHATSAPP_OWNER_JID is set, all send operations (send_message, send_file, send_audio_message) are restricted to the owner's JID — effectively a 'Saved Messages' mode. Read operations remain unrestricted, so Claude can search and reference any conversation. Phone numbers are normalized: leading '+' stripped, whitespace removed, @s.whatsapp.net appended.",
+      callout: {
+        title: "Why self-chat?",
+        text: "Letting an LLM send messages to arbitrary contacts is dangerous. Self-chat mode lets Claude use WhatsApp as a note-taking and reference tool without risk of accidentally messaging people. Read everything, send only to yourself.",
       },
     },
   ],
