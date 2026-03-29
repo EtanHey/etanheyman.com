@@ -1144,7 +1144,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## How many tests does Golems have?
 
-**1,073 tests** across 78 test files. The test suite covers all 12 packages and runs with `bun test` from the monorepo root.
+**1,179 tests** across 84 test files. The test suite covers all 12 packages and runs with `bun test` from the monorepo root.
 
 ## What's the tech stack?
 

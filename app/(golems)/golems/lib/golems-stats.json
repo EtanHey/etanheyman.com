@@ -12,11 +12,11 @@
     "list": "claude, coach, content, docsite, golem-skills, golems-tui, jobs, recruiter, services, shared, tax-helper, teller"
   },
   "tests": {
-    "passing": 1073,
+    "passing": 1179,
     "failing": 1,
     "skipped": 2,
-    "total": 1076,
-    "files": 78
+    "total": 1182,
+    "files": 84
   },
   "brainlayer": {
     "chunks": 312000,
