@@ -1,11 +1,11 @@
 ---
 title: "Skills Library"
-description: "60+ reusable Claude Code skills covering development, operations, content, research, and quality workflows — 40 with eval coverage."
+description: "55 reusable Claude Code skills covering development, operations, content, research, and quality workflows — 40 with eval coverage."
 ---
 
 # Skills Library
 
-> 60+ reusable Claude Code skills with eval coverage across 40 skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
+> 55 reusable Claude Code skills with eval coverage across 40 skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
 
 ## What Are Skills?
 
@@ -137,7 +137,7 @@ Or symlink into your project's `.claude/commands/` directory for per-project acc
 
 ## Eval Coverage
 
-40 of 60+ skills have eval suites with structured assertions. Evals verify that skills trigger correctly and produce the expected behavior. See individual skill pages for eval details.
+40 of 55 skills have eval suites with structured assertions. Evals verify that skills trigger correctly and produce the expected behavior. See individual skill pages for eval details.
 
 ## Source
 

@@ -1,36 +1,38 @@
 {
-  "generatedAt": "2026-03-23T00:00:00Z",
+  "generatedAt": "2026-03-28T00:00:00Z",
   "skills": {
-    "count": 60,
-    "withSkillMd": 60,
+    "count": 55,
+    "withSkillMd": 55,
     "withEvals": 40,
-    "evalCoverage": "75%",
+    "evalCoverage": "73%",
     "adapterLayer": "AI-agnostic (Claude, Cursor, Gemini, Codex, Kiro)"
   },
   "packages": {
-    "count": 12,
-    "list": "claude, coach, content, docsite, golem-skills, golems-tui, jobs, recruiter, services, shared, tax-helper, teller"
+    "count": 11,
+    "list": "claude, coach, content, docsite, golem-skills, golems-tui, jobs, recruiter, services, shared, teller"
   },
   "tests": {
-    "passing": 1073,
+    "passing": 1179,
     "failing": 1,
     "skipped": 2,
-    "total": 1076,
-    "files": 78
+    "total": 1182,
+    "files": 84
   },
   "brainlayer": {
-    "chunks": 312000,
-    "chunksDisplay": "312K+",
-    "mcpTools": 11,
-    "pythonTests": 1083,
+    "chunks": 284000,
+    "chunksDisplay": "284K+",
+    "mcpTools": 12,
+    "mcpToolsStubbed": 5,
+    "pythonTests": 1415,
     "swiftTests": 28,
     "daemon": "BrainBar (209KB native binary)"
   },
   "voicelayer": {
+    "tests": 359,
     "daemon": "MCP daemon, dual-protocol (NDJSON + MCP Content-Length)"
   },
   "cmuxlayer": {
-    "tests": 221,
+    "tests": 278,
     "socketSpeedup": "1,423x",
     "nativeMcp": true
   },

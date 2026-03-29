@@ -560,7 +560,7 @@ const result = await runLLM(prompt);
     {
       title: "MCP Ecosystem",
       description:
-        "8 MCP servers powering every golem. BrainLayer: 11 tools (3 core memory + 8 knowledge graph/lifecycle) with BrainBar daemon. Email: 7 tools for triage. VoiceLayer: 2 voice tools with MCP daemon. Plus Supabase for database, Exa for web search, Sophtron for financial data, GLM for local inference. Each golem declares which MCP servers it needs via context profiles.",
+        "8 MCP servers powering every golem. BrainLayer: 12 tools (3 core memory + 9 knowledge graph/lifecycle) with BrainBar daemon. Email: 7 tools for triage. VoiceLayer: 2 voice tools with MCP daemon. Plus Supabase for database, Exa for web search, Sophtron for financial data, GLM for local inference. Each golem declares which MCP servers it needs via context profiles.",
       diagramNodes: [
         {
           icon: "Brain",

@@ -1,6 +1,6 @@
 ---
 title: "BrainLayer — Memory Layer"
-description: "Persistent memory for Claude Code. 312K+ indexed conversation chunks with semantic search, 10-field enrichment, and PII sanitization."
+description: "Persistent memory for Claude Code. 284K+ indexed conversation chunks with semantic search, 10-field enrichment, and PII sanitization."
 ---
 
 # BrainLayer (Memory)
@@ -9,7 +9,7 @@ description: "Persistent memory for Claude Code. 312K+ indexed conversation chun
 
 ## What It Does
 
-BrainLayer (Hebrew: Zikaron, "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 312K+ chunks indexed, searchable in under 2 seconds.
+BrainLayer (Hebrew: Zikaron, "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 284K+ chunks indexed, searchable in under 2 seconds.
 
 ## Architecture
 
@@ -60,7 +60,7 @@ AST-aware chunking with tree-sitter for code (~500 tokens). Never splits stack t
 Uses `bge-large-en-v1.5` model (1024 dimensions). Runs locally via sentence-transformers with MPS acceleration on Apple Silicon.
 
 ### 5. Index
-sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 312K+ chunks.
+sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 284K+ chunks.
 
 ## Interfaces
 
@@ -73,7 +73,7 @@ brainlayer dashboard                              # Interactive TUI
 ```
 
 ### MCP Server
-Exposed to Claude Code as `brainlayer-mcp` (8 tools):
+Exposed to Claude Code as `brainlayer-mcp` (12 tools):
 
 | Tool | Description |
 |------|-------------|

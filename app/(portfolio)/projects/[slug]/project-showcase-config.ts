@@ -48,9 +48,9 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "pip install brainlayer",
     isMiniSite: true,
     stats: [
-      { value: 312, suffix: "K+", label: "Indexed chunks" },
-      { value: 11, label: "MCP tools" },
-      { value: 1111, label: "Tests passing" },
+      { value: 284, suffix: "K+", label: "Indexed chunks" },
+      { value: 12, label: "MCP tools" },
+      { value: 1415, label: "Tests passing" },
       { value: 119, label: "KG entities" },
     ],
     features: [
@@ -68,15 +68,15 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
       {
         iconName: "Database",
-        title: "11 MCP Tools",
+        title: "12 MCP Tools",
         description:
-          "3 core (search, store, recall) + 8 knowledge graph (digest, entity, update, expand, tags, subscribe, unsubscribe, stats). Consolidated from 14. Old names still work via aliases.",
+          "3 core (search, store, recall) + 9 knowledge graph (digest, entity, update, expand, tags, subscribe, unsubscribe, stats, crossref). Consolidated from 14. Old names still work via aliases.",
       },
       {
         iconName: "Brain",
         title: "3-Mode Enrichment",
         description:
-          "Unified brain_digest with 3 modes: full content ingestion, faceted tag generation via Gemini 2.5 Flash, and tiered selectivity (T0-T3 classifier). 312K+ chunks enriched with structured metadata.",
+          "Unified brain_digest with 3 modes: full content ingestion, faceted tag generation via Gemini 2.5 Flash, and tiered selectivity (T0-T3 classifier). 284K+ chunks enriched with structured metadata.",
       },
     ],
     installTabs: [
@@ -100,7 +100,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { icon: "FileText", title: "Indexing", subtitle: "Chunk + deduplicate" },
       { icon: "Binary", title: "Embedding", subtitle: "bge-large 1024-dim" },
       { icon: "Search", title: "Hybrid Search", subtitle: "Vec + FTS5 + RRF" },
-      { icon: "Wrench", title: "BrainBar", subtitle: "11 tools, Unix socket" },
+      { icon: "Wrench", title: "BrainBar", subtitle: "12 tools, Unix socket" },
     ],
   },
 
@@ -112,7 +112,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { value: 2, label: "MCP tools" },
       { value: 2, label: "STT backends" },
       { value: 300, suffix: "ms", prefix: "~", label: "STT latency" },
-      { value: 314, label: "Tests passing" },
+      { value: 359, label: "Tests passing" },
     ],
     features: [
       {
@@ -299,8 +299,8 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     accent: { color: "#94A3B8", colorRgb: "148, 163, 184" },
     isMiniSite: true,
     stats: [
-      { value: 12, label: "Packages" },
-      { value: 60, suffix: "+", label: "Skills" },
+      { value: 11, label: "Packages" },
+      { value: 55, label: "Skills" },
       { value: 5, label: "Supported CLIs" },
       { value: 321, suffix: "+", label: "PRs merged" },
     ],
@@ -309,7 +309,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         iconName: "Layers",
         title: "AI-Agnostic Skills",
         description:
-          "60+ skills with 3-layer architecture: SKILL.md (universal) + adapters/ (per-CLI) + capabilities.yaml (routing). Validated across Claude, Codex, Cursor, Gemini, and Kiro.",
+          "55 skills with 3-layer architecture: SKILL.md (universal) + adapters/ (per-CLI) + capabilities.yaml (routing). Validated across Claude, Codex, Cursor, Gemini, and Kiro.",
       },
       {
         iconName: "Shield",
@@ -353,7 +353,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { icon: "Bot", title: "OrcClaude v2", subtitle: "Multi-agent sprints" },
       {
         icon: "Layers",
-        title: "60+ Skills",
+        title: "55 Skills",
         subtitle: "5 CLI adapters",
         children: ["Claude", "Codex", "Cursor", "Gemini", "Kiro"],
       },

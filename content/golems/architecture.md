@@ -8,7 +8,7 @@ sidebar_position: 2
 
 ## 7 Golems + Infrastructure, 3 Environments
 
-Golems is a **Bun workspace monorepo with 12 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
+Golems is a **Bun workspace monorepo with 11 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
 
 | Package | Role |
 |---------|------|
@@ -71,7 +71,7 @@ Your Mac runs these always-on services:
 | **Telegram Bot** | Receive commands, send notifications | grammy.js |
 | **Night Shift** | Scan repos for improvements, auto-commit | Claude + Ralph |
 | **Notification Server** | Queue and send Telegram messages | HTTP server |
-| **BrainLayer Memory** | 312K+ chunks, 11 MCP tools, semantic search + brain_digest | FastAPI + sqlite-vec + BrainBar daemon |
+| **BrainLayer Memory** | 284K+ chunks, 12 MCP tools, semantic search + brain_digest | FastAPI + sqlite-vec + BrainBar daemon |
 | **Render Service** | Remotion video rendering microservice | Bun + Remotion |
 | **Enrichment** | Process BrainLayer chunks (tags, summaries) | GLM-4.7-Flash via Ollama |
 

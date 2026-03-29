@@ -108,7 +108,7 @@ const SKILL_CATEGORIES: Record<string, SkillEntry[]> = {
     {
       name: "brainlayer",
       command: "/brainlayer",
-      description: "Search, store, recall from 290K+ memory chunks",
+      description: "Search, store, recall from 284K+ memory chunks",
       category: "Research & Context",
     },
     {

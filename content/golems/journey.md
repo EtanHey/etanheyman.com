@@ -41,7 +41,7 @@ Instead of building golems first, we built **BrainLayer** (originally Zikaron, H
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 312K+ conversation chunks and returns results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 284K+ conversation chunks and returns results in under 2 seconds.
 
 ### Jan 17: First Golem — Email Router
 
@@ -385,7 +385,7 @@ Faceted tag schema (`dom:`, `act:`, `object:`) replaces flat activity-based tags
 ## Late March 2026: Ecosystem Velocity
 
 ### brain_digest Ships
-The long-awaited `brain_digest` tool is fully operational — extracts entities, relations, and action items from raw content in three modes (auto, conversation, document). Combined with `brain_store`, `brain_entity`, and `brain_expand`, BrainLayer now has 11 MCP tools. The knowledge base has grown to 312K+ chunks.
+The long-awaited `brain_digest` tool is fully operational — extracts entities, relations, and action items from raw content in three modes (auto, conversation, document). Combined with `brain_store`, `brain_entity`, and `brain_expand`, BrainLayer now has 12 MCP tools. The knowledge base has grown to 284K+ chunks.
 
 ### QA Video Pipeline
 The `/qa-video` skill ships — a video-based QA pipeline where screen recordings with narration are processed into structured findings. The "stalker pipeline" captures video, correlates click events with screen state, and produces actionable bug reports. Multi-round iteration: record, process, fix, retest.
@@ -393,8 +393,8 @@ The `/qa-video` skill ships — a video-based QA pipeline where screen recording
 ### OrcClaude v2.0
 The orchestrator agent reaches v2.0: sprint management, cross-repo coordination via cmux, background agent spawning and monitoring, research dispatch, and collab kickoffs. The planner-worker topology from R31 is now the default: orcClaude plans, domain experts provide intel, workers execute independently.
 
-### 60+ Skills with Eval Coverage
-The skill library grows from 46 to 60+ skills. 40 skills have eval suites with structured assertions. The adapter layer makes every skill AI-agnostic — the same skill works across Claude Code, Cursor, Gemini CLI, Codex, and Kiro.
+### 55 Skills with Eval Coverage
+The skill library grows from 46 to 55 skills. 40 skills have eval suites with structured assertions. The adapter layer makes every skill AI-agnostic — the same skill works across Claude Code, Cursor, Gemini CLI, Codex, and Kiro.
 
 ### Dashboard Momentum
 The Golems Dashboard receives 15 PRs in rapid succession: 2D canvas knowledge graph (d3-force), enrichment observatory, wiki synthesis, entity detail panel, and community clustering. The dashboard evolves from a status page to an interactive knowledge exploration tool.

@@ -33,7 +33,7 @@ Then in Claude Code: `/tools` or use `@brainlayer` in any prompt.
 
 | Server | Command | Tools | Purpose |
 |--------|---------|-------|---------|
-| **brainlayer** | `brainlayer-mcp` | 11 | Memory layer — search, store, digest 312K+ indexed conversation chunks |
+| **brainlayer** | `brainlayer-mcp` | 12 | Memory layer — search, store, digest 284K+ indexed conversation chunks |
 | **voicelayer** | `voicelayer-mcp` | 6 | Voice I/O — TTS + STT via VoiceBar daemon |
 | **cmuxlayer** | native MCP daemon | 10+ | Terminal multiplexer — panes, splits, agent orchestration |
 | **golems-glm** | `bun run packages/shared/src/glm/mcp-server.ts` | 2 | Local GLM-4.7-Flash — summarize, score/classify (experimental) |
@@ -247,7 +247,7 @@ Quick job statistics.
 
 ## Memory Tools (brainlayer)
 
-BrainLayer provides persistent memory across Claude Code sessions — semantic search over 312K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec. BrainBar daemon (209KB native Swift binary) provides real-time indexing via hooks.
+BrainLayer provides persistent memory across Claude Code sessions — semantic search over 284K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec. BrainBar daemon (209KB native Swift binary) provides real-time indexing via hooks.
 
 ### brainlayer_search
 
@@ -483,7 +483,7 @@ Key capabilities: semantic web search, code context retrieval, company research.
 
 - **Email tools** use Supabase directly (cloud-first architecture)
 - **Job tools** query Supabase `golem_jobs` and `scrape_activity` tables
-- **BrainLayer tools** query local sqlite-vec database (312K+ chunks, FTS5 + vector hybrid search, faceted tag schema)
+- **BrainLayer tools** query local sqlite-vec database (284K+ chunks, FTS5 + vector hybrid search, faceted tag schema)
 - **GLM tools** run locally via Ollama (no network, ~3-8s per call on M1 Pro)
 - **Scoring:** Email scores 1-10 (10=urgent), Job scores 1-10 (8+=hot match)
 - **Categories:** Email categories are semantic (job, interview, subscription, tech-update, newsletter, promo, social, other)

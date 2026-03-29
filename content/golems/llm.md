@@ -12,7 +12,7 @@ sidebar_position: 99
 
 ## 7 Golems + Infrastructure, 3 Environments
 
-Golems is a **Bun workspace monorepo with 12 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
+Golems is a **Bun workspace monorepo with 11 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure. Work splits between your local Mac (cognitive tasks), Railway cloud (data collection), and Vercel (web dashboard).
 
 | Package | Role |
 |---------|------|
@@ -29,7 +29,7 @@ Golems is a **Bun workspace monorepo with 12 packages** — 7 golems (1 orchestr
 | `golems-tui` | React Ink terminal dashboard |
 | `tax-helper` | Schedule C transaction categorization (Sophtron MCP) |
 | `ralph` | Autonomous coding loop (PRD execution) |
-| `brainlayer` | Memory layer (Python, 224K+ chunks post-dedup, sqlite-vec + FTS5) |
+| `brainlayer` | Memory layer (Python, 284K+ chunks post-dedup, sqlite-vec + FTS5) |
 
 ## Mac = Brain, Railway = Body
 
@@ -77,7 +77,7 @@ Your Mac runs these always-on services:
 | **Telegram Bot** | Receive commands, send notifications | grammy.js |
 | **Night Shift** | Scan repos for improvements, auto-commit | Claude + Ralph |
 | **Notification Server** | Queue and send Telegram messages | HTTP server |
-| **BrainLayer** | Persistent memory — 224K+ chunks, hybrid search | BrainBar (Swift daemon) + sqlite-vec |
+| **BrainLayer** | Persistent memory — 284K+ chunks, hybrid search | BrainBar (Swift daemon) + sqlite-vec |
 | **Render Service** | Remotion video rendering microservice | Bun + Remotion |
 | **Enrichment** | Process BrainLayer chunks (faceted tags, summaries) | Gemini Flash (primary) or MLX locally |
 
@@ -1106,7 +1106,7 @@ The only hard dependency is `@golems/shared` for database and LLM access.
 
 ## What's the memory cost?
 
-BrainLayer uses sqlite-vec with bge-large-en-v1.5 embeddings. For 224K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
+BrainLayer uses sqlite-vec with bge-large-en-v1.5 embeddings. For 284K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
 
 ## Does it work without Railway?
 
@@ -1144,7 +1144,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## How many tests does Golems have?
 
-**1,073 tests** across 78 test files. The test suite covers all 12 packages and runs with `bun test` from the monorepo root.
+**1,179 tests** across 84 test files. The test suite covers all 11 packages and runs with `bun test` from the monorepo root.
 
 ## What's the tech stack?
 
@@ -1162,7 +1162,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## Can I use the skills without the full ecosystem?
 
-Yes. The 59 skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
+Yes. The 55 skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
 
 ```bash
 # Just the commit skill
@@ -1186,12 +1186,12 @@ Claude Code v2.1 or later. The plugin system, skill loading, and MCP server supp
 
 ## What is Golems?
 
-Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **12 packages** — 7 domain agents plus shared infrastructure and tools, each installable as a Claude Code plugin.
+Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **11 packages** — 7 domain agents plus shared infrastructure and tools, each installable as a Claude Code plugin.
 
 - **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
 - **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
 - **Infrastructure:** @golems/shared (foundation + email system), @golems/services (Night Shift, Cloud Worker, Briefing)
-- **Tools:** Ralph (autonomous coding loop), BrainLayer (224K+ chunk memory layer with 10-field enrichment)
+- **Tools:** Ralph (autonomous coding loop), BrainLayer (284K+ chunk memory layer with 10-field enrichment)
 - **Core Principle:** Golems are domain experts, not I/O channels — they own specific knowledge areas and produce specialized outputs
 
 ## Architecture Principle
@@ -2498,7 +2498,7 @@ Instead of building golems first, we built **BrainLayer** — a memory layer usi
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 224K+ conversation chunks and returns results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 284K+ conversation chunks and returns results in under 2 seconds.
 
 ### Jan 17: First Golem — Email Router
 
@@ -2876,7 +2876,7 @@ Then in Claude Code: `/tools` or use `@brainlayer` in any prompt.
 
 | Server | Command | Tools | Purpose |
 |--------|---------|-------|---------|
-| **brainlayer** | `brainlayer-mcp` | 8 | Memory layer — search 224K+ indexed conversation chunks |
+| **brainlayer** | `brainlayer-mcp` | 12 | Memory layer — search 284K+ indexed conversation chunks |
 | **voicelayer** | `voicelayer-mcp` | 6 | Voice I/O — TTS + STT via VoiceBar daemon |
 | **cmuxlayer** | native MCP daemon | 10+ | Terminal multiplexer — panes, splits, agent orchestration |
 | **golems-glm** | `bun run packages/shared/src/glm/mcp-server.ts` | 2 | Local GLM-4.7-Flash — summarize, score/classify (experimental) |
@@ -3090,7 +3090,7 @@ Quick job statistics.
 
 ## Memory Tools (brainlayer)
 
-BrainLayer provides persistent memory across Claude Code sessions — semantic search over 224K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec.
+BrainLayer provides persistent memory across Claude Code sessions — semantic search over 284K+ indexed conversation chunks using bge-large-en-v1.5 embeddings (1024 dims) and sqlite-vec.
 
 ### brainlayer_search
 
@@ -3269,7 +3269,7 @@ Key capabilities: account listing, transaction history, identity verification.
 
 - **Email tools** use Supabase directly (cloud-first architecture)
 - **Job tools** query Supabase `golem_jobs` and `scrape_activity` tables
-- **BrainLayer tools** query local sqlite-vec database (224K+ chunks, FTS5 + vector hybrid search)
+- **BrainLayer tools** query local sqlite-vec database (284K+ chunks, FTS5 + vector hybrid search)
 - **VoiceLayer tools** communicate with VoiceBar daemon via Unix socket
 - **cmuxlayer tools** control terminal panes via native MCP daemon
 - **GLM tools** run locally via Ollama (no network, ~3-8s per call on M1 Pro)
@@ -3451,7 +3451,7 @@ done
 
 ## Skills Library
 
-Ralph manages 57 reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
+Ralph manages 55 reusable Claude Code skills in `skills/golem-powers/`. These are installable as Claude Code plugins and cover:
 
 - **Development:** commit, create-pr, worktrees, test-plan, lsp
 - **Operations:** railway, 1password, convex, github
@@ -3676,7 +3676,7 @@ await setState("nightShiftTarget", "songscript");
 
 ## What It Does
 
-BrainLayer (Hebrew for "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 224K+ chunks indexed, searchable in under 2 seconds.
+BrainLayer (Hebrew for "memory") is a **knowledge pipeline** that indexes every Claude Code conversation into a searchable database. It uses semantic embeddings to find past solutions, decisions, and patterns across all your projects. 284K+ chunks indexed, searchable in under 2 seconds.
 
 ## Architecture
 
@@ -3727,7 +3727,7 @@ AST-aware chunking with tree-sitter for code (~500 tokens). Never splits stack t
 Uses `bge-large-en-v1.5` model (1024 dimensions). Runs locally via sentence-transformers with MPS acceleration on Apple Silicon.
 
 ### 5. Index
-sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 224K+ chunks.
+sqlite-vec for vector similarity search. WAL mode + `busy_timeout=5000ms` for concurrent access from daemon, MCP server, and enrichment. Sub-2-second queries across 284K+ chunks.
 
 ## Interfaces
 
@@ -3740,7 +3740,7 @@ brainlayer dashboard                              # Interactive TUI
 ```
 
 ### MCP Server
-Exposed to Claude Code as `brainlayer-mcp` (8 tools):
+Exposed to Claude Code as `brainlayer-mcp` (12 tools):
 
 | Tool | Description |
 |------|-------------|
@@ -3915,7 +3915,7 @@ This helps visually distinguish which Claude session is which when running multi
 
 # Skills Library
 
-> 57 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
+> 55 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
 
 ## What Are Skills?
 
