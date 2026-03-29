@@ -84,12 +84,10 @@ const AboutPage = () => {
             leading teams and managing projects to successful completion.
           </p>
           <Link
-            download="Etan Heyman resume.pdf"
-            href="/Etan_Heyman_resume.pdf"
-            target="_blank"
+            href="/projects"
             className="w-full rounded-[80px] bg-blue-500 py-4 text-center text-xl text-white xl:mt-4 xl:text-2xl"
           >
-            Download My CV
+            View My Projects
           </Link>
         </div>
 
@@ -123,7 +121,7 @@ const AboutPage = () => {
         </div>
         <Link
           href="/contact"
-          className="flex w-full items-center justify-center gap-2 rounded-[80px] bg-blue-500 py-4 text-xl text-white hover:bg-blue-600 transition-colors"
+          className="flex w-full items-center justify-center gap-2 rounded-[80px] bg-blue-500 py-4 text-xl text-white transition-colors hover:bg-blue-600"
         >
           Let's talk now! <SendIcon />
         </Link>

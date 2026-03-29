@@ -15,7 +15,7 @@ const terminalData: Record<string, { tabs: TerminalTab[]; title: string }> = {
         lines: [
           '\x1b[90m$\x1b[0m brainlayer search \x1b[33m"how did I implement auth"\x1b[0m',
           "",
-          "\x1b[1;34mBrainLayer Search\x1b[0m  \x1b[90m·\x1b[0m  312,000+ chunks indexed",
+          "\x1b[1;34mBrainLayer Search\x1b[0m  \x1b[90m·\x1b[0m  284,000+ chunks indexed",
           "",
           "\x1b[32mFound 12 results across 3 projects\x1b[0m",
           "",
@@ -300,7 +300,7 @@ const terminalData: Record<string, { tabs: TerminalTab[]; title: string }> = {
           "",
           "\x1b[32m\u25CF\x1b[0m \x1b[1;37mTelegram Bot\x1b[0m      \x1b[32mrunning\x1b[0m  \x1b[90mport 3847\x1b[0m",
           "\x1b[32m\u25CF\x1b[0m \x1b[1;37mCloud Worker\x1b[0m      \x1b[32mrunning\x1b[0m  \x1b[90mRailway\x1b[0m",
-          "\x1b[32m\u25CF\x1b[0m \x1b[1;37mBrainLayer MCP\x1b[0m    \x1b[32mrunning\x1b[0m  \x1b[90m7 tools\x1b[0m",
+          "\x1b[32m\u25CF\x1b[0m \x1b[1;37mBrainLayer MCP\x1b[0m    \x1b[32mrunning\x1b[0m  \x1b[90m12 tools\x1b[0m",
           "\x1b[32m\u25CF\x1b[0m \x1b[1;37mVoiceLayer MCP\x1b[0m    \x1b[32mrunning\x1b[0m  \x1b[90m2 tools\x1b[0m",
           "\x1b[33m\u25CF\x1b[0m \x1b[1;37mNight Shift\x1b[0m       \x1b[33mscheduled\x1b[0m  \x1b[90m4am daily\x1b[0m",
           "\x1b[33m\u25CF\x1b[0m \x1b[1;37mMorning Briefing\x1b[0m  \x1b[33mscheduled\x1b[0m  \x1b[90m8am daily\x1b[0m",

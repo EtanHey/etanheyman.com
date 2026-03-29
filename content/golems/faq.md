@@ -17,7 +17,7 @@ The only hard dependency is `@golems/shared` for database and LLM access.
 
 ## What's the memory cost?
 
-BrainLayer uses sqlite-vec with bge-large-en-v1.5 embeddings. For 291K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
+BrainLayer uses sqlite-vec with bge-large-en-v1.5 embeddings. For 284K+ chunks, the database is approximately 1.4GB on disk. Queries run in under 2 seconds. The embedding model loads into ~1.5GB of RAM when indexing, but the MCP server uses the pre-built index (no model loaded at query time).
 
 ## Does it work without Railway?
 
@@ -54,7 +54,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## How many tests does Golems have?
 
-**1,073 tests** across 78 test files. The test suite covers all 12 packages and runs with `bun test` from the monorepo root.
+**1,179 tests** across 84 test files. The test suite covers all 11 packages and runs with `bun test` from the monorepo root.
 
 ## What's the tech stack?
 
@@ -72,7 +72,7 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## Can I use the skills without the full ecosystem?
 
-Yes. The 59 skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
+Yes. The 55 skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
 
 ```bash
 # Just the commit skill

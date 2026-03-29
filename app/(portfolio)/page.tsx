@@ -58,13 +58,9 @@ export default async function Home() {
                   </svg>
                 </button>
               </Link>
-              <Link
-                href="/Etan_Heyman_resume.pdf"
-                target="_blank"
-                className="w-full sm:w-auto"
-              >
+              <Link href="/about" className="w-full sm:w-auto">
                 <button className="hover:border-primary flex w-full items-center justify-center rounded-[80px] border-2 border-blue-300 bg-transparent px-6 py-4 text-[20px] font-normal whitespace-nowrap text-blue-300 transition-all hover:bg-blue-300/10 active:scale-[0.98] sm:w-auto sm:px-8 md:h-[68px] md:px-12 md:text-[20px] lg:px-16 lg:text-[24px]">
-                  Download my CV
+                  About me
                 </button>
               </Link>
             </div>

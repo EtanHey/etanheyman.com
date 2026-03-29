@@ -60,11 +60,11 @@ const featuresData: Record<string, FeatureSection[]> = {
     },
     {
       iconName: "Wrench",
-      title: "11 MCP Tools",
+      title: "12 MCP Tools",
       tagline:
-        "Powerful memory layer with 11 intelligent tools that understand what you need",
+        "Powerful memory layer with 12 intelligent tools that understand what you need",
       description:
-        "From 14 specialized tools to 11 that cover every use case. 3 core memory tools (brain_search, brain_store, brain_recall) plus 8 knowledge graph and lifecycle tools (brain_digest, brain_entity, brain_update, brain_expand, brain_tags, brain_subscribe, brain_unsubscribe, brain_stats). Backward-compat aliases keep existing workflows intact.",
+        "From 14 specialized tools to 12 that cover every use case. 3 core memory tools (brain_search, brain_store, brain_recall) plus 9 knowledge graph and lifecycle tools (brain_digest, brain_entity, brain_update, brain_expand, brain_tags, brain_subscribe, brain_unsubscribe, brain_stats, brain_crossref). Backward-compat aliases keep existing workflows intact.",
       highlights: [
         "brain_search — hybrid query, 7 filter dimensions, understands intent",
         "brain_store — persist decisions, learnings, with entity linking",
@@ -424,12 +424,12 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
   golems: [
     {
       iconName: "Layers",
-      title: "60+ AI-Agnostic Skills",
+      title: "55 AI-Agnostic Skills",
       tagline: "Same skills, any CLI — Claude, Codex, Cursor, Gemini, Kiro",
       description:
         "Skills are written once in universal SKILL.md format, then adapted for each AI CLI via a thin adapters/ layer. A capabilities.yaml file routes each skill to the right adapters based on what each CLI supports. 40 skill eval packs with 480+ assertions ensure quality. 96% pass rate across the eval suite. The adapter layer means skills work across 5 different AI CLIs without rewriting.",
       highlights: [
-        "60+ skills — commit, pr-loop, research, orc, large-plan, and more",
+        "55 skills — commit, pr-loop, research, orc, large-plan, and more",
         "3-layer architecture — SKILL.md + adapters/ + capabilities.yaml",
         "40 eval packs — 480+ assertions, fixture-based testing",
         "5 CLIs validated — Claude, Codex, Cursor, Gemini, Kiro",
@@ -504,9 +504,9 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
       title: "MCP Server Ecosystem",
       tagline: "8 MCP servers powering every golem",
       description:
-        "Each golem declares which MCP servers it needs. BrainLayer provides 11 memory + KG tools including the new brain_digest with 3 modes and pubsub for real-time updates. VoiceLayer exposes 2 voice tools with daemon architecture. The email server handles triage with 7 tools. Plus Supabase for database, Exa for web search, Sophtron for financial data, and GLM for local inference.",
+        "Each golem declares which MCP servers it needs. BrainLayer provides 12 memory + KG tools including the new brain_digest with 3 modes and pubsub for real-time updates. VoiceLayer exposes 2 voice tools with daemon architecture. The email server handles triage with 7 tools. Plus Supabase for database, Exa for web search, Sophtron for financial data, and GLM for local inference.",
       highlights: [
-        "BrainLayer — 11 memory + KG tools, BrainBar daemon",
+        "BrainLayer — 12 memory + KG tools, BrainBar daemon",
         "Email — 7 triage & draft tools",
         "VoiceLayer — 2 voice tools, MCP daemon",
         "Supabase — SQL & DDL access",
@@ -521,13 +521,13 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
       title: "Neural Observatory Dashboard",
       tagline: "2D canvas knowledge graph + enrichment explorer",
       description:
-        "A Next.js dashboard with d3-force 2D canvas knowledge graph visualization, enrichment observatory for search quality analysis, and wiki synthesis panels. Entity detail panels with community clustering let you explore the knowledge graph interactively. Filter panels handle 312K+ chunks without crashing.",
+        "A Next.js dashboard with d3-force 2D canvas knowledge graph visualization, enrichment observatory for search quality analysis, and wiki synthesis panels. Entity detail panels with community clustering let you explore the knowledge graph interactively. Filter panels handle 284K+ chunks without crashing.",
       highlights: [
         "2D canvas KG — d3-force graph with zoom and filter",
         "Enrichment observatory — search quality explorer",
         "Wiki synthesis — Neural Observatory Phase 1",
         "Entity detail panels — community clustering",
-        "Aggregate-first — handles 312K+ chunks efficiently",
+        "Aggregate-first — handles 284K+ chunks efficiently",
       ],
     },
   ],
