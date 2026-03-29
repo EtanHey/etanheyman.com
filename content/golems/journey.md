@@ -201,7 +201,7 @@ Built the full ecosystem in a concentrated sprint:
 
 **Phase 4 — Tooling:** Helpers layer (rate-limited API wrappers), DeepSource static analysis, skills catalog CLI, plugin architecture, session forking, Playwright E2E scaffold.
 
-**Sprint count:** 400+ tests at the time, 35 plan items completed, 7 MCP tools. (Post-Phase 8 componentization: 1,148 tests, 3,990 assertions across 14 packages.)
+**Sprint count:** 400+ tests at the time, 35 plan items completed, 7 MCP tools. (Post-Phase 8 componentization: 1,179 tests across 12 packages.)
 
 ### Feb 7: Distribution Strategy
 
@@ -342,7 +342,7 @@ Planned and executed a 9-phase componentization with a strict policy: if anythin
 | **6. CoachGolem** | Brand new golem: Google Calendar sync, daily planning, ecosystem status aggregation. 15 tests. | +15 pass |
 | **7. Services** | Cloud Worker, Night Shift, Briefing moved to `@golems/services`. Root Dockerfile for Railway workspace. | — |
 | **8. Infrastructure** | Launchd plists updated. `load-env.ts` made workspace-aware. Pre-commit hook fixed. | — |
-| **9. Distribution** | npm metadata on all packages. READMEs per package. Root CLAUDE.md rewritten. | **1,148 pass** |
+| **9. Distribution** | npm metadata on all packages. READMEs per package. Root CLAUDE.md rewritten. | **1,179 pass** |
 
 ### Key Decisions
 
@@ -356,7 +356,7 @@ Planned and executed a 9-phase componentization with a strict policy: if anythin
 
 ```
 Before:  1 package, ~890 tests, tightly coupled
-After:   14 packages, 1,148 tests, each golem independently installable
+After:   12 packages, 1,179 tests, each golem independently installable
 ```
 
 6 golems (Claude orchestrator + Recruiter, Teller, Job, Coach, Content domain experts), plus @golems/shared (including the Email system), @golems/services, Ralph, and BrainLayer.

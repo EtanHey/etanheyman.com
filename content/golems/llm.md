@@ -2658,7 +2658,7 @@ Built the full ecosystem in a concentrated sprint:
 
 **Phase 4 — Tooling:** Helpers layer (rate-limited API wrappers), DeepSource static analysis, skills catalog CLI, plugin architecture, session forking, Playwright E2E scaffold.
 
-**Sprint count:** 400+ tests at the time, 35 plan items completed, 7 MCP tools. (Post-Phase 8 componentization: 1,179 tests, 4,056 assertions across 10 packages.)
+**Sprint count:** 400+ tests at the time, 35 plan items completed, 7 MCP tools. (Post-Phase 8 componentization: 1,179 tests across 12 packages.)
 
 ### Feb 7: Distribution Strategy
 
@@ -2813,7 +2813,7 @@ Planned and executed a 9-phase componentization with a strict policy: if anythin
 
 ```
 Before:  1 package, ~890 tests, tightly coupled
-After:   10 packages, 1,179 tests, each golem independently installable
+After:   12 packages, 1,179 tests, each golem independently installable
 ```
 
 6 golems (Claude orchestrator + Recruiter, Teller, Job, Coach, Content domain experts), plus @golems/shared (including the Email system), @golems/services, Ralph, and BrainLayer.
