@@ -6,6 +6,7 @@ import {
   FeaturedProjectCard,
   HomeProjectCard,
 } from "@/app/components/ProjectCard";
+import GolemsEcosystem from "@/app/components/GolemsEcosystem";
 
 export default async function Home() {
   // Fetch all projects
@@ -100,6 +101,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Golems Ecosystem Section */}
+      <GolemsEcosystem />
 
       {/* CTA Section */}
       <section className="px-[18px] pt-6 pb-12 sm:px-8 md:px-12 md:pt-8 md:pb-16 lg:px-20 lg:pt-12 lg:pb-20 xl:px-40 xl:pt-14 xl:pb-24 2xl:px-[323px]">
