@@ -734,68 +734,108 @@ function BeforeAfterSection() {
   );
 }
 
-/* ── Get Started Section ───────────────────────────────────────── */
+/* ── Install Section ──────────────────────────────────────────── */
 
-const installSteps = [
+const individualInstalls = [
   {
-    step: "1",
-    command: "git clone https://github.com/EtanHey/golems && cd golems",
-    label: "Clone",
-    desc: "Get the monorepo",
+    name: "BrainLayer",
+    command: "pip install brainlayer",
+    description:
+      "Persistent memory — semantic search, entity graph, knowledge digest",
+    color: "#e59500",
+    language: "Python",
   },
   {
-    step: "2",
-    command: "bun install",
-    label: "Install",
-    desc: "One command, all packages",
+    name: "VoiceLayer",
+    command: "npm i voicelayer-mcp",
+    description:
+      "Voice I/O — speech-to-text, text-to-speech, dual-protocol MCP",
+    color: "#2dd4a8",
+    language: "Node.js",
   },
   {
-    step: "3",
-    command: "golems wizard",
-    label: "Setup",
-    desc: "Interactive 3-phase wizard wires everything",
-  },
-  {
-    step: "4",
-    command: "golems status",
-    label: "Verify",
-    desc: "See all your golems running",
+    name: "cmuxLayer",
+    command: "npm i cmuxlayer",
+    description:
+      "Multi-terminal — spawn agents, coordinate panes, monitor output",
+    color: "#6ab0f3",
+    language: "Node.js",
   },
 ];
 
-function GetStartedSection() {
+function InstallSection() {
   return (
     <section className="relative bg-gradient-to-b from-[#0c0b0a] to-[#0a0908] py-12 md:py-20">
       <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950033] to-transparent" />
-      <div className="mx-auto max-w-[1000px] px-6">
+      <div className="mx-auto max-w-[900px] px-4 sm:px-6">
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
-          Get Started in 60 Seconds
+          Get Started
         </h2>
-        <p className="mb-12 text-center text-[#b0a89c] italic">
-          Four commands. That&apos;s it.
+        <p className="mb-10 text-center text-[#b0a89c] italic">
+          One command for everything, or install what you need.
         </p>
-        <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
-          {installSteps.map((s) => (
-            <div
-              key={s.step}
-              className="group relative rounded-xl border border-[#e5950014] bg-[#14120e]/90 p-5 transition-colors hover:border-[#e5950040]"
-            >
-              <CopyButton text={s.command} />
-              <div className="mb-3 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[#e59500] to-[#c46d3c] text-sm font-extrabold text-[#0c0b0a]">
-                {s.step}
-              </div>
-              <div className="mb-1 text-sm font-bold text-[#e59500]">
-                {s.label}
-              </div>
-              <code className="mb-2 block rounded-md border border-[#2dd4a81a] bg-black/40 px-2.5 py-1.5 font-mono text-[0.72rem] break-all text-[#2dd4a8]">
-                {s.command}
+
+        {/* Primary: one-command install */}
+        <div className="mb-8 rounded-xl border border-[#e5950030] bg-[#14120e]/90 p-6">
+          <div className="mb-3 text-center text-xs font-bold tracking-wider text-[#e59500] uppercase">
+            Full ecosystem
+          </div>
+          <div className="group relative mx-auto max-w-lg">
+            <div className="flex items-center justify-center rounded-lg border border-[#2dd4a840] bg-[#0d0d0d] px-4 py-3 pr-14">
+              <code className="font-mono text-sm text-[#2dd4a8] sm:text-base">
+                <span className="text-[#b0a89c]">$</span> npx golems-cli install
               </code>
-              <p className="m-0 text-[0.8rem] leading-snug text-[#b0a89c]">
-                {s.desc}
+            </div>
+            <CopyButton text="npx golems-cli install" />
+          </div>
+          <p className="m-0 mt-3 text-center text-[0.78rem] text-[#b0a89c]">
+            Installs all three MCP servers, wires Claude Code config, and
+            verifies the setup.
+          </p>
+        </div>
+
+        {/* Divider */}
+        <div className="mb-8 flex items-center gap-4">
+          <div className="h-px flex-1 bg-[#e5950015]" />
+          <span className="text-xs font-medium text-[#b0a89c]">
+            or install individually
+          </span>
+          <div className="h-px flex-1 bg-[#e5950015]" />
+        </div>
+
+        {/* Individual installs */}
+        <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {individualInstalls.map((pkg) => (
+            <div
+              key={pkg.name}
+              className="group relative rounded-xl border bg-[#14120e]/90 p-4"
+              style={{ borderColor: `${pkg.color}15` }}
+            >
+              <CopyButton text={pkg.command} />
+              <div className="mb-2 flex items-center justify-between">
+                <span
+                  className="text-sm font-bold"
+                  style={{ color: pkg.color }}
+                >
+                  {pkg.name}
+                </span>
+                <span className="rounded-md bg-[#ffffff08] px-1.5 py-0.5 text-[0.65rem] text-[#b0a89c]">
+                  {pkg.language}
+                </span>
+              </div>
+              <code
+                className="mb-2 block rounded-md border bg-black/40 px-2.5 py-1.5 font-mono text-[0.72rem] text-[#2dd4a8]"
+                style={{ borderColor: `${pkg.color}1a` }}
+              >
+                {pkg.command}
+              </code>
+              <p className="m-0 text-[0.75rem] leading-snug text-[#a09080]">
+                {pkg.description}
               </p>
             </div>
           ))}
         </div>
+
         <div className="text-center">
           <Link
             href="/golems/docs/getting-started"
@@ -1190,7 +1230,7 @@ export default function GolemsHome() {
     <>
       <HomepageHero />
       <BeforeAfterSection />
-      <GetStartedSection />
+      <InstallSection />
       <EcosystemSection />
       <SkillsShowcase />
       <CrossAISection />
