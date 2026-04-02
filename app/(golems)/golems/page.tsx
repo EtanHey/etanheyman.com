@@ -849,35 +849,6 @@ function InstallSection() {
   );
 }
 
-/* ── Ecosystem Section (golems + tools) ────────────────────────── */
-
-const golems = [
-  {
-    emoji: "\uD83D\uDCC5",
-    name: "Coach",
-    desc: "Primary golem \u2014 health, schedule, recruiting, content, admin, daily planning.",
-    link: "/golems/docs/golems/coach",
-  },
-  {
-    emoji: "\uD83E\uDD16",
-    name: "Claude",
-    desc: "Telegram bot \u2014 routes commands, spawns sessions, manages notifications.",
-    link: "/golems/docs/golems/claude",
-  },
-  {
-    emoji: "\uD83D\uDCBC",
-    name: "Recruiter",
-    desc: "Job hunt \u2014 board scraping, outreach, follow-ups, 7-mode interview practice.",
-    link: "/golems/docs/golems/recruiter",
-  },
-  {
-    emoji: "\uD83C\uDF19",
-    name: "Services",
-    desc: "Infrastructure \u2014 Night Shift (4am), Morning Briefing, cloud workers, nightly docs.",
-    link: "/golems/docs/packages/services",
-  },
-];
-
 /* ── Numbers Strip ────────────────────────────────────────────── */
 
 const ecosystemStats = [
@@ -912,194 +883,69 @@ function NumbersStrip() {
   );
 }
 
-/* ── Ecosystem Section (golems + tools) ────────────────────────── */
+/* ── Builder Profile ──────────────────────────────────────────── */
 
-function EcosystemSection() {
+function BuilderProfile() {
   return (
     <section className="relative bg-gradient-to-b from-[#0c0b0a] to-[#080807] py-12 md:py-20">
       <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950026] to-transparent" />
-      <div className="mx-auto max-w-[1000px] px-4 sm:px-6">
+      <div className="mx-auto max-w-[700px] px-4 sm:px-6">
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
-          The Ecosystem
+          Built by Etan Heyman
         </h2>
-        <p className="mb-10 text-center text-[#b0a89c] italic">
-          4 domain golems, {golemsStats.skills.count} skills, 3 daemon MCPs, and
-          a CLI.
+        <p className="mb-8 text-center text-[#b0a89c] italic">
+          Full-stack engineer building open-source tools for AI agents.
         </p>
 
-        {/* Golems — compact list */}
-        <div className="mb-10">
-          <h3 className="mb-4 text-base font-bold text-[#e59500]">Golems</h3>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {golems.map((g) => (
-              <Link
-                key={g.name}
-                href={g.link}
-                className="flex items-center gap-3 rounded-lg border border-[#c46d3c1a] bg-[#14120e]/90 px-4 py-3 no-underline transition-colors hover:border-[#e5950040]"
-              >
-                <span className="text-lg">{g.emoji}</span>
-                <span className="text-sm font-bold text-[#e8e2d6]">
-                  {g.name}
-                </span>
-                <span className="text-[0.78rem] text-[#b0a89c]">{g.desc}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Tools & MCPs */}
-        <div>
-          <h3 className="mb-4 text-base font-bold text-[#2dd4a8]">
-            Tools &amp; MCPs
-          </h3>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-            <Link
-              href="/golems/skills"
-              className="rounded-lg border border-[#e5950014] bg-[#14120e]/90 px-4 py-3 no-underline transition-colors hover:border-[#e5950040]"
-            >
-              <div className="text-lg font-bold text-[#e59500]">
-                {golemsStats.skills.count}
+        <div className="rounded-xl border border-[#e5950020] bg-[#14120e]/90 p-6">
+          <div className="mb-4 flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+            <Image
+              src="/images/golems-logo.svg"
+              alt="Etan Heyman"
+              width={56}
+              height={56}
+              className="h-14 w-14 rounded-full"
+            />
+            <div className="text-center sm:text-left">
+              <div className="text-lg font-bold text-[#f0ebe0]">
+                Etan Heyman
               </div>
-              <div className="text-sm font-medium text-[#e8e2d6]">Skills</div>
-              <div className="text-[0.75rem] text-[#b0a89c]">
-                Reusable Claude Code slash commands
-              </div>
-            </Link>
-            <div className="rounded-lg border border-[#2dd4a814] bg-[#14120e]/90 px-4 py-3">
-              <div className="text-lg font-bold text-[#2dd4a8]">3</div>
-              <div className="text-sm font-medium text-[#e8e2d6]">
-                Daemon MCPs
-              </div>
-              <div className="text-[0.75rem] text-[#b0a89c]">
-                BrainLayer ({golemsStats.brainlayer.chunksDisplay} chunks) +
-                VoiceLayer + cmuxlayer
-              </div>
-            </div>
-            <div className="rounded-lg border border-[#6ab0f314] bg-[#14120e]/90 px-4 py-3">
-              <div className="text-lg font-bold text-[#6ab0f3]">CLI</div>
-              <div className="text-sm font-medium text-[#e8e2d6]">
-                golems-cli
-              </div>
-              <div className="text-[0.75rem] text-[#b0a89c]">
-                wizard, status, recruit, coach, logs
+              <div className="text-sm text-[#b0a89c]">
+                AI Infrastructure &amp; Developer Tools
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Agents */}
-        <div className="mt-10">
-          <h3 className="mb-4 text-base font-bold text-[#f97316]">Agents</h3>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {[
-              {
-                name: "coachClaude",
-                desc: "Health, schedule, recruiting, daily planning",
-              },
-              {
-                name: "orcClaude",
-                desc: "Cross-repo orchestrator, multi-agent sprints",
-              },
-              {
-                name: "maintenanceClaude",
-                desc: "README, docs, portfolio updates with verification",
-              },
-              {
-                name: "publicistClaude",
-                desc: "LinkedIn, content creation, showcase videos",
-              },
-              {
-                name: "contentClaude",
-                desc: "ClaudeGolem brand content across platforms",
-              },
-              {
-                name: "interviewClaude",
-                desc: "7-mode interview practice with Elo tracking",
-              },
-            ].map((a) => (
-              <div
-                key={a.name}
-                className="flex items-center gap-3 rounded-lg border border-[#f9731620] bg-[#14120e]/90 px-4 py-3"
-              >
-                <span className="font-mono text-sm font-bold text-[#f97316]">
-                  {a.name}
-                </span>
-                <span className="text-[0.78rem] text-[#b0a89c]">{a.desc}</span>
-              </div>
-            ))}
-          </div>
-          <p className="mt-2 text-xs text-[#b0a89c]">
-            Agents are skills loaded as persistent identities via{" "}
-            <code className="text-[#6ab0f3]">claude --agent</code>
+          <p className="mb-4 text-sm leading-relaxed text-[#a09080]">
+            Designed and built 3 MCP servers, 36 reusable skills, and an
+            autonomous agent ecosystem from scratch. Every component is
+            open-source, tested, and documented.
           </p>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-/* ── Architecture Section ──────────────────────────────────────── */
-
-function ArchitectureSection() {
-  return (
-    <section className="relative bg-[#0c0b0a] py-12 md:py-20">
-      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#2dd4a81e] to-transparent" />
-      <div className="mx-auto max-w-[1000px] px-6">
-        <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
-          How It Works
-        </h2>
-        <p className="mb-12 text-center text-[#b0a89c] italic">
-          Mac is the brain, Railway is the body
-        </p>
-        <div className="mx-auto flex max-w-[700px] flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
-          <div className="flex-1 rounded-xl border border-[#c46d3c1a] bg-[#14120e]/90 p-6 transition-colors hover:border-[#e5950040]">
-            <h3 className="mb-3 text-base font-bold text-[#e59500]">
-              Your Mac (Brain)
-            </h3>
-            <ul className="m-0 list-none space-y-1 p-0">
-              {[
-                "Telegram Bot",
-                "Night Shift",
-                "BrainLayer MCP",
-                "VoiceLayer MCP",
-              ].map((item) => (
-                <li
-                  key={item}
-                  className="font-mono text-sm text-[#a69987] before:text-[#c46d3c] before:content-['\\2022_']"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
+          <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
+            <Link
+              href="/"
+              className="rounded-lg border border-[#e5950030] px-4 py-2 text-[0.8rem] font-medium text-[#e59500] no-underline transition-all hover:border-[#e5950060] hover:bg-[#e5950008]"
+            >
+              Portfolio
+            </Link>
+            <a
+              href="https://github.com/EtanHey"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg border border-[#a6998730] px-4 py-2 text-[0.8rem] font-medium text-[#a69987] no-underline transition-all hover:border-[#a6998760] hover:bg-[#a699870a]"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://linkedin.com/in/etanheyman"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg border border-[#6ab0f330] px-4 py-2 text-[0.8rem] font-medium text-[#6ab0f3] no-underline transition-all hover:border-[#6ab0f360] hover:bg-[#6ab0f308]"
+            >
+              LinkedIn
+            </a>
           </div>
-          <div className="shrink-0 rotate-90 text-2xl text-[#2dd4a8] drop-shadow-[0_0_12px_rgba(45,212,168,0.2)] md:rotate-0">
-            &harr;
-          </div>
-          <div className="flex-1 rounded-xl border border-[#c46d3c1a] bg-[#14120e]/90 p-6 transition-colors hover:border-[#e5950040]">
-            <h3 className="mb-3 text-base font-bold text-[#e59500]">
-              Railway (Body)
-            </h3>
-            <ul className="m-0 list-none space-y-1 p-0">
-              {["Email Poller", "Job Scraper", "Briefing Generator"].map(
-                (item) => (
-                  <li
-                    key={item}
-                    className="font-mono text-sm text-[#a69987] before:text-[#c46d3c] before:content-['\\2022_']"
-                  >
-                    {item}
-                  </li>
-                ),
-              )}
-            </ul>
-          </div>
-        </div>
-        <div className="mt-6 text-center">
-          <Link
-            href="/golems/docs/architecture"
-            className="rounded-lg border border-[#2dd4a840] px-6 py-2.5 text-sm font-semibold text-[#2dd4a8] no-underline transition-all hover:border-[#2dd4a899] hover:bg-[#2dd4a80f]"
-          >
-            Explore Architecture &rarr;
-          </Link>
         </div>
       </div>
     </section>
@@ -1268,10 +1114,9 @@ export default function GolemsHome() {
       <BeforeAfterSection />
       <InstallSection />
       <NumbersStrip />
-      <EcosystemSection />
       <SkillsShowcase />
       <CrossAISection />
-      <ArchitectureSection />
+      <BuilderProfile />
     </>
   );
 }
