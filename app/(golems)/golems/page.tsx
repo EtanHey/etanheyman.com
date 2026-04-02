@@ -65,7 +65,7 @@ const products = [
   {
     name: "VoiceLayer",
     tagline: "Voice I/O for AI agents",
-    description: `${golemsStats.voicelayer.tests} tests. Dual-protocol MCP daemon. Talk to your agents, hear them respond.`,
+    description: `${golemsStats.voicelayer.tests} tests. 11 MCP tools. Talk to your agents, hear them respond.`,
     href: "https://voicelayer.etanheyman.com",
     color: "#2dd4a8",
     icon: (
@@ -748,8 +748,7 @@ const individualInstalls = [
   {
     name: "VoiceLayer",
     command: "npm i voicelayer-mcp",
-    description:
-      "Voice I/O — speech-to-text, text-to-speech, dual-protocol MCP",
+    description: "Voice I/O — speech-to-text, text-to-speech, 11 MCP tools",
     color: "#2dd4a8",
     language: "Node.js",
   },
@@ -894,7 +893,7 @@ function BuilderProfile() {
           Built by Etan Heyman
         </h2>
         <p className="mb-8 text-center text-[#b0a89c] italic">
-          Full-stack engineer building open-source tools for AI agents.
+          AI engineer building open-source tools for AI agents.
         </p>
 
         <div className="rounded-xl border border-[#e5950020] bg-[#14120e]/90 p-6">

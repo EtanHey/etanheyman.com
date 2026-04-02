@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-03-28T00:00:00Z",
+  "generatedAt": "2026-04-02T00:00:00Z",
   "skills": {
-    "count": 55,
-    "withSkillMd": 55,
-    "withEvals": 40,
-    "evalCoverage": "73%",
+    "count": 36,
+    "withSkillMd": 36,
+    "withEvals": 34,
+    "evalCoverage": "94%",
     "adapterLayer": "AI-agnostic (Claude, Cursor, Gemini, Codex, Kiro)"
   },
   "packages": {
@@ -28,7 +28,7 @@
     "daemon": "BrainBar (209KB native binary)"
   },
   "voicelayer": {
-    "tests": 359,
+    "tests": 540,
     "daemon": "MCP daemon, dual-protocol (NDJSON + MCP Content-Length)"
   },
   "cmuxlayer": {
