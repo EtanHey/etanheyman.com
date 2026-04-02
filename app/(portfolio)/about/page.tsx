@@ -62,9 +62,7 @@ const AboutPage = () => {
           </h1>
           <div className="flex items-center gap-4">
             <LaptopIcon />
-            <h3 className="text-2xl font-light xl:text-[32px]">
-              Full Stack Engineer
-            </h3>
+            <h3 className="text-2xl font-light xl:text-[32px]">AI Engineer</h3>
           </div>
           <div className="flex items-center gap-4">
             <LocationIcon />
