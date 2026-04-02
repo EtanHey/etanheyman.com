@@ -547,21 +547,21 @@ function HomepageHero() {
         </div>
 
         {/* Product cards */}
-        <div className="mb-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="mb-10 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-3">
           {products.map((p) => (
             <a
               key={p.name}
               href={p.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group rounded-xl border bg-[#14120e]/90 p-5 no-underline transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_32px_rgba(229,149,0,0.08)]"
+              className="group flex flex-col rounded-xl border bg-[#14120e]/90 p-5 no-underline transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_32px_rgba(229,149,0,0.08)]"
               style={{
                 borderColor: `${p.color}20`,
               }}
             >
               <div className="mb-3 flex items-center gap-3">
                 <div
-                  className="flex h-10 w-10 items-center justify-center rounded-lg"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
                   style={{ backgroundColor: `${p.color}10` }}
                 >
                   {p.icon}
@@ -575,7 +575,7 @@ function HomepageHero() {
                   </div>
                 </div>
               </div>
-              <p className="m-0 text-[0.78rem] leading-snug text-[#a09080]">
+              <p className="m-0 flex-1 text-[0.78rem] leading-snug text-[#a09080]">
                 {p.description}
               </p>
               <div
@@ -770,8 +770,14 @@ function InstallSection() {
         <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
           Get Started
         </h2>
-        <p className="mb-10 text-center text-[#b0a89c] italic">
-          One command for everything, or install what you need.
+        <p className="mb-10 text-center text-[#b0a89c]">
+          One command for everything, or install what you need.{" "}
+          <Link
+            href="/golems/docs/getting-started"
+            className="text-[#e59500] no-underline hover:underline"
+          >
+            Full guide &rarr;
+          </Link>
         </p>
 
         {/* Primary: one-command install */}
@@ -803,11 +809,11 @@ function InstallSection() {
         </div>
 
         {/* Individual installs */}
-        <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="mb-8 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-3">
           {individualInstalls.map((pkg) => (
             <div
               key={pkg.name}
-              className="group relative rounded-xl border bg-[#14120e]/90 p-4"
+              className="group relative flex flex-col rounded-xl border bg-[#14120e]/90 p-4"
               style={{ borderColor: `${pkg.color}15` }}
             >
               <CopyButton text={pkg.command} />
