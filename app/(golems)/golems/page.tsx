@@ -628,6 +628,112 @@ function HomepageHero() {
   );
 }
 
+/* ── Before/After Comparison ──────────────────────────────────── */
+
+const comparisons = [
+  {
+    before: "Your agent forgets everything between sessions",
+    after: "Persistent memory across every conversation",
+    product: "BrainLayer",
+    color: "#e59500",
+  },
+  {
+    before: "You type every command by hand",
+    after: "Talk to your agents, hear them respond",
+    product: "VoiceLayer",
+    color: "#2dd4a8",
+  },
+  {
+    before: "One terminal, one task, waiting for each to finish",
+    after: "Spawn parallel agents across coordinated panes",
+    product: "cmuxLayer",
+    color: "#6ab0f3",
+  },
+];
+
+function BeforeAfterSection() {
+  return (
+    <section className="relative bg-gradient-to-b from-[#0c0b0a] to-[#0a0908] py-12 md:py-20">
+      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950033] to-transparent" />
+      <div className="mx-auto max-w-[900px] px-4 sm:px-6">
+        <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
+          What Changes
+        </h2>
+        <p className="mb-10 text-center text-[#b0a89c] italic">
+          Three problems. Three open-source solutions.
+        </p>
+
+        <div className="flex flex-col gap-4">
+          {comparisons.map((c) => (
+            <div
+              key={c.product}
+              className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border sm:grid-cols-[1fr_auto_1fr]"
+              style={{ borderColor: `${c.color}15` }}
+            >
+              {/* Before */}
+              <div className="flex items-center gap-3 bg-[#14120e]/90 px-5 py-4">
+                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ff555520] text-xs font-bold text-[#ff5555]">
+                  &times;
+                </div>
+                <p className="m-0 text-sm leading-snug text-[#a09080]">
+                  {c.before}
+                </p>
+              </div>
+
+              {/* Arrow divider */}
+              <div
+                className="hidden items-center justify-center bg-[#14120e]/90 px-3 sm:flex"
+                style={{ color: c.color }}
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M5 12h14M13 6l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.6"
+                  />
+                </svg>
+              </div>
+
+              {/* After */}
+              <div className="flex items-center gap-3 bg-[#14120e]/90 px-5 py-4">
+                <div
+                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                  style={{
+                    backgroundColor: `${c.color}20`,
+                    color: c.color,
+                  }}
+                >
+                  &#10003;
+                </div>
+                <div>
+                  <p className="m-0 text-sm leading-snug text-[#e8e2d6]">
+                    {c.after}
+                  </p>
+                  <span
+                    className="mt-0.5 inline-block text-[0.7rem] font-bold"
+                    style={{ color: c.color }}
+                  >
+                    {c.product}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ── Get Started Section ───────────────────────────────────────── */
 
 const installSteps = [
@@ -1083,6 +1189,7 @@ export default function GolemsHome() {
   return (
     <>
       <HomepageHero />
+      <BeforeAfterSection />
       <GetStartedSection />
       <EcosystemSection />
       <SkillsShowcase />
