@@ -878,6 +878,42 @@ const golems = [
   },
 ];
 
+/* ── Numbers Strip ────────────────────────────────────────────── */
+
+const ecosystemStats = [
+  { value: "45", label: "MCP Tools", color: "#e59500" },
+  { value: "2,557", label: "Tests Passing", color: "#2dd4a8" },
+  { value: "295K+", label: "Knowledge Chunks", color: "#e59500" },
+  { value: "36", label: "Skills", color: "#6ab0f3" },
+  { value: "3", label: "MCP Servers", color: "#c46d3c" },
+];
+
+function NumbersStrip() {
+  return (
+    <section className="relative bg-[#0a0908] py-10 md:py-14">
+      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950020] to-transparent" />
+      <div className="absolute right-0 bottom-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950020] to-transparent" />
+      <div className="mx-auto flex max-w-[900px] flex-wrap items-center justify-center gap-8 px-4 sm:gap-12 md:gap-16">
+        {ecosystemStats.map((s) => (
+          <div key={s.label} className="flex flex-col items-center gap-1">
+            <span
+              className="text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl"
+              style={{ color: s.color }}
+            >
+              {s.value}
+            </span>
+            <span className="text-[0.7rem] font-medium tracking-wider text-[#b0a89c] uppercase">
+              {s.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── Ecosystem Section (golems + tools) ────────────────────────── */
+
 function EcosystemSection() {
   return (
     <section className="relative bg-gradient-to-b from-[#0c0b0a] to-[#080807] py-12 md:py-20">
@@ -1231,6 +1267,7 @@ export default function GolemsHome() {
       <HomepageHero />
       <BeforeAfterSection />
       <InstallSection />
+      <NumbersStrip />
       <EcosystemSection />
       <SkillsShowcase />
       <CrossAISection />
