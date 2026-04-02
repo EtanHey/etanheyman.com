@@ -74,6 +74,9 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Golems Ecosystem Section — centerpiece, above projects */}
+      <GolemsEcosystem />
+
       {/* Projects Section */}
       <section
         id="projects"
@@ -102,18 +105,15 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Golems Ecosystem Section */}
-      <GolemsEcosystem />
-
       {/* CTA Section */}
       <section className="px-[18px] pt-6 pb-12 sm:px-8 md:px-12 md:pt-8 md:pb-16 lg:px-20 lg:pt-12 lg:pb-20 xl:px-40 xl:pt-14 xl:pb-24 2xl:px-[323px]">
         <div className="mx-auto flex max-w-[354px] flex-col gap-6 sm:max-w-[500px] md:max-w-none md:flex-row md:items-center md:gap-8 lg:gap-12">
           <div className="flex flex-col gap-2 md:flex-1 md:gap-4">
             <h2 className="font-[Nutmeg] text-[26px] leading-none font-semibold text-blue-200 sm:text-[32px] md:text-[36px] lg:text-[42px] xl:text-[48px]">
-              Like what you see?
+              Let's build something.
             </h2>
             <p className="font-[Nutmeg] text-[22px] leading-none font-light text-white sm:text-[24px] md:text-[26px] lg:text-[30px] xl:text-[32px]">
-              Don't hesitate to contact me right away!
+              Looking for an AI engineer who ships production tools.
             </p>
           </div>
           <Link href="/contact" className="w-full sm:w-auto md:w-auto">

@@ -41,16 +41,16 @@ const nutmeg = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Etan Heyman",
+  title: "Etan Heyman — AI Engineer",
   description:
-    "Personal website of Etan Heyman | UI/UX Design by Dor Zohar (ProductDZ)",
+    "Building open-source tools for AI agents. Creator of Golems: 3 MCP servers, 44 tools — persistent memory, voice I/O, multi-agent orchestration.",
   keywords: [
+    "AI engineer",
+    "MCP server",
+    "AI agents",
+    "open source",
     "developer",
     "portfolio",
-    "software engineer",
-    "Dor Zohar",
-    "ProductDZ",
-    "UI/UX design",
   ],
   authors: [
     { name: "Etan Heyman" },
@@ -81,8 +81,8 @@ export const metadata: Metadata = {
     url: "https://etanheyman.com",
     title: "Etan Heyman",
     description:
-      "Personal website of Etan Heyman | UI/UX Design by Dor Zohar (ProductDZ)",
-    siteName: "Etan Heyman's Portfolio | Full-Stack Developer",
+      "AI Engineer building open-source tools for AI agents. Creator of the Golems ecosystem: 3 MCP servers, 44 tools.",
+    siteName: "Etan Heyman | AI Engineer",
     images: [
       {
         url: "/favicon/web-app-manifest-512x512.png",
@@ -96,7 +96,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Etan Heyman",
     description:
-      "Personal website of Etan Heyman | UI/UX Design by Dor Zohar (ProductDZ)",
+      "AI Engineer building open-source tools for AI agents. Creator of the Golems ecosystem: 3 MCP servers, 44 tools.",
     images: ["/favicon/web-app-manifest-512x512.png"],
   },
   verification: {
