@@ -1,252 +1,634 @@
-"use client";
-
-import { useState, useEffect, useCallback, useRef } from "react";
-import type { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import TelegramMock from "./components/TelegramMock";
-import GolemMascot from "./components/GolemMascot";
 import CopyButton from "./components/CopyButton";
 import SkillsShowcase from "./components/SkillsShowcase";
 import golemsStats from "./lib/golems-stats.json";
 
-/* ── Tab content: real CLI flows ───────────────────────────────── */
+/* ── Product cards data ────────────────────────────────────────── */
 
-interface TerminalTab {
-  id: string;
-  label: string;
-  emoji: string;
-  lines: string[];
-  showMascot?: boolean;
+const products = [
+  {
+    name: "BrainLayer",
+    tagline: "Persistent memory for AI agents",
+    description: `${golemsStats.brainlayer.chunksDisplay} chunks indexed. ${golemsStats.brainlayer.mcpTools} MCP tools. Semantic search, entity graph, knowledge digest.`,
+    href: "https://brainlayer.etanheyman.com",
+    color: "#e59500",
+    icon: (
+      <svg
+        width="28"
+        height="28"
+        viewBox="0 0 28 28"
+        fill="none"
+        aria-hidden="true"
+      >
+        <circle
+          cx="14"
+          cy="14"
+          r="12"
+          stroke="#e59500"
+          strokeWidth="1.5"
+          opacity="0.3"
+        />
+        <circle cx="14" cy="10" r="3" fill="#e59500" opacity="0.8" />
+        <circle cx="9" cy="17" r="2.5" fill="#e59500" opacity="0.6" />
+        <circle cx="19" cy="17" r="2.5" fill="#e59500" opacity="0.6" />
+        <line
+          x1="14"
+          y1="13"
+          x2="9"
+          y2="15"
+          stroke="#e59500"
+          strokeWidth="1"
+          opacity="0.4"
+        />
+        <line
+          x1="14"
+          y1="13"
+          x2="19"
+          y2="15"
+          stroke="#e59500"
+          strokeWidth="1"
+          opacity="0.4"
+        />
+        <line
+          x1="9"
+          y1="17"
+          x2="19"
+          y2="17"
+          stroke="#e59500"
+          strokeWidth="1"
+          opacity="0.3"
+        />
+      </svg>
+    ),
+  },
+  {
+    name: "VoiceLayer",
+    tagline: "Voice I/O for AI agents",
+    description: `${golemsStats.voicelayer.tests} tests. Dual-protocol MCP daemon. Talk to your agents, hear them respond.`,
+    href: "https://voicelayer.etanheyman.com",
+    color: "#2dd4a8",
+    icon: (
+      <svg
+        width="28"
+        height="28"
+        viewBox="0 0 28 28"
+        fill="none"
+        aria-hidden="true"
+      >
+        <rect
+          x="11"
+          y="4"
+          width="6"
+          height="12"
+          rx="3"
+          stroke="#2dd4a8"
+          strokeWidth="1.5"
+          opacity="0.8"
+        />
+        <path
+          d="M8 13a6 6 0 0 0 12 0"
+          stroke="#2dd4a8"
+          strokeWidth="1.5"
+          opacity="0.5"
+        />
+        <line
+          x1="14"
+          y1="19"
+          x2="14"
+          y2="23"
+          stroke="#2dd4a8"
+          strokeWidth="1.5"
+          opacity="0.5"
+        />
+        <line
+          x1="10"
+          y1="23"
+          x2="18"
+          y2="23"
+          stroke="#2dd4a8"
+          strokeWidth="1.5"
+          opacity="0.4"
+        />
+      </svg>
+    ),
+  },
+  {
+    name: "cmuxLayer",
+    tagline: "Multi-terminal orchestration",
+    description: `${golemsStats.cmuxlayer.tests} tests. ${golemsStats.cmuxlayer.socketSpeedup} faster than shell. Spawn, coordinate, and monitor AI agents.`,
+    href: "https://cmuxlayer.etanheyman.com",
+    color: "#6ab0f3",
+    icon: (
+      <svg
+        width="28"
+        height="28"
+        viewBox="0 0 28 28"
+        fill="none"
+        aria-hidden="true"
+      >
+        <rect
+          x="3"
+          y="4"
+          width="10"
+          height="9"
+          rx="2"
+          stroke="#6ab0f3"
+          strokeWidth="1.5"
+          opacity="0.7"
+        />
+        <rect
+          x="15"
+          y="4"
+          width="10"
+          height="9"
+          rx="2"
+          stroke="#6ab0f3"
+          strokeWidth="1.5"
+          opacity="0.7"
+        />
+        <rect
+          x="3"
+          y="15"
+          width="10"
+          height="9"
+          rx="2"
+          stroke="#6ab0f3"
+          strokeWidth="1.5"
+          opacity="0.7"
+        />
+        <rect
+          x="15"
+          y="15"
+          width="10"
+          height="9"
+          rx="2"
+          stroke="#6ab0f3"
+          strokeWidth="1.5"
+          opacity="0.7"
+        />
+      </svg>
+    ),
+  },
+];
+
+/* ── Connection Diagram (static SVG) ──────────────────────────── */
+
+function ConnectionDiagram() {
+  return (
+    <svg
+      viewBox="0 0 720 260"
+      fill="none"
+      className="mx-auto w-full max-w-[720px]"
+      role="img"
+      aria-label="Diagram showing how VoiceLayer, BrainLayer, and cmuxLayer connect through Claude Code"
+    >
+      {/* Subtle grid background */}
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path
+            d="M 40 0 L 0 0 0 40"
+            fill="none"
+            stroke="#e5950008"
+            strokeWidth="0.5"
+          />
+        </pattern>
+      </defs>
+      <rect width="720" height="260" fill="url(#grid)" />
+
+      {/* Connection lines — drawn behind nodes */}
+      {/* You → VoiceLayer */}
+      <path
+        d="M 105 70 L 195 70"
+        stroke="#2dd4a8"
+        strokeWidth="1.5"
+        opacity="0.4"
+        strokeDasharray="4 4"
+      />
+      {/* VoiceLayer → Claude Code */}
+      <path
+        d="M 305 70 L 395 70"
+        stroke="#c0b8a8"
+        strokeWidth="1.5"
+        opacity="0.3"
+      />
+      {/* Claude Code → BrainLayer */}
+      <path
+        d="M 505 70 L 595 70"
+        stroke="#e59500"
+        strokeWidth="1.5"
+        opacity="0.4"
+      />
+      {/* Claude Code → cmuxLayer (down) */}
+      <path
+        d="M 450 100 L 450 150"
+        stroke="#6ab0f3"
+        strokeWidth="1.5"
+        opacity="0.4"
+      />
+      {/* cmuxLayer → 3 agent panes */}
+      <path
+        d="M 370 195 L 310 230"
+        stroke="#6ab0f3"
+        strokeWidth="1"
+        opacity="0.25"
+      />
+      <path
+        d="M 450 210 L 450 230"
+        stroke="#6ab0f3"
+        strokeWidth="1"
+        opacity="0.25"
+      />
+      <path
+        d="M 530 195 L 590 230"
+        stroke="#6ab0f3"
+        strokeWidth="1"
+        opacity="0.25"
+      />
+      {/* BrainLayer → remembers label */}
+      <path
+        d="M 650 100 L 650 140"
+        stroke="#e59500"
+        strokeWidth="1"
+        opacity="0.25"
+        strokeDasharray="3 3"
+      />
+
+      {/* ── Nodes ── */}
+      {/* You */}
+      <rect
+        x="40"
+        y="48"
+        width="65"
+        height="44"
+        rx="10"
+        fill="#14120e"
+        stroke="#c0b8a830"
+        strokeWidth="1"
+      />
+      <text
+        x="72"
+        y="75"
+        textAnchor="middle"
+        fill="#c0b8a8"
+        fontSize="13"
+        fontFamily="monospace"
+      >
+        You
+      </text>
+
+      {/* VoiceLayer */}
+      <rect
+        x="195"
+        y="44"
+        width="110"
+        height="52"
+        rx="12"
+        fill="#14120e"
+        stroke="#2dd4a840"
+        strokeWidth="1.5"
+      />
+      <circle cx="220" cy="70" r="6" fill="#2dd4a8" opacity="0.2" />
+      <circle cx="220" cy="70" r="3" fill="#2dd4a8" opacity="0.6" />
+      <text
+        x="258"
+        y="75"
+        textAnchor="middle"
+        fill="#2dd4a8"
+        fontSize="12"
+        fontWeight="bold"
+        fontFamily="sans-serif"
+      >
+        VoiceLayer
+      </text>
+
+      {/* Claude Code (center) */}
+      <rect
+        x="395"
+        y="44"
+        width="110"
+        height="52"
+        rx="12"
+        fill="#14120e"
+        stroke="#c0b8a850"
+        strokeWidth="1.5"
+      />
+      <text
+        x="450"
+        y="66"
+        textAnchor="middle"
+        fill="#f0ebe0"
+        fontSize="11"
+        fontWeight="bold"
+        fontFamily="sans-serif"
+      >
+        Claude Code
+      </text>
+      <text
+        x="450"
+        y="82"
+        textAnchor="middle"
+        fill="#b0a89c"
+        fontSize="9"
+        fontFamily="monospace"
+      >
+        orchestrates
+      </text>
+
+      {/* BrainLayer */}
+      <rect
+        x="595"
+        y="44"
+        width="110"
+        height="52"
+        rx="12"
+        fill="#14120e"
+        stroke="#e5950040"
+        strokeWidth="1.5"
+      />
+      <circle cx="620" cy="70" r="6" fill="#e59500" opacity="0.2" />
+      <circle cx="620" cy="70" r="3" fill="#e59500" opacity="0.6" />
+      <text
+        x="660"
+        y="75"
+        textAnchor="middle"
+        fill="#e59500"
+        fontSize="12"
+        fontWeight="bold"
+        fontFamily="sans-serif"
+      >
+        BrainLayer
+      </text>
+
+      {/* cmuxLayer */}
+      <rect
+        x="395"
+        y="150"
+        width="110"
+        height="52"
+        rx="12"
+        fill="#14120e"
+        stroke="#6ab0f340"
+        strokeWidth="1.5"
+      />
+      <circle cx="420" cy="176" r="6" fill="#6ab0f3" opacity="0.2" />
+      <circle cx="420" cy="176" r="3" fill="#6ab0f3" opacity="0.6" />
+      <text
+        x="458"
+        y="181"
+        textAnchor="middle"
+        fill="#6ab0f3"
+        fontSize="12"
+        fontWeight="bold"
+        fontFamily="sans-serif"
+      >
+        cmuxLayer
+      </text>
+
+      {/* Agent panes */}
+      <rect
+        x="270"
+        y="232"
+        width="60"
+        height="24"
+        rx="6"
+        fill="#6ab0f30a"
+        stroke="#6ab0f320"
+        strokeWidth="1"
+      />
+      <text
+        x="300"
+        y="248"
+        textAnchor="middle"
+        fill="#6ab0f3"
+        fontSize="9"
+        fontFamily="monospace"
+        opacity="0.7"
+      >
+        test
+      </text>
+
+      <rect
+        x="420"
+        y="232"
+        width="60"
+        height="24"
+        rx="6"
+        fill="#6ab0f30a"
+        stroke="#6ab0f320"
+        strokeWidth="1"
+      />
+      <text
+        x="450"
+        y="248"
+        textAnchor="middle"
+        fill="#6ab0f3"
+        fontSize="9"
+        fontFamily="monospace"
+        opacity="0.7"
+      >
+        lint
+      </text>
+
+      <rect
+        x="560"
+        y="232"
+        width="60"
+        height="24"
+        rx="6"
+        fill="#6ab0f30a"
+        stroke="#6ab0f320"
+        strokeWidth="1"
+      />
+      <text
+        x="590"
+        y="248"
+        textAnchor="middle"
+        fill="#6ab0f3"
+        fontSize="9"
+        fontFamily="monospace"
+        opacity="0.7"
+      >
+        deploy
+      </text>
+
+      {/* Remembers label */}
+      <text
+        x="650"
+        y="156"
+        textAnchor="middle"
+        fill="#e59500"
+        fontSize="9"
+        fontFamily="monospace"
+        opacity="0.45"
+      >
+        remembers
+      </text>
+
+      {/* Flow arrows (small triangles) */}
+      <polygon points="193,70 187,66 187,74" fill="#2dd4a8" opacity="0.5" />
+      <polygon points="393,70 387,66 387,74" fill="#c0b8a8" opacity="0.4" />
+      <polygon points="593,70 587,66 587,74" fill="#e59500" opacity="0.5" />
+      <polygon points="450,148 446,142 454,142" fill="#6ab0f3" opacity="0.5" />
+    </svg>
+  );
 }
 
-const tabs: TerminalTab[] = [
-  {
-    id: "wizard",
-    label: "Wizard",
-    emoji: "\u2728",
-    showMascot: true,
-    lines: [
-      "$ golems wizard",
-      "",
-      "\x1b[33m=== GOLEMS SETUP WIZARD ===\x1b[0m",
-      "",
-      "\x1b[34mPhase 1: Prerequisites\x1b[0m",
-      "  \x1b[32m\u2713\x1b[0m bun v1.2.4",
-      "  \x1b[32m\u2713\x1b[0m Claude Code v2.1",
-      "  \x1b[32m\u2713\x1b[0m 1Password CLI",
-      "  \x1b[33m\u25CB\x1b[0m Railway CLI (optional)",
-      "",
-      "\x1b[34mPhase 2: Services\x1b[0m",
-      "  \x1b[36m[1]\x1b[0m Telegram Bot \u2014 Chat + notifications",
-      "  \x1b[36m[2]\x1b[0m Recruiter    \u2014 Job hunt + outreach",
-      "  \x1b[36m[3]\x1b[0m Coach        \u2014 Health, schedule, admin",
-      "  \x1b[36m[4]\x1b[0m Night Shift  \u2014 4am improvements",
-      "",
-      "  Select services to enable [1-4, all]: \x1b[32mall\x1b[0m",
-      "",
-      "\x1b[34mPhase 3: Wiring\x1b[0m",
-      "  \x1b[32m\u2713\x1b[0m Created ~/.golems/",
-      "  \x1b[32m\u2713\x1b[0m Installed LaunchAgents (4 services)",
-      "  \x1b[32m\u2713\x1b[0m Wired MCP servers (brainlayer, voicelayer)",
-      "  \x1b[32m\u2713\x1b[0m Linked golems CLI to ~/bin",
-      "",
-      "\x1b[32m\u2714 Setup complete! Run \x1b[0mgolems status\x1b[32m to verify.\x1b[0m",
-    ],
-  },
-  {
-    id: "status",
-    label: "Status",
-    emoji: "\uD83D\uDCCA",
-    lines: [
-      "$ golems status",
-      "",
-      "\x1b[34m=== GOLEMS STATUS ===\x1b[0m",
-      "",
-      "  \x1b[32m\u2713\x1b[0m Telegram Bot     running (port 3847)",
-      "  \x1b[32m\u2713\x1b[0m Ollama           running",
-      "",
-      "\x1b[34mLaunchAgents:\x1b[0m",
-      "  \x1b[32m\u2713\x1b[0m nightshift",
-      "  \x1b[32m\u2713\x1b[0m briefing",
-      "  \x1b[32m\u2713\x1b[0m recruiter",
-      "  \x1b[32m\u2713\x1b[0m coach",
-      "  \x1b[32m\u2713\x1b[0m session-archiver",
-      "",
-      "\x1b[34mClaude Sessions:\x1b[0m 3 running",
-      "\x1b[34mNight Shift Target:\x1b[0m songscript",
-      "",
-      `\x1b[34mSkills:\x1b[0m ${golemsStats.skills.count} loaded`,
-      `\x1b[34mPackages:\x1b[0m ${golemsStats.packages.count} (${golemsStats.packages.list})`,
-      `\x1b[34mTests:\x1b[0m ${golemsStats.tests.passing} passing`,
-      `\x1b[34mMemory:\x1b[0m ${golemsStats.brainlayer.chunksDisplay} chunks indexed`,
-    ],
-  },
-  {
-    id: "recruiter",
-    label: "Recruiter",
-    emoji: "\uD83D\uDCBC",
-    lines: [
-      "$ golems recruit --practice",
-      "",
-      "\x1b[34m=== INTERVIEW PRACTICE ===\x1b[0m",
-      "\x1b[33mElo: 1450 \u2192 tracking 7-step system\x1b[0m",
-      "",
-      "\x1b[36mStep 1: Introduction\x1b[0m",
-      '  Q: "Tell me about a challenging technical project."',
-      "",
-      '  \x1b[32mYou:\x1b[0m "I built an autonomous agent ecosystem',
-      "  that manages email triage, job searching, and",
-      '  code deployment through persistent Claude sessions..."',
-      "",
-      "\x1b[36mFeedback:\x1b[0m",
-      "  \x1b[32m\u2713\x1b[0m Strong opening with concrete system",
-      `  \x1b[33m\u25CB\x1b[0m Add metrics (${golemsStats.tests.passing} tests, ${golemsStats.packages.count} packages, ${golemsStats.skills.count} skills)`,
-      "  \x1b[33m\u25CB\x1b[0m Mention the constraint: Mac + Railway split",
-      "",
-      "\x1b[34mScore: 7.2/10\x1b[0m | \x1b[33mElo: +15\x1b[0m",
-      "  \x1b[36mNext:\x1b[0m Step 2: Technical Deep Dive \u2192",
-    ],
-  },
-  {
-    id: "email",
-    label: "Email",
-    emoji: "\uD83D\uDCE7",
-    lines: [
-      "$ golems email --triage",
-      "",
-      "\x1b[34m=== EMAIL TRIAGE ===\x1b[0m",
-      "\x1b[33mScanning inbox... 23 new emails\x1b[0m",
-      "",
-      "\x1b[31m\u26A0 URGENT (score 10):\x1b[0m",
-      "  From: hiring@acme-corp.dev",
-      '  Subj: "Interview confirmation \u2014 Tuesday 2pm"',
-      "  \x1b[32m\u2192 Routed to Recruiter\x1b[0m",
-      "",
-      "\x1b[33mTRACKED (score 7-9):\x1b[0m",
-      "  3 job status updates \u2192 Recruiter",
-      "  1 payment receipt ($49) \u2192 Coach",
-      "",
-      "\x1b[36mROUTED:\x1b[0m",
-      "  8 recruiter \u2192 Recruiter",
-      "  3 finance  \u2192 Coach",
-      "  12 dev     \u2192 Claude",
-      "",
-      "\x1b[34mFollow-ups:\x1b[0m 2 overdue, 5 due this week",
-    ],
-  },
-  {
-    id: "coach",
-    label: "Coach",
-    emoji: "\uD83D\uDCC5",
-    lines: [
-      "$ golems coach --plan",
-      "",
-      "\x1b[34m=== DAILY PLAN ===\x1b[0m",
-      "\x1b[33mToday \u2014 Saturday\x1b[0m",
-      "",
-      "\x1b[36mHealth (Whoop):\x1b[0m",
-      "  Recovery: \x1b[32m82%\x1b[0m (green)",
-      "  Sleep: 7.2h (94% efficiency)",
-      "  Strain: 8.4 yesterday",
-      "",
-      "\x1b[36mPriorities:\x1b[0m",
-      "  \x1b[32m1.\x1b[0m Finish docs polish PR (etanheyman.com)",
-      "  \x1b[33m2.\x1b[0m 2 overdue email follow-ups",
-      "  \x1b[33m3.\x1b[0m Interview prep: system design (Elo 1450)",
-      "",
-      "\x1b[36mGolem Status:\x1b[0m",
-      "  \x1b[32m\u2713\x1b[0m Jobs: 3 new matches (best: 9.2)",
-      "  \x1b[32m\u2713\x1b[0m Email: inbox triaged, 2 follow-ups due",
-      "  \x1b[33m\u25CB\x1b[0m Recruiter: Sarah wants Thursday confirmed",
-      "",
-      "\x1b[32m\u2714 Plan ready. Have a good day.\x1b[0m",
-    ],
-  },
-  {
-    id: "content",
-    label: "Content",
-    emoji: "\u270D\uFE0F",
-    lines: [
-      "$ golems content --draft linkedin",
-      "",
-      "\x1b[34m=== CONTENT PIPELINE ===\x1b[0m",
-      "\x1b[33mDraft: LinkedIn post (topic: agentic systems)\x1b[0m",
-      "",
-      "\x1b[36mResearch:\x1b[0m",
-      "  Pulled 3 recent commits for context",
-      "  Found 2 relevant BrainLayer chunks",
-      "  Audience: Israeli tech, English post",
-      "",
-      "\x1b[36mDraft (v1):\x1b[0m",
-      '  "I built 6 autonomous agents that run while I',
-      "  sleep. Night Shift creates PRs at 4am. Morning",
-      "  Briefing summarizes everything at 8am. The trick?",
-      "  They don't talk to each other directly...\"",
-      "",
-      "\x1b[34mCritique wave:\x1b[0m \x1b[33mRunning 3 agents...\x1b[0m",
-      "  Agent 1: \x1b[32m8/10\x1b[0m \u2014 Strong hook, add metrics",
-      "  Agent 2: \x1b[32m7/10\x1b[0m \u2014 Good, shorten last paragraph",
-      "",
-      "\x1b[34mReady for review.\x1b[0m Draft saved to scratchpad.",
-    ],
-  },
-  {
-    id: "nightshift",
-    label: "NightShift",
-    emoji: "\uD83C\uDF19",
-    lines: [
-      "$ golems logs nightshift --last",
-      "",
-      "\x1b[34m=== NIGHT SHIFT LOG (4:02am) ===\x1b[0m",
-      "\x1b[33mTarget: songscript\x1b[0m",
-      "",
-      "\x1b[36m[4:02]\x1b[0m Scanning repo for improvements...",
-      "\x1b[36m[4:05]\x1b[0m Found 3 items:",
-      "  1. Missing error boundary in PlayerView",
-      "  2. WhisperX timeout too short (30s \u2192 120s)",
-      "  3. Dead import in utils/format.ts",
-      "",
-      "\x1b[36m[4:12]\x1b[0m Creating worktree: nightshift-songscript",
-      "\x1b[36m[4:18]\x1b[0m Implementing fixes...",
-      "\x1b[36m[4:31]\x1b[0m Running tests: \x1b[32m142 pass\x1b[0m, 0 fail",
-      "\x1b[36m[4:33]\x1b[0m CodeRabbit review: \x1b[32mPASS\x1b[0m",
-      "\x1b[36m[4:34]\x1b[0m Created PR: songscript#42",
-      "",
-      "\x1b[32m\u2714 Night Shift complete. 3 fixes, 1 PR.\x1b[0m",
-      "\x1b[34mMorning briefing queued for 8am.\x1b[0m",
-    ],
-  },
-];
+/* ── Hero Section ──────────────────────────────────────────────── */
 
-/* ── Golems grid data ──────────────────────────────────────────── */
+function HomepageHero() {
+  return (
+    <header className="relative overflow-hidden bg-[#0c0b0a] pb-12 md:pb-20">
+      {/* Ambient glow */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 600px 400px at 50% 20%, rgba(229,149,0,0.08) 0%, transparent 70%), radial-gradient(ellipse 400px 300px at 30% 60%, rgba(45,212,168,0.05) 0%, transparent 70%), radial-gradient(ellipse 400px 300px at 70% 60%, rgba(106,176,243,0.04) 0%, transparent 70%)",
+        }}
+      />
 
-const golems = [
-  {
-    emoji: "\uD83D\uDCC5",
-    name: "Coach",
-    desc: "Primary golem — health, schedule, recruiting, content, admin, daily planning.",
-    link: "/golems/docs/golems/coach",
-  },
-  {
-    emoji: "\uD83E\uDD16",
-    name: "Claude",
-    desc: "Telegram bot — routes commands, spawns sessions, manages notifications.",
-    link: "/golems/docs/golems/claude",
-  },
-  {
-    emoji: "\uD83D\uDCBC",
-    name: "Recruiter",
-    desc: "Job hunt — board scraping, outreach, follow-ups, 7-mode interview practice.",
-    link: "/golems/docs/golems/recruiter",
-  },
-  {
-    emoji: "\uD83C\uDF19",
-    name: "Services",
-    desc: "Infrastructure — Night Shift (4am), Morning Briefing, cloud workers, nightly docs.",
-    link: "/golems/docs/packages/services",
-  },
-];
+      <div className="relative z-[2] mx-auto max-w-[900px] px-4 pt-10 md:px-6 md:pt-16">
+        {/* Logo + tagline */}
+        <div className="mb-8 flex flex-col items-center gap-4 text-center">
+          <Image
+            src="/images/golems-logo.svg"
+            alt="Golems logo"
+            width={64}
+            height={64}
+            className="h-12 w-12 drop-shadow-[0_0_24px_rgba(229,149,0,0.4)] md:h-16 md:w-16"
+          />
+
+          <div className="flex items-center gap-1.5 font-mono text-[0.7rem] text-[#b0a89c] sm:text-xs">
+            <span className="text-[#a09080]">Spawn</span>
+            <span className="text-[#c46d3c] opacity-70">&rarr;</span>
+            <span className="text-[#a09080]">Work</span>
+            <span className="text-[#c46d3c] opacity-70">&rarr;</span>
+            <span className="text-[#a09080]">Die</span>
+            <span className="text-[#c46d3c] opacity-70">&rarr;</span>
+            <span className="text-[#2dd4a8] drop-shadow-[0_0_16px_rgba(45,212,168,0.35)]">
+              Remember
+            </span>
+          </div>
+
+          <h1 className="m-0 max-w-[640px] bg-gradient-to-br from-[#f0ebe0] to-[#e59500] bg-clip-text text-3xl leading-tight font-black tracking-tight text-transparent sm:text-4xl md:text-5xl">
+            Your AI agents work alone. They don&apos;t have to.
+          </h1>
+
+          <p className="m-0 max-w-[560px] text-base leading-relaxed text-[#b0a89c] sm:text-lg">
+            Three open-source MCP servers that give AI agents persistent memory,
+            voice I/O, and multi-terminal coordination.{" "}
+            <span className="text-[#c0b8a8]">
+              {golemsStats.brainlayer.mcpTools + 11 + 22} tools.
+            </span>{" "}
+            One ecosystem.
+          </p>
+        </div>
+
+        {/* Connection diagram */}
+        <div className="mb-10 hidden sm:block">
+          <ConnectionDiagram />
+        </div>
+
+        {/* Mobile: simplified flow text */}
+        <div className="mb-8 flex flex-col items-center gap-2 text-center sm:hidden">
+          <div className="flex items-center gap-2 text-sm text-[#b0a89c]">
+            <span className="font-bold text-[#2dd4a8]">Voice</span>
+            <span className="text-[#c46d3c] opacity-60">&rarr;</span>
+            <span className="font-bold text-[#f0ebe0]">Claude</span>
+            <span className="text-[#c46d3c] opacity-60">&rarr;</span>
+            <span className="font-bold text-[#e59500]">Memory</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-[#b0a89c]">
+            <span className="font-bold text-[#f0ebe0]">Claude</span>
+            <span className="text-[#c46d3c] opacity-60">&rarr;</span>
+            <span className="font-bold text-[#6ab0f3]">Orchestrate</span>
+          </div>
+        </div>
+
+        {/* Product cards */}
+        <div className="mb-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {products.map((p) => (
+            <a
+              key={p.name}
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group rounded-xl border bg-[#14120e]/90 p-5 no-underline transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_32px_rgba(229,149,0,0.08)]"
+              style={{
+                borderColor: `${p.color}20`,
+              }}
+            >
+              <div className="mb-3 flex items-center gap-3">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: `${p.color}10` }}
+                >
+                  {p.icon}
+                </div>
+                <div>
+                  <div className="text-sm font-bold" style={{ color: p.color }}>
+                    {p.name}
+                  </div>
+                  <div className="text-[0.72rem] text-[#b0a89c]">
+                    {p.tagline}
+                  </div>
+                </div>
+              </div>
+              <p className="m-0 text-[0.78rem] leading-snug text-[#a09080]">
+                {p.description}
+              </p>
+              <div
+                className="mt-3 text-[0.72rem] font-medium opacity-0 transition-opacity group-hover:opacity-100"
+                style={{ color: p.color }}
+              >
+                Visit site &rarr;
+              </div>
+            </a>
+          ))}
+        </div>
+
+        {/* Install CTA */}
+        <div className="flex flex-col items-center gap-4">
+          <div className="group relative w-full max-w-md">
+            <div className="flex items-center rounded-lg border border-[#2dd4a830] bg-[#0d0d0d] px-4 py-2.5 pr-14">
+              <code className="font-mono text-[0.75rem] text-[#2dd4a8] sm:text-sm">
+                <span className="text-[#b0a89c]">$</span> npx golems-cli install
+              </code>
+            </div>
+            <CopyButton text="npx golems-cli install" />
+          </div>
+
+          <p className="m-0 text-center text-[0.72rem] text-[#b0a89c]">
+            Or install individually:{" "}
+            <code className="text-[#e59500]">pip install brainlayer</code>
+            {" \u00B7 "}
+            <code className="text-[#2dd4a8]">npm i voicelayer-mcp</code>
+            {" \u00B7 "}
+            <code className="text-[#6ab0f3]">npm i cmuxlayer</code>
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link
+              href="/golems/docs/getting-started"
+              className="flex min-h-11 items-center justify-center rounded-lg bg-gradient-to-br from-[#e59500] to-[#c46d3c] px-6 py-2 text-[0.8rem] font-bold text-[#0c0b0a] no-underline transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(229,149,0,0.35)] sm:text-sm"
+            >
+              Get Started
+            </Link>
+            <Link
+              href="https://github.com/EtanHey/golems"
+              className="flex min-h-11 items-center justify-center rounded-lg border border-[#a6998733] px-5 py-2 text-[0.8rem] font-medium text-[#a69987] no-underline transition-all hover:border-[#a6998766] hover:bg-[#a699870f] hover:text-[#c0b8a8] sm:text-sm"
+            >
+              GitHub &rarr;
+            </Link>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/* ── Get Started Section ───────────────────────────────────────── */
 
 const installSteps = [
   {
@@ -274,270 +656,6 @@ const installSteps = [
     desc: "See all your golems running",
   },
 ];
-
-/* ── Render ANSI-like color codes to spans ─────────────────────── */
-
-function renderLine(raw: string): ReactNode {
-  const parts: ReactNode[] = [];
-  let key = 0;
-  const colorMap: Record<string, string> = {
-    "0": "",
-    "31": "#ff5555",
-    "32": "#28c840",
-    "33": "#e59500",
-    "34": "#6ab0f3",
-    "36": "#40d4d4",
-  };
-  const regex = /\x1b\[(\d+)m/g;
-  let lastIndex = 0;
-  let currentColor = "";
-  let match;
-
-  while ((match = regex.exec(raw)) !== null) {
-    if (match.index > lastIndex) {
-      const text = raw.slice(lastIndex, match.index);
-      parts.push(
-        currentColor ? (
-          <span key={key++} style={{ color: currentColor }}>
-            {text}
-          </span>
-        ) : (
-          <span key={key++}>{text}</span>
-        ),
-      );
-    }
-    currentColor = colorMap[match[1]] || "";
-    lastIndex = regex.lastIndex;
-  }
-
-  if (lastIndex < raw.length) {
-    const text = raw.slice(lastIndex);
-    parts.push(
-      currentColor ? (
-        <span key={key++} style={{ color: currentColor }}>
-          {text}
-        </span>
-      ) : (
-        <span key={key++}>{text}</span>
-      ),
-    );
-  }
-
-  return parts.length > 0 ? parts : raw;
-}
-
-/* ── Hero Section ──────────────────────────────────────────────── */
-
-function HomepageHero() {
-  const [activeTab, setActiveTab] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval>>(null);
-
-  const startAutoplay = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      setActiveTab((prev) => (prev + 1) % tabs.length);
-    }, 6000);
-  }, []);
-
-  useEffect(() => {
-    startAutoplay();
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [startAutoplay]);
-
-  const handleTabChange = useCallback(
-    (index: number) => {
-      setActiveTab(index);
-      startAutoplay(); // Reset timer so user's selection isn't immediately overridden
-    },
-    [startAutoplay],
-  );
-
-  const currentTab = tabs[activeTab];
-
-  return (
-    <header className="relative min-h-[600px] overflow-hidden bg-[#0c0b0a]">
-      {/* Ambient glow */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 700px 500px at 15% 50%, rgba(229,149,0,0.10) 0%, transparent 70%), radial-gradient(ellipse 500px 400px at 85% 30%, rgba(196,109,60,0.07) 0%, transparent 70%), radial-gradient(ellipse 300px 300px at 50% 80%, rgba(45,212,168,0.04) 0%, transparent 70%)",
-        }}
-      />
-
-      <div className="relative z-[2] mx-auto grid max-w-[1400px] grid-cols-1 items-start gap-4 p-4 md:p-6 lg:grid-cols-[1fr_280px] xl:grid-cols-[1fr_280px]">
-        {/* ── TERMINAL (left) ── */}
-        <div className="flex flex-col gap-4">
-          {/* Header with logo + title */}
-          <div className="flex items-center justify-center gap-4 py-1 md:justify-start">
-            <Image
-              src="/images/golems-logo.svg"
-              alt="Golems logo"
-              width={56}
-              height={56}
-              className="w-9 shrink-0 drop-shadow-[0_0_20px_rgba(229,149,0,0.4)] sm:h-10 sm:w-10 md:h-14 md:w-14"
-            />
-            <div className="flex flex-col gap-0.5">
-              <h1 className="m-0 bg-gradient-to-br from-[#f0ebe0] to-[#e59500] bg-clip-text text-xl leading-tight font-black tracking-tight text-transparent sm:text-2xl md:text-3xl">
-                Golems
-              </h1>
-              <div className="flex flex-wrap items-center gap-1.5 font-mono text-[0.65rem] text-[#b0a89c] sm:text-xs">
-                <span className="text-[#a09080]">Spawn</span>
-                <span className="text-[#c46d3c] opacity-70">&rarr;</span>
-                <span className="text-[#a09080]">Work</span>
-                <span className="text-[#c46d3c] opacity-70">&rarr;</span>
-                <span className="text-[#a09080]">Die</span>
-                <span className="text-[#c46d3c] opacity-70">&rarr;</span>
-                <span className="text-[#2dd4a8] drop-shadow-[0_0_16px_rgba(45,212,168,0.35)]">
-                  Remember
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Terminal window */}
-          <div className="overflow-hidden rounded-xl border border-[#e5950026] bg-[#0d0d0d] shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(229,149,0,0.05)]">
-            {/* Title bar */}
-            <div className="flex items-center gap-2 border-b border-[#e5950014] bg-[#1a1816] px-3 py-2">
-              <div className="flex gap-1.5">
-                <span className="block h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-                <span className="block h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
-                <span className="block h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-              </div>
-              <span className="flex-1 text-center font-mono text-[0.72rem] text-[#666]">
-                golems
-              </span>
-              <div className="w-12" />
-            </div>
-
-            {/* Tab bar */}
-            <div
-              className="scrollbar-none flex overflow-x-auto border-b border-[#e595000f] bg-[#141210]"
-              role="tablist"
-            >
-              {tabs.map((t, i) => (
-                <button
-                  key={t.id}
-                  className={`flex min-h-[44px] cursor-pointer items-center gap-1.5 border-b-2 px-3.5 py-2 font-mono text-[0.72rem] whitespace-nowrap text-[#666] transition-colors ${
-                    i === activeTab
-                      ? "border-[#e59500] bg-[#e595000f] text-[#e59500]"
-                      : "border-transparent hover:bg-[#e5950007] hover:text-[#a09080]"
-                  }`}
-                  onClick={() => handleTabChange(i)}
-                  type="button"
-                  role="tab"
-                  aria-selected={i === activeTab}
-                >
-                  <span className="text-[0.8rem]">{t.emoji}</span>
-                  <span>{t.label}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Terminal content */}
-            <div
-              className="scrollbar-none h-[260px] overflow-x-hidden overflow-y-auto p-4 font-mono text-xs leading-relaxed text-[#c0b8a8] sm:h-[340px] md:h-[420px] md:px-5 md:text-[0.76rem]"
-              role="tabpanel"
-              aria-label={`Terminal demonstration: ${currentTab.label} command output`}
-            >
-              {currentTab.showMascot ? (
-                <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-[auto_1fr]">
-                  <div className="hidden opacity-90 md:block">
-                    <GolemMascot
-                      variant="guardian"
-                      size="md"
-                      animated={false}
-                    />
-                  </div>
-                  <div className="overflow-hidden">
-                    {currentTab.lines.map((line, i) => (
-                      <div
-                        key={`${activeTab}-${i}`}
-                        className="animate-[lineReveal_0.3s_ease_forwards] break-words whitespace-pre-wrap opacity-0 md:break-normal md:whitespace-pre"
-                        style={{ animationDelay: `${i * 50}ms` }}
-                      >
-                        {renderLine(line)}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="overflow-hidden">
-                  {currentTab.lines.map((line, i) => (
-                    <div
-                      key={`${activeTab}-${i}`}
-                      className="animate-[lineReveal_0.3s_ease_forwards] break-words whitespace-pre-wrap opacity-0 md:break-normal md:whitespace-pre"
-                      style={{ animationDelay: `${i * 50}ms` }}
-                    >
-                      {renderLine(line)}
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="mt-1 inline-block animate-[blink_1s_step-end_infinite] text-[#e59500]">
-                _
-              </div>
-            </div>
-          </div>
-
-          {/* Quick install CTA */}
-          <div className="group relative w-full max-w-lg">
-            <div className="flex items-center rounded-lg border border-[#2dd4a830] bg-[#0d0d0d] px-4 py-2.5 pr-14">
-              <code className="font-mono text-[0.75rem] text-[#2dd4a8] sm:text-sm">
-                <span className="text-[#b0a89c]">$</span> git clone
-                https://github.com/EtanHey/golems &amp;&amp; cd golems
-                &amp;&amp; bun install
-              </code>
-            </div>
-            <CopyButton text="git clone https://github.com/EtanHey/golems && cd golems && bun install" />
-          </div>
-
-          {/* Action buttons */}
-          <div className="flex w-full flex-col justify-center gap-3 md:w-auto md:flex-row md:flex-wrap md:items-center">
-            <Link
-              href="/golems/docs/getting-started"
-              className="flex min-h-12 w-full items-center justify-center rounded-lg bg-gradient-to-br from-[#e59500] to-[#c46d3c] px-5 py-2 text-center text-[0.8rem] font-bold text-[#0c0b0a] no-underline transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(229,149,0,0.35)] sm:px-6 sm:py-2.5 sm:text-sm md:inline-flex md:min-h-0 md:w-auto"
-            >
-              Get Started
-            </Link>
-            <Link
-              href="/golems/docs/architecture"
-              className="flex min-h-12 w-full items-center justify-center rounded-lg border border-[#2dd4a840] px-5 py-2 text-center text-[0.8rem] font-semibold text-[#2dd4a8] no-underline transition-all hover:border-[#2dd4a899] hover:bg-[#2dd4a80f] sm:px-6 sm:py-2.5 sm:text-sm md:inline-flex md:min-h-0 md:w-auto"
-            >
-              Architecture
-            </Link>
-            <Link
-              href="https://github.com/EtanHey/golems"
-              className="flex min-h-12 w-full items-center justify-center rounded-lg border border-[#a6998733] px-4 py-2 text-center text-[0.78rem] font-medium text-[#a69987] no-underline transition-all hover:border-[#a6998766] hover:bg-[#a699870f] hover:text-[#c0b8a8] sm:px-5 sm:py-2.5 sm:text-[0.85rem] md:inline-flex md:min-h-0 md:w-auto"
-            >
-              GitHub &rarr;
-            </Link>
-          </div>
-        </div>
-
-        {/* ── TELEGRAM (right sidebar, iPhone frame) ── */}
-        <div className="mx-auto flex max-w-full flex-col self-stretch lg:mx-0 lg:max-w-none">
-          <div className="relative flex flex-1 flex-col overflow-hidden rounded-2xl border border-[#e5950026] bg-[#0e1621] shadow-[0_12px_40px_rgba(0,0,0,0.4)] lg:rounded-[44px] lg:border-2 lg:border-[#3a3a3c] lg:bg-black lg:shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_1px_#1c1c1e,inset_0_0_0_1px_rgba(255,255,255,0.04)]">
-            {/* Side button (desktop only) */}
-            <div className="absolute top-[100px] right-[-4px] z-10 hidden h-11 w-[3px] rounded-r bg-[#3a3a3c] lg:block" />
-            {/* Dynamic Island (desktop only) */}
-            <div className="relative z-[5] mx-auto mt-2.5 hidden h-7 w-[92px] shrink-0 rounded-[20px] bg-black lg:block" />
-            <TelegramMock
-              activeIndex={activeTab}
-              onTopicClick={handleTabChange}
-            />
-            {/* Home bar (desktop only) */}
-            <div className="mx-auto my-2 hidden h-1 w-[100px] shrink-0 rounded-full bg-white/20 lg:block" />
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
-
-/* ── Get Started Section ───────────────────────────────────────── */
 
 function GetStartedSection() {
   return (
@@ -586,6 +704,33 @@ function GetStartedSection() {
 }
 
 /* ── Ecosystem Section (golems + tools) ────────────────────────── */
+
+const golems = [
+  {
+    emoji: "\uD83D\uDCC5",
+    name: "Coach",
+    desc: "Primary golem \u2014 health, schedule, recruiting, content, admin, daily planning.",
+    link: "/golems/docs/golems/coach",
+  },
+  {
+    emoji: "\uD83E\uDD16",
+    name: "Claude",
+    desc: "Telegram bot \u2014 routes commands, spawns sessions, manages notifications.",
+    link: "/golems/docs/golems/claude",
+  },
+  {
+    emoji: "\uD83D\uDCBC",
+    name: "Recruiter",
+    desc: "Job hunt \u2014 board scraping, outreach, follow-ups, 7-mode interview practice.",
+    link: "/golems/docs/golems/recruiter",
+  },
+  {
+    emoji: "\uD83C\uDF19",
+    name: "Services",
+    desc: "Infrastructure \u2014 Night Shift (4am), Morning Briefing, cloud workers, nightly docs.",
+    link: "/golems/docs/packages/services",
+  },
+];
 
 function EcosystemSection() {
   return (
