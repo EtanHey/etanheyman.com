@@ -23,9 +23,10 @@ const BRAND_LIGHT = "#3B9FFF";
 const timelineData = [
   {
     period: "08/2024-TODAY",
-    title: "Software Engineer • Cantaloupe AI - New Orleans, LA/Denver, CO",
+    title:
+      "AI/Full-Stack Engineer • Cantaloupe AI - New Orleans, LA/Denver, CO",
     description:
-      "Building recruitment platform from the ground up. Tech stack: React Native → Svelte → Bubble.io → Svelte → Next.js. Implemented Vapi.ai integration for automated candidate screening (reducing manual work by 80%), designed database schemas, built real-time features, created responsive dashboards, and integrated third-party services including Merge.dev ATS/HRIS systems, Google Maps APIs, Twilio messaging, and bilingual i18n support.",
+      "Built AI-powered hiring platform with Vapi.ai voice interview integration — automated candidate screening reducing manual work by 80%. Designed database schemas, built real-time features, created responsive dashboards, and integrated Merge.dev ATS/HRIS, Google Maps, Twilio messaging, and bilingual i18n. Stack evolved through React Native → Svelte → Next.js.",
   },
   {
     period: "11/2023-08/2024",
@@ -71,7 +72,8 @@ const timelineData = [
   },
   {
     period: "2013-2016",
-    title: "Art Major • Ironi Alef School of Arts and Sciences - Modi'in, Israel",
+    title:
+      "Art Major • Ironi Alef School of Arts and Sciences - Modi'in, Israel",
     description:
       "Studied visual arts and creative design, developing a strong foundation in aesthetics and visual communication that would later inform my approach to frontend development and UI/UX work.",
   },
@@ -188,9 +190,7 @@ function TimelineCard({
       {/* Entrance animation wrapper — 3D unfold on scroll */}
       <motion.div
         initial={
-          reducedMotion
-            ? { opacity: 0 }
-            : { opacity: 0, y: 30, rotateX: 6 }
+          reducedMotion ? { opacity: 0 } : { opacity: 0, y: 30, rotateX: 6 }
         }
         animate={
           isInView
@@ -298,7 +298,7 @@ function TimelineCard({
 
           {/* Description */}
           <motion.p
-            className="text-xs font-light leading-relaxed sm:text-sm"
+            className="text-xs leading-relaxed font-light sm:text-sm"
             animate={{
               color: isActive
                 ? "rgba(209, 213, 219, 1)"
