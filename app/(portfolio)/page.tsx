@@ -36,7 +36,7 @@ export default async function Home() {
 
             {/* Tagline */}
             <p className="font-[Nutmeg] text-[26px] leading-none font-light text-white sm:text-[30px] md:text-[32px] lg:text-[36px] xl:text-[40px]">
-              Building infrastructure for AI agents.
+              Building open-source tools for AI agents.
             </p>
 
             {/* CTA Buttons */}
