@@ -11,11 +11,9 @@ import {
   TechIconName,
   TechIconWrapper,
 } from "@/app/components/tech-icons/TechIconWrapper";
-import { useRegion } from "@/app/hooks/useRegion";
-import { LoadingText } from "@/app/components/ui/LoadingText";
+import { CONTACT_INFO } from "@/app/hooks/useRegion";
 
 const AboutPage = () => {
-  const { contactInfo, isLoading } = useRegion();
   const careerSectionRef = useRef<HTMLDivElement>(null);
   const [careerSectionPosition, setCareerSectionPosition] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -67,11 +65,7 @@ const AboutPage = () => {
           <div className="flex items-center gap-4">
             <LocationIcon />
             <h3 className="text-2xl font-light xl:text-[32px]">
-              {isLoading ? (
-                <LoadingText>Loading location...</LoadingText>
-              ) : (
-                contactInfo.location
-              )}
+              {CONTACT_INFO.location}
             </h3>
           </div>
           <p className="text-sm font-light xl:text-xl">
