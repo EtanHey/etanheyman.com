@@ -8,11 +8,9 @@ import SendIcon from "@/app/components/navigation/about/SendIcon";
 import { PhoneInput } from "@/app/components/ui/phone-input";
 import { ContactFormData, submitContactForm } from "./actions";
 import { SocialLinks } from "@/app/components/SocialLinks";
-import { useRegion } from "@/app/hooks/useRegion";
-import { LoadingText } from "@/app/components/ui/LoadingText";
+import { CONTACT_INFO } from "@/app/hooks/useRegion";
 
 export default function Contact() {
-  const { contactInfo, isLoading: isRegionLoading } = useRegion();
   const [formValues, setFormValues] = useState({
     fullName: "",
     email: "",
@@ -143,7 +141,7 @@ export default function Contact() {
                 <div className="focus-within:border-primary border-b border-blue-900">
                   <PhoneInput
                     international
-                    defaultCountry={contactInfo.defaultCountry as any}
+                    defaultCountry={CONTACT_INFO.defaultCountry as any}
                     value={phoneValue}
                     onChange={handlePhoneChange}
                     className="border-none focus-within:outline-none [&_.rounded-e-lg]:rounded-none [&_.rounded-e-lg]:border-none [&_.rounded-e-lg]:bg-transparent [&_.rounded-e-lg]:shadow-none [&_.rounded-e-lg]:focus:outline-none"
@@ -284,17 +282,13 @@ export default function Contact() {
             <div className="flex flex-col gap-8">
               <div className="flex items-center gap-6">
                 <PhoneIcon aria-hidden="true" />
-                {isRegionLoading ? (
-                  <LoadingText />
-                ) : (
-                  <Link
-                    href={`tel:${contactInfo.phone}`}
-                    className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-                    aria-label={`Call me at ${contactInfo.phoneDisplay}`}
-                  >
-                    {contactInfo.phoneDisplay}
-                  </Link>
-                )}
+                <Link
+                  href={`tel:${CONTACT_INFO.phone}`}
+                  className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                  aria-label={`Call me at ${CONTACT_INFO.phoneDisplay}`}
+                >
+                  {CONTACT_INFO.phoneDisplay}
+                </Link>
               </div>
 
               <div className="flex items-center gap-6">
@@ -310,19 +304,15 @@ export default function Contact() {
 
               <div className="flex items-center gap-6">
                 <LocationIcon aria-hidden="true" />
-                {isRegionLoading ? (
-                  <LoadingText />
-                ) : (
-                  <Link
-                    href={contactInfo.locationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-                    aria-label={`View ${contactInfo.location} on Google Maps`}
-                  >
-                    {contactInfo.location}
-                  </Link>
-                )}
+                <Link
+                  href={CONTACT_INFO.locationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-sm text-white underline underline-offset-1 transition-colors hover:text-blue-200 hover:decoration-2 hover:underline-offset-2 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                  aria-label={`View ${CONTACT_INFO.location} on Google Maps`}
+                >
+                  {CONTACT_INFO.location}
+                </Link>
               </div>
             </div>
           </div>
