@@ -10,7 +10,7 @@ const products = [
   {
     name: "BrainLayer",
     tagline: "Persistent memory for AI agents",
-    description: `${golemsStats.brainlayer.chunksDisplay} chunks indexed. ${golemsStats.brainlayer.mcpTools} MCP tools. Semantic search, entity graph, knowledge digest.`,
+    description: `${golemsStats.brainlayer.chunksDisplay} chunks indexed. ${golemsStats.brainlayer.entitiesDisplay} KG entities. Search quality 2.6 → ${golemsStats.brainlayer.enrichmentQuality} after v2 prompt rewrite.`,
     href: "https://brainlayer.etanheyman.com",
     color: "#e59500",
     icon: (
@@ -858,10 +858,23 @@ function InstallSection() {
 
 const ecosystemStats = [
   { value: "45", label: "MCP Tools", color: "#e59500" },
-  { value: "2,557", label: "Tests Passing", color: "#2dd4a8" },
-  { value: "295K+", label: "Knowledge Chunks", color: "#e59500" },
-  { value: "36", label: "Skills", color: "#6ab0f3" },
-  { value: "3", label: "MCP Servers", color: "#c46d3c" },
+  {
+    value: (
+      golemsStats.brainlayer.pythonTests +
+      golemsStats.brainlayer.swiftTests +
+      golemsStats.voicelayer.tests +
+      golemsStats.cmuxlayer.tests
+    ).toLocaleString(),
+    label: "Tests Passing",
+    color: "#2dd4a8",
+  },
+  { value: "313K+", label: "Knowledge Chunks", color: "#e59500" },
+  { value: "8,790", label: "KG Entities", color: "#c46d3c" },
+  {
+    value: String(golemsStats.skills.count),
+    label: "Skills",
+    color: "#6ab0f3",
+  },
 ];
 
 function NumbersStrip() {
@@ -922,9 +935,11 @@ function BuilderProfile() {
           </div>
 
           <p className="mb-4 text-sm leading-relaxed text-[#a09080]">
-            Designed and built 3 MCP servers, 36 reusable skills, and an
-            autonomous agent ecosystem from scratch. Every component is
-            open-source, tested, and documented.
+            Designed the architecture and built 3 MCP servers, 60 AI-agnostic
+            skills, and an agent orchestration layer. BrainLayer indexes 313K+
+            chunks across 8,790 KG entities. Orchestrated parallel AI agents for
+            implementation. Every component is open-source, tested (2,900+
+            tests), and documented.
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
