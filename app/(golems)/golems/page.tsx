@@ -10,7 +10,7 @@ const products = [
   {
     name: "BrainLayer",
     tagline: "Persistent memory for AI agents",
-    description: `${golemsStats.brainlayer.chunksDisplay} chunks indexed. ${golemsStats.brainlayer.entitiesDisplay} knowledge-graph entities. Enrichment quality ${golemsStats.brainlayer.enrichmentQuality}.`,
+    description: `${golemsStats.brainlayer.chunksDisplay} chunks indexed. ${golemsStats.brainlayer.entitiesDisplay} KG entities. Search quality 2.6 → ${golemsStats.brainlayer.enrichmentQuality} after v2 prompt rewrite.`,
     href: "https://brainlayer.etanheyman.com",
     color: "#e59500",
     icon: (
@@ -935,10 +935,11 @@ function BuilderProfile() {
           </div>
 
           <p className="mb-4 text-sm leading-relaxed text-[#a09080]">
-            Designed and built 3 MCP servers, 60 reusable skills, and an
-            autonomous agent ecosystem from scratch. BrainLayer alone stores
-            313K+ chunks and 8,790 knowledge-graph entities. Every component is
-            open-source, tested, and documented.
+            Designed the architecture and built 3 MCP servers, 60 AI-agnostic
+            skills, and an agent orchestration layer. BrainLayer indexes 313K+
+            chunks across 8,790 KG entities. Orchestrated parallel AI agents for
+            implementation. Every component is open-source, tested (2,900+
+            tests), and documented.
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
