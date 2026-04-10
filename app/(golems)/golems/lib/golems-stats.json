@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-02T00:00:00Z",
+  "generatedAt": "2026-04-10T00:00:00Z",
   "skills": {
     "count": 36,
     "withSkillMd": 36,
@@ -19,8 +19,11 @@
     "files": 84
   },
   "brainlayer": {
-    "chunks": 284000,
-    "chunksDisplay": "284K+",
+    "chunks": 313914,
+    "chunksDisplay": "313K+",
+    "entities": 8790,
+    "entitiesDisplay": "8,790",
+    "enrichmentQuality": "4.04/5",
     "mcpTools": 12,
     "mcpToolsStubbed": 5,
     "pythonTests": 1415,
