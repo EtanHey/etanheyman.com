@@ -48,9 +48,9 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "pip install brainlayer",
     isMiniSite: true,
     stats: [
-      { value: 284, suffix: "K+", label: "Indexed chunks" },
+      { value: 335, suffix: "K+", label: "Indexed chunks" },
       { value: 12, label: "MCP tools" },
-      { value: 1415, label: "Tests passing" },
+      { value: 1848, label: "Tests passing" },
       { value: 119, label: "KG entities" },
     ],
     features: [
@@ -70,13 +70,13 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         iconName: "Database",
         title: "12 MCP Tools",
         description:
-          "3 core (search, store, recall) + 9 knowledge graph (digest, entity, update, expand, tags, subscribe, unsubscribe, stats, crossref). Consolidated from 14. Old names still work via aliases.",
+          "3 core memory tools (search, store, recall) plus 9 graph, enrichment, and lifecycle tools (digest, entity, tags, expand, update, get_person, enrich, supersede, archive). Consolidated from 14. Old names still work via aliases.",
       },
       {
         iconName: "Brain",
         title: "3-Mode Enrichment",
         description:
-          "Unified brain_digest with 3 modes: full content ingestion, faceted tag generation via Gemini 2.5 Flash, and tiered selectivity (T0-T3 classifier). 284K+ chunks enriched with structured metadata.",
+          "Unified brain_digest with 3 modes: full content ingestion, faceted tag generation via Gemini 2.5 Flash, and tiered selectivity (T0-T3 classifier). 335K+ chunks enriched with structured metadata.",
       },
     ],
     installTabs: [
@@ -166,23 +166,23 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     tagline: "@golems/cmux-mcp",
     isMiniSite: true,
     stats: [
-      { value: 21, label: "MCP tools" },
+      { value: 25, label: "MCP tools" },
       { value: 5, label: "Supported CLIs" },
-      { value: 278, label: "Test assertions" },
+      { value: 335, label: "Test assertions" },
       { value: 3, label: "API layers" },
     ],
     features: [
       {
         iconName: "Terminal",
-        title: "21 MCP Tools, 3 Layers",
+        title: "25 MCP Tools, 3 Layers",
         description:
-          "11 core surface tools (split, read, send, send_key, notify, rename), 8 agent lifecycle tools (spawn_agent, stop_agent, send_to_agent, wait_for), and 2 V2 facade tools (interact + kill).",
+          "13 core surface tools (split, read, send, send_key, notify, rename, move, reorder, new_surface), 10 agent lifecycle tools (spawn_agent, stop_agent, send_to_agent, wait_for, wait_for_all, my_agents), and 2 V2 facade tools (interact + kill).",
       },
       {
         iconName: "Bot",
         title: "Terminal Orchestration for AI",
         description:
-          "Spawn Claude, Codex, Cursor, Gemini, or Kiro agents into terminal panes. Each gets a tracked state machine: spawning → booting → ready → working → done. Native MCP with 1,423x socket speedup.",
+          "Spawn Claude, Codex, Cursor, Gemini, or Kiro agents into terminal panes. Each gets a tracked state machine with thinking-state detection. Chunked input delivery for resilient prompt injection. Native MCP with 1,423x socket speedup.",
       },
       {
         iconName: "Globe",
@@ -215,7 +215,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
         title: "CLI Command",
         subtitle: "spawn / interact / kill",
       },
-      { icon: "Wrench", title: "MCP Server", subtitle: "21 typed tools" },
+      { icon: "Wrench", title: "MCP Server", subtitle: "25 typed tools" },
       { icon: "Monitor", title: "cmux Socket", subtitle: "Terminal control" },
       {
         icon: "Bot",
@@ -302,7 +302,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { value: 11, label: "Packages" },
       { value: 55, label: "Skills" },
       { value: 5, label: "Supported CLIs" },
-      { value: 321, suffix: "+", label: "PRs merged" },
+      { value: 383, suffix: "+", label: "PRs merged" },
     ],
     features: [
       {

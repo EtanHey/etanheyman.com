@@ -24,6 +24,7 @@ type AccentStyles = {
   statChip: string;
   statValue: string;
   fallbackGradient: string;
+  colorRgb: string;
 };
 
 const TOOL_COUNT_REGEX = /(\d[\d,]*)\+?\s*(?:mcp\s+)?tools?\b/i;
@@ -39,6 +40,7 @@ const ACCENT_STYLES: Record<AccentName, AccentStyles> = {
     statChip: "border-blue-200/50 bg-blue-200/10",
     statValue: "text-blue-100",
     fallbackGradient: "from-blue-500 to-blue-700",
+    colorRgb: "136, 207, 248",
   },
   violet: {
     border: "border-indigo-300/20",
@@ -49,6 +51,7 @@ const ACCENT_STYLES: Record<AccentName, AccentStyles> = {
     statChip: "border-indigo-300/35 bg-indigo-400/10",
     statValue: "text-indigo-100",
     fallbackGradient: "from-indigo-800 to-[#00003F]",
+    colorRgb: "99, 102, 241",
   },
   emerald: {
     border: "border-sky-300/20",
@@ -59,6 +62,7 @@ const ACCENT_STYLES: Record<AccentName, AccentStyles> = {
     statChip: "border-sky-300/35 bg-sky-400/10",
     statValue: "text-sky-100",
     fallbackGradient: "from-cyan-800 to-[#00003F]",
+    colorRgb: "56, 189, 248",
   },
   amber: {
     border: "border-slate-300/20",
@@ -69,6 +73,7 @@ const ACCENT_STYLES: Record<AccentName, AccentStyles> = {
     statChip: "border-slate-300/35 bg-slate-400/10",
     statValue: "text-slate-100",
     fallbackGradient: "from-slate-700 to-[#00003F]",
+    colorRgb: "148, 163, 184",
   },
 };
 
@@ -249,14 +254,21 @@ function ProjectCardBase({
         >
           {project.previewImage ? (
             <>
-              {isSvgOrLogo && <div className="absolute inset-0 bg-blue-50" />}
+              {isSvgOrLogo && (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundColor: `rgba(${accent.colorRgb ?? "15, 130, 235"}, 0.06)`,
+                  }}
+                />
+              )}
               {isSvgOrLogo ? (
                 <img
                   src={project.previewImage
                     .replace("#svg", "")
                     .replace("#logo", "")}
                   alt={project.title}
-                  className="absolute inset-0 h-full w-full object-contain object-center p-8"
+                  className="absolute inset-0 h-full w-full object-contain object-center p-8 transition-transform duration-700 group-hover/card:scale-[1.04]"
                   loading={priority ? "eager" : "lazy"}
                 />
               ) : (
@@ -284,7 +296,10 @@ function ProjectCardBase({
                       .replace("#svg", "")
                       .replace("#logo", "")}
                     alt={project.title}
-                    className="h-[40%] w-[40%] object-contain opacity-30 transition-opacity duration-500 group-hover/card:opacity-50"
+                    className="h-[55%] w-[55%] object-contain opacity-90 transition-all duration-500 group-hover/card:scale-[1.05] group-hover/card:opacity-100"
+                    style={{
+                      filter: `drop-shadow(0 0 24px rgba(${accent.colorRgb ?? "15, 130, 235"}, 0.5))`,
+                    }}
                     loading="lazy"
                   />
                 </div>

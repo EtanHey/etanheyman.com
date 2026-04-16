@@ -31,7 +31,7 @@ const PROJECT_DESCRIPTIONS: Record<string, string> = {
   voicelayer:
     "Bi-directional voice I/O layer for AI assistants. VoiceBar MCP daemon with LaunchAgent auto-start. TTS via edge-tts, STT via whisper.cpp + Wispr Flow (~300ms). 2 tools (voice_speak, voice_ask) with auto-mode detection. 359 tests.",
   cmuxlayer:
-    "Terminal orchestration for AI agents. 21 MCP tools across 3 layers: surface control, agent lifecycle (spawn_agent, stop_agent, send_to_agent), and V2 facade. Playwright browser surfaces. 1,423x socket speedup via native MCP.",
+    "Terminal orchestration for AI agents. 25 MCP tools across 3 layers: surface control, agent lifecycle (spawn_agent, stop_agent, send_to_agent), and V2 facade. Playwright browser surfaces. 1,423x socket speedup via native MCP.",
   "whatsapp-mcp":
     "Hebrew-compatible WhatsApp MCP fork. Fixed Unicode search (instr() over LOWER+LIKE), dual-bridge personal+business auto-detection, self-chat safety mode. 12 MCP tools for reading and sending messages.",
   golems: `Autonomous AI agent ecosystem. ${golemsStats.packages.count} packages, ${golemsStats.agents.count} domain agents, ${golemsStats.skills.count} skills, multi-LLM routing, Night Shift autonomous coding at 4am.`,
@@ -151,21 +151,17 @@ export default async function ProjectPage({
               className="relative z-30 aspect-square h-[100px] w-[100px] flex-shrink-0 overflow-hidden rounded-3xl md:h-[140px] md:w-[140px]"
               style={{
                 boxShadow: `0 0 60px rgba(${accent.colorRgb}, 0.3)`,
+                backgroundColor: `rgba(${accent.colorRgb}, 0.08)`,
               }}
             >
               {project.logoUrl.toLowerCase().endsWith(".svg") ||
               project.logoUrl.includes("#svg") ||
               project.logoUrl.includes("#logo") ? (
-                <>
-                  <div className="absolute inset-0 bg-blue-50" />
-                  <img
-                    src={project.logoUrl
-                      .replace("#svg", "")
-                      .replace("#logo", "")}
-                    alt={`${project.title} logo`}
-                    className="relative h-full w-full object-contain p-4"
-                  />
-                </>
+                <img
+                  src={project.logoUrl.replace("#svg", "").replace("#logo", "")}
+                  alt={`${project.title} logo`}
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <Image
                   src={project.logoUrl}

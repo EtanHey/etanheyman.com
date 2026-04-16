@@ -250,18 +250,26 @@ try {
     {
       title: "MCP Tool Layers",
       description:
-        "21 tools organized into three layers. Layer 1: 11 core surface tools for terminal pane control (list, split, read, send, send_key, rename, status, progress, notify, close, browser). Layer 2: 8 agent lifecycle tools (spawn, stop, send_to, read_output, wait_for, wait_for_all, list, get_state). Layer 3: 2 V2 facade tools (interact + kill) that consolidate all agent operations into a clean, flat API.",
+        "25 tools organized into three layers. Layer 1: 13 core surface tools for terminal pane control (list, split, read, send, send_key, rename, status, progress, notify, close, browser, move, reorder, new_surface). Layer 2: 10 agent lifecycle tools (spawn, stop, send_to, read_output, wait_for, wait_for_all, list, get_state, my_agents, interact). Layer 3: 2 V2 facade tools (interact + kill) that consolidate all agent operations into a clean, flat API.",
       diagramNodes: [
         {
           icon: "Terminal",
           title: "Surface Layer",
-          subtitle: "11 core tools",
-          children: ["list", "split", "read", "send", "notify", "browser"],
+          subtitle: "13 core tools",
+          children: [
+            "list",
+            "split",
+            "read",
+            "send",
+            "notify",
+            "move",
+            "reorder",
+          ],
         },
         {
           icon: "Bot",
           title: "Agent Layer",
-          subtitle: "8 lifecycle tools",
+          subtitle: "10 lifecycle tools",
           children: ["spawn", "stop", "send_to", "wait_for_all"],
         },
         {
@@ -321,7 +329,7 @@ socket.write(JSON.stringify({
     {
       title: "Security & Quality Guards",
       description:
-        "Repository names are sanitized before shell execution — only alphanumeric characters, hyphens, underscores, and dots pass through. Agent IDs include random suffixes to prevent collision when spawning multiple agents for the same repo. All 21 tools validate input via Zod schemas. Mode enforcement: manual mode makes all mutating tools read-only. Agent quality tracking (unknown → verified → suspect → degraded) lets orchestrators filter unreliable output.",
+        "Repository names are sanitized before shell execution — only alphanumeric characters, hyphens, underscores, and dots pass through. Agent IDs include random suffixes to prevent collision when spawning multiple agents for the same repo. All 25 tools validate input via Zod schemas. Mode enforcement: manual mode makes all mutating tools read-only. Agent quality tracking (unknown → verified → suspect → degraded) lets orchestrators filter unreliable output.",
       comparisonTable: {
         headers: ["Guard", "Mechanism", "Why"],
         rows: [
@@ -329,7 +337,7 @@ socket.write(JSON.stringify({
           ["ID collision", "Random suffix", "Safe parallel spawns"],
           [
             "Input validation",
-            "Zod schemas on all 21 tools",
+            "Zod schemas on all 25 tools",
             "Type-safe at boundary",
           ],
           ["Mode enforcement", "Manual = read-only", "Safe observation mode"],
