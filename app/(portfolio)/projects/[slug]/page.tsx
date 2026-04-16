@@ -31,7 +31,7 @@ const PROJECT_DESCRIPTIONS: Record<string, string> = {
   voicelayer:
     "Bi-directional voice I/O layer for AI assistants. VoiceBar MCP daemon with LaunchAgent auto-start. TTS via edge-tts, STT via whisper.cpp + Wispr Flow (~300ms). 2 tools (voice_speak, voice_ask) with auto-mode detection. 359 tests.",
   cmuxlayer:
-    "Terminal orchestration for AI agents. 21 MCP tools across 3 layers: surface control, agent lifecycle (spawn_agent, stop_agent, send_to_agent), and V2 facade. Playwright browser surfaces. 1,423x socket speedup via native MCP.",
+    "Terminal orchestration for AI agents. 25 MCP tools across 3 layers: surface control, agent lifecycle (spawn_agent, stop_agent, send_to_agent), and V2 facade. Playwright browser surfaces. 1,423x socket speedup via native MCP.",
   "whatsapp-mcp":
     "Hebrew-compatible WhatsApp MCP fork. Fixed Unicode search (instr() over LOWER+LIKE), dual-bridge personal+business auto-detection, self-chat safety mode. 12 MCP tools for reading and sending messages.",
   golems: `Autonomous AI agent ecosystem. ${golemsStats.packages.count} packages, ${golemsStats.agents.count} domain agents, ${golemsStats.skills.count} skills, multi-LLM routing, Night Shift autonomous coding at 4am.`,
