@@ -151,21 +151,17 @@ export default async function ProjectPage({
               className="relative z-30 aspect-square h-[100px] w-[100px] flex-shrink-0 overflow-hidden rounded-3xl md:h-[140px] md:w-[140px]"
               style={{
                 boxShadow: `0 0 60px rgba(${accent.colorRgb}, 0.3)`,
+                backgroundColor: `rgba(${accent.colorRgb}, 0.08)`,
               }}
             >
               {project.logoUrl.toLowerCase().endsWith(".svg") ||
               project.logoUrl.includes("#svg") ||
               project.logoUrl.includes("#logo") ? (
-                <>
-                  <div className="absolute inset-0 bg-blue-50" />
-                  <img
-                    src={project.logoUrl
-                      .replace("#svg", "")
-                      .replace("#logo", "")}
-                    alt={`${project.title} logo`}
-                    className="relative h-full w-full object-contain p-4"
-                  />
-                </>
+                <img
+                  src={project.logoUrl.replace("#svg", "").replace("#logo", "")}
+                  alt={`${project.title} logo`}
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <Image
                   src={project.logoUrl}
