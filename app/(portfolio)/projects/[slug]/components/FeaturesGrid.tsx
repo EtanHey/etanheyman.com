@@ -11,6 +11,13 @@ import {
   Bot,
   Zap,
   Cloud,
+  Terminal,
+  Globe,
+  GitBranch,
+  Smartphone,
+  Shield,
+  MessageSquare,
+  Layers,
   type LucideIcon,
 } from "lucide-react";
 import type { ProjectFeature } from "../project-showcase-config";
@@ -28,6 +35,13 @@ const icons: Record<string, LucideIcon> = {
   Bot,
   Zap,
   Cloud,
+  Terminal,
+  Globe,
+  GitBranch,
+  Smartphone,
+  Shield,
+  MessageSquare,
+  Layers,
 };
 
 export function FeaturesGrid({
@@ -71,7 +85,7 @@ export function FeaturesGrid({
               <h3 className="mb-2 font-[Nutmeg] text-[17px] font-semibold text-white">
                 {feature.title}
               </h3>
-              <p className="font-[Nutmeg] text-[14px] font-light leading-relaxed text-white/55">
+              <p className="font-[Nutmeg] text-[14px] leading-relaxed font-light text-white/55">
                 {feature.description}
               </p>
             </div>
