@@ -123,7 +123,7 @@ export default function GolemsEcosystem() {
             Golems Ecosystem
           </h2>
           <p className="mt-2 font-[Nutmeg] text-[15px] leading-[1.3] font-light text-white/60 sm:text-[17px] md:text-[18px]">
-            3 open-source MCP servers. 44 tools. Persistent memory, voice I/O,
+            3 open-source MCP servers. 48 tools. Persistent memory, voice I/O,
             and multi-agent orchestration for AI coding assistants.
           </p>
         </div>
