@@ -410,6 +410,8 @@ Eight PRs landed in a single night, all authored from **measured** friction rath
 
 The headline pattern: every rule was paired with binary or qualitative evidence before it shipped. No "this would probably help" merges.
 
+**The release-gate practice that makes that possible.** Each candidate rule is validated by spawning a fresh agent on the same fixture and measuring the delta against an unmodified baseline agent — a live A/B eval, not a manual code review. Treatment and baseline agents see identical triggers and inputs; the only difference is whether the SKILL.md excerpt under test is loaded in their context. If the binary signal (sub-agent dispatch count, correction-turn count, orphan-envelope count) doesn't flip, the rule doesn't ship.
+
 ### Standing-preference binding (coach + presentation-builder)
 
 A 2-hour slide-deck session produced **9 correction turns** asking for "less terms, premise-only, more visuals" on the same deck. The new rule: when a stylistic/structural ask repeats ≥2 times, treat it as STANDING for the rest of the session — self-prompt before every deliverable, self-check before delivery, redraft if non-compliant. Live PR-time eval: same trigger, same fixture, fresh agent. **9 correction turns → 2**, **325 → 9.2 average words per slide**, **slide 2: 377 → 17 words**. PR [#404](https://github.com/EtanHey/golems/pull/404).
@@ -422,17 +424,17 @@ Coach and orc launcher matrices both showed the same anti-pattern: batch reads d
 
 Four /goal outputs the same night surfaced critical issues only when externally evaluated — including one where the producing agent emitted "evaluator replay PASS" without ever dispatching a separate evaluator. The new Phase N+1 rule is non-negotiable: every /large-plan output producing code/config must end with a separate evaluator subagent that re-Reads every cited file, scores against verbatim pass criteria, and returns ≥8/10 or `ITERATE`. Self-audit explicitly does not satisfy /goal. PR [#407](https://github.com/EtanHey/golems/pull/407).
 
-### Envelope-vs-Delivery pairing + workspace categorization (cmux-agents)
+### Agent-to-agent message delivery audit (cmux-agents)
 
-One Codex session emitted **64 orphan envelopes** — `[FROM=X TO=Y]` headers in the author's pane with no corresponding `send_to_agent` call. The user's verbatim friction: *"Why do you have these messages in your chat but no one enters them?"* New rule: any envelope must ship with a matching delivery call in the same turn. The second rule fixes a related categorization bug: 4 of 8 cmux panes spawned by `new_split({workspace})` landed in the wrong workspace, burning ~5 minutes of context on manual `move_surface` recovery. 6-step lookup protocol now runs before every `new_split`. PR [#409](https://github.com/EtanHey/golems/pull/409).
+One Codex session emitted **64 orphaned inter-agent messages** — message headers written into the author's pane with no corresponding tool call that actually delivered them anywhere. The user's verbatim friction: *"Why do you have these messages in your chat but no one enters them?"* The new rule pairs the message header with its delivery call atomically: an agent cannot write a `[TO: another-agent]` envelope without invoking the delivery tool in the same turn. A companion rule fixes a related routing bug where 4 of 8 new agent panes landed in the wrong workspace, burning ~5 minutes of orchestrator context on manual recovery — now resolved by a pre-spawn workspace lookup. PR [#409](https://github.com/EtanHey/golems/pull/409).
 
 ### Inherited-citation suspect rule (session-handoff)
 
 Post-compaction summaries are pattern-completed by the compacting model and have a non-zero fabrication rate. A receiving agent caught fabricated paths only because it happened to verify — a 2-round live eval on 4 fresh agents with both obvious-fake and subtle-fake fixtures showed treatment used deterministic structure (`SUSPECT` markers, Phase-0 audit, `compaction-fabrication` brain_store tag) where baseline relied on instinctive /never-fabricate triggering. Defense-in-depth ship — instinct degrades under context pressure, deterministic rules don't. PR [#410](https://github.com/EtanHey/golems/pull/410).
 
-### Hyphen-aware launcher aliases (ralph)
+### Cross-repo agent launchers now accept hyphenated repo names (ralph)
 
-The launcher registry stripped hyphens from repo names (`skill-creator` → `skillcreator`), so `mcp__cmux__spawn_agent({repo:"skill-creator"})` failed with `Launcher "skill-creatorClaude" not found`. New dispatch logic emits verbatim aliases whenever the repo basename differs from the registry key: `skill-creatorClaude`, `maakaf-homeClaude`, `6pm-miniClaude`, `qwan-drillClaude`, `Mehayom-appClaude` all resolve. Binary win: `jq '.ok' /tmp/eval-p10-treatment/spawn-result.json` flipped `false → true`. PR [ralph#7](https://github.com/EtanHey/ralph/pull/7).
+The agent-launcher registry normalized repo names by stripping hyphens (`skill-creator` → `skillcreator`), so any orchestration call that asked for a hyphenated repo by its real name silently failed. The fix: the launcher generator now emits verbatim aliases whenever a repo's directory basename differs from its registry key, so orchestration code can spawn agents by their literal repo names. Binary win — the failing test case flipped from `false` to `true` after the patch. PR [ralph#7](https://github.com/EtanHey/ralph/pull/7).
 
 ### BrainLayer hygiene (noise filter + KG persistence fix)
 
