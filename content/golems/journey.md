@@ -404,6 +404,46 @@ For the first time, the portfolio site itself is updated by a multi-agent collab
 
 ---
 
+## May 17 2026: Friction-Reduction Sprint
+
+Eight PRs landed in a single night, all authored from **measured** friction rather than hypothesis. Phase 2 of the sprint instrumented real coach + orc sessions, counted concrete signals (correction turns per slide deck, sub-agent dispatch calls, orphan envelope counts, fabricated-citation incidents), then Phase 5 turned the strongest signals into normative SKILL.md rules with live evals on fresh agent panes.
+
+The headline pattern: every rule was paired with binary or qualitative evidence before it shipped. No "this would probably help" merges.
+
+### Standing-preference binding (coach + presentation-builder)
+
+A 2-hour slide-deck session produced **9 correction turns** asking for "less terms, premise-only, more visuals" on the same deck. The new rule: when a stylistic/structural ask repeats ≥2 times, treat it as STANDING for the rest of the session — self-prompt before every deliverable, self-check before delivery, redraft if non-compliant. Live PR-time eval: same trigger, same fixture, fresh agent. **9 correction turns → 2**, **325 → 9.2 average words per slide**, **slide 2: 377 → 17 words**. PR [#404](https://github.com/EtanHey/golems/pull/404).
+
+### Parallel-by-default sub-agent dispatch (orc + agent-routing)
+
+Coach and orc launcher matrices both showed the same anti-pattern: batch reads done sequentially (5 Reads + 3 Bashes in a row) instead of fanned out across parallel sub-agents. The refined C4 rule splits **interactive work** (visible cmux panes by default) from **batch work** (immediate parallel sub-agent dispatch, no permission ask) with explicit triggers: ≥3 file reads, ≥2 transcription/conversion, ≥1 web research. Batch D eval: **0 → 4 Agent calls** across both launcher matrices. Binary win. PR [#405](https://github.com/EtanHey/golems/pull/405).
+
+### Mandatory adversarial evaluator phase (large-plan)
+
+Four /goal outputs the same night surfaced critical issues only when externally evaluated — including one where the producing agent emitted "evaluator replay PASS" without ever dispatching a separate evaluator. The new Phase N+1 rule is non-negotiable: every /large-plan output producing code/config must end with a separate evaluator subagent that re-Reads every cited file, scores against verbatim pass criteria, and returns ≥8/10 or `ITERATE`. Self-audit explicitly does not satisfy /goal. PR [#407](https://github.com/EtanHey/golems/pull/407).
+
+### Envelope-vs-Delivery pairing + workspace categorization (cmux-agents)
+
+One Codex session emitted **64 orphan envelopes** — `[FROM=X TO=Y]` headers in the author's pane with no corresponding `send_to_agent` call. The user's verbatim friction: *"Why do you have these messages in your chat but no one enters them?"* New rule: any envelope must ship with a matching delivery call in the same turn. The second rule fixes a related categorization bug: 4 of 8 cmux panes spawned by `new_split({workspace})` landed in the wrong workspace, burning ~5 minutes of context on manual `move_surface` recovery. 6-step lookup protocol now runs before every `new_split`. PR [#409](https://github.com/EtanHey/golems/pull/409).
+
+### Inherited-citation suspect rule (session-handoff)
+
+Post-compaction summaries are pattern-completed by the compacting model and have a non-zero fabrication rate. A receiving agent caught fabricated paths only because it happened to verify — a 2-round live eval on 4 fresh agents with both obvious-fake and subtle-fake fixtures showed treatment used deterministic structure (`SUSPECT` markers, Phase-0 audit, `compaction-fabrication` brain_store tag) where baseline relied on instinctive /never-fabricate triggering. Defense-in-depth ship — instinct degrades under context pressure, deterministic rules don't. PR [#410](https://github.com/EtanHey/golems/pull/410).
+
+### Hyphen-aware launcher aliases (ralph)
+
+The launcher registry stripped hyphens from repo names (`skill-creator` → `skillcreator`), so `mcp__cmux__spawn_agent({repo:"skill-creator"})` failed with `Launcher "skill-creatorClaude" not found`. New dispatch logic emits verbatim aliases whenever the repo basename differs from the registry key: `skill-creatorClaude`, `maakaf-homeClaude`, `6pm-miniClaude`, `qwan-drillClaude`, `Mehayom-appClaude` all resolve. Binary win: `jq '.ok' /tmp/eval-p10-treatment/spawn-result.json` flipped `false → true`. PR [ralph#7](https://github.com/EtanHey/ralph/pull/7).
+
+### BrainLayer hygiene (noise filter + KG persistence fix)
+
+Two BrainLayer PRs landed alongside the skill wave. [#289](https://github.com/EtanHey/brainlayer/pull/289) rejects BrainLayer-MCP-unavailable diagnostics and PreCompact checkpoint payloads at the watcher / drain / store ingest heads so tooling failures stop becoming durable memory, with a paired hybrid-reranker demotion. [#290](https://github.com/EtanHey/brainlayer/pull/290) fixes a knowledge-graph persistence regression that traced back to a `use_llm=llm_caller is not None` predicate in `process_chunk` — the MCP/CLI digest path never set `llm_caller`, so non-seed person entities were silently never materialized into `kg_entities`. This was the second recurrence of the same April-6 root cause; the new RED-first regression test (`test_digest_content_persists_llm_people_entities_for_lookup`) now guards it.
+
+### Methodology validation
+
+The 6-step PR cycle (brief → spawn → live eval → CodeRabbit → merge → release) ran cleanly across all seven golems branches in parallel, with cmux workspace categorization issues surfaced and *fixed* mid-sprint — friction Proposal #12 went from "noticed during Wave 2" to "merged as PR #409" in the same night.
+
+---
+
 ## What's Next
 
 ### Active
