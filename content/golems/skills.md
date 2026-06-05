@@ -1,11 +1,11 @@
 ---
 title: "Skills Library"
-description: "55 reusable Claude Code skills covering development, operations, content, research, and quality workflows — 40 with eval coverage."
+description: "55 reusable Claude Code skills covering development, operations, content, research, and quality workflows — 46 with eval coverage."
 ---
 
 # Skills Library
 
-> 55 reusable Claude Code skills with eval coverage across 40 skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
+> 55 reusable Claude Code skills with eval coverage across 46 skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
 
 ## What Are Skills?
 
@@ -66,6 +66,7 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 | QA Video | `/qa-video` | Video-based QA pipeline — screen recording processed into structured findings |
 | Critique Waves | `/critique-waves` | Parallel verification agents for consensus |
 | Never Fabricate | `/never-fabricate` | Mandatory verification before reporting on file contents or results |
+| Phoenix Human View | `/phoenix-human-view` | The human-eval UX contract for Phoenix grading views — replay-not-scorecard, frozen suites, mobile-first (eval: 45.8% → 100%) |
 
 ### Domain
 
@@ -85,6 +86,8 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 | Orchestrator Status | `/orchestrator-status` | Ecosystem-wide status and orientation |
 | cmux Agents | `/cmux-agents` | Spawn AI agents in cmux panes — Claude, Cursor, Gemini, Codex, Kiro |
 | cmux | `/cmux` | Control cmux panes, splits, browser, sidebar, agent-to-agent messaging |
+| Cursor Multitask | `/cursor-multitask` | Route fan-out/parallel work to the right engine — Cursor `/multitask`, headless fan-out, Workflow tool, or cmux fleet (eval: 78.6% → 100%) |
+| Fleet Wrap | `/fleet-wrap` | Quiet-down protocol at sprint close — zero polling crons, one final dashboard + message, then silent (eval: 60% → 100%) |
 
 ### Project Management
 
@@ -138,7 +141,7 @@ Or symlink into your project's `.claude/commands/` directory for per-project acc
 
 ## Eval Coverage
 
-40 of 55 skills have eval suites with structured assertions. Evals verify that skills trigger correctly and produce the expected behavior. See individual skill pages for eval details.
+46 of 55 skills have eval suites with structured assertions. Evals verify that skills trigger correctly and produce the expected behavior — and that they beat baseline: recent A/B-evaled skills include `/cursor-multitask` (baseline 78.6% → with-skill 100%), `/fleet-wrap` (60% → 100%), and `/phoenix-human-view` (45.8% → 100%), with raw scoring committed in each skill's `evals/results/`. See individual skill pages for eval details.
 
 ## Recent Skill Updates (2026-05-17)
 
