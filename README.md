@@ -178,11 +178,14 @@ Includes: AWS, Axios, Docker, FastAPI, HuggingFace, Next.js, NextJS, Python, PyT
 
 ```bash
 npm run dev         # Start dev server on :3000
+npm run generate:skills # Refresh /golems/skills manifest from ~/Gits/golems/skills/golem-powers
 npm run build       # Build for production
 npm run start       # Run production build
 npm run lint        # Check code quality
 npm run type-check  # TypeScript validation
 ```
+
+`npm run build` runs `prebuild`, which refreshes `app/(golems)/golems/lib/skills-manifest.json` from every `SKILL.md` under `~/Gits/golems/skills/golem-powers`. If that source checkout is unavailable, the generator logs a warning and keeps the committed manifest for CI/deploy environments.
 
 ---
 
