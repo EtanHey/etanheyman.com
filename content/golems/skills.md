@@ -13,6 +13,8 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 
 ## Skill Categories
 
+Note: the live, always-current skills inventory is the auto-generated `/golems/skills` page; this table is a curated overview.
+
 ### Development
 
 | Skill | Command | What It Does |
@@ -41,7 +43,6 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 
 | Skill | Command | What It Does |
 |-------|---------|-------------|
-| LinkedIn Post | `/linkedin-post` | Topic discovery, drafting, scheduling, review |
 | Content | `/content` | Multi-platform content creation and publishing |
 | Nightly Docs Update | `/nightly-docs-update` | Automated documentation updates |
 | YouTube Pipeline | `/youtube-pipeline` | YouTube content processing pipeline |
@@ -72,7 +73,6 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 
 | Skill | Command | What It Does |
 |-------|---------|-------------|
-| Interview Practice | `/interview-practice` | 7-mode practice with Elo tracking |
 | Email Golem | `/email-golem` | Email status, manual triage, recent scores |
 | Nightly Journal | `/nightly-journal` | End-of-day sweep — comms, client activity, diary |
 | Obsidian | `/obsidian` | Search, read, write Obsidian vault notes |
@@ -112,7 +112,6 @@ In any Claude Code session with golem-powers installed:
 
 ```
 /commit              # Invoke the commit skill
-/interview-practice  # Start interview practice
 /railway logs        # Check Railway deployment logs
 ```
 
