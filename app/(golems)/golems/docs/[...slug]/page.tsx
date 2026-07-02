@@ -17,6 +17,10 @@ import { getDocsNav, flattenNav } from '../../lib/docs-nav';
 
 const CONTENT_DIR = join(process.cwd(), 'content', 'golems');
 
+function isArchivedSlug(slug: string[]): boolean {
+  return slug.includes('_archived');
+}
+
 function getAllDocPaths(dir: string, prefix = ''): string[] {
   const paths: string[] = [];
   if (!existsSync(dir)) return paths;
@@ -24,6 +28,7 @@ function getAllDocPaths(dir: string, prefix = ''): string[] {
     const full = join(dir, entry);
     const rel = prefix ? `${prefix}/${entry}` : entry;
     if (statSync(full).isDirectory()) {
+      if (entry === '_archived') continue;
       paths.push(...getAllDocPaths(full, rel));
     } else if (entry.endsWith('.md')) {
       paths.push(rel.replace(/\.md$/, ''));
@@ -37,6 +42,7 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
+  if (isArchivedSlug(slug)) return { title: 'Not Found' };
   const filePath = join(CONTENT_DIR, ...slug) + '.md';
   if (!existsSync(filePath)) return { title: 'Not Found' };
   const raw = readFileSync(filePath, 'utf-8');
@@ -62,6 +68,7 @@ function extractTextContent(node: React.ReactNode): string {
 
 export default async function DocsPage({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
+  if (isArchivedSlug(slug)) notFound();
   const slugStr = slug.join('/');
   const filePath = join(CONTENT_DIR, ...slug) + '.md';
   if (!existsSync(filePath)) notFound();
@@ -69,6 +76,11 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   const raw = readFileSync(filePath, 'utf-8');
   const { data, content } = matter(raw);
   const pageTitle = data.title || content.match(/^#\s+(.+)/m)?.[1] || slug[slug.length - 1];
+  const badges = [
+    typeof data.type === 'string' ? data.type : null,
+    data.retired ? 'retired' : null,
+    typeof data.status === 'string' ? data.status : null,
+  ].filter((badge): badge is string => Boolean(badge));
 
   // Strip first H1 from content to avoid duplicate title rendering (matches dashboard)
   const strippedContent = content.replace(/^#\s+.+\n?/m, '');
@@ -111,6 +123,18 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
     <div className="max-w-6xl mx-auto px-4 md:px-6 pt-4 md:pt-8 pb-12 flex gap-8">
       <article className="flex-1 min-w-0 max-w-3xl">
         <Breadcrumbs title={pageTitle} />
+        {badges.length > 0 && (
+          <div className="mb-4 flex flex-wrap gap-2">
+            {badges.map((badge) => (
+              <span
+                key={badge}
+                className="rounded-sm border border-[#e5950026] bg-[#e595000a] px-2 py-1 text-[0.65rem] font-semibold tracking-wide text-[#8b7355] uppercase"
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+        )}
         {slugStr === 'architecture' && <ArchitectureDiagram />}
         <MDXRemote
           source={strippedContent}

@@ -63,6 +63,16 @@ export default function SkillsIndexPage() {
         {skills.length} reusable Claude Code skills. Click any skill for docs,
         eval results, and install prompt.
       </p>
+      <p className="mb-6 text-sm text-[#8b7355]">
+        Looking for retired tools and foundational loops?{" "}
+        <Link
+          href="/golems/docs/heritage/ralph"
+          className="font-medium text-[#e59500] transition-colors hover:text-[#f0b13a]"
+        >
+          Visit Heritage
+        </Link>
+        .
+      </p>
 
       {/* Terminal install hero */}
       <div className="mb-10 overflow-hidden rounded-xl border border-[#e5950020] bg-[#0d0d0d]">
