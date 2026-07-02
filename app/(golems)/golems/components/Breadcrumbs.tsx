@@ -7,7 +7,6 @@ import { ChevronRight } from "lucide-react";
 // Map URL segments to section names
 const sectionMap: Record<string, string> = {
   "golems/claude": "Agents",
-  "golems/recruiter": "Agents",
   "golems/coach": "Agents",
   "golems/email": "Tools & Layers",
   "packages/shared": "Tools & Layers",
@@ -16,14 +15,12 @@ const sectionMap: Record<string, string> = {
   "packages/services": "Infrastructure",
   "packages/zikaron": "Infrastructure", // legacy route, redirects to BrainLayer
   "packages/brainlayer": "Infrastructure",
-  "packages/ralph": "Infrastructure",
-  "cloud-worker": "Infrastructure",
+  "heritage/ralph": "Heritage",
   "per-repo-sessions": "Infrastructure",
   "configuration/env-vars": "Guides",
   "configuration/secrets": "Guides",
   faq: "Guides",
   journey: "Guides",
-  "interview-practice": "Agents",
   llm: "Guides",
   "deployment/railway": "Guides",
   "getting-started": "Getting Started",

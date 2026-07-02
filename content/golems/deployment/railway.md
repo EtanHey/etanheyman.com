@@ -243,7 +243,7 @@ Typical monthly cost: **$5-10** (Railway compute only, LLM is free with Gemini).
 
 ## See Also
 
-- [Cloud Worker](../cloud-worker.md) — Schedule details and endpoints
+- [Services Package](../packages/services.md) — Cloud worker schedules and service entry points
 - [Environment Variables](../configuration/env-vars.md) — Complete variable reference
 - [Secrets Management](../configuration/secrets.md) — How to store API keys
 - [Golems Architecture](../architecture.md) — System design

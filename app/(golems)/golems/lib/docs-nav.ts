@@ -8,6 +8,9 @@ export type DocNavItem = {
   slug: string;
   title: string;
   position?: number;
+  type?: string;
+  retired?: boolean;
+  status?: string;
   children?: DocNavItem[];
 };
 
@@ -35,6 +38,7 @@ function getAllDocSlugs(): string[][] {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       if (entry.isDirectory()) {
+        if (entry.name === "_archived") continue;
         walk(path.join(dir, entry.name), [...prefix, entry.name]);
       } else if (entry.name.endsWith(".md")) {
         const slug = entry.name.replace(/\.md$/, "");
@@ -50,7 +54,13 @@ function getAllDocSlugs(): string[][] {
 /**
  * Load title and sidebar_position from a doc's frontmatter.
  */
-function getDocMeta(parts: string[]): { title: string; sidebarPosition?: number } | null {
+function getDocMeta(parts: string[]): {
+  title: string;
+  sidebarPosition?: number;
+  type?: string;
+  retired?: boolean;
+  status?: string;
+} | null {
   const filePath = path.join(DOCS_DIR, ...parts) + ".md";
   if (!fs.existsSync(filePath)) return null;
 
@@ -63,7 +73,13 @@ function getDocMeta(parts: string[]): { title: string; sidebarPosition?: number 
     title = h1Match ? h1Match[1] : parts[parts.length - 1];
   }
 
-  return { title, sidebarPosition: data.sidebar_position };
+  return {
+    title,
+    sidebarPosition: data.sidebar_position,
+    type: data.type,
+    retired: data.retired,
+    status: data.status,
+  };
 }
 
 /**
@@ -84,6 +100,9 @@ export function getDocsNav(): DocNavItem[] {
       slug: parts.join("/"),
       title: meta.title,
       position: meta.sidebarPosition,
+      type: meta.type,
+      retired: meta.retired,
+      status: meta.status,
     };
 
     if (parts.length === 1) {

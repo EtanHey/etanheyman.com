@@ -8,6 +8,16 @@ interface Props {
   nav: DocNavItem[];
 }
 
+function TypeBadge({ type }: { type?: string }) {
+  if (!type) return null;
+
+  return (
+    <span className="rounded-sm border border-[#e5950026] px-1.5 py-0.5 text-[0.6rem] leading-none font-semibold tracking-wide text-[#8b7355] uppercase">
+      {type}
+    </span>
+  );
+}
+
 export default function Sidebar({ nav }: Props) {
   const pathname = usePathname();
 
@@ -28,13 +38,14 @@ export default function Sidebar({ nav }: Props) {
               <div key={section.slug}>
                 <Link
                   href={href}
-                  className={`block rounded-md px-3 py-1.5 text-sm transition-colors ${
+                  className={`flex items-center justify-between gap-2 rounded-md px-3 py-1.5 text-sm transition-colors ${
                     isActive
                       ? "bg-[#e5950015] font-medium text-[#e59500]"
                       : "text-[#a69987] hover:bg-[#ffffff08] hover:text-[#c0b8a8]"
                   }`}
                 >
-                  {section.title}
+                  <span>{section.title}</span>
+                  <TypeBadge type={section.type} />
                 </Link>
               </div>
             );
@@ -60,7 +71,10 @@ export default function Sidebar({ nav }: Props) {
                             : "text-[#a69987] hover:bg-[#ffffff08] hover:text-[#c0b8a8]"
                         }`}
                       >
-                        {item.title}
+                        <span className="flex items-center justify-between gap-2">
+                          <span>{item.title}</span>
+                          <TypeBadge type={item.type} />
+                        </span>
                       </Link>
                     </li>
                   );
