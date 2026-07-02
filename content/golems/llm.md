@@ -629,9 +629,9 @@ After rotating keys:
 
 ---
 
-# Content Pipelines
+# Content Pipelines (Legacy)
 
-ContentGolem orchestrates 5 visual content pipelines and a text publishing pipeline. Each pipeline follows the same pattern: idea in, Claude Code picks the right tool, output rendered.
+The legacy Content Pipelines page documented visual and text publishing experiments in ContentGolem. The underlying `@golems/content` package still exists, but this page is retained as historical context rather than a current headline capability.
 
 ## Pipeline Overview
 
@@ -761,9 +761,9 @@ View pipeline history and stats on the dashboard at `/content`.
 
 ## Text Publishing
 
-Beyond visual content, ContentGolem handles text publishing:
+Beyond visual content, ContentGolem handled text publishing experiments:
 
-- **LinkedIn posts** via the `/linkedin-post` skill (2026 algorithm optimization)
+- **LinkedIn-style posts** through content drafting workflows
 - **Soltome posts** via the Soltome API client (AI social network)
 - **Ghostwriting** in the owner's Hebrew-English voice
 
@@ -771,13 +771,11 @@ Text content goes through a critique-waves quality process: parallel agents revi
 
 ## CC Skills
 
-Content pipelines are invoked via Claude Code skills:
+The current content skill remains the live entry point:
 
 | Skill | Pipeline |
 |-------|----------|
 | `golem-powers/content/workflows/draft` | Text drafting + critique |
-| `golem-powers/linkedin-post/workflows/draft` | LinkedIn-specific drafting |
-| `golem-powers/linkedin-post/workflows/review` | Draft quality review |
 
 ## Dependencies
 
@@ -2379,13 +2377,13 @@ export SUPABASE_SERVICE_KEY=...
 
 ---
 
-# Interview Practice
+# Interview Practice (Legacy)
 
-> 7 interview modes with Elo-rated skill tracking. Practice until your rating says you're ready.
+> Legacy RecruiterGolem practice feature retained as historical context.
 
 ## How It Works
 
-RecruiterGolem runs interactive interview practice sessions via Telegram. An AI interviewer asks you questions, scores your responses, and tracks your skill progression using an Elo rating system — the same system used in chess to measure relative skill.
+RecruiterGolem previously ran interactive interview practice sessions via Telegram. An AI interviewer asked questions, scored responses, and tracked skill progression using an Elo rating system.
 
 ## The 7 Modes
 
@@ -2415,7 +2413,7 @@ Elo is tracked **per mode**, so you can see exactly where you're strong and wher
 ## Practice Flow
 
 ```
-1. Start:     /practice (Telegram) or /interview-practice (Claude Code)
+1. Start:     /practice (Telegram; legacy flow)
 2. Select:    Choose mode (behavioral, technical, etc.)
 3. Question:  AI interviewer asks a question
 4. Respond:   You answer naturally
@@ -3303,7 +3301,6 @@ ContentGolem's logic currently lives in Claude Code skills:
 | Skill | What It Does |
 |-------|-------------|
 | `golem-powers/content/` | Draft workflow (draft > critique > refine > publish) |
-| `golem-powers/linkedin-post/` | LinkedIn-specific drafting with 2026 algorithm rules |
 
 Supporting services in `@golems/services`:
 - **Soltome client** — API client for soltome.com
@@ -3455,7 +3452,7 @@ Ralph manages 55 reusable Claude Code skills in `skills/golem-powers/`. These ar
 
 - **Development:** commit, create-pr, worktrees, test-plan, lsp
 - **Operations:** railway, 1password, convex, github
-- **Content:** linkedin-post, content, writing-skills
+- **Content:** content, writing-skills
 - **Research:** context7, github-research, cli-agents
 - **Quality:** coderabbit, critique-waves, pr-comments
 - **Memory:** brainlayer, catchup, learn-mistake
@@ -3917,6 +3914,8 @@ This helps visually distinguish which Claude session is which when running multi
 
 > 55 reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
 
+Note: the live, always-current skills inventory is the auto-generated `/golems/skills` page; this table is a curated overview.
+
 ## What Are Skills?
 
 Skills are Claude Code plugins that provide specialized capabilities. They're stored in `skills/golem-powers/` and can be installed into any project. Each skill has a trigger (slash command), a description, and focused instructions for a specific workflow.
@@ -3947,7 +3946,6 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 
 | Skill | Command | What It Does |
 |-------|---------|-------------|
-| LinkedIn Post | `/linkedin-post` | Topic discovery, drafting, scheduling, review |
 | Content | `/content` | Multi-platform content creation and publishing |
 | Writing Skills | `/writing-skills` | Create and validate new skills |
 
@@ -3975,7 +3973,6 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 
 | Skill | Command | What It Does |
 |-------|---------|-------------|
-| Interview Practice | `/interview-practice` | 7-mode practice with Elo tracking |
 | Email Golem | `/email-golem` | Email status, manual triage, recent scores |
 | Tax Helper | `/tax-helper` | Transaction categorization for Schedule C |
 | Obsidian | `/obsidian` | Search, read, write Obsidian vault notes |
@@ -4003,7 +4000,6 @@ In any Claude Code session with golem-powers installed:
 
 ```
 /commit              # Invoke the commit skill
-/interview-practice  # Start interview practice
 /railway logs        # Check Railway deployment logs
 ```
 
