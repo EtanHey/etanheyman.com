@@ -159,17 +159,14 @@ const featuresData: Record<string, FeatureSection[]> = {
         language: "json",
         code: `{
   "mcpServers": {
-    "qa-voice": {
-      "command": "bunx",
-      "args": ["voicelayer-mcp"],
-      "env": {
-        "QA_VOICE_STT_BACKEND": "auto",
-        "QA_VOICE_TTS_VOICE": "en-US-JennyNeural"
-      }
+    "voicelayer": {
+      "command": "socat",
+      "args": ["STDIO", "UNIX-CONNECT:/tmp/voicelayer-mcp.sock"]
     }
   }
 }`,
-        caption: "MCP config with STT backend auto-detection",
+        caption:
+          "Each session connects to the singleton daemon via a socat shim. STT backend auto-detects; tune with QA_VOICE_* env on the daemon host.",
       },
     },
     {
@@ -209,16 +206,16 @@ const featuresData: Record<string, FeatureSection[]> = {
     },
     {
       iconName: "Zap",
-      title: "MCP Daemon Architecture",
-      tagline: "Singleton voice service via socat — always on",
+      title: "App-owned MCP Daemon",
+      tagline: "One voice daemon, owned by VoiceBar — always on",
       description:
-        "VoiceLayer runs as a macOS MCP daemon with dual-protocol support (NDJSON + MCP Content-Length). A socat-based singleton ensures only one voice service instance runs, even across multiple Claude sessions. Auto-starts via macOS LaunchAgent. User-controlled stop via signal file, with 5-minute orphan timeout for session booking cleanup.",
+        "VoiceLayer runs as a singleton MCP daemon with dual-protocol support (NDJSON + MCP Content-Length) on a Unix socket. The daemon runs as a child of VoiceBar.app so it inherits the app's microphone permission — launchd keeps VoiceBar alive, and VoiceBar keeps the daemon alive across crashes and clean exits. Every Claude session connects through a lightweight socat shim, and session booking cleans up stale mic locks automatically.",
       highlights: [
-        "Socat singleton — one daemon, many sessions",
+        "Singleton daemon — one process, many sessions via socat shims",
         "Dual-protocol — NDJSON + MCP Content-Length",
-        "LaunchAgent auto-start — zero manual setup",
-        "5-minute orphan timeout for stale sessions",
-        "touch /tmp/voicelayer-stop — instant stop",
+        "Owned by VoiceBar.app — inherits mic permission (TCC)",
+        "launchd -> VoiceBar.app -> child MCP daemon supervision",
+        "Session booking auto-clears stale microphone locks",
       ],
     },
   ],

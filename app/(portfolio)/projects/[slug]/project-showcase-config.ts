@@ -106,20 +106,26 @@ const configs: Record<string, ProjectShowcaseConfig> = {
 
   voicelayer: {
     accent: { color: "#38BDF8", colorRgb: "56, 189, 248" },
-    tagline: "bunx voicelayer-mcp",
+    tagline: "brew install etanhey/layers/voicebar",
     isMiniSite: true,
     stats: [
       { value: 2, label: "MCP tools" },
       { value: 2, label: "STT backends" },
       { value: 300, suffix: "ms", prefix: "~", label: "STT latency" },
-      { value: 359, label: "Tests passing" },
+      { value: 300, suffix: "+", label: "Tests passing" },
     ],
     features: [
       {
         iconName: "Mic",
         title: "Bi-directional TTS + STT",
         description:
-          "voice_speak and voice_ask cover the full range: fire-and-forget TTS to interactive Q&A, with automatic mode detection. VoiceBar daemon (renamed from FlowBar) handles both directions.",
+          "voice_speak and voice_ask cover the full range: fire-and-forget TTS to interactive Q&A, with automatic mode detection. The VoiceBar notch app drives both directions from a menu-bar surface.",
+      },
+      {
+        iconName: "Sparkles",
+        title: "Liquid-Glass notch UI",
+        description:
+          "VoiceBar renders around the MacBook camera notch: Liquid-Glass wings, morph animations between idle/recording/speaking, a karaoke-highlighting teleprompter, truthful waveform, and a right-click menu. Hover to summon; F5 to record.",
       },
       {
         iconName: "Radio",
@@ -141,11 +147,15 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       },
     ],
     installTabs: [
-      { label: "bunx", command: "bunx voicelayer-mcp" },
+      {
+        label: "Homebrew",
+        command:
+          "brew tap etanhey/layers\nbrew install etanhey/layers/voicelayer\nbrew install --cask etanhey/layers/voicebar",
+      },
       {
         label: "MCP Config",
         command:
-          '{\n  "mcpServers": {\n    "qa-voice": {\n      "command": "bunx",\n      "args": ["voicelayer-mcp"]\n    }\n  }\n}',
+          '{\n  "mcpServers": {\n    "voicelayer": {\n      "command": "socat",\n      "args": ["STDIO", "UNIX-CONNECT:/tmp/voicelayer-mcp.sock"]\n    }\n  }\n}',
       },
     ],
     architectureFlow: [
