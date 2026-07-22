@@ -49,6 +49,7 @@ project-research/
 
 # Local docs and temp files
 docs.local/
+/public/demos/source-private/
 supabase/.temp/
 .cursor/
 

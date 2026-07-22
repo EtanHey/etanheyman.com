@@ -12,6 +12,17 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,html}\"",
     "test": "vitest",
     "test:run": "vitest run",
+    "demo:prepare": "node scripts/prepare-voicelayer-demo-sources.mjs",
+    "demo:studio": "npm run demo:prepare && remotion studio remotion/voicelayer/index.ts",
+    "demo:compositions": "remotion compositions remotion/voicelayer/index.ts",
+    "demo:still:hero": "remotion still remotion/voicelayer/index.ts VoiceLayerHero public/demos/voicelayer-hero-poster.png --frame=650 --image-format=png",
+    "demo:still:making-of": "remotion still remotion/voicelayer/index.ts VoiceLayerMakingOf public/demos/voicelayer-making-of-poster.png --frame=2010 --image-format=png",
+    "demo:still": "npm run demo:prepare && npm run demo:still:hero && npm run demo:still:making-of",
+    "demo:render:hero": "remotion render remotion/voicelayer/index.ts VoiceLayerHero public/demos/voicelayer-hero.mp4 --codec=h264 --crf=23 --pixel-format=yuv420p --color-space=bt709 --muted --concurrency=50%",
+    "demo:render:making-of": "remotion render remotion/voicelayer/index.ts VoiceLayerMakingOf public/demos/voicelayer-making-of.mp4 --codec=h264 --crf=24 --pixel-format=yuv420p --color-space=bt709 --muted --concurrency=50%",
+    "demo:render": "npm run demo:prepare && npm run demo:render:hero && npm run demo:render:making-of",
+    "demo:versions": "node scripts/check-remotion-versions.mjs",
+    "demo:sanitize": "node scripts/check-voicelayer-demo-sanitization.mjs",
     "prepare": "husky"
   },
   "dependencies": {
@@ -53,6 +64,7 @@
     "uploadthing": "^7.6.0"
   },
   "devDependencies": {
+    "@remotion/cli": "4.0.496",
     "@tailwindcss/postcss": "^4.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -66,6 +78,7 @@
     "postcss": "^8",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "remotion": "4.0.496",
     "tailwindcss": "^4.0.9",
     "tsx": "^4.8.1",
     "typescript": "^5",
