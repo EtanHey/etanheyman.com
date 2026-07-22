@@ -80,4 +80,25 @@ describe("VoiceLayer v2.1.17 showcase", () => {
     expect(realDesktop).toContain("OffthreadVideo");
     expect(realDesktop).toContain("muted");
   });
+
+  it("keeps the hero's real captured macOS menu bar in the making-of cut", () => {
+    const root = resolve(import.meta.dirname, "../../../../..");
+    const showcase = readFileSync(
+      resolve(root, "remotion/voicelayer/VoiceLayerShowcase.tsx"),
+      "utf8",
+    );
+    const realDesktop = readFileSync(
+      resolve(root, "remotion/voicelayer/components/RealDesktop.tsx"),
+      "utf8",
+    );
+
+    expect(realDesktop).toContain("const CapturedMacMenuBar");
+    expect(realDesktop).toMatch(
+      /const CapturedMacMenuBar[\s\S]*?<SourceVideo src=\{SOURCE\.hero\}/,
+    );
+    expect(realDesktop).toContain("<CapturedMacMenuBar />");
+    expect(showcase).not.toContain(
+      'theme={frame >= 1_800 ? "light" : "dark"}',
+    );
+  });
 });

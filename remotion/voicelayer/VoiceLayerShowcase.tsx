@@ -285,7 +285,7 @@ export const VoiceLayerMakingOf = () => {
     <AbsoluteFill style={{ backgroundColor: "#000", color: "white" }}>
       <RealFootageBase cut="making-of" />
       <PrivacyDesktop frame={frame} cut="making-of" state={state} />
-      <SourceNotchMask theme={frame >= 1_800 ? "light" : "dark"} />
+      <SourceNotchMask theme="light" />
       <NotchVoiceBar frame={frame} state={state} previousState={previous} />
       <ChapterLabel state={state} />
       {state.id === "qa-frame" && <QaFrameFinding frame={frame} start={state.start} />}

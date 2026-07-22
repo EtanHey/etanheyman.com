@@ -42,6 +42,26 @@ const SourceVideo = ({ src, playbackRate = 0.5 }: { src: string; playbackRate?: 
   </AbsoluteFill>
 );
 
+const CapturedMacMenuBar = () => (
+  <div
+    style={{
+      position: "absolute",
+      left: 0,
+      right: 0,
+      top: 0,
+      height: 33,
+      overflow: "hidden",
+      zIndex: 1,
+    }}
+  >
+    {[0, 900, 1_800].map((from) => (
+      <Sequence key={from} from={from} durationInFrames={900} premountFor={30}>
+        <SourceVideo src={SOURCE.hero} />
+      </Sequence>
+    ))}
+  </div>
+);
+
 export const RealFootageBase = ({ cut }: { cut: "hero" | "making-of" }) => {
   if (cut === "hero") return <SourceVideo src={SOURCE.hero} />;
 
@@ -56,6 +76,7 @@ export const RealFootageBase = ({ cut }: { cut: "hero" | "making-of" }) => {
       <Sequence from={1_800} durationInFrames={900} premountFor={30}>
         <SourceVideo src={SOURCE.teleprompter} />
       </Sequence>
+      <CapturedMacMenuBar />
     </AbsoluteFill>
   );
 };
