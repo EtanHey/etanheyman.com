@@ -118,15 +118,6 @@ export const MAKING_OF_STATES: readonly DemoState<MakingOfStateId>[] = [
 export const HERO_DURATION_FRAMES = 900;
 export const MAKING_OF_DURATION_FRAMES = 2_700;
 
-export const REDACTION_ZONES = [
-  { id: "session-rail", opacity: 0.94, blur: 28 },
-  { id: "header-left", opacity: 0.96, blur: 28 },
-  { id: "header-right", opacity: 0.96, blur: 28 },
-  { id: "pane-left", opacity: 0.66, blur: 28 },
-  { id: "pane-right", opacity: 0.66, blur: 28 },
-  { id: "terminal-status", opacity: 0.98, blur: 28 },
-] as const;
-
 export const PASTED_TRANSCRIPT =
   "Ship the smallest verified fix, then run the focused checks.";
 

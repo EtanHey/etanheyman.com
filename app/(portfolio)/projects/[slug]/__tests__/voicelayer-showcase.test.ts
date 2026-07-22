@@ -1,5 +1,13 @@
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { execFileSync, spawnSync } from "node:child_process";
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { getTerminalShowcaseData } from "../terminal-showcase-config";
 
@@ -47,7 +55,7 @@ describe("VoiceLayer v2.1.17 showcase", () => {
     expect(component).toContain("/demos/voicelayer-making-of.mp4");
     expect(component).toContain("/demos/voicelayer-making-of-poster.png");
     expect(component).toContain("Real Mac footage");
-    expect(component).toContain("hard-redacted");
+    expect(component).toContain("path-level redaction");
   });
 
   it("stages private QA recordings outside git", () => {
@@ -62,7 +70,7 @@ describe("VoiceLayer v2.1.17 showcase", () => {
     expect(gitignore).toContain("/public/demos/source-private/");
   });
 
-  it("does not retain the synthetic-desktop premise", () => {
+  it("keeps the captured Claude and Codex panes instead of reconstructing them", () => {
     const root = resolve(import.meta.dirname, "../../../../..");
     const showcase = readFileSync(
       resolve(root, "remotion/voicelayer/VoiceLayerShowcase.tsx"),
@@ -76,9 +84,21 @@ describe("VoiceLayer v2.1.17 showcase", () => {
     expect(showcase).not.toContain("SyntheticDesktop");
     expect(showcase).not.toContain("Timeline");
     expect(showcase).toContain("<RealFootageBase");
-    expect(showcase).toContain("<PrivacyDesktop");
+    expect(showcase).toContain("<TargetedRedactions");
+    expect(showcase).not.toContain("<PrivacyDesktop");
     expect(realDesktop).toContain("OffthreadVideo");
     expect(realDesktop).toContain("muted");
+    for (const reconstructedSurface of [
+      "PrivacyDesktop",
+      "SessionRail",
+      "SafePane",
+      "SeamMask",
+      "SafeLine",
+      "heroLeadLines",
+      "makingLeadLines",
+    ]) {
+      expect(realDesktop).not.toContain(reconstructedSurface);
+    }
   });
 
   it("keeps the hero's real captured macOS menu bar in the making-of cut", () => {
@@ -100,5 +120,48 @@ describe("VoiceLayer v2.1.17 showcase", () => {
     expect(showcase).not.toContain(
       'theme={frame >= 1_800 ? "light" : "dark"}',
     );
+    expect(showcase).not.toContain("SourceNotchMask");
+    expect(showcase).not.toMatch(/width:\s*520[\s\S]{0,180}background:/);
+  });
+
+  it("executes the narrow sanitizer policy against controlled fixtures", () => {
+    const root = resolve(import.meta.dirname, "../../../../..");
+    const sanitizer = resolve(
+      root,
+      "scripts/check-voicelayer-demo-sanitization.mjs",
+    );
+    const fixtureRoot = mkdtempSync(join(tmpdir(), "voicelayer-sanitize-"));
+
+    try {
+      const authentic = resolve(fixtureRoot, "authentic.txt");
+      writeFileSync(
+        authentic,
+        "brain_store tool call · agent reasoning · 324,660 tokens · voicelayerLead · real diff",
+      );
+      expect(() =>
+        execFileSync(
+          process.execPath,
+          [sanitizer, "--policy-only", `--scan-text=${authentic}`],
+          { cwd: root, encoding: "utf8" },
+        ),
+      ).not.toThrow();
+
+      const privateValues = resolve(fixtureRoot, "private.txt");
+      writeFileSync(
+        privateValues,
+        "/Users/private-account/Gits/voicelayer sk-proj-abcdefghijklmnop $102.19",
+      );
+      const result = spawnSync(
+        process.execPath,
+        [sanitizer, "--policy-only", `--scan-text=${privateValues}`],
+        { cwd: root, encoding: "utf8" },
+      );
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain("real macOS user path");
+      expect(result.stderr).toContain("credential-shaped value");
+      expect(result.stderr).toContain("session cost or spend figure");
+    } finally {
+      rmSync(fixtureRoot, { recursive: true, force: true });
+    }
   });
 });

@@ -4,15 +4,19 @@ import { extname, join, relative, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const allowMissingAssets = process.argv.includes("--allow-missing-assets");
+const policyOnly = process.argv.includes("--policy-only");
+const requestedTextFiles = process.argv
+  .filter((argument) => argument.startsWith("--scan-text="))
+  .map((argument) => resolve(root, argument.slice("--scan-text=".length)));
 const frameDirs = process.argv
   .filter((argument) => argument.startsWith("--frames-dir="))
   .map((argument) => resolve(root, argument.slice("--frames-dir=".length)));
 
-const sourceRoots = [
+const sourceRoots = policyOnly ? [] : [
   resolve(root, "remotion/voicelayer"),
   resolve(root, "app/(portfolio)/projects/[slug]/components/VoiceLayerDemo.tsx"),
 ];
-const publishedSlices = [
+const publishedSlices = policyOnly ? [] : [
   {
     path: resolve(root, "app/(portfolio)/projects/[slug]/page.tsx"),
     start: "{/* ─── VoiceLayer product demo ─── */}",
@@ -24,15 +28,24 @@ const publishedSlices = [
     end: "  cmuxlayer: {",
   },
 ];
-const assetRoots = [
+const assetRoots = policyOnly ? [] : [
   resolve(root, "public/demos/voicelayer-hero.mp4"),
   resolve(root, "public/demos/voicelayer-hero-poster.png"),
   resolve(root, "public/demos/voicelayer-making-of.mp4"),
   resolve(root, "public/demos/voicelayer-making-of-poster.png"),
 ];
 const sourceStage = resolve(root, "public/demos/source-private");
+const clientBlocklistPath = resolve(sourceStage, "client-names.txt");
 
-const textExtensions = new Set([".ts", ".tsx", ".js", ".mjs", ".json", ".css"]);
+const textExtensions = new Set([
+  ".ts",
+  ".tsx",
+  ".js",
+  ".mjs",
+  ".json",
+  ".css",
+  ".txt",
+]);
 const imageExtensions = new Set([".png", ".jpg", ".jpeg"]);
 const ignoredSegments = new Set(["__tests__", "node_modules"]);
 const bannedPatterns = [
@@ -41,26 +54,32 @@ const bannedPatterns = [
     regex: /\/Users\/(?!you(?:\/|\b))/i,
     binarySafe: true,
   },
-  { label: "mounted-volume path", regex: /\/Volumes\//i, binarySafe: true },
-  { label: "runtime path", regex: /\/(?:private|tmp)\//i, binarySafe: true },
-  { label: "home shorthand", regex: /~\//, binarySafe: false },
-  { label: "personal identifier", regex: /etan(?:\s+heyman|heyman)?/i, binarySafe: true },
-  { label: "private machine identifier", regex: /happycampr/i, binarySafe: true },
-  { label: "BrainLayer payload", regex: /brain_store\s*\(|memory payload/i, binarySafe: true },
   {
-    label: "agent reasoning",
-    regex: /chain[- ]of[- ]thought|agent reasoning|internal strategy|internal decision/i,
-    binarySafe: true,
-  },
-  {
-    label: "cost or usage figure",
-    regex: /\$\s?\d{2,}(?:[,.]\d+)?|\b(?:session )?costs?\b|\bspend(?:ing)?\b|\b\d[\d,.]*\s+tokens?\b/i,
+    label: "credential-shaped value",
+    regex: /\b(?:sk-(?:proj-)?[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{16,}|AKIA[A-Z0-9]{16}|Bearer\s+[A-Za-z0-9._-]{16,})\b|\bapi[_-]?key\s*[:=]\s*["']?[A-Za-z0-9._-]{12,}/i,
     binarySafe: false,
   },
-  { label: "client reference", regex: /\bclients?\b/i, binarySafe: true },
-  { label: "real terminal title", regex: /Terminal\s+[—-]/i, binarySafe: true },
-  { label: "source workspace title", regex: /voicelayerLead|skillcreatorClaude/i, binarySafe: true },
+  {
+    label: "session cost or spend figure",
+    regex: /\$\s?\d{1,6}(?:,\d{3})*\.\d{2}\b/,
+    binarySafe: false,
+  },
 ];
+
+if (existsSync(clientBlocklistPath)) {
+  const clientNames = readFileSync(clientBlocklistPath, "utf8")
+    .split(/\r?\n/)
+    .map((name) => name.trim())
+    .filter(Boolean);
+  for (const name of clientNames) {
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    bannedPatterns.push({
+      label: "client name",
+      regex: new RegExp(`\\b${escaped}\\b`, "i"),
+      binarySafe: false,
+    });
+  }
+}
 
 function collectFiles(path) {
   if (!existsSync(path)) return [];
@@ -106,6 +125,7 @@ const findings = [];
 const files = [
   ...sourceRoots.flatMap(collectFiles),
   ...assetRoots.filter(existsSync),
+  ...requestedTextFiles.filter(existsSync),
 ];
 for (const file of files) {
   findings.push(
@@ -126,7 +146,7 @@ for (const slice of publishedSlices) {
   );
 }
 
-if (existsSync(sourceStage)) {
+if (!policyOnly && existsSync(sourceStage)) {
   const staged = collectFiles(sourceStage);
   for (const path of staged) {
     const repoPath = relative(root, path);

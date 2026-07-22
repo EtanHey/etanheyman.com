@@ -2,7 +2,8 @@ import { Check, Film, Keyboard, ScanSearch, Split, Waves } from "lucide-react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { ContextMenu } from "./components/ContextMenu";
 import { NotchVoiceBar } from "./components/NotchVoiceBar";
-import { PrivacyDesktop, RealFootageBase } from "./components/RealDesktop";
+import { RealFootageBase } from "./components/RealDesktop";
+import { TargetedRedactions } from "./components/TargetedRedactions";
 import {
   COLORS,
   HERO_STATES,
@@ -12,24 +13,6 @@ import {
   type HeroStateId,
   type MakingOfStateId,
 } from "./model";
-
-const SourceNotchMask = ({ theme }: { theme: "light" | "dark" }) => (
-  <div
-    style={{
-      position: "absolute",
-      left: "50%",
-      top: 0,
-      width: 520,
-      height: 35,
-      transform: "translateX(-50%)",
-      background:
-        theme === "light"
-          ? "linear-gradient(180deg, rgb(221,226,228) 0%, rgb(188,197,201) 100%)"
-          : "#000",
-      zIndex: 8,
-    }}
-  />
-);
 
 const currentAndPrevious = <TId extends string>(
   frame: number,
@@ -267,8 +250,7 @@ export const VoiceLayerHero = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: "#000", color: "white" }}>
       <RealFootageBase cut="hero" />
-      <PrivacyDesktop frame={frame} cut="hero" state={state} />
-      <SourceNotchMask theme="light" />
+      <TargetedRedactions frame={frame} cut="hero" />
       <NotchVoiceBar frame={frame} state={state} previousState={previous} />
       <HeroCue frame={frame} state={state} />
       {state.id === "context-menu" && (
@@ -284,8 +266,7 @@ export const VoiceLayerMakingOf = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: "#000", color: "white" }}>
       <RealFootageBase cut="making-of" />
-      <PrivacyDesktop frame={frame} cut="making-of" state={state} />
-      <SourceNotchMask theme="light" />
+      <TargetedRedactions frame={frame} cut="making-of" />
       <NotchVoiceBar frame={frame} state={state} previousState={previous} />
       <ChapterLabel state={state} />
       {state.id === "qa-frame" && <QaFrameFinding frame={frame} start={state.start} />}

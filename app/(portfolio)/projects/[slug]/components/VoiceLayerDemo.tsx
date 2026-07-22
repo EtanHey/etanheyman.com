@@ -26,7 +26,7 @@ const DemoHeader = ({
         className="h-3.5 w-3.5 text-[#73d89b]"
         aria-hidden="true"
       />
-      Real Mac footage · hard-redacted
+      Real Mac footage · path-level redaction
     </div>
   </div>
 );
@@ -50,7 +50,7 @@ export function VoiceLayerDemo() {
             controls
             preload="metadata"
             poster={HERO_POSTER_SRC}
-            aria-label="VoiceLayer product demonstration on a real hard-redacted Mac showing F5 dictation, cursor insertion, teleprompter playback, and the right-click menu"
+            aria-label="VoiceLayer product demonstration on a real Mac with path-level redaction showing F5 dictation, cursor insertion, teleprompter playback, and the right-click menu"
           >
             <source src={HERO_VIDEO_SRC} type="video/mp4" />
             Your browser does not support embedded video.

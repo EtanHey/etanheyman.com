@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 import Vision
 
-func recognize(_ path: String) throws -> [String] {
+func recognize(_ path: String) throws -> [(text: String, box: CGRect)] {
     guard let image = NSImage(contentsOfFile: path),
           let data = image.tiffRepresentation,
           let bitmap = NSBitmapImageRep(data: data),
@@ -19,15 +19,24 @@ func recognize(_ path: String) throws -> [String] {
     try handler.perform([request])
 
     return (request.results ?? []).compactMap { observation in
-        observation.topCandidates(1).first?.string
+        observation.topCandidates(1).first.map { candidate in
+            (candidate.string, observation.boundingBox)
+        }
     }
 }
 
-for path in CommandLine.arguments.dropFirst() {
+let includeBounds = CommandLine.arguments.contains("--bounds")
+let paths = CommandLine.arguments.dropFirst().filter { $0 != "--bounds" }
+
+for path in paths {
     do {
         print("FRAME\t\(path)")
         for line in try recognize(path) {
-            print(line)
+            if includeBounds {
+                print(String(format: "BOUNDS\t%.6f\t%.6f\t%.6f\t%.6f\t%@", line.box.minX, line.box.minY, line.box.width, line.box.height, line.text))
+            } else {
+                print(line.text)
+            }
         }
     } catch {
         fputs("OCR failed for \(path): \(error)\n", stderr)

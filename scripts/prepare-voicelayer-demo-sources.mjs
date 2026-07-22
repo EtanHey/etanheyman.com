@@ -15,7 +15,7 @@ const sources = [
       voiceLayerRoot,
       "docs.local/qa/2026-07-13-teleprompter-live-test.mov",
     ),
-    start: "35",
+    start: "45",
     duration: "16",
   },
   {
@@ -42,7 +42,7 @@ const sources = [
       voiceLayerRoot,
       "docs.local/qa/2026-07-13-teleprompter-live-test.mov",
     ),
-    start: "35",
+    start: "45",
     duration: "16",
   },
 ];

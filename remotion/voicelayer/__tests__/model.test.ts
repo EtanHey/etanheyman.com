@@ -59,18 +59,30 @@ describe("VoiceLayer demo model", () => {
     expect(source).toContain("voice_speak");
   });
 
-  it("defines strong blur-plus-replacement zones without replacing the whole desktop", async () => {
-    const model = await import("../model");
-    expect(model.REDACTION_ZONES.map((zone) => zone.id)).toEqual([
-      "session-rail",
-      "header-left",
-      "header-right",
-      "pane-left",
-      "pane-right",
-      "terminal-status",
-    ]);
-    expect(model.REDACTION_ZONES.every((zone) => zone.opacity >= 0.65)).toBe(true);
-    expect(model.REDACTION_ZONES.every((zone) => zone.blur >= 28)).toBe(true);
+  it("limits redactions to paths, secrets, client names, and costs", async () => {
+    const redactions = await import("../redactions");
+    const allowedKinds = new Set(["path", "secret", "client", "cost"]);
+
+    expect(redactions.TARGETED_REDACTIONS.length).toBeGreaterThan(0);
+    expect(
+      redactions.TARGETED_REDACTIONS.every((zone) =>
+        allowedKinds.has(zone.kind),
+      ),
+    ).toBe(true);
+    expect(
+      redactions.TARGETED_REDACTIONS.some(
+        (zone) => zone.kind === "path" && zone.replacement === "/Users/you",
+      ),
+    ).toBe(true);
+    expect(
+      redactions.TARGETED_REDACTIONS.every(
+        (zone) =>
+          zone.width > 0 &&
+          zone.height > 0 &&
+          zone.width < 520 &&
+          zone.height < 90,
+      ),
+    ).toBe(true);
   });
 
   it("fails fast when a timeline has no states", async () => {
