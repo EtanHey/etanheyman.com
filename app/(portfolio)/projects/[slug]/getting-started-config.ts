@@ -72,23 +72,24 @@ const gettingStartedData: Record<string, GettingStartedStep[]> = {
   voicelayer: [
     {
       step: 1,
-      title: "Quick start with bunx",
+      title: "Install with Homebrew",
       description:
-        "The fastest way to try VoiceLayer. Runs the MCP server directly without installing.",
-      command: "bunx voicelayer-mcp",
-      note: "Requires Bun runtime. For npm: npx voicelayer-mcp.",
+        "The tap ships the CLI/MCP package plus the notarized VoiceBar notch app as a cask. VoiceBar owns the microphone-permissioned voice daemon, so install both.",
+      command:
+        "brew tap etanhey/layers\nbrew install etanhey/layers/voicelayer\nbrew install --cask etanhey/layers/voicebar\nvoicelayer setup",
+      note: "Prefer npm? bun add -g voicelayer-mcp (or npm i -g voicelayer-mcp) installs just the CLI/MCP package.",
     },
     {
       step: 2,
       title: "Configure MCP",
       description:
-        "Add VoiceLayer to your Claude Code MCP configuration for persistent access.",
-      command: `// ~/.claude/settings.json
+        "VoiceLayer runs as a singleton daemon on a Unix socket — each Claude session connects through a lightweight socat shim. Add this to any repo's .mcp.json.",
+      command: `// .mcp.json
 {
   "mcpServers": {
-    "qa-voice": {
-      "command": "bunx",
-      "args": ["voicelayer-mcp"]
+    "voicelayer": {
+      "command": "socat",
+      "args": ["STDIO", "UNIX-CONNECT:/tmp/voicelayer-mcp.sock"]
     }
   }
 }`,

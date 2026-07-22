@@ -11,6 +11,14 @@ import {
   Bot,
   Zap,
   Cloud,
+  Terminal,
+  Globe,
+  GitBranch,
+  Smartphone,
+  Shield,
+  MessageSquare,
+  Layers,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import type { ProjectFeature } from "../project-showcase-config";
@@ -28,6 +36,14 @@ const icons: Record<string, LucideIcon> = {
   Bot,
   Zap,
   Cloud,
+  Terminal,
+  Globe,
+  GitBranch,
+  Smartphone,
+  Shield,
+  MessageSquare,
+  Layers,
+  Sparkles,
 };
 
 export function FeaturesGrid({
