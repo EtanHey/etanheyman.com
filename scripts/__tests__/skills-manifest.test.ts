@@ -55,6 +55,10 @@ const packageJson: PackageJson = JSON.parse(
 );
 const skillsDirAvailable = existsSync(SKILLS_DIR);
 
+/** Mirrors PROVENANCE_FILES in scripts/generate-skills-manifest.ts. */
+const PROVENANCE_FILES = ["PROVENANCE.md", "UPSTREAM.md", "ATTRIBUTION.md"];
+
+/** Every skill dir on disk, published or not. */
 function liveSkillDirs(): string[] {
   return readdirSync(SKILLS_DIR)
     .filter((d) => {
@@ -62,6 +66,29 @@ function liveSkillDirs(): string[] {
       return statSync(dir).isDirectory() && existsSync(join(dir, "SKILL.md"));
     })
     .sort();
+}
+
+/**
+ * A skill dir is third-party (installed, not authored here) when it carries a
+ * provenance/attribution file naming an upstream source. Those must never get
+ * a public page on the portfolio site.
+ */
+function isThirdParty(dir: string): boolean {
+  return PROVENANCE_FILES.some((f) => existsSync(join(SKILLS_DIR, dir, f)));
+}
+
+/** Explicit `publish: false` opt-out in SKILL.md frontmatter. */
+function optsOutOfPublishing(dir: string): boolean {
+  const raw = readFileSync(join(SKILLS_DIR, dir, "SKILL.md"), "utf-8");
+  const fm = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  return fm ? /^publish:\s*false\s*$/m.test(fm[1]) : false;
+}
+
+/** The scoped set: golems-authored skills that are eligible for a public page. */
+function publishableSkillDirs(): string[] {
+  return liveSkillDirs().filter(
+    (d) => !isThirdParty(d) && !optsOutOfPublishing(d),
+  );
 }
 
 describe("skills-manifest.json (structural)", () => {
@@ -143,6 +170,50 @@ describe("generate-skills-manifest.ts", () => {
     });
   });
 
+  it("excludes third-party and opted-out skills, keeps authored ones", () => {
+    const tempDir = mkdtempSync(join(tmpdir(), "skills-manifest-"));
+    const skillsDir = join(tempDir, "skills");
+    const outputPath = join(tempDir, "skills-manifest.json");
+
+    const writeSkill = (
+      name: string,
+      frontmatter: string,
+      extraFiles: Record<string, string> = {},
+    ) => {
+      const dir = join(skillsDir, name);
+      mkdirSync(dir, { recursive: true });
+      writeFileSync(
+        join(dir, "SKILL.md"),
+        `---\nname: ${name}\ndescription: Fixture skill\n${frontmatter}---\n\n# ${name}\n`,
+      );
+      for (const [file, body] of Object.entries(extraFiles)) {
+        writeFileSync(join(dir, file), body);
+      }
+    };
+
+    writeSkill("authored-skill", "");
+    writeSkill("vendored-skill", "", {
+      "PROVENANCE.md":
+        "- **Source:** https://github.com/someone/vendored-skill\n",
+    });
+    writeSkill("declared-upstream", "upstream: https://github.com/someone/x\n");
+    writeSkill("opted-out", "publish: false\n");
+
+    execFileSync("npx", ["tsx", "scripts/generate-skills-manifest.ts"], {
+      cwd: join(__dirname, "../.."),
+      env: {
+        ...process.env,
+        SKILLS_MANIFEST_SKILLS_DIR: skillsDir,
+        SKILLS_MANIFEST_OUTPUT: outputPath,
+      },
+      stdio: "pipe",
+    });
+
+    const generated: Manifest = JSON.parse(readFileSync(outputPath, "utf-8"));
+    expect(Object.keys(generated.skills)).toEqual(["authored-skill"]);
+    expect(generated.skillCount).toBe(1);
+  });
+
   it("filters malformed assertion entries without skipping the skill", () => {
     const tempDir = mkdtempSync(join(tmpdir(), "skills-manifest-"));
     const skillsDir = join(tempDir, "skills");
@@ -194,20 +265,37 @@ describe("generate-skills-manifest.ts", () => {
 describe.skipIf(!skillsDirAvailable)(
   "skills-manifest.json (parity with live skills dir)",
   () => {
-    it("covers every skills/golem-powers dir that has a SKILL.md", () => {
-      const live = liveSkillDirs();
+    it("covers exactly the golems-authored skills (not every skill on disk)", () => {
+      const publishable = publishableSkillDirs();
       const inManifest = Object.keys(manifest.skills).sort();
-      const missing = live.filter((d) => !inManifest.includes(d));
-      const extra = inManifest.filter((d) => !live.includes(d));
+      const missing = publishable.filter((d) => !inManifest.includes(d));
+      const extra = inManifest.filter((d) => !publishable.includes(d));
       expect(
         missing,
-        `skills on disk but missing from manifest (rerun: npm run generate:skills): ${missing.join(", ")}`,
+        `golems-authored skills missing from manifest (rerun: npm run generate:skills): ${missing.join(", ")}`,
       ).toEqual([]);
       expect(
         extra,
-        `manifest entries with no matching skill dir on disk: ${extra.join(", ")}`,
+        `manifest entries that are not golems-authored skill dirs: ${extra.join(", ")}`,
       ).toEqual([]);
-      expect(manifest.skillCount).toBe(live.length);
+      expect(manifest.skillCount).toBe(publishable.length);
+    });
+
+    it("never publishes a third-party (installed) skill", () => {
+      const thirdParty = liveSkillDirs().filter(isThirdParty);
+      const leaked = thirdParty.filter((d) => d in manifest.skills);
+      expect(
+        leaked,
+        `third-party skills leaked into the public manifest: ${leaked.join(", ")}`,
+      ).toEqual([]);
+    });
+
+    it("excludes i-have-adhd, which is installed from an upstream repo", () => {
+      // Regression guard for the concrete case: i-have-adhd is vendored from
+      // github.com/ayghri/i-have-adhd and carries a PROVENANCE.md.
+      if (!liveSkillDirs().includes("i-have-adhd")) return;
+      expect(isThirdParty("i-have-adhd")).toBe(true);
+      expect(Object.keys(manifest.skills)).not.toContain("i-have-adhd");
     });
 
     it(`generatedAt is fresh (within ${FRESHNESS_DAYS} days)`, () => {

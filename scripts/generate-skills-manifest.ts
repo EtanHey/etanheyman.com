@@ -73,6 +73,58 @@ interface SkillEval {
   assertions: SkillEvalAssertion[];
 }
 
+/**
+ * Files that mark a skill as vendored from somewhere else. A skill that
+ * merely got *installed* into golem-powers (third-party, upstream-owned)
+ * carries one of these; a skill authored in the golems repo does not.
+ */
+const PROVENANCE_FILES = ["PROVENANCE.md", "UPSTREAM.md", "ATTRIBUTION.md"];
+
+/**
+ * Frontmatter keys that, when present, declare an external origin.
+ */
+const EXTERNAL_ORIGIN_KEYS = ["upstream", "source_repo", "sourceRepo"];
+
+interface PublishDecision {
+  publish: boolean;
+  reason?: string;
+}
+
+/**
+ * The portfolio site publishes a PUBLIC page per manifest entry
+ * (/golems/skills and /golems/skills/[name]). Only skills authored in the
+ * golems repo may be published — installing a third-party skill must never
+ * silently queue a public page for someone else's work.
+ *
+ * A skill is treated as NOT publishable when:
+ *   1. it carries a provenance/attribution file naming an upstream source, or
+ *   2. its frontmatter declares an external origin (`upstream:`/`source_repo:`), or
+ *   3. it opts out explicitly with `publish: false`.
+ */
+function publishDecision(
+  skillDir: string,
+  frontmatter: Record<string, unknown>,
+): PublishDecision {
+  if (frontmatter.publish === false) {
+    return { publish: false, reason: "frontmatter publish: false" };
+  }
+
+  for (const key of EXTERNAL_ORIGIN_KEYS) {
+    const value = frontmatter[key];
+    if (typeof value === "string" && value.trim().length > 0) {
+      return { publish: false, reason: `frontmatter ${key}: ${value.trim()}` };
+    }
+  }
+
+  for (const file of PROVENANCE_FILES) {
+    if (existsSync(join(skillDir, file))) {
+      return { publish: false, reason: `third-party (${file} present)` };
+    }
+  }
+
+  return { publish: true };
+}
+
 function resolveCategory(
   dir: string,
   frontmatter: Record<string, unknown>,
@@ -129,6 +181,7 @@ function generateManifest() {
 
   const skills: Record<string, unknown> = {};
   const skipped: string[] = [];
+  const notPublished: string[] = [];
   const dirs = readdirSync(SKILLS_DIR).filter((d) =>
     statSync(join(SKILLS_DIR, d)).isDirectory(),
   );
@@ -157,6 +210,13 @@ function generateManifest() {
           if (nameMatch) frontmatter.name = nameMatch[1].trim();
           if (descMatch) frontmatter.description = descMatch[1].trim();
         }
+      }
+
+      // Publish gate: only golems-authored skills get a public page.
+      const decision = publishDecision(skillDir, frontmatter);
+      if (!decision.publish) {
+        notPublished.push(`${dir} (${decision.reason})`);
+        continue;
       }
 
       // Read evals
@@ -230,6 +290,11 @@ function generateManifest() {
   console.log(
     `Generated manifest: ${Object.keys(skills).length} skills → ${OUTPUT}`,
   );
+  if (notPublished.length > 0) {
+    console.log(
+      `[skills-manifest] Not published (not golems-authored / opted out): ${notPublished.join(", ")}`,
+    );
+  }
   if (skipped.length > 0) {
     console.warn(
       `[skills-manifest] Skipped ${skipped.length} skill(s) due to errors: ${skipped.join(", ")}`,
