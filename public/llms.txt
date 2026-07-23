@@ -1,0 +1,38 @@
+# Etan Heyman
+
+> AI Infrastructure Engineer. Building open-source tools for AI coding agents.
+
+Etan Heyman builds the layer underneath AI coding agents: persistent memory, voice I/O,
+terminal orchestration, and an agent skill system. The work is MCP-native (Model Context
+Protocol), ships as installable open-source packages and native macOS daemons, and is used
+daily to run multi-agent development workflows on real production repos.
+
+Based in Israel. Works in English and Hebrew.
+
+## Flagship projects
+
+- [BrainLayer](https://github.com/EtanHey/brainlayer): Persistent memory for AI agents. MCP server with 12 tools (search / store / recall + knowledge graph), hybrid semantic + FTS5 search over 313K+ deduplicated chunks via sqlite-vec, plus BrainBar — a native Swift macOS daemon serving MCP over a Unix socket. Site: https://brainlayer.etanheyman.com
+- [cmuxLayer](https://github.com/EtanHey/cmuxlayer): Terminal orchestration for AI agents. 21 MCP tools across surface control, agent lifecycle (spawn / stop / send-to), and Playwright browser surfaces — 1,423x socket speedup over the shell-out approach. Site: https://cmuxlayer.etanheyman.com
+- [VoiceLayer](https://github.com/EtanHey/voicelayer): Bi-directional voice I/O for AI assistants. VoiceBar MCP daemon with LaunchAgent auto-start, TTS via edge-tts and STT via whisper.cpp (~300ms round trip), exposed as two MCP tools (voice_speak, voice_ask). Site: https://voicelayer.etanheyman.com
+- [WhatsApp MCP](https://github.com/EtanHey/whatsapp-mcp): Hebrew-compatible WhatsApp MCP fork. Fixes Unicode search, adds dual-bridge personal + business auto-detection and a self-chat safety mode. 12 MCP tools for reading and sending messages.
+- Golems: Autonomous multi-agent ecosystem — the orchestration layer that drives the tools above. Domain agents, a versioned skill system with evals, multi-LLM routing, and scheduled autonomous coding runs. Overview: https://www.etanheyman.com/projects/golems — skills catalog: https://www.etanheyman.com/golems/skills
+
+## Site map
+
+- [Home](https://www.etanheyman.com/): Positioning, featured projects, current focus.
+- [About](https://www.etanheyman.com/about): Background, timeline, and technology stack.
+- [Projects](https://www.etanheyman.com/projects): Full project index, open-source and client work.
+- [Golems docs](https://www.etanheyman.com/golems): Architecture, getting started, and agent-skill documentation.
+- [Golems skills](https://www.etanheyman.com/golems/skills): Catalog of authored agent skills, each with its eval coverage.
+- [Contact](https://www.etanheyman.com/contact): Direct contact form and email.
+
+## Resume
+
+- [Resume (PDF)](https://www.etanheyman.com/Etan_Heyman_resume.pdf): Full CV — roles, stack, and shipped projects.
+
+## Contact
+
+- Email: etan@heyman.net
+- GitHub: https://github.com/EtanHey
+- LinkedIn: https://www.linkedin.com/in/etanheyman
+- Location: Israel
