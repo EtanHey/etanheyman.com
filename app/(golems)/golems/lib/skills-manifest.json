@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-23T14:06:53.076Z",
-  "skillCount": 77,
+  "generatedAt": "2026-08-03T13:05:14.053Z",
+  "skillCount": 81,
   "skills": {
     "1password": {
       "name": "1password",
@@ -49,7 +49,7 @@
         "troubleshoot",
         "use-environment"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "adversarial-council": {
       "name": "adversarial-council",
@@ -62,7 +62,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "agada-bench": {
       "name": "agada-bench",
@@ -82,16 +82,16 @@
         "pending-rt-routing",
         "run-bench"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "agent-routing": {
       "name": "agent-routing",
       "command": "/agent-routing",
       "description": "Enforce Cursor=gather, Codex=implement, Claude=orchestrate. Triggers: delegate, worker assignment, routing.",
       "category": "Other",
-      "content": "\n# Agent Routing — CLI Tool Assignment Matrix\n\n> Fleet law: canon #1 owns Cursor=gather, Codex=implement, Claude=orchestrate. This skill keeps routing mechanics, delegation checks, eval-backed anti-patterns, and prompt templates. Launcher/model law lives in canon #5/#6 plus `/repogolem`.\n\n> **Auto-dispatch triggers** (canonical in orc/SKILL.md C4): batch reads ≥3, transcription ≥2,\n> web research ≥1, or any \"in parallel\" / \"all of these\" phrasing → fan out sub-agents\n> in the SAME message before asking permission.\n\n---\n\n## Launcher Pointer\n\nagent-routing chooses **who** does the work. `/repogolem` owns **how** to launch the worker, including `-s`, `-c`, `-w`, raw CLI escape hatches, and model override bans.\n\n```bash\nbrainlayerCursor -s \"one-sentence task prompt here\"     # gather / read-only\nbrainlayerCodex  -s \"one-sentence task prompt here\"     # implement\n```\n\nVisible cmux pane workers use repoGolem launchers, not raw `cursor`/`codex`/`claude`, copied env vars, manual `cd`, or `--fast`. Internal ephemeral subagents are a separate harness: explicit model selection is allowed only through that harness's real model field/`-m`, never through a `--fast` alias.\n\n---\n\n## Task -> Model Override Table\n\nUse this table after the role matrix chooses the worker type. It is a deliberate\noverride surface, not a quota-saving excuse: defaults are not limits, judge\noutput quality instead of price tag, and apply `intelligence > taste > cost`.\nCost is a tie-breaker only; in this column, a higher score means more economical\nor more available for the task.\n\n`model-pin-gate` blocks accidental Fable inheritance. When it blocks, pin one of\nthe exact rows below, or use explicit Fable only from an apex orchestration seat.\nThe gate block message already points here; this table points back to that pin\nlaw without duplicating its hook logic.\n\n| model | cost | intelligence | taste | default work |\n|---|---:|---:|---:|---|\n| `gpt-5.5` (via `codex exec`) | 9 | 8 | 5 | Bulk/mechanical work, implementation, refactors, debugging, tests, verification, and an extra review perspective. For visible workers, still use `{repo}Codex -s`; `codex exec` is only for an internal harness/thin `sonnet` wrapper that writes a self-contained Codex prompt and returns a digest. |\n| `gpt-5.3-codex-spark` | separate pool; score pending | measure-first | measure-first | Weekly-pool wall override for implementation-shaped load only. For visible workers, still use repoGolem launcher policy; the explicit example `codex exec -m gpt-5.3-codex-spark -c model_reasoning_effort=\"medium\" ...` is internal-harness only, as is the equivalent Codex model field. Pin `model_reasoning_effort` per call, verify the session `\"model\"` field, and do NOT route bulk transcript grep-and-cite mining to Spark until an effort-pinned retest clears it. |\n| `sonnet` | 5; floor ~$0.03/call | 5 | 7 | Thin Claude wrappers, low-cost coordination, routine synthesis, and user-facing work that needs taste >=7 but not Opus-level reasoning. |\n| `claude-opus-4-8[1m]` | 4; floor ~$0.09/call | 7 | 8 | Reviews, contested decisions, taste-sensitive writing, long-context synthesis, and reasoning where the extra judgment beats the token cost. Do not use it for token-grinding intake. |\n| `haiku` | floor ~$0.01/call; no policy score | measure-first | measure-first | Retained only as a measurement candidate. No policy default until benched; \"never Haiku\" is a hypothesis to test, not dogma. |\n\nFable is apex-orchestration only; post-2026-07-07 Fable usage spends usage\ncredits. Do not add a scored Fable row for general worker routing; current\npricing-floor lint uses ~$0.18/call as the Fable floor when it appears in gate\nconfigs.\n\nReasoning effort is per tool call and should follow work shape, not model name.\nAct as though nothing right of `high` exists unless a specific eval proves the\nextra spend pays for itself; `ultracode` means `high` plus more spins, not a\nblank check for `max` effort.\n\nGrounding: Theo Gem-6 table (`docs.local/sprint/weave-2026-07-06-drift/sources/theo-fable-video-gems.md`), runbook delta notes (`docs.local/skills-audit-notes.md:151,177`), budget-floor pricing (`skill-creator/hooks-lab/gates/budget-floor-lint/SKILL.md`), and the paired pin law in `skill-creator/hooks-lab/gates/model-pin-gate`.\n\n---\n\n## The Routing Matrix\n\n| Tool | Role | What It Does | What It NEVER Does |\n|------|------|-------------|-------------------|\n| **Cursor** | Data gathering | SQL queries, file scanning, codebase search, grep, read-only lookups, audit scans | Code changes, implementations, PRs, decisions |\n| **Codex** | Implementation | Code changes, bug fixes, refactoring, test writing, PRs | Research, data gathering, orchestration |\n| **Gemini (CLI)** | Visual heavy-lift | Frame batches, OCR, image-heavy /qa-video work, screenshot review, visual UI critique | Codebase changes, multi-file refactors, long human-fluid sessions |\n| **Claude** | Orchestration | Coordination, user interaction, decisions, synthesis, BrainLayer queries, monitoring, long human-fluid sessions | SQL queries, bulk file reads, code implementation, bulk image reads |\n\nUse this matrix to split mixed tasks: Cursor gathers, Codex implements, Claude orchestrates and reviews. Keep role-specific exceptions in the goal/collab brief.\n\n## Lead Topology\n\nDomain LEADs (brainlayerClaude, voicelayerClaude, phx-LEAD, skillCreatorClaude, …) are orchestrators one tier down from orc. The same routing matrix applies to them:\n\n1. LEADs delegate implementation to Codex workers and keep their own worker monitor loop (canon #1/#7).\n2. Lead goals must preserve orchestration duties: spawn/delegate, maintain health gates, synthesize, and verify.\n3. Lead topology must be managed: a lead is an `agent_id` with `role:\"orchestrator\"` and left-column placement.\n4. Tiny lead self-edits must be bounded, disclosed in the active collab, and isolated; larger work routes to a Codex+Claude pair.\n5. Workflow/subagent fan-out is read-only recon/verification/synthesis except audio-dashboard builds; code implementation uses visible Codex-implements + Claude-reviews pairs.\n\n## GOAL DELEGATION CONTRACT (2026-06-26 cmux remediation)\n\nRouting is not only tool choice. A correct route must preserve the full user mission and attach it to the right existing worker.\n\nBefore delegating or re-delegating a lane:\n\n1. **Reuse before spawn.** If the user references an existing cmux pane/agent, or the same repo/workspace/role lane already has a managed worker, reuse it unless it is dead, unhealthy, or the user explicitly asks for a replacement. Do not spawn a duplicate just to get a cleaner prompt.\n2. **Supersede narrow goals, don't fork the lane.** If the existing worker has a stale or too-narrow prompt, send one explicit superseding goal to that same `agent_id`.\n3. **Preserve the full delegation.** Copy the user's whole mission into the goal contract. Do not shrink a broad baseline/cleanup/planning request to the next local blocker. For BrainLayer baseline work, include PR/branch/worktree state, service health, queue/deferred-store replay, watcher coverage, real stats, data-retention constraints, and green/no-green criteria when those are part of the ask.\n4. **Use a file-backed goal contract.** For complex or multi-hour work, write an absolute goal file first. Delivery syntax is harness-specific:\n\n```text\nCodex, only when verified: /goal Read and execute this goal file until complete: /abs/path/to/goal.md\nGemini/Antigravity: Read and execute this goal file until complete: /abs/path/to/goal.md\nCursor: use its verified goal command or a plain file-contract message; if the UI shows a duplicated footer prompt, verify accepted/working state before resending.\n```\n\nThe goal file must include hard constraints, success criteria, report path, exact DONE marker, and green/no-green decision criteria.\n\n5. **Monitor artifacts, not vibes.** After the goal is delivered, conserve lead context: wait on the report file/DONE marker and low-frequency health checks. Do not repeatedly read large pane scrollback unless debugging delivery, registry/screen disagreement, or a wedged prompt.\n6. **File completion beats pane silence.** If the contracted report exists and ends with the required DONE marker, read the report and advance synthesis. If cmux `wait_for`/registry/pane state disagrees, record that as cmux health evidence; do not rerun the lane just because the pane did not send a final chat message.\n7. **Zero workers must mean terminal state.** Do not close/stop/archive a worker just to make a workspace clean. A lane may disappear only after its collab row records `DONE` with verified report marker, `BLOCKED`/`NOT_GREEN` with file-backed handoff, or `TRANSFERRED` with successor `agent_id` and delivery evidence. Otherwise record `closure_without_artifact` and keep the lane visible.\n8. **Green means real green.** PRs merged, CI green, or a UI showing 100% are insufficient for infra baseline claims. Verify the domain-specific health criteria in the goal file before saying green. If queue/deferred stores, unwatched roots, missing vectors, or probe/coverage gaps remain, say `NOT_GREEN`.\n9. **User confusion is a stop sign.** If the user asks why work is happening, says the agent is confused, or corrects the route, pause further spawning/patching and explain current state from evidence before taking more tool actions. Store the correction separately; do not use memory capture as permission to keep doing unrelated work.\n10. **Raw/orphan escape hatches must converge back to managed routing.** If a raw surface send, interrupted spawn, or orphan pane is used to unblock a lane, immediately recover/register or replace it with a managed `agent_id` and correct role/topology before treating it as production.\n\n## Delegated Authority\n\nFleet law for approved queues, permission parking, and route-through-leads lives in canon #8. Routing mechanics:\n\n1. Checkpoint branch, commit/PR, worker `agent_id`, report path, DONE marker, service/MCP state, and exact blocker.\n2. If in scope and recoverable, continue through `/pr-loop`, restart/reload/re-index, or rebuild as needed.\n3. If the current agent cannot reconnect after a restart, spawn or resume a managed successor with the same goal file and handoff path.\n4. Verify with the real post-operation probe before reporting green.\n5. Ask Etan only for truly irreversible or outside-mission actions: destructive data deletion, force-push/history rewrite, unowned-work cleanup, credential/account changes, paid external actions, or human-only license/ToS acceptance.\n\n## Gemini Visual Exception\n\nThe user has explicitly named Gemini for these triggers (this is policy, not Claude's preference):\n\n- User pastes a video URL + says \"extract\" / \"analyze\" / \"process this video\"\n- Frame-by-frame OCR / vision read across many frames (`/qa-video`)\n- Visual UI critique / screenshot review when there are multiple screenshots\n- Anything where the natural plan is \"spawn `claude` to read 30 frames\" — switch to `gemini` and save Claude's 1M context for orchestration\n\n`/qa-video` owns the Gemini-for-visuals workflow. Tool-surface changes (Cursor SDK, model IDs, vendor defaults) route through `/whats-new`; they do not change canon #1 without an explicit policy update.\n\n---\n\n## DECISION TREE\n\nWhen you have a task to assign, walk this tree:\n\n```\nIs it a READ-ONLY operation? (query, scan, search, audit, lookup)\n├── YES → CURSOR\n│   Examples: SQL queries, grep patterns, file listing, codebase audit,\n│   \"what does this function do?\", \"find all usages of X\"\n│\n└── NO → Does it change code or files?\n    ├── YES → CODEX\n    │   Examples: bug fix, refactor, new feature, test writing,\n    │   \"implement X\", \"fix the bug in Y\", \"add tests for Z\"\n    │\n    └── NO → Is it coordination, synthesis, or decision-making?\n        ├── YES → CLAUDE (you)\n        │   Examples: plan review, collab kickoff, agent monitoring,\n        │   BrainLayer queries, user interaction, research routing\n        │\n        └── UNCLEAR → Default to CURSOR for the data-gathering phase,\n            then CODEX for any resulting implementation.\n            Split into 2 tasks if needed.\n```\n\n**Split rule:** If a task has BOTH a gathering phase and an implementation phase, split it into two tasks. Cursor gathers, writes findings to `docs.local/`. Codex reads findings and implements. Claude reviews.\n\n**Fan-out rule (parallel units → `/cursor-multitask`):** when a task decomposes into\nN independent parallel units (classify N files, audit M things, tests+docs+examples,\nparallel verification passes), invoke `/cursor-multitask` to pick the engine —\nCursor `/multitask` (in-editor GUI, `|||` syntax), headless `cursor-agent` shell\nfan-out, the Claude Workflow tool, or the cmux fleet (visible multi-vendor workers →\n`/cmux-agents`). Evaled 2026-06-05: baseline 78.6% → with_skill 100%\n(`cursor-multitask/evals/results/headless-ab-2026-06-05.json`).\n\n---\n\n## VERIFICATION GATES\n\n### Gate 1: Pre-Collab — Routing Declaration\n\nEvery collab file MUST include a routing section that declares which tool handles which task:\n\n```markdown\n## Agent Routing\n| Task | Tool | Agent ID | Surface/Workspace | Goal File | Report Path | DONE Marker | Status |\n|------|------|----------|-------------------|-----------|-------------|-------------|--------|\n| Scan BrainLayer DB schema | Cursor | agent:abc | surface:XX / workspace:1 | goals/schema.md | reports/schema.md | DONE_SCHEMA | PENDING |\n| Implement FTS5 fix | Codex | agent:def | surface:YY / workspace:1 | goals/fts5.md | reports/fts5.md | DONE_FTS5 | PENDING |\n| Coordinate + review | Claude (orcClaude) | self | self | collab.md | final-report.md | DONE_ORC | IN_PROGRESS |\n```\n\nIf a collab lacks this section, add it before spawning agents. If a row points to an existing cmux worker, reuse that `agent_id` and supersede with a full goal file instead of spawning a duplicate.\n\n### Gate 2: Mid-Sprint — Worker Utilization Check\n\nEvery monitoring cycle (cron or manual), check:\n\n1. **Is the Claude agent's context >50%?** If yes:\n   - Check if its Cursor/Codex workers have received tasks\n   - If workers are idle while Claude is burning context → VIOLATION\n   - Action: nudge the Claude agent to delegate remaining data work\n\n2. **Are Cursor/Codex surfaces alive?** Run `list_surfaces`:\n   - If a worker surface is gone (crashed/closed) → respawn immediately\n   - Don't wait for the Claude to notice — orcClaude owns surface health\n\n3. **Is the Claude doing Cursor work?** Check if Claude is running:\n   - `sqlite3` or SQL queries → should be Cursor\n   - `grep` or `find` across many files → should be Cursor\n   - `git log` analysis across repos → should be Cursor\n\n4. **Does EACH dispatching LEAD have its own monitor loop on its workers?** A lead that\n   dispatched a worker and went idle without a `/loop`/cron on it = fired-and-forgot\n   violation. Flag the LEAD, not just the worker. orc's fleet monitor catches\n   lead-busy/codex-idle inversions but does not replace the lead's own loop.\n\n5. **Is the lead over-polling instead of waiting on file-backed completion?** If a goal file defines a report path and DONE marker, prefer that artifact. Large pane scrollback reads are for delivery failures, wedged prompts, or health disputes, not routine status narration.\n\n6. **Did the lead preserve the user's full delegation?** Compare the goal file to the user's ask. If a broad baseline/cleanup mission was narrowed to one issue or one PR, mark the route invalid and supersede the same worker with the full goal.\n\n### Gate 3: Post-Sprint — Utilization Audit\n\nAfter a sprint completes, check:\n- Did each Claude agent actually use its assigned workers?\n- What % of data-gathering was done by Cursor vs Claude?\n- If Claude did >30% of the data gathering → flag for process improvement\n\n---\n\n## ANTI-PATTERNS (from real sessions)\n\n### AP1: Claude Does Everything Itself\n> \"So no cursors were run, it seems. Am I correct?\" — User, L4357\n> \"Correct. brainClaude spawned one but never executed... skillCreatorClaude never spawned one at all.\" — orcClaude, L4357-4360\n\n**Pattern:** Claude agent spawns a Cursor surface but never sends it work. Does all SQL/file scanning itself, burning 70%+ context on mechanical data extraction.\n\n**Fix:** After spawning a Cursor worker, the FIRST action must be sending it a task. Verify delivery within 15 seconds (read_screen token count check).\n\n### AP2: Cursor Used for Code Changes\n> \"I stopped Cursor because it seems like it sent it to do things I'm not looking for anyone to do things. This is research.\" — User, L4514-4517\n\n**Pattern:** Cursor agent receives a task that includes implementation instructions, starts making code changes.\n\n**Fix:** Cursor prompts must include: `\"READ-ONLY: Do NOT modify any files. Report findings to [output path]. Exit when done.\"`\n\n### AP3: Wrong Model on Worker\n\n> \"brainlayer cursor scan is GPT-5.4. What the hell?\" — User, L3822\n\n**Pattern:** Worker launched with a specific expensive model when Auto/default would suffice.\n\n**Fix:** For visible workers, route by role here and use launcher/model policy from canon #5 plus `/repogolem`. Cursor data-gathering defaults to Auto/no model override unless a task explicitly requires a current Max Mode model ID.\n\n### AP4: Claude Implements When It Should Orchestrate\n> brainClaude started implementing code fixes when it should only orchestrate — L4525-4548\n\n**Pattern:** A Claude agent assigned as coordinator starts writing code itself instead of dispatching to Codex.\n\n**Fix:** Claude agents in a collab with assigned Codex workers must NEVER use Write/Edit tools for implementation. Exception: collab file updates, docs, research prompts.\n\n### AP5: Orc Burns Context on Content Creation\n> orcClaude spent hundreds of lines writing research prompts, project files, and context docs directly — L343-598, 876-895\n\n**Pattern:** Orchestrator writes long documents (research prompts, project descriptions) instead of delegating to a subagent or worker.\n\n**Fix:** If a document will be >50 lines, delegate writing to a subagent. orcClaude should outline (5-10 bullet points) and assign, not draft 100-line documents.\n\n---\n\n## INTEGRATION WITH OTHER SKILLS\n\nThis skill is a **building block** used by higher-level skills:\n\n| Skill | How It Uses Agent Routing |\n|-------|--------------------------|\n| `/orc` | Iron Rules R28+ reference this routing matrix |\n| `/cmux-agents` | spawn-agent uses routing to pick CLI type |\n| `/large-plan` | Phase assignment uses routing for tool selection |\n| `/pr-loop` | Implementation phases route to Codex, review to Cursor |\n| `/collab` | Collab template includes routing declaration section |\n\n---\n\n## AP6: False Tool Limitations (April 6, 2026)\n> brainClaude: \"Cursor Pro hit usage limit — can't use for audits this cycle\"\n> User: \"CORRECTION: Cursor Pro does NOT have a usage limit\"\n\n**Pattern:** Agent assumes a tool has a usage cap and skips work. brainClaude skipped Cursor audits on PR #212-216 citing a nonexistent \"Cursor Pro usage limit.\" The actual issue was Max Mode has a daily cap, but regular `cursor agent` mode is **unlimited** on Pro.\n\n**Fix:** Cursor Pro limitations:\n- `cursor agent \"prompt\"` (default model) — **UNLIMITED**. Use for all audits.\n- `cursor agent --model \"<cursor-max-mode-model>\" \"prompt\"` (Max Mode) — has daily cap. Use Cursor's current Max Mode model ID; verify the picker via `cursor agent --help` or the Cursor changelog. (Historic example: `gpt-5.2-codex-xhigh` was the Max Mode pick at one point; do NOT hardcode — the user wants Cursor on Auto by default per R28.)\n- **NEVER skip audits citing \"usage limit.\"** Switch to default model instead.\n\n## AP7: Trusting Codex's Text Response About Its Own Model (April 15, 2026)\n\n> Codex output: \"I'm running as gpt-5.4...\"\n> Actual session metadata: `\"model\":\"gpt-5.3-codex-spark\"`\n\n**Pattern:** Agent asks Codex which model it is, or reads Codex's self-description, and treats that text as authoritative. Codex's text response consistently says \"gpt-5.4\" regardless of which model is actually running. This masks misrouted launches because the self-id stays the same even when the actual session model changes.\n\n**Fix:** Never trust Codex's self-identification. The **source of truth** is the session JSONL, and you must read the `\"model\"` field directly:\n\n```bash\n# Today's sessions — model field is the source of truth\ngrep -h -E '\"model\":' ~/.codex/sessions/$(date +%Y/%m/%d)/*.jsonl | sort -u\n\n# Specific date\ngrep -h -E '\"model\":' ~/.codex/sessions/2026/04/15/*.jsonl | sort -u\n```\n\n`\"model\":\"gpt-5.3-codex-spark\"` confirms Spark. Check immediately after the task starts — don't ask Codex.\n\n## AP9: Using Raw `codex` Instead of repoGolem Launchers (April 15, 2026)\n\n> 19/19 sessions violated — 100% bypass rate.\n\n**Pattern:** Agent spawns `codex \"prompt\"` directly instead of using `{repo}Codex -s` launcher.\n\n**Why it's wrong:** No cd to repo dir, no iTerm profile, no model preset, no workspace isolation.\n\n**Fix:** ALWAYS use `{repo}Codex` launcher (e.g., `golemsCodex -s`, `brainlayerCodex -s`). Use `--raw` escape hatch for edge cases only.\n\n**Evidence:** `batch-M6-codex.md` — 0/19 used launchers.\n\n## AP10: Skill/Hook Authorship Bypassing skillCreator (2026-05-16, incident-2026-05-16)\n\n> Source: yashClaude + MainCodex session-mining 2026-05-16. brainbar-c95a8f3a-508 (audit), brainbar-9e70b920-079 (yashClaude mine), brainbar-fab97680-5ea (MainCodex mine), brainbar-ff137da8-e10 (routing-violation log).\n\n**Pattern:** An orchestrator agent (yashClaude here) dispatches an implementation agent (MainCodex) with a mission that includes editing or creating files under `~/.claude/skills/**` or `~/.claude/hooks/**` — bypassing skillCreator (whose domain those paths are).\n\n**Concrete example from 2026-05-16:** yashClaude at L3191 of its session sent MainCodex the full 4-layer Daemon Verification Gate mission, which included modifying `~/.claude/skills/golem-powers/pr-loop/SKILL.md` + creating `~/.claude/hooks/daemon-gate-precheck.py` + registering it in `~/.claude/settings.json`. MainCodex shipped all four layers cleanly — but the work passed through ZERO skillCreator audit before merge. Quality was fine in this case (skillCreator post-hoc audit found SHIP-grade hygiene per brainbar-c95a8f3a-508) but the ROUTING was wrong.\n\n**Why it's wrong:** Skills + hooks are skillCreator's domain. The skillCreator agent has the expertise for skill description-triggering, hook PreToolUse stdout protocol (the legacy `sys.exit(0)` empty-stdout pattern was a bug fixed at brainbar today), failure-mode catalog discipline, and `/skill-creator` audit standards. Sending these to Codex or any other agent risks shipping with a stale convention or missing audit step.\n\n**Fix — orchestrators MUST route-check before dispatch:**\n1. Before sending a mission to ANY worker, grep the mission text for path patterns: `~/.claude/skills/`, `~/.claude/hooks/`, `~/.claude/agents/`, `~/.claude/CLAUDE.md`, `settings.json`.\n2. If ANY match: re-route the touching parts of the mission to skillCreator (spawn skillCreator subagent if needed), OR add an explicit skillCreator-audit step BEFORE the worker's PR merges.\n3. If the orchestrator IS skillCreator, no re-route needed.\n\n**Fix — workers MUST route-check before patching:**\n1. When a worker receives a mission, before its first Edit/Write to a `~/.claude/skills/**` or `~/.claude/hooks/**` path, brain_search(\"agent-routing skillCreator domain\") to confirm.\n2. If skillCreator is NOT already in the loop, send the orchestrator a route-check signal: \"`This task touches skillCreator-domain files. Re-route or add skillCreator audit?`\"\n3. Pause the patch until orchestrator confirms.\n\n**Evidence:** Two acknowledgements landed only POST-incident — MainCodex's retirement brain_store (\"future changes under ~/.claude/skills/** and ~/.claude/hooks/** should route through skillCreator ownership\") and yashClaude's handoff note. Catching it mid-flight would have prevented the routing violation (output quality was fine, but the principle matters for next time).\n\n**Test for compliance:** When you (the orchestrator OR the worker) are about to Edit a file under `~/.claude/skills/**` or `~/.claude/hooks/**`, did skillCreator review the change first? If no → STOP. Route through skillCreator.\n\n## AP11: Verbose Launcher Invocation Instead of `{repo}{Tool} -s` (2026-05-21, severity-10 user mandate)\n\n**Pattern:** Agents dispatch visible cmux pane workers with raw CLIs, manual `cd`, copied env vars, or ad hoc flags instead of repoGolem launchers.\n\n```bash\n{repo}{Tool} -s \"prompt\"\n```\n\nDetailed flag behavior, model bans, headless mode, worktree launching, and registry precedence live in `/repogolem` and canon #6. agent-routing only checks that the worker type matches the task.\n\nLaunchers handle cwd, MCP wiring, env vars, iTerm profile, secrets, and tab metadata; duplicating that ceremony is a routing smell.\n\n## SPAWN INFRASTRUCTURE DEFAULTS (added 2026-04-29)\n\nLauncher skip-perms and registry precedence live in canon #6 plus `/repogolem`. Routing still decides when isolation is needed:\n\n| Scenario | Use |\n|---|---|\n| Sequential specialist (one at a time, like W13 → W22 → W23) | `git checkout -b fix/foo` in main repo. No worktree, no sandbox. One canonical app. |\n| Truly parallel work, NO file overlap (Round 1-style sprint) | Native `git worktree` is fine. Verify MCP/config paths explicitly. Still no restrictive sandbox. |\n| Parallel work WITH file overlap | Force serialize. Don't try to parallelize. |\n\n### Cross-references\n- Native `git worktree`: create only for real isolation needs, then verify MCP/config paths\n- `/repogolem` skill: launcher flag reference (`-s` mappings already correct)\n- `/orc` skill: pre-relay verification rule (Rule added 2026-04-29 to stop relaying stale evidence from workers)\n\n## Usage Budget\n\nFleet model/usage law lives in canon #5. For routing, manage usage by dispatch-counting, splitting broad work into bounded workers, and avoiding unnecessary duplicate spawns.\n\n---\n\n## SELF-CHECK: Am I About to Violate R28?\n\n**Run this check before EVERY Write/Edit/Bash-with-code-changes:**\n\n```\nPAUSE. Am I about to Write/Edit code?\n├── Am I an orchestrator (orcClaude, or coordinating a collab)?\n│   ├── YES → VIOLATION. Route to Codex/Cursor via cmux.\n│   │   Exception: collab files, docs, research prompts, or Rule 7 tiny-unblocker edits\n│   └── NO → Am I a domain agent (mehayomClaude, voiceClaude, etc.)?\n│       ├── YES + no Codex worker assigned → OK (you ARE the implementer)\n│       └── YES + Codex worker assigned → VIOLATION. Send to your Codex.\n└── Does this exceed ANY Rule 7 tiny-unblocker bound? → Route to a Codex+Claude pair.\n```\n\n**From JSONL data (April 1-6, 2026):** Orchestrator sessions averaged 80+ Write/Edit calls per session. The worst had 190. The R28 target is <30 for orchestrators.\n\n---\n\n## QUICK REFERENCE — Copy-Paste for Collab Templates\n\n```markdown\n## Agent Routing (MANDATORY)\n\n| Task | Tool | Rationale |\n|------|------|-----------|\n| [data gathering task] | Cursor (read-only) | Scanning, no changes needed |\n| [implementation task] | Codex | Code changes, needs reasoning |\n| [coordination task] | Claude | Orchestration, user interaction |\n\n**Rules:**\n- Cursor prompts MUST include \"READ-ONLY: Do NOT modify any files\"\n- Codex gets findings from Cursor's output, not raw data\n- Visible worker launch form is `{repo}{Tool} -s \"prompt\"`; `/repogolem` owns launcher details.\n- Reuse existing managed workers before spawning; if the mission changed, supersede with one file-backed goal contract using that harness's adapter syntax\n- Goal files preserve the full user delegation and include report path, DONE marker, and green/no-green criteria\n- Workflow/subagent fan-out is read-only recon/verification/synthesis except audio-dashboard builds; code implementation uses visible Codex-implements + Claude-reviews pairs, except for the bounded tiny-unblocker carve-out in Rule 7\n- Leads monitor report files/DONE markers and low-frequency health, not high-frequency pane narration\n- Zero worker panes means every lane is DONE, BLOCKED/NOT_GREEN with handoff, or TRANSFERRED; never close unfinished work for cleanliness\n- Claude reviews Codex's PR, doesn't implement itself\n- If a worker crashes, respawn within 60 seconds\n```\n",
-      "evalCount": 23,
-      "assertionCount": 0,
+      "content": "\n# Agent Routing — CLI Tool Assignment Matrix\n\n> Fleet law: canon #1 owns Cursor=gather, Codex=implement, Claude=orchestrate. This skill keeps routing mechanics, delegation checks, eval-backed anti-patterns, and prompt templates. Launcher/model law lives in canon #5/#6 plus `/repogolem`.\n\n> **Auto-dispatch triggers** (canonical in orc/SKILL.md C4): batch reads ≥3, transcription ≥2,\n> web research ≥1, or any \"in parallel\" / \"all of these\" phrasing → fan out sub-agents\n> in the SAME message before asking permission.\n\n---\n\n## Launcher Pointer\n\nagent-routing chooses **who** does the work. `/repogolem` owns **how** to launch the worker, including `-s`, `-c`, `-w`, raw CLI escape hatches, and model override bans.\n\n```bash\nbrainlayerCursor -s \"one-sentence task prompt here\"     # gather / read-only\nbrainlayerCodex  -s \"one-sentence task prompt here\"     # implement\n```\n\nVisible cmux pane workers use repoGolem launchers, not raw `cursor`/`codex`/`claude`, copied env vars, manual `cd`, or `--fast`. Internal ephemeral subagents are a separate harness: explicit model selection is allowed only through that harness's real model field/`-m`, never through a `--fast` alias.\n\n---\n\n## Model & Effort: Decide From the Mission\n\nEffort is a mission choice, not a model personality trait. **Default to `high` so\nthe seat is never accidentally too low, then pass `-E` explicitly for every\nrepoGolem Codex mission.** Inheriting `high` is allowed only when you can explain\nwhy it fits; inheritance must be a choice, not an accident.\n\nAsk these questions in order:\n\n1. **Is the lane bounded, mechanical, and independently verifiable?** Exact diff\n   shape, established pattern, focused tests, binary rubric, and trivial rollback\n   all point to `medium`. This is Etan's settled floor for well-specified\n   implementation lanes; important work does not become `xhigh` merely because it\n   matters.\n2. **Does the lane still contain open-ended implementation or judgment?** Novel\n   decomposition, error semantics, or non-trivial review defaults to Sol at\n   `high`.\n3. **Is the reasoning genuinely hard in a way more tokens can help?**\n   Nondeterministic debugging, contradictory evidence, adversarial verification,\n   or design under conflicting requirements can justify Sol at `xhigh`. Do not\n   turn that exception into a fleet default.\n4. **Would `max` materially beat `xhigh` here?** The general answer is **NOT\n   KNOWN**. Use `max` only when a mission-specific eval proves the extra spend\n   pays; repoGolem currently rejects `max`, so never claim it was selected through\n   `-E`.\n5. **Is the model choice measured for this work shape?** Luna\n   (`gpt-5.6-luna`) is a reasonable candidate for bounded mechanical, pattern, and\n   audit work; Sol (`gpt-5.6-sol`) is the default for open-ended implementation.\n   That Luna direction rests on one qualified head-to-head at `medium`: Luna\n   scored ACCEPT and tied code taste at roughly 21x lower reported cost, but the\n   inputs were cumulative session totals including cache reads. Treat the ratio\n   as an upper-bound datapoint, measure output tokens and wall-clock as well as\n   token price, and do not generalize it into universal doctrine.\n\nWhat is **NOT KNOWN**: a measured Terra task-tier assignment, a broad\nper-task-class Sol/Luna benchmark, Luna-at-`max` performance, or a general rule for\nchoosing `max` over `xhigh`. Do not fill those gaps with vendor-tier intuition.\n\n### Apply the choice, then verify it\n\n- repoGolem passes effort correctly. Use, for example,\n  `brainlayerCodex -s -E medium \"<bounded mission>\"` or\n  `brainlayerCodex -s -E high \"<open-ended mission>\"`.\n- repoGolem deliberately refuses `-m/--model` for agent sessions; it does not\n  silently drop the model. When a model pin is required, use an explicitly\n  authorized raw/internal Codex spawn with both model and effort pinned rather\n  than pretending the repoGolem alias honored `-m`.\n- cmuxlayer `spawn_agent.model` has separately substituted non-alias model values\n  while reporting them honored. For every pinned run, record the **requested and\n  effective** model plus effort from the run log/session metadata. The effective\n  values, not the prompt or agent's self-identification, are the routing evidence.\n\nBefore dispatch, write one sentence for each field:\n\n```text\nMission shape: bounded/mechanical | open-ended | contradictory/adversarial\nChoice: <effective-model target> at <medium|high|xhigh|ultra>\nWhy: <signals from the mission, not task importance alone>\nDispatch: <launcher/raw internal path and explicit effort pin>\nVerification: <where the effective model+effort will be read>\nUnknowns: <anything not measured; write NOT KNOWN rather than extrapolating>\n```\n\n---\n\n## Task -> Model Override Table\n\nUse this table after the role matrix chooses the worker type. It is a deliberate\noverride surface, not a quota-saving excuse: defaults are not limits, judge\noutput quality instead of price tag, and apply `intelligence > taste > cost`.\nCost is a tie-breaker only; in this column, a higher score means more economical\nor more available for the task.\n\n`model-pin-gate` blocks accidental Fable inheritance. When it blocks, pin one of\nthe exact rows below, or use explicit Fable only from an apex orchestration seat.\nThe gate block message already points here; this table points back to that pin\nlaw without duplicating its hook logic.\n\n| model | cost | intelligence | taste | default work |\n|---|---:|---:|---:|---|\n| `gpt-5.5` (via `codex exec`) | 9 | 8 | 5 | Bulk/mechanical work, implementation, refactors, debugging, tests, verification, and an extra review perspective. For visible workers, still use `{repo}Codex -s`; `codex exec` is only for an internal harness/thin `sonnet` wrapper that writes a self-contained Codex prompt and returns a digest. |\n| `gpt-5.3-codex-spark` | separate pool; score pending | measure-first | measure-first | Weekly-pool wall override for implementation-shaped load only. For visible workers, still use repoGolem launcher policy; the explicit example `codex exec -m gpt-5.3-codex-spark -c model_reasoning_effort=\"medium\" ...` is internal-harness only, as is the equivalent Codex model field. Pin `model_reasoning_effort` per call, verify the session `\"model\"` field, and do NOT route bulk transcript grep-and-cite mining to Spark until an effort-pinned retest clears it. |\n| `sonnet` | 5; floor ~$0.03/call | 5 | 7 | Thin Claude wrappers, low-cost coordination, routine synthesis, and user-facing work that needs taste >=7 but not Opus-level reasoning. |\n| `claude-opus-4-8[1m]` | 4; floor ~$0.09/call | 7 | 8 | Reviews, contested decisions, taste-sensitive writing, long-context synthesis, and reasoning where the extra judgment beats the token cost. Do not use it for token-grinding intake. |\n| `haiku` | floor ~$0.01/call; no policy score | measure-first | measure-first | Retained only as a measurement candidate. No policy default until benched; \"never Haiku\" is a hypothesis to test, not dogma. |\n\nFable is apex-orchestration only; post-2026-07-07 Fable usage spends usage\ncredits. Do not add a scored Fable row for general worker routing; current\npricing-floor lint uses ~$0.18/call as the Fable floor when it appears in gate\nconfigs.\n\nReasoning effort is per tool call and should follow work shape, not model name.\nUse the Model & Effort questions above for mission-shaped escalation through\n`xhigh`. Act as though nothing right of `xhigh` exists unless a specific eval\nproves the extra spend pays for itself; `ultracode` means `high` plus more spins,\nnot a blank check for `max` or `ultra` effort.\n\nGrounding: Theo Gem-6 table (`docs.local/sprint/weave-2026-07-06-drift/sources/theo-fable-video-gems.md`), runbook delta notes (`docs.local/skills-audit-notes.md:151,177`), budget-floor pricing (`skill-creator/hooks-lab/gates/budget-floor-lint/SKILL.md`), and the paired pin law in `skill-creator/hooks-lab/gates/model-pin-gate`.\n\n---\n\n## The Routing Matrix\n\n| Tool | Role | What It Does | What It NEVER Does |\n|------|------|-------------|-------------------|\n| **Cursor** | Data gathering | SQL queries, file scanning, codebase search, grep, read-only lookups, audit scans | Code changes, implementations, PRs, decisions |\n| **Codex** | Implementation | Code changes, bug fixes, refactoring, test writing, PRs | Research, data gathering, orchestration |\n| **Gemini (CLI)** | Visual heavy-lift | Frame batches, OCR, image-heavy /qa-video work, screenshot review, visual UI critique | Codebase changes, multi-file refactors, long human-fluid sessions |\n| **Claude** | Orchestration | Coordination, user interaction, decisions, synthesis, BrainLayer queries, monitoring, long human-fluid sessions | SQL queries, bulk file reads, code implementation, bulk image reads |\n\nUse this matrix to split mixed tasks: Cursor gathers, Codex implements, Claude orchestrates and reviews. Keep role-specific exceptions in the goal/collab brief.\n\n## Lead Topology\n\nDomain LEADs (brainlayerClaude, voicelayerClaude, phx-LEAD, skillCreatorClaude, …) are orchestrators one tier down from orc. The same routing matrix applies to them:\n\n1. LEADs delegate implementation to Codex workers and keep their own worker monitor loop (canon #1/#7).\n2. Lead goals must preserve orchestration duties: spawn/delegate, maintain health gates, synthesize, and verify.\n3. Lead topology must be managed: a lead is an `agent_id` with `role:\"orchestrator\"` and left-column placement.\n4. Tiny lead self-edits must be bounded, disclosed in the active collab, and isolated; larger work routes to a Codex+Claude pair.\n5. Workflow/subagent fan-out is read-only recon/verification/synthesis except audio-dashboard builds; code implementation uses visible Codex-implements + Claude-reviews pairs.\n\n## GOAL DELEGATION CONTRACT (2026-06-26 cmux remediation)\n\nRouting is not only tool choice. A correct route must preserve the full user mission and attach it to the right existing worker.\n\nBefore delegating or re-delegating a lane:\n\n1. **Reuse before spawn.** If the user references an existing cmux pane/agent, or the same repo/workspace/role lane already has a managed worker, reuse it unless it is dead, unhealthy, or the user explicitly asks for a replacement. Do not spawn a duplicate just to get a cleaner prompt.\n2. **Supersede narrow goals, don't fork the lane.** If the existing worker has a stale or too-narrow prompt, send one explicit superseding goal to that same `agent_id`.\n3. **Preserve the full delegation.** Copy the user's whole mission into the goal contract. Do not shrink a broad baseline/cleanup/planning request to the next local blocker. For BrainLayer baseline work, include PR/branch/worktree state, service health, queue/deferred-store replay, watcher coverage, real stats, data-retention constraints, and green/no-green criteria when those are part of the ask.\n4. **Use a file-backed goal contract.** For complex or multi-hour work, write an absolute goal file first. Delivery syntax is harness-specific:\n\n```text\nCodex, only when verified: /goal Read and execute this goal file until complete: /abs/path/to/goal.md\nGemini/Antigravity: Read and execute this goal file until complete: /abs/path/to/goal.md\nCursor: use its verified goal command or a plain file-contract message; if the UI shows a duplicated footer prompt, verify accepted/working state before resending.\n```\n\nThe goal file must include hard constraints, success criteria, report path, exact DONE marker, and green/no-green decision criteria.\n\n5. **Monitor artifacts, not vibes.** After the goal is delivered, conserve lead context: wait on the report file/DONE marker and low-frequency health checks. Do not repeatedly read large pane scrollback unless debugging delivery, registry/screen disagreement, or a wedged prompt.\n6. **File completion beats pane silence.** If the contracted report exists and ends with the required DONE marker, read the report and advance synthesis. If cmux `wait_for`/registry/pane state disagrees, record that as cmux health evidence; do not rerun the lane just because the pane did not send a final chat message.\n7. **Zero workers must mean terminal state.** Do not close/stop/archive a worker just to make a workspace clean. A lane may disappear only after its collab row records `DONE` with verified report marker, `BLOCKED`/`NOT_GREEN` with file-backed handoff, or `TRANSFERRED` with successor `agent_id` and delivery evidence. Otherwise record `closure_without_artifact` and keep the lane visible.\n8. **Green means real green.** PRs merged, CI green, or a UI showing 100% are insufficient for infra baseline claims. Verify the domain-specific health criteria in the goal file before saying green. If queue/deferred stores, unwatched roots, missing vectors, or probe/coverage gaps remain, say `NOT_GREEN`.\n9. **User confusion is a stop sign.** If the user asks why work is happening, says the agent is confused, or corrects the route, pause further spawning/patching and explain current state from evidence before taking more tool actions. Store the correction separately; do not use memory capture as permission to keep doing unrelated work.\n10. **Raw/orphan escape hatches must converge back to managed routing.** If a raw surface send, interrupted spawn, or orphan pane is used to unblock a lane, immediately recover/register or replace it with a managed `agent_id` and correct role/topology before treating it as production.\n\n## Delegated Authority\n\nFleet law for approved queues, permission parking, and route-through-leads lives in canon #8. Routing mechanics:\n\n1. Checkpoint branch, commit/PR, worker `agent_id`, report path, DONE marker, service/MCP state, and exact blocker.\n2. If in scope and recoverable, continue through `/pr-loop`, restart/reload/re-index, or rebuild as needed.\n3. If the current agent cannot reconnect after a restart, spawn or resume a managed successor with the same goal file and handoff path.\n4. Verify with the real post-operation probe before reporting green.\n5. Ask Etan only for truly irreversible or outside-mission actions: destructive data deletion, force-push/history rewrite, unowned-work cleanup, credential/account changes, paid external actions, or human-only license/ToS acceptance.\n\n## Gemini Visual Exception\n\nThe user has explicitly named Gemini for these triggers (this is policy, not Claude's preference):\n\n- User pastes a video URL + says \"extract\" / \"analyze\" / \"process this video\"\n- Frame-by-frame OCR / vision read across many frames (`/qa-video`)\n- Visual UI critique / screenshot review when there are multiple screenshots\n- Anything where the natural plan is \"spawn `claude` to read 30 frames\" — switch to `gemini` and save Claude's 1M context for orchestration\n\n`/qa-video` owns the Gemini-for-visuals workflow. Tool-surface changes (Cursor SDK, model IDs, vendor defaults) route through `/whats-new`; they do not change canon #1 without an explicit policy update.\n\n---\n\n## DECISION TREE\n\nWhen you have a task to assign, walk this tree:\n\n```\nIs it a READ-ONLY operation? (query, scan, search, audit, lookup)\n├── YES → CURSOR\n│   Examples: SQL queries, grep patterns, file listing, codebase audit,\n│   \"what does this function do?\", \"find all usages of X\"\n│\n└── NO → Does it change code or files?\n    ├── YES → CODEX\n    │   Examples: bug fix, refactor, new feature, test writing,\n    │   \"implement X\", \"fix the bug in Y\", \"add tests for Z\"\n    │\n    └── NO → Is it coordination, synthesis, or decision-making?\n        ├── YES → CLAUDE (you)\n        │   Examples: plan review, collab kickoff, agent monitoring,\n        │   BrainLayer queries, user interaction, research routing\n        │\n        └── UNCLEAR → Default to CURSOR for the data-gathering phase,\n            then CODEX for any resulting implementation.\n            Split into 2 tasks if needed.\n```\n\n**Split rule:** If a task has BOTH a gathering phase and an implementation phase, split it into two tasks. Cursor gathers, writes findings to `docs.local/`. Codex reads findings and implements. Claude reviews.\n\n**Fan-out rule (parallel units → `/cursor-multitask`):** when a task decomposes into\nN independent parallel units (classify N files, audit M things, tests+docs+examples,\nparallel verification passes), invoke `/cursor-multitask` to pick the engine —\nCursor `/multitask` (in-editor GUI, `|||` syntax), headless `cursor-agent` shell\nfan-out, the Claude Workflow tool, or the cmux fleet (visible multi-vendor workers →\n`/cmux-agents`). Evaled 2026-06-05: baseline 78.6% → with_skill 100%\n(`cursor-multitask/evals/results/headless-ab-2026-06-05.json`).\n\n---\n\n## VERIFICATION GATES\n\n### Gate 1: Pre-Collab — Routing Declaration\n\nEvery collab file MUST include a routing section that declares which tool handles which task:\n\n```markdown\n## Agent Routing\n| Task | Tool | Agent ID | Surface/Workspace | Goal File | Report Path | DONE Marker | Status |\n|------|------|----------|-------------------|-----------|-------------|-------------|--------|\n| Scan BrainLayer DB schema | Cursor | agent:abc | surface:XX / workspace:1 | goals/schema.md | reports/schema.md | DONE_SCHEMA | PENDING |\n| Implement FTS5 fix | Codex | agent:def | surface:YY / workspace:1 | goals/fts5.md | reports/fts5.md | DONE_FTS5 | PENDING |\n| Coordinate + review | Claude (orcClaude) | self | self | collab.md | final-report.md | DONE_ORC | IN_PROGRESS |\n```\n\nIf a collab lacks this section, add it before spawning agents. If a row points to an existing cmux worker, reuse that `agent_id` and supersede with a full goal file instead of spawning a duplicate.\n\n### Gate 2: Mid-Sprint — Worker Utilization Check\n\nEvery monitoring cycle (cron or manual), check:\n\n1. **Is the Claude agent's context >50%?** If yes:\n   - Check if its Cursor/Codex workers have received tasks\n   - If workers are idle while Claude is burning context → VIOLATION\n   - Action: nudge the Claude agent to delegate remaining data work\n\n2. **Are Cursor/Codex surfaces alive?** Run `list_surfaces`:\n   - If a worker surface is gone (crashed/closed) → respawn immediately\n   - Don't wait for the Claude to notice — orcClaude owns surface health\n\n3. **Is the Claude doing Cursor work?** Check if Claude is running:\n   - `sqlite3` or SQL queries → should be Cursor\n   - `grep` or `find` across many files → should be Cursor\n   - `git log` analysis across repos → should be Cursor\n\n4. **Does EACH dispatching LEAD have its own monitor loop on its workers?** A lead that\n   dispatched a worker and went idle without a `/loop`/cron on it = fired-and-forgot\n   violation. Flag the LEAD, not just the worker. orc's fleet monitor catches\n   lead-busy/codex-idle inversions but does not replace the lead's own loop.\n\n5. **Is the lead over-polling instead of waiting on file-backed completion?** If a goal file defines a report path and DONE marker, prefer that artifact. Large pane scrollback reads are for delivery failures, wedged prompts, or health disputes, not routine status narration.\n\n6. **Did the lead preserve the user's full delegation?** Compare the goal file to the user's ask. If a broad baseline/cleanup mission was narrowed to one issue or one PR, mark the route invalid and supersede the same worker with the full goal.\n\n### Gate 3: Post-Sprint — Utilization Audit\n\nAfter a sprint completes, check:\n- Did each Claude agent actually use its assigned workers?\n- What % of data-gathering was done by Cursor vs Claude?\n- If Claude did >30% of the data gathering → flag for process improvement\n\n---\n\n## ANTI-PATTERNS (from real sessions)\n\n### AP1: Claude Does Everything Itself\n> \"So no cursors were run, it seems. Am I correct?\" — User, L4357\n> \"Correct. brainClaude spawned one but never executed... skillCreatorClaude never spawned one at all.\" — orcClaude, L4357-4360\n\n**Pattern:** Claude agent spawns a Cursor surface but never sends it work. Does all SQL/file scanning itself, burning 70%+ context on mechanical data extraction.\n\n**Fix:** After spawning a Cursor worker, the FIRST action must be sending it a task. Verify delivery within 15 seconds (read_screen token count check).\n\n### AP2: Cursor Used for Code Changes\n> \"I stopped Cursor because it seems like it sent it to do things I'm not looking for anyone to do things. This is research.\" — User, L4514-4517\n\n**Pattern:** Cursor agent receives a task that includes implementation instructions, starts making code changes.\n\n**Fix:** Cursor prompts must include: `\"READ-ONLY: Do NOT modify any files. Report findings to [output path]. Exit when done.\"`\n\n### AP3: Wrong Model on Worker\n\n> \"brainlayer cursor scan is GPT-5.4. What the hell?\" — User, L3822\n\n**Pattern:** Worker launched with a specific expensive model when Auto/default would suffice.\n\n**Fix:** For visible workers, route by role here and use launcher/model policy from canon #5 plus `/repogolem`. Cursor data-gathering defaults to Auto/no model override unless a task explicitly requires a current Max Mode model ID.\n\n### AP4: Claude Implements When It Should Orchestrate\n> brainClaude started implementing code fixes when it should only orchestrate — L4525-4548\n\n**Pattern:** A Claude agent assigned as coordinator starts writing code itself instead of dispatching to Codex.\n\n**Fix:** Claude agents in a collab with assigned Codex workers must NEVER use Write/Edit tools for implementation. Exception: collab file updates, docs, research prompts.\n\n### AP5: Orc Burns Context on Content Creation\n> orcClaude spent hundreds of lines writing research prompts, project files, and context docs directly — L343-598, 876-895\n\n**Pattern:** Orchestrator writes long documents (research prompts, project descriptions) instead of delegating to a subagent or worker.\n\n**Fix:** If a document will be >50 lines, delegate writing to a subagent. orcClaude should outline (5-10 bullet points) and assign, not draft 100-line documents.\n\n---\n\n## INTEGRATION WITH OTHER SKILLS\n\nThis skill is a **building block** used by higher-level skills:\n\n| Skill | How It Uses Agent Routing |\n|-------|--------------------------|\n| `/orc` | Iron Rules R28+ reference this routing matrix |\n| `/cmux-agents` | spawn-agent uses routing to pick CLI type |\n| `/large-plan` | Phase assignment uses routing for tool selection |\n| `/pr-loop` | Implementation phases route to Codex, review to Cursor |\n| `/collab` | Collab template includes routing declaration section |\n\n---\n\n## AP6: False Tool Limitations (April 6, 2026)\n> brainClaude: \"Cursor Pro hit usage limit — can't use for audits this cycle\"\n> User: \"CORRECTION: Cursor Pro does NOT have a usage limit\"\n\n**Pattern:** Agent assumes a tool has a usage cap and skips work. brainClaude skipped Cursor audits on PR #212-216 citing a nonexistent \"Cursor Pro usage limit.\" The actual issue was Max Mode has a daily cap, but regular `cursor agent` mode is **unlimited** on Pro.\n\n**Fix:** Cursor Pro limitations:\n- `cursor agent \"prompt\"` (default model) — **UNLIMITED**. Use for all audits.\n- `cursor agent --model \"<cursor-max-mode-model>\" \"prompt\"` (Max Mode) — has daily cap. Use Cursor's current Max Mode model ID; verify the picker via `cursor agent --help` or the Cursor changelog. (Historic example: `gpt-5.2-codex-xhigh` was the Max Mode pick at one point; do NOT hardcode — the user wants Cursor on Auto by default per R28.)\n- **NEVER skip audits citing \"usage limit.\"** Switch to default model instead.\n\n## AP7: Trusting Codex's Text Response About Its Own Model (April 15, 2026)\n\n> Codex output: \"I'm running as gpt-5.4...\"\n> Actual session metadata: `\"model\":\"gpt-5.3-codex-spark\"`\n\n**Pattern:** Agent asks Codex which model it is, or reads Codex's self-description, and treats that text as authoritative. Codex's text response consistently says \"gpt-5.4\" regardless of which model is actually running. This masks misrouted launches because the self-id stays the same even when the actual session model changes.\n\n**Fix:** Never trust Codex's self-identification. The **source of truth** is the session JSONL, and you must read the `\"model\"` field directly:\n\n```bash\n# Today's sessions — model field is the source of truth\ngrep -h -E '\"model\":' ~/.codex/sessions/$(date +%Y/%m/%d)/*.jsonl | sort -u\n\n# Specific date\ngrep -h -E '\"model\":' ~/.codex/sessions/2026/04/15/*.jsonl | sort -u\n```\n\n`\"model\":\"gpt-5.3-codex-spark\"` confirms Spark. Check immediately after the task starts — don't ask Codex.\n\n## AP9: Using Raw `codex` Instead of repoGolem Launchers (April 15, 2026)\n\n> 19/19 sessions violated — 100% bypass rate.\n\n**Pattern:** Agent spawns `codex \"prompt\"` directly instead of using `{repo}Codex -s` launcher.\n\n**Why it's wrong:** No cd to repo dir, no iTerm profile, no model preset, no workspace isolation.\n\n**Fix:** ALWAYS use `{repo}Codex` launcher (e.g., `golemsCodex -s`, `brainlayerCodex -s`). Use `--raw` escape hatch for edge cases only.\n\n**Evidence:** `batch-M6-codex.md` — 0/19 used launchers.\n\n## AP10: Skill/Hook Authorship Bypassing skillCreator (2026-05-16, incident-2026-05-16)\n\n> Source: yashClaude + MainCodex session-mining 2026-05-16. brainbar-c95a8f3a-508 (audit), brainbar-9e70b920-079 (yashClaude mine), brainbar-fab97680-5ea (MainCodex mine), brainbar-ff137da8-e10 (routing-violation log).\n\n**Pattern:** An orchestrator agent (yashClaude here) dispatches an implementation agent (MainCodex) with a mission that includes editing or creating files under `~/.claude/skills/**` or `~/.claude/hooks/**` — bypassing skillCreator (whose domain those paths are).\n\n**Concrete example from 2026-05-16:** yashClaude at L3191 of its session sent MainCodex the full 4-layer Daemon Verification Gate mission, which included modifying `~/.claude/skills/golem-powers/pr-loop/SKILL.md` + creating `~/.claude/hooks/daemon-gate-precheck.py` + registering it in `~/.claude/settings.json`. MainCodex shipped all four layers cleanly — but the work passed through ZERO skillCreator audit before merge. Quality was fine in this case (skillCreator post-hoc audit found SHIP-grade hygiene per brainbar-c95a8f3a-508) but the ROUTING was wrong.\n\n**Why it's wrong:** Skills + hooks are skillCreator's domain. The skillCreator agent has the expertise for skill description-triggering, hook PreToolUse stdout protocol (the legacy `sys.exit(0)` empty-stdout pattern was a bug fixed at brainbar today), failure-mode catalog discipline, and `/skill-creator` audit standards. Sending these to Codex or any other agent risks shipping with a stale convention or missing audit step.\n\n**Fix — orchestrators MUST route-check before dispatch:**\n1. Before sending a mission to ANY worker, grep the mission text for path patterns: `~/.claude/skills/`, `~/.claude/hooks/`, `~/.claude/agents/`, `~/.claude/CLAUDE.md`, `settings.json`.\n2. If ANY match: re-route the touching parts of the mission to skillCreator (spawn skillCreator subagent if needed), OR add an explicit skillCreator-audit step BEFORE the worker's PR merges.\n3. If the orchestrator IS skillCreator, no re-route needed.\n\n**Fix — workers MUST route-check before patching:**\n1. When a worker receives a mission, before its first Edit/Write to a `~/.claude/skills/**` or `~/.claude/hooks/**` path, brain_search(\"agent-routing skillCreator domain\") to confirm.\n2. If skillCreator is NOT already in the loop, send the orchestrator a route-check signal: \"`This task touches skillCreator-domain files. Re-route or add skillCreator audit?`\"\n3. Pause the patch until orchestrator confirms.\n\n**Evidence:** Two acknowledgements landed only POST-incident — MainCodex's retirement brain_store (\"future changes under ~/.claude/skills/** and ~/.claude/hooks/** should route through skillCreator ownership\") and yashClaude's handoff note. Catching it mid-flight would have prevented the routing violation (output quality was fine, but the principle matters for next time).\n\n**Test for compliance:** When you (the orchestrator OR the worker) are about to Edit a file under `~/.claude/skills/**` or `~/.claude/hooks/**`, did skillCreator review the change first? If no → STOP. Route through skillCreator.\n\n## AP11: Verbose Launcher Invocation Instead of `{repo}{Tool} -s` (2026-05-21, severity-10 user mandate)\n\n**Pattern:** Agents dispatch visible cmux pane workers with raw CLIs, manual `cd`, copied env vars, or ad hoc flags instead of repoGolem launchers.\n\n```bash\n{repo}{Tool} -s \"prompt\"\n```\n\nDetailed flag behavior, model bans, headless mode, worktree launching, and registry precedence live in `/repogolem` and canon #6. agent-routing only checks that the worker type matches the task.\n\nLaunchers handle cwd, MCP wiring, env vars, iTerm profile, secrets, and tab metadata; duplicating that ceremony is a routing smell.\n\n## SPAWN INFRASTRUCTURE DEFAULTS (added 2026-04-29)\n\nLauncher skip-perms and registry precedence live in canon #6 plus `/repogolem`. Routing still decides when isolation is needed:\n\n| Scenario | Use |\n|---|---|\n| Sequential specialist (one at a time, like W13 → W22 → W23) | `git checkout -b fix/foo` in main repo. No worktree, no sandbox. One canonical app. |\n| Truly parallel work, NO file overlap (Round 1-style sprint) | Native `git worktree` is fine. Verify MCP/config paths explicitly. Still no restrictive sandbox. |\n| Parallel work WITH file overlap | Force serialize. Don't try to parallelize. |\n\n### Cross-references\n- Native `git worktree`: create only for real isolation needs, then verify MCP/config paths\n- `/repogolem` skill: launcher flag reference (`-s` mappings already correct)\n- `/orc` skill: pre-relay verification rule (Rule added 2026-04-29 to stop relaying stale evidence from workers)\n\n## Usage Budget\n\nFleet model/usage law lives in canon #5. For routing, manage usage by dispatch-counting, splitting broad work into bounded workers, and avoiding unnecessary duplicate spawns.\n\n---\n\n## SELF-CHECK: Am I About to Violate R28?\n\n**Run this check before EVERY Write/Edit/Bash-with-code-changes:**\n\n```\nPAUSE. Am I about to Write/Edit code?\n├── Am I an orchestrator (orcClaude, or coordinating a collab)?\n│   ├── YES → VIOLATION. Route to Codex/Cursor via cmux.\n│   │   Exception: collab files, docs, research prompts, or Rule 7 tiny-unblocker edits\n│   └── NO → Am I a domain agent (mehayomClaude, voiceClaude, etc.)?\n│       ├── YES + no Codex worker assigned → OK (you ARE the implementer)\n│       └── YES + Codex worker assigned → VIOLATION. Send to your Codex.\n└── Does this exceed ANY Rule 7 tiny-unblocker bound? → Route to a Codex+Claude pair.\n```\n\n**From JSONL data (April 1-6, 2026):** Orchestrator sessions averaged 80+ Write/Edit calls per session. The worst had 190. The R28 target is <30 for orchestrators.\n\n---\n\n## QUICK REFERENCE — Copy-Paste for Collab Templates\n\n```markdown\n## Agent Routing (MANDATORY)\n\n| Task | Tool | Rationale |\n|------|------|-----------|\n| [data gathering task] | Cursor (read-only) | Scanning, no changes needed |\n| [implementation task] | Codex | Code changes, needs reasoning |\n| [coordination task] | Claude | Orchestration, user interaction |\n\n**Rules:**\n- Cursor prompts MUST include \"READ-ONLY: Do NOT modify any files\"\n- Codex gets findings from Cursor's output, not raw data\n- Visible worker launch form is `{repo}{Tool} -s \"prompt\"`; `/repogolem` owns launcher details.\n- Reuse existing managed workers before spawning; if the mission changed, supersede with one file-backed goal contract using that harness's adapter syntax\n- Goal files preserve the full user delegation and include report path, DONE marker, and green/no-green criteria\n- Workflow/subagent fan-out is read-only recon/verification/synthesis except audio-dashboard builds; code implementation uses visible Codex-implements + Claude-reviews pairs, except for the bounded tiny-unblocker carve-out in Rule 7\n- Leads monitor report files/DONE markers and low-frequency health, not high-frequency pane narration\n- Zero worker panes means every lane is DONE, BLOCKED/NOT_GREEN with handoff, or TRANSFERRED; never close unfinished work for cleanliness\n- Claude reviews Codex's PR, doesn't implement itself\n- If a worker crashes, respawn within 60 seconds\n```\n",
+      "evalCount": 29,
+      "assertionCount": 18,
       "hasFixtures": false,
       "evals": [
         {
@@ -208,10 +208,64 @@
           "name": "eval-23",
           "assertionCount": 0,
           "assertions": []
+        },
+        {
+          "name": "bounded-mechanical-change",
+          "assertionCount": 3,
+          "assertions": [
+            "selects-medium",
+            "qualifies-luna",
+            "reports-effective-routing"
+          ]
+        },
+        {
+          "name": "bounded-pattern-audit",
+          "assertionCount": 3,
+          "assertions": [
+            "selects-medium",
+            "states-evidence-limit",
+            "measures-task-cost"
+          ]
+        },
+        {
+          "name": "routine-open-ended-implementation",
+          "assertionCount": 3,
+          "assertions": [
+            "selects-high",
+            "selects-sol",
+            "explicit-effort-choice"
+          ]
+        },
+        {
+          "name": "judgment-heavy-review",
+          "assertionCount": 3,
+          "assertions": [
+            "selects-high",
+            "rejects-reflexive-xhigh",
+            "names-escalation-signals"
+          ]
+        },
+        {
+          "name": "gnarly-concurrency-debugging",
+          "assertionCount": 3,
+          "assertions": [
+            "selects-xhigh",
+            "selects-sol",
+            "keeps-xhigh-exceptional"
+          ]
+        },
+        {
+          "name": "adversarial-design-under-contradiction",
+          "assertionCount": 3,
+          "assertions": [
+            "selects-xhigh",
+            "does-not-invent-max-doctrine",
+            "marks-max-gap"
+          ]
         }
       ],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "approval-comms-gate": {
       "name": "approval-comms-gate",
@@ -224,7 +278,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "architectural-conformance-audit": {
       "name": "architectural-conformance-audit",
@@ -263,7 +317,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "archive": {
       "name": "archive",
@@ -300,7 +354,7 @@
         "archive-snapshot",
         "cleanup-completed"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "audio-dashboard": {
       "name": "audio-dashboard",
@@ -460,7 +514,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-07-20"
+      "lastModified": "2026-08-03"
     },
     "brain-store-fallback": {
       "name": "brain-store-fallback",
@@ -475,7 +529,7 @@
       "workflows": [
         "replay"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "budget-usage-lint": {
       "name": "budget-usage-lint",
@@ -488,7 +542,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "claude-desktop-research": {
       "name": "claude-desktop-research",
@@ -505,7 +559,7 @@
         "harvest-results",
         "migrate"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "cmux": {
       "name": "cmux",
@@ -582,7 +636,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "cmux-agents": {
       "name": "cmux-agents",
@@ -975,7 +1029,7 @@
       "workflows": [
         "prompt-audit"
       ],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "coach": {
       "name": "coach",
@@ -1308,7 +1362,7 @@
         "health",
         "recruit"
       ],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "coderabbit": {
       "name": "coderabbit",
@@ -1357,7 +1411,89 @@
         "security",
         "verify"
       ],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
+    },
+    "codex-workflows": {
+      "name": "codex-workflows",
+      "command": "/codex-workflows",
+      "description": "Verified headless Codex worktree fan-out. Triggers: codex-workflows, headless Codex, Codex parallel. NOT for healthy cmux single-worker tasks.",
+      "category": "Other",
+      "content": "\n# Codex Workflows\n\nUse this skill for headless parallel Codex dispatch or when cmux is unavailable.\nHealthy cmux panes remain the default for visible, reachable single-worker tasks;\nheadless mode is a fan-out engine and degraded fallback, not a cmux replacement.\n\nRun the harness through `scripts/codex-workflows.sh`. Detailed interfaces are in\n`workflows/agent.md`, `workflows/parallel.md`, and `workflows/pipeline.md`.\n\n## Primitives\n\n- `agent` creates one isolated worktree, launches one worker, verifies startup,\n  and records it in an explicit manifest.\n- `parallel` validates a JSON fan-out spec, launches every worker before\n  watching, and keeps every outcome in one manifest.\n- `pipeline` runs ordered stages, parallel within a stage, and stops on failure\n  before the next stage unless `continue_on_failure` is explicitly enabled.\n- `watch` observes process exit first, then parses the finished log once.\n- `status`, `harvest`, and `cleanup` make inspection and retirement mechanical.\n\n## Non-Negotiable Guards\n\n1. Discover the real default branch with `git remote show origin`. Never assume\n   `main` or `master`.\n2. Launch `/Users/etanheyman/.local/bin/codex` through `/usr/bin/nohup`. Never\n   invoke bare `codex`; a captured PID is not a worker.\n3. Use one worktree, branch, and log per worker. Grant workspace-write access to\n   the repository Git directory and explicit reporting paths with `--add-dir`.\n4. Verify startup after a grace period. Report `FAILED_LAUNCH` loudly when the\n   process died or launcher diagnostics show an executable, command, or fetch\n   failure.\n5. Never live-grep a worker stream. Wait for process exit, then extract exact\n   `TASK_DONE`, PR URLs, and failures from structured finished-log events.\n6. Pin the bounded-work default to `gpt-5.6-luna` with explicit `xhigh` or `max`\n   reasoning effort. Record the effective model/effort, output tokens, and\n   wall-clock duration in the manifest and run log.\n7. Treat `TASK_DONE` as a signal, not artifact proof. Harvest only declared\n   worktree-relative, non-symlink artifacts; do not clean up before harvest.\n\n## Degraded-Mode Contract\n\nEvery headless run and worker record must state the same four facts:\n\n- `lead-reachable-only`\n- `no-pane`\n- `no-listen-name`\n- `no-self-monitor`\n\nName the dispatching lead. ARM-MONITORS registration must describe the worker as\nlead-reachable-only; do not invent a pane, listen-name, or monitor.\n\n## Completion Interpretation\n\n`parallel` without `--watch` proves launch only, records `completion_proven:\nfalse`, prints `LAUNCH_ONLY`, and exits 75 so it cannot be mistaken for completed\nwork. With `--watch`, success requires every worker to reach `completed`.\n`failed_launch`, `failed`, `watch_timeout`, `parser_failed`, and `incomplete` all\nreturn nonzero. A watch timeout preserves the live process and log so another\nwatch can resume.\n\nSee `references/manifest.md` for states and\n`references/composition.schema.json` for the fan-out/pipeline input contract.\n",
+      "evalCount": 6,
+      "assertionCount": 28,
+      "hasFixtures": true,
+      "evals": [
+        {
+          "name": "verified-single-worker-launch",
+          "assertionCount": 5,
+          "assertions": [
+            "discovers-remote-head",
+            "absolute-codex-binary",
+            "pointer-prompt",
+            "pid-is-not-worker",
+            "lead-reachable-only"
+          ]
+        },
+        {
+          "name": "manifested-two-worker-fanout",
+          "assertionCount": 5,
+          "assertions": [
+            "distinct-worktrees",
+            "distinct-branches",
+            "distinct-logs",
+            "single-manifest",
+            "no-live-stream-grep"
+          ]
+        },
+        {
+          "name": "false-green-launch-detection",
+          "assertionCount": 5,
+          "assertions": [
+            "does-not-trust-shell-zero",
+            "does-not-trust-pid",
+            "checks-process-identity",
+            "checks-launcher-diagnostics",
+            "failed-launch-verdict"
+          ]
+        },
+        {
+          "name": "post-exit-signal-extraction",
+          "assertionCount": 5,
+          "assertions": [
+            "waits-for-process-exit",
+            "assistant-message-only",
+            "ignores-tool-doc-text",
+            "persists-metrics",
+            "artifact-is-independent-proof"
+          ]
+        },
+        {
+          "name": "honest-degraded-routing",
+          "assertionCount": 4,
+          "assertions": [
+            "cmux-first",
+            "canonical-degraded-set",
+            "explicit-lead",
+            "not-a-cmux-replacement"
+          ]
+        },
+        {
+          "name": "fail-closed-pipeline",
+          "assertionCount": 4,
+          "assertions": [
+            "parallel-within-stage",
+            "no-early-next-stage",
+            "stops-on-failure",
+            "records-policy"
+          ]
+        }
+      ],
+      "workflows": [
+        "agent",
+        "parallel",
+        "pipeline"
+      ],
+      "lastModified": "2026-08-03"
     },
     "collab-routing-gate": {
       "name": "collab-routing-gate",
@@ -1370,7 +1506,130 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
+    },
+    "conference-recruiting": {
+      "name": "conference-recruiting",
+      "command": "/conference-recruiting",
+      "description": "Use when a user asks to mine a tech or security conference, Hackers Summer Camp, BSides, Black Hat, DEF CON, conference sponsors, exhibitors, or speakers for hiring targets and matching jobs. NOT for general job search or LinkedIn post drafting.",
+      "category": "Other",
+      "content": "\n# Conference Recruiting Sweep\n\nConference sponsorship signals budget and presence; speaker, village, booth, and\nCTF affiliations signal active technical teams. Neither signal proves candidate\nfit. The sweep turns those signals into a verified, human-route-first pipeline.\n\n## Signal Model\n\n| Source | Signal | Strength |\n|---|---|---|\n| Platinum/Gold sponsor | Budget + current conference presence | Strong |\n| Other paid sponsor/exhibitor | Budget exists | Medium |\n| Speaker employer | Public technical culture | Medium |\n| Village, booth, contest, or CTF host | Hands-on team | Medium |\n\n## Core Rules\n\n1. **Require a configured profile source; never guess.** Resolve `PROFILE SOURCE`\n   only from an explicit path in the current request or from\n   `CONFERENCE_RECRUITING_PROFILE_SOURCE` (explicit path wins). There is no\n   default. Before any fit judgment or worker dispatch, verify that the resolved\n   path is a readable regular file, read it, and validate it against the\n   [profile contract](references/profile-contract.md). If it is unset, unreadable,\n   or invalid, stop and ask the user to configure or repair it. BrainLayer may\n   supplement preferences and pipeline history, but experience, positioning,\n   artifact, connector, and disclosure claims come only from the profile source.\n   Every worker brief quotes the relevant block verbatim with exact file+line\n   provenance using [the worker template](references/worker-brief-template.md).\n2. **Mine sponsors and speakers.** Resolve the official conference source, extract\n   sponsors/exhibitors with tiers, and extract speaker affiliations; dedupe while\n   retaining every source tag. Speaker mining may be omitted only as an explicit,\n   reasoned opt-out recorded before the final report. Sponsor volume is never a\n   silent opt-out. See [conference sources](references/conference-sources.md).\n3. **Verify live hiring from first parties.** For JavaScript-heavy boards, try the\n   official ATS API before mirrors. A cached or aggregator listing is discovery,\n   not proof. Read the live posting body and direct apply URL. If verification\n   fails after fallback search, report `could not check`, never `not hiring`.\n4. **Route by actual level.** Unprefixed roles are cold-applyable. Senior-titled\n   roles are referral-only; cold Senior is dead. A `Senior / Principal` slug is a\n   dual-level req, not one title: read the body for the real level and clarify a\n   referrer's misread with quoted body evidence. Uniform Senior prefixes are a\n   level floor, not flexibility created by req volume. Apply\n   [job-routing doctrine](references/job-routing.md).\n5. **Rank by whether a live human exists, and sort by it.** Cross-check past\n   applications, rejections, referrals, and whatever contact evidence actually\n   exists before ranking. A connector roster is not proof of a live opportunity:\n   `unknown` is the default, and only current profile-source evidence, a separately\n   verified current record, or user confirmation may promote it. Never infer\n   `unworked` or active state from a person's presence in the roster. The report\n   must contain an `Is there a human here?` column and sort verified active paths\n   first. A referral changes who reads the candidate, never what level the\n   candidate is.\n6. **Choose resumes from the configured artifact inventory.** Read the validated\n   profile source's `artifacts` records. Shipment folder names are not variant\n   identities; rendered headline strings are. Before a send, verify that the\n   selected artifact path is a readable regular file. Send one resume per\n   referrer human even for multiple roles. Per-role variants are allowed only\n   across different recipients. Headline matching beats body tailoring, and no\n   new tailoring build is the default. Repairing an untruthful headline is a\n   defect fix, not a tailoring build, and is always allowed: block the send and\n   route the repair/rebuild through the workflow that owns the profile source.\n   If `artifacts` is empty or the selected path cannot be read, stop and ask the\n   user; never re-derive inventory from folder names.\n7. **Protect the referrer.** Before working a new lead, add the connector through\n   the workflow that maintains the profile source and re-read the regenerated or\n   updated source. Never edit a generated export directly. Send the chosen CV\n   with the exact req link and an upfront, truthful years-gap disclosure. Make one\n   concrete ask per human, with secondary options clearly secondary. A fast\n   disclosed no is a cheap successful outcome, not a protocol failure. Follow the full\n   [referral protocol](references/referral-protocol.md).\n8. **Bound and prove fan-out.** Pin a concrete model ID for every worker, verify\n   the effective runtime model, and stagger waves at a maximum of three concurrent\n   workers. Any eval record must separately capture requested model, observed\n   effective model ID, observed effective effort, and an allowed runtime\n   observation source. An alias or model-table inference is not eval evidence.\n9. **Ship one evidence-backed report.** Date-stamp it; sort by human route first\n   and location second; include role title, body-confirmed level, location, source\n   signal, pipeline state, human state, direct URL, and verification route. Keep\n   watch and could-not-check sections. Never fabricate a role. Write the primary\n   report, copy it only to explicitly configured secondary destinations,\n   shortlist 5–10 targets, and brain-store the summary. Follow the\n   [report contract](references/report-contract.md).\n\n## Run\n\n1. Resolve and validate `PROFILE SOURCE`, fill the worker template from it, then\n   gather conference and live-job evidence in bounded, model-verified waves.\n2. Apply job routing and pipeline history before ranking. For warm routes, read\n   the configured artifact inventory and referral protocol before choosing the\n   package.\n3. Produce, copy, shortlist, and store the report exactly as the report contract\n   specifies.\n\n## Boundaries\n\n- The profile-source owner owns resume artifacts, shipment paths, headline truth,\n  and builder edits. This skill consumes the configured contract rather than\n  copying volatile facts. It routes truth repairs through the owning workflow;\n  the no-build default never permits a known false headline to keep shipping.\n- General recruiting stays with the user's configured job-search workflow; this\n  skill produces a conference-sourced input to that pipeline.\n- `/never-fabricate` applies to every role, model-provenance claim, and completion\n  claim.\n",
+      "evalCount": 10,
+      "assertionCount": 49,
+      "hasFixtures": true,
+      "evals": [
+        {
+          "name": "hackers-summer-camp-full-sweep",
+          "assertionCount": 5,
+          "assertions": [
+            "resolves-all-three-conferences",
+            "extracts-sponsors-and-speakers",
+            "loads-configured-profile-source",
+            "single-aggregated-file",
+            "configured-location-ranking"
+          ]
+        },
+        {
+          "name": "single-conference-sweep",
+          "assertionCount": 4,
+          "assertions": [
+            "finds-official-site",
+            "sponsor-tier-captured",
+            "careers-urls-verified",
+            "output-in-applications-dir"
+          ]
+        },
+        {
+          "name": "no-relevant-roles-edge",
+          "assertionCount": 3,
+          "assertions": [
+            "companies-still-listed",
+            "no-fabricated-roles",
+            "date-stamped"
+          ]
+        },
+        {
+          "name": "paywalled-or-js-heavy-site",
+          "assertionCount": 3,
+          "assertions": [
+            "fetch-failures-reported",
+            "fallback-search-used",
+            "no-mock-green"
+          ]
+        },
+        {
+          "name": "job-search-pipeline-integration",
+          "assertionCount": 3,
+          "assertions": [
+            "top-targets-shortlist",
+            "configured-secondary-copy",
+            "brain-store-results"
+          ]
+        },
+        {
+          "name": "profile-source-provenance-worker-brief",
+          "assertionCount": 3,
+          "assertions": [
+            "profile-source-before-worker-dispatch",
+            "quoted-profile-source-with-line-provenance",
+            "memory-does-not-supply-experience"
+          ]
+        },
+        {
+          "name": "human-first-level-routing",
+          "assertionCount": 8,
+          "assertions": [
+            "unprefixed-cold-senior-referral-only",
+            "dual-level-body-read",
+            "req-count-not-flexibility",
+            "company-rigidity-is-secondary",
+            "human-column-sorted-first",
+            "pipeline-history-before-ranking",
+            "connector-roster-not-live-opportunity",
+            "referral-does-not-relevel"
+          ]
+        },
+        {
+          "name": "profile-source-resume-selection",
+          "assertionCount": 9,
+          "assertions": [
+            "fails-closed-when-profile-source-unset",
+            "reads-and-validates-configured-profile-source",
+            "no-hardcoded-private-profile-path",
+            "headline-identifies-variant",
+            "one-file-per-referrer-human",
+            "tailoring-only-across-recipients",
+            "headline-match-beats-body-tailoring",
+            "no-new-build-by-default",
+            "rejects-and-repairs-unheld-headline"
+          ]
+        },
+        {
+          "name": "referral-send-protocol",
+          "assertionCount": 5,
+          "assertions": [
+            "connector-logged-before-work",
+            "cv-link-gap-disclosure-together",
+            "one-concrete-ask",
+            "fast-no-preserves-relationship",
+            "no-relevel-promise"
+          ]
+        },
+        {
+          "name": "fanout-source-and-eval-honesty",
+          "assertionCount": 6,
+          "assertions": [
+            "concrete-model-pin-and-stagger",
+            "ats-api-first",
+            "stale-mirror-not-live-role",
+            "could-not-check-is-not-not-hiring",
+            "speaker-mining-explicit-opt-out",
+            "effective-model-provenance"
+          ]
+        }
+      ],
+      "workflows": [],
+      "lastModified": "2026-08-03"
     },
     "content-demo-creation": {
       "name": "content-demo-creation",
@@ -1383,7 +1642,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "context-check": {
       "name": "context-check",
@@ -1417,7 +1676,69 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
+    },
+    "convention-audit": {
+      "name": "convention-audit",
+      "command": "/convention-audit",
+      "description": "Use when code may have duplicated ownership, uncoordinated implementations, multiple writers, split lifecycle controls, live-copy drift, or missing single sources of truth. NOT for generic lint, style, security, or architectural research audits.",
+      "category": "Other",
+      "content": "\n# Convention Audit\n\nAnswer one question:\n\n> Where does one concept have multiple independent implementations that can silently diverge?\n\nThis is a report-only audit. Do not fix findings in the audited repository; each fix needs its own owning-repo PR loop.\n\n## Run\n\n```bash\nbash skills/golem-powers/convention-audit/scripts/run.sh \\\n  --repo /absolute/path/to/repo \\\n  --output-dir /absolute/path/to/reports\n```\n\nThe runner fans out raw `codex exec` workers across six concept lenses, then sends their candidates through a separate synthesis worker. Every worker requests `gpt-5.6-luna` with `max` reasoning. It may fall back to `xhigh` only when Codex explicitly rejects `max`; all other pin failures stop the run. A successful preflight must accept the requested model and effort, and its raw startup banner is retained in `pin-preflight.log`. That banner is acceptance evidence from the CLI, not independent server-side model telemetry. repoGolem aliases are forbidden because they can drop model and effort.\n\nThe time/query lens also receives a deterministic Python-source inventory for lower-bound SQLite `datetime()` comparisons. This is a narrow seed, not a general detector: the model workers remain responsible for other languages, query shapes, and convention families.\n\nRaw lens outputs are candidates, not reports. They must be structurally valid, but a lens may cite a broad implementation entrypoint and a more specific divergent line. Those candidates still reach synthesis; the final synthesis output is rejected unless every divergent `path:line` also appears verbatim in its finding's implementation-site set. The runner checkpoints `run-log.json` through preflight, analysis, synthesis, and reporting. A handled failure overwrites it with `status: failed`, the failing stage and error, partial worker telemetry, and target-state verification when available.\n\n## Finding Gate\n\nKeep a finding only when all are true:\n\n1. One concept has at least two independent implementation or ownership sites.\n2. Every relevant site is listed as `file:line` and verified against the current tree.\n3. At least one concrete drift state is explained; resemblance alone is insufficient.\n4. A shared helper, owner, controller, or derivation shape would collapse the sites.\n\nCallers that already share one helper are a must-not-flag control. Ignore naming, formatting, ordinary repeated syntax, generic lint, and speculative refactors. Workers may inspect only the audited repository root; external eval, collab, report, skill, and checkout paths are out of scope and may contain answer keys.\n\n## Output Contract\n\nEach finding includes the concept, every implementation site, only the divergent sites, and the smallest shared-helper shape. Each repo report also includes:\n\n- requested model and effort accepted by the successful preflight, plus its raw banner evidence;\n- whether detection was seed-assisted; when no seed fires, an explicit warning that unseeded lenses have no measured known-answer detection evidence;\n- output tokens and wall-clock duration;\n- Codex CLI cost telemetry, or an explicit `unavailable` value when the CLI emits none;\n- raw worker logs and git-visible unchanged-target-state verification, with the verification scope recorded explicitly.\n- on failure, a durable partial `run-log.json`; raw candidates remain non-actionable unless synthesis completes under the strict finding contract.\n\n## Routing\n\n- BrainLayer findings: `@bl-cleanup` primary, `@brainlayer` copied.\n- VoiceLayer findings: flag for a successor seat; the previous seat is retired.\n- Findings remain reports until the owning lane opens a separate implementation loop.\n\n## Rollout Calibration Gate\n\nRun BrainLayer first: it owns the known answer and its static seed fires there. Before authorizing VoiceLayer or cmuxlayer, use the BrainLayer report to select one independently verified defect outside the seed's SQLite-window family—such as live-copy drift, path/worktree identity, or split lifecycle ownership—and record whether an unseeded model lens found it. If no unseeded calibration point passes, do not spend the later repo runs.\n\n## Common Mistakes\n\n| Mistake | Correction |\n|---|---|\n| Running a broad conventions review | Ask only the single-source-of-truth question. |\n| Flagging three callers of one helper | Return no finding; ownership is already shared. |\n| Listing examples instead of every site | Re-scan and enumerate the full concept surface. |\n| Reporting a requested pin as independent effective telemetry | Report it as a successful preflight acceptance and retain the startup banner. |\n| Editing the target while auditing | Stop; raw workers run in a read-only sandbox and the runner verifies tracked and nonignored git-visible state. |\n| Treating the static seed as broad discovery | State that it covers Python SQLite recent-window comparisons only. |\n| Reading eval fixtures or answer keys from outside the target | Stop; workers and synthesis are scoped to the audited repository root. |\n",
+      "evalCount": 5,
+      "assertionCount": 18,
+      "hasFixtures": true,
+      "evals": [
+        {
+          "name": "brainlayer-c99fabb7-time-window-known-answer",
+          "assertionCount": 5,
+          "assertions": [
+            "reports-six-sites",
+            "flags-session-repo",
+            "flags-enrich-recent",
+            "does-not-flag-normalized-sites",
+            "proposes-shared-helper"
+          ]
+        },
+        {
+          "name": "shared-helper-must-not-flag-control",
+          "assertionCount": 3,
+          "assertions": [
+            "no-false-finding",
+            "clean-control-verdict",
+            "no-generic-lint-noise"
+          ]
+        },
+        {
+          "name": "two-writers-one-field",
+          "assertionCount": 3,
+          "assertions": [
+            "names-concept",
+            "lists-both-writers",
+            "proposes-owner-shape"
+          ]
+        },
+        {
+          "name": "split-lifecycle-ownership",
+          "assertionCount": 3,
+          "assertions": [
+            "lists-both-lifecycle-halves",
+            "explains-divergence",
+            "proposes-unified-controller"
+          ]
+        },
+        {
+          "name": "report-only-pinned-run",
+          "assertionCount": 4,
+          "assertions": [
+            "raw-codex-luna-workers",
+            "reports-effective-effort",
+            "reports-telemetry",
+            "does-not-edit-target"
+          ]
+        }
+      ],
+      "workflows": [],
+      "lastModified": "2026-08-03"
     },
     "crash-resume-index": {
       "name": "crash-resume-index",
@@ -1430,7 +1751,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "cron-payload-discipline": {
       "name": "cron-payload-discipline",
@@ -1514,7 +1835,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-14"
+      "lastModified": "2026-08-03"
     },
     "cursor-multitask": {
       "name": "cursor-multitask",
@@ -1578,7 +1899,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "cursor-workflows": {
       "name": "cursor-workflows",
@@ -1591,7 +1912,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "cyber": {
       "name": "cyber",
@@ -1686,7 +2007,7 @@
         "pr-review",
         "repo-scan"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "deploy-verify": {
       "name": "deploy-verify",
@@ -1750,7 +2071,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "drive-usage": {
       "name": "drive-usage",
@@ -1763,7 +2084,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "eas-prebuild-check": {
       "name": "eas-prebuild-check",
@@ -1776,7 +2097,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "ecosystem-health": {
       "name": "ecosystem-health",
@@ -1845,7 +2166,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "false-green-gate": {
       "name": "false-green-gate",
@@ -1858,7 +2179,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "figma-loop": {
       "name": "figma-loop",
@@ -1907,7 +2228,7 @@
         "iterate",
         "setup"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "fleet-wrap": {
       "name": "fleet-wrap",
@@ -1920,7 +2241,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "fleet-wrap-gate": {
       "name": "fleet-wrap-gate",
@@ -1933,7 +2254,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "frustration-capture": {
       "name": "frustration-capture",
@@ -1987,7 +2308,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "gemini-research": {
       "name": "gemini-research",
@@ -2000,7 +2321,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "git-guardian": {
       "name": "git-guardian",
@@ -2086,7 +2407,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-21"
+      "lastModified": "2026-08-03"
     },
     "github-research": {
       "name": "github-research",
@@ -2127,7 +2448,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "golem-install": {
       "name": "golem-install",
@@ -2176,7 +2497,7 @@
         "validate",
         "wire-project"
       ],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "google-drive-archive": {
       "name": "google-drive-archive",
@@ -2189,7 +2510,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "html-dashboard": {
       "name": "html-dashboard",
@@ -2230,7 +2551,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "idle-dwell-gate": {
       "name": "idle-dwell-gate",
@@ -2243,7 +2564,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "install-runbook-linter": {
       "name": "install-runbook-linter",
@@ -2256,7 +2577,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "judge-fleet": {
       "name": "judge-fleet",
@@ -2330,7 +2651,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "large-plan": {
       "name": "large-plan",
@@ -2402,7 +2723,7 @@
         "phase-evaluator",
         "scaffold"
       ],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "launchd-secret-linter": {
       "name": "launchd-secret-linter",
@@ -2415,7 +2736,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "linkedin-post": {
       "name": "linkedin-post",
@@ -2434,7 +2755,7 @@
         "schedule",
         "topic"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "mac-systems": {
       "name": "mac-systems",
@@ -2482,7 +2803,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-07-17"
+      "lastModified": "2026-08-03"
     },
     "model-pin-gate": {
       "name": "model-pin-gate",
@@ -2495,7 +2816,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "monitor-law-gate": {
       "name": "monitor-law-gate",
@@ -2508,7 +2829,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "never-fabricate": {
       "name": "never-fabricate",
@@ -2567,7 +2888,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "nightly-journal": {
       "name": "nightly-journal",
@@ -2580,7 +2901,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "obsidian": {
       "name": "obsidian",
@@ -2626,7 +2947,7 @@
         "search",
         "write"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "orc": {
       "name": "orc",
@@ -2682,7 +3003,75 @@
       "workflows": [
         "fact-propagation"
       ],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
+    },
+    "pane-liveness-check": {
+      "name": "pane-liveness-check",
+      "command": "/pane-liveness-check",
+      "description": "Use when auditing cmux panes for claim-or-close, sprint close-out, idle workers, dead shells, uncommitted or unpushed artifacts, untitled seats, or stale numeric surface refs.",
+      "category": "Other",
+      "content": "\n# Pane Liveness Check\n\nRun a read-only claim-or-close sweep. The core rule is conservative: **uncertainty always KEEP**. Idle state, `TASK_DONE`, a title, or cost data never proves that a pane is done.\n\n## Run\n\n```bash\nbash skills/golem-powers/pane-liveness-check/scripts/run.sh\nbash skills/golem-powers/pane-liveness-check/scripts/run.sh --json\n```\n\nThe runner uses cmux/cmuxlayer reads and Git status/upstream reads. It never closes, kills, sends to, retitles, checks out, fetches, resets, or cleans a worktree.\n\n## Safety Contract\n\n1. Enumerate with cmuxlayer `list_surfaces` and `verbose:true`; stable UUID is each surface's `id`.\n2. Key every row by UUID. Treat `surface:N` as display-only.\n3. Immediately before each parsed read, re-list and compare UUID. Accept screen evidence only with an atomic `cmux read-screen --id-format both` receipt for the expected UUID. Re-list afterward.\n4. Any mismatch means `STALE-REF — re-enumerate`, `verdict: null`, and no disposition.\n5. Set an owner only from explicit metadata (`seat_lane`, `parent_agent_id`, `Owner lane: @name`, or `(@name)`); otherwise use `owner=UNKNOWN`.\n\n## Verdicts\n\n| Evidence | Verdict |\n|---|---|\n| Uncommitted files or unpushed commits | `KEEP-unpushed` |\n| Verified dead process | `DEAD-shell` |\n| Live worker still booting, thinking, or working | `KEEP-live` |\n| Open/owed/unknown lane or incomplete proof | `KEEP-blocked` |\n| Closed lane, harvested/reported worker, clean pushed artifact | `CLOSE-CANDIDATE` |\n| UUID mismatch | No disposition: `STALE-REF` |\n\nReport DONE only when all three are true: no open lane, no live worker is unharvested or unreported, and no work is unpushed. Flag launcher-only titles such as `<repo>Claude [surface:N]` as untitled.\n\n## NOT for\n\n- Automatically closing, killing, messaging, or retitling panes.\n- Worktree mutation or garbage collection.\n- Billing analysis or worker shaming; output omits cost entirely.\n\n## Common Mistakes\n\n- Treating `idle`, `TASK_DONE`, or an old title as completion proof.\n- Inferring ownership from a repository-like title.\n- Reusing a numeric surface ref after pane re-enumeration.\n- Declaring DONE while a live worker, open lane, dirty tree, or unpushed commit remains.\n\n## Evaluation\n\n2026-08-03: naive baseline 2/18 (11.1%); deterministic sweep 18/18 (100%), +88.9 percentage points.\n",
+      "evalCount": 6,
+      "assertionCount": 18,
+      "hasFixtures": true,
+      "evals": [
+        {
+          "name": "idle-reviewer-with-outstanding-iterate",
+          "assertionCount": 3,
+          "assertions": [
+            "keep-blocked",
+            "no-close",
+            "reason-names-open-lane"
+          ]
+        },
+        {
+          "name": "task-done-with-untracked-artifact",
+          "assertionCount": 3,
+          "assertions": [
+            "keep-unpushed",
+            "task-done-not-proof",
+            "reason-names-uncommitted"
+          ]
+        },
+        {
+          "name": "dead-process-under-live-title",
+          "assertionCount": 3,
+          "assertions": [
+            "dead-shell",
+            "title-not-liveness",
+            "process-field"
+          ]
+        },
+        {
+          "name": "idle-pane-with-two-unpushed-commits",
+          "assertionCount": 3,
+          "assertions": [
+            "keep-unpushed",
+            "no-close",
+            "commit-count"
+          ]
+        },
+        {
+          "name": "numeric-ref-retargets-live-worker",
+          "assertionCount": 3,
+          "assertions": [
+            "stale-ref",
+            "no-disposition",
+            "verbose-list"
+          ]
+        },
+        {
+          "name": "clean-verified-closure-control",
+          "assertionCount": 3,
+          "assertions": [
+            "close-candidate",
+            "no-cost",
+            "uuid-key"
+          ]
+        }
+      ],
+      "workflows": [],
+      "lastModified": "2026-08-03"
     },
     "phoenix-human-view": {
       "name": "phoenix-human-view",
@@ -2695,7 +3084,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "plan-validate": {
       "name": "plan-validate",
@@ -2749,7 +3138,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "pr-loop": {
       "name": "pr-loop",
@@ -2864,7 +3253,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "prd": {
       "name": "prd",
@@ -2905,7 +3294,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "presentation-builder": {
       "name": "presentation-builder",
@@ -2944,7 +3333,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "qa-verdict-gate": {
       "name": "qa-verdict-gate",
@@ -2957,7 +3346,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "qa-video": {
       "name": "qa-video",
@@ -2972,7 +3361,7 @@
       "workflows": [
         "gems"
       ],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "render-done-gate": {
       "name": "render-done-gate",
@@ -2985,7 +3374,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "repogolem": {
       "name": "repogolem",
@@ -3039,17 +3428,17 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-07-17"
+      "lastModified": "2026-08-03"
     },
     "research-lifecycle": {
       "name": "research-lifecycle",
       "command": "/research-lifecycle",
-      "description": "Refresh research context: sprint results, stale condense, archive findings. Triggers: stale context, R-number.",
+      "description": "Refresh local research context and the Drive grounding corpus. Triggers: stale context, R-number.",
       "category": "Other",
-      "content": "\n# Research Lifecycle — Context Freshness Management\n\n> Anti-pattern: R75 says \"FTS5 is 96.9% desynced\" — but it's been fixed for days. Without lifecycle management, R76 starts from wrong assumptions.\n\nResearch context files live at `docs.local/claude-web/projects/<project>/`. After a sprint implements research findings, these files go STALE. This skill manages the lifecycle so the next research round starts from truth, not assumptions.\n\n---\n\n## HARVEST GATE — research without a harvest path is PARKED, not done\n\nEvery research dispatch — fleet-fired OR **Etan-fired in his own Gemini/NotebookLM UI** (standing **fire=Etan** rule) — MUST carry these fields **at dispatch time**:\n\n| Field | Required content |\n|-------|------------------|\n| **harvest_owner** | Named agent/LEAD who owns pulling results back into the fleet |\n| **harvest_trigger** | What event starts harvest (report complete, Drive export lands, cron poll, Etan says \"it's done\", etc.) |\n| **export_route** | Where results land for the fleet: Drive path, `docs.local/research/`, collab ack, brain_store digest — adapters must name this explicitly |\n\n**Research without all three = PARKED.** Do not mark done, do not brain_store conclusions, do not close the collab row until harvest completes or Etan explicitly parks it.\n\nApplies to `/gemini-research`, `/claude-desktop-research`, and orc W5 research dispatches. The E07 integrity gate catches bad claims; this gate catches **throughput** — results sitting unharvested since morning.\n\n---\n\n## THE LIFECYCLE\n\n```\nSPRINT COMPLETES (findings implemented)\n  │\n  ├─ 1. NEWEST: Add sprint results as new context file\n  │     (what changed, benchmark numbers, PRs merged)\n  │\n  ├─ 2. CONDENSED: Compress older context files\n  │     (files 01-50 → one condensed file)\n  │\n  ├─ 3. UPDATED: Refresh description.md with current state\n  │     (facts first, narrative second)\n  │\n  ├─ 4. ARCHIVED: Move implemented research results\n  │     (R-numbers whose findings are now in code)\n  │\n  └─ 5. MIRRORED: Update NotebookLM sources\n        (swap stale for updated files)\n```\n\n---\n\n## STEP 1: NEWEST — Add Sprint Results\n\nAfter a sprint that implements research findings, create a new context file:\n\n```markdown\n# File: research-context/NN-sprint-results-{date}.md\n\n## Sprint: {description}\n- Date: {date}\n- PRs merged: #{N}, #{N}, #{N}\n\n## What Changed\n- {specific change 1}: {before state} → {after state}\n- {specific change 2}: {before} → {after}\n\n## Benchmark Numbers\n- {metric}: {old value} → {new value}\n- {metric}: {old} → {new}\n\n## What's Still Open\n- {remaining issue 1}\n- {remaining issue 2}\n```\n\n**Key:** Include BEFORE and AFTER states. The researcher needs to know what was the problem AND what's the current state.\n\n**Naming:** Use sequential numbers (91-, 92-, 93-...) to preserve ordering. Prefix with the topic.\n\n---\n\n## STEP 2: CONDENSED — Compress Stale Context\n\nWhen context files accumulate (>10 files or >50KB total), condense older ones:\n\n```\nBEFORE:\n  91-swift-python-root-cause.md     (from 2 weeks ago, findings implemented)\n  92-brainbar-ux-current-state.md   (from 1 week ago, partially stale)\n  93-inspiration-references.md       (timeless, keep as-is)\n  94-search-improvement-collab.md   (from yesterday, still current)\n\nAFTER:\n  condensed-pre-R75.md              (91 + 92 merged, updated to current state)\n  93-inspiration-references.md       (unchanged — timeless content)\n  94-search-improvement-collab.md   (unchanged — still current)\n  95-R75-sprint-results.md          (NEW — what the sprint changed)\n```\n\n**Condensation rules:**\n- Merge files about the SAME topic into one\n- Update claims to current state (remove \"FTS5 is broken\" if it's fixed)\n- Keep timeless content as-is (references, architecture decisions with rationale)\n- Remove redundant context (if 3 files say \"BrainBar is Swift\", keep it in one place)\n\n---\n\n## STEP 3: UPDATED — Refresh description.md\n\nThe project description file tells the researcher what the project IS. It must reflect current state.\n\n```\nLocation: docs.local/claude-web/projects/<project>/description.md\n```\n\n**Refresh checklist:**\n- [ ] Architecture claims match current code (check recent PRs)\n- [ ] Stats are current (chunk count, entity count, test count)\n- [ ] Open issues are actually still open (not fixed in latest sprint)\n- [ ] \"Known limitations\" haven't been resolved\n- [ ] No claims about features that are stubs (check with /never-fabricate)\n\n**Format:** Facts first, narrative second. Lead with numbers, follow with explanation.\n\n```markdown\n## Current State (as of {date})\n- Chunks: 299,972 (FTS5: 100% synced ← was 3.1% before R75 sprint)\n- Entities: 166 (0.055% coverage ← needs improvement)\n- Tests: 675 passing\n- MCP: BrainBar (Swift daemon), 5 working tools + 3 stubs\n\n## Architecture\n{current architecture, verified against code}\n```\n\n---\n\n## STEP 4: ARCHIVED — Move Implemented Research\n\nResearch results (R-number files) whose findings are fully implemented should move to archived:\n\n```bash\n# Move completed research\nmv docs.local/claude-web/projects/brainlayer/R38-knowledge-graph.md \\\n   docs.local/claude-web/projects/archived/brainlayer/\n```\n\n**Archive criteria:**\n- ALL findings from the research are implemented (check PRs)\n- Benchmark improvements are captured in a sprint results file\n- The research is >1 sprint old (keep recent research active for reference)\n\n**DON'T archive:**\n- Research with partially-implemented findings (keep, mark which are done)\n- Timeless architectural decisions (keep in main project)\n- The LATEST research result (always keep the most recent R-number)\n\n---\n\n## STEP 5: MIRRORED — Update NotebookLM Sources\n\nIf the project has a NotebookLM notebook (see `/gemini-research`):\n\n1. Delete stale sources from the notebook:\n   ```\n   source_delete(source_id=stale_source, confirm=True)\n   ```\n\n2. Add updated files:\n   ```\n   source_add(notebook_id, source_type=\"file\", file_path=\"updated-context.md\", wait=True)\n   ```\n\n3. Update notebook instructions:\n   ```\n   chat_configure(notebook_id, goal=\"custom\",\n     custom_prompt=\"Context files have been updated as of {date}. Previous findings about {X} are now implemented.\")\n   ```\n\n**Remember NP3:** .py/.json/.swift/.yaml files must be renamed to .txt for NotebookLM upload.\n\n---\n\n## WHEN TO TRIGGER\n\n| Trigger | Action |\n|---------|--------|\n| Sprint merged PRs that address research findings | Run full lifecycle (Steps 1-5) |\n| Before writing a new R-number research prompt | Run Steps 2-4 (condense, update, archive) |\n| Nightly/project maintenance runs | Check if context files are stale (Step 3 at minimum) |\n| Context file count > 10 | Run Step 2 (condense) |\n| NotebookLM notebook exists | Run Step 5 (mirror) |\n\n---\n\n## STALENESS DETECTION\n\nA context file is STALE when:\n\n1. **It describes a problem that's been fixed** — e.g., \"FTS5 is 96.9% desynced\" after PR fixing it\n2. **Its benchmark numbers are outdated** — e.g., \"675 tests\" when there are now 720\n3. **Its architecture claims are wrong** — e.g., \"Python MCP\" when it's now Swift BrainBar\n4. **It references PRs as \"open\" that are merged** — check via `gh pr view`\n5. **It's >2 sprints old and never updated** — age alone signals staleness\n\n**Quick staleness check:**\n```bash\n# Find context files older than 7 days with no updates\nfind docs.local/claude-web/projects/PROJECT/research-context/ -name \"*.md\" -mtime +7\n```\n\n---\n\n## INTEGRATION\n\n| Skill | How Research Lifecycle Uses It |\n|-------|------------------------------|\n| Claude/Gemini research runs | Create research results → lifecycle manages them afterward |\n| `/gemini-research` | NotebookLM file type restrictions apply to mirroring (Step 5) |\n| Nightly/project maintenance | Should check research context staleness during sweeps |\n| `/never-fabricate` | Verify claims in description.md against actual code before updating |\n| `/orc` W5 | Claude Web research prompts consume these context files |\n\n---\n\n## EXAMPLE: Post-R75 Lifecycle\n\nR75 sprint fixed FTS5 sync, implemented detect_entities_in_prompt, improved search.\n\n1. **NEWEST:** Create `95-R75-sprint-results.md` with: FTS5 3.1%→100%, entity detection implemented, search hybrid mode live\n2. **CONDENSED:** Merge `91-swift-python-root-cause.md` + `92-brainbar-ux-current-state.md` → `condensed-pre-R75.md` (update \"FTS5 broken\" → \"FTS5 fixed in PR #198\")\n3. **UPDATED:** Refresh `description.md` — chunk count, entity count, test count, remove \"FTS5 broken\" from known issues\n4. **ARCHIVED:** Move `R38-knowledge-graph.md` (fully implemented) to `archived/brainlayer/`\n5. **MIRRORED:** Delete old NLM sources, upload updated files\n",
-      "evalCount": 6,
-      "assertionCount": 0,
-      "hasFixtures": false,
+      "content": "\n# Research Lifecycle — Context Freshness Management\n\n> Anti-pattern: R75 says \"FTS5 is 96.9% desynced\" — but it's been fixed for days. Without lifecycle management, R76 starts from wrong assumptions.\n\nResearch context files live at `docs.local/claude-web/projects/<project>/`. After a sprint implements research findings, these files go STALE. The local corpus is the source; Google Drive is the grounding corpus Gemini reads. This skill refreshes both so the next research round starts from truth, not assumptions.\n\n---\n\n## HARVEST GATE — research without a harvest path is PARKED, not done\n\nEvery research dispatch — fleet-fired OR **Etan-fired in his own Gemini/NotebookLM UI** (standing **fire=Etan** rule) — MUST carry these fields **at dispatch time**:\n\n| Field | Required content |\n|-------|------------------|\n| **harvest_owner** | Named agent/LEAD who owns pulling results back into the fleet |\n| **harvest_trigger** | What event starts harvest (report complete, Drive export lands, cron poll, Etan says \"it's done\", etc.) |\n| **export_route** | Where results land for the fleet: Drive path, `docs.local/research/`, collab ack, brain_store digest — adapters must name this explicitly |\n\n**Research without all three = PARKED.** Do not mark done, do not brain_store conclusions, do not close the collab row until harvest completes or Etan explicitly parks it.\n\nApplies to `/gemini-research`, `/claude-desktop-research`, and orc W5 research dispatches. The E07 integrity gate catches bad claims; this gate catches **throughput** — results sitting unharvested since morning.\n\n---\n\n## THE LIFECYCLE\n\n```\nSPRINT COMPLETES (findings implemented)\n  │\n  ├─ 1. NEWEST: Add sprint results as new context file\n  │     (what changed, benchmark numbers, PRs merged)\n  │\n  ├─ 2. CONDENSED: Compress older context files\n  │     (files 01-50 → one condensed file)\n  │\n  ├─ 3. UPDATED: Refresh description.md with current state\n  │     (facts first, narrative second)\n  │\n  ├─ 4. ARCHIVED: Move implemented research results\n  │     (R-numbers whose findings are now in code)\n  │\n  └─ 5. MIRRORED: Update Drive AND NotebookLM\n        (Drive required; NotebookLM only when a project notebook exists)\n```\n\n---\n\n## STEP 1: NEWEST — Add Sprint Results\n\nAfter a sprint that implements research findings, create a new context file:\n\n```markdown\n# File: research-context/NN-sprint-results-{date}.md\n\n## Sprint: {description}\n- Date: {date}\n- PRs merged: #{N}, #{N}, #{N}\n\n## What Changed\n- {specific change 1}: {before state} → {after state}\n- {specific change 2}: {before} → {after}\n\n## Benchmark Numbers\n- {metric}: {old value} → {new value}\n- {metric}: {old} → {new}\n\n## What's Still Open\n- {remaining issue 1}\n- {remaining issue 2}\n```\n\n**Key:** Include BEFORE and AFTER states. The researcher needs to know what was the problem AND what's the current state.\n\n**Naming:** Use sequential numbers (91-, 92-, 93-...) to preserve ordering. Prefix with the topic.\n\n---\n\n## STEP 2: CONDENSED — Compress Stale Context\n\nWhen context files accumulate (>10 files or >50KB total), condense older ones:\n\n```\nBEFORE:\n  91-swift-python-root-cause.md     (from 2 weeks ago, findings implemented)\n  92-brainbar-ux-current-state.md   (from 1 week ago, partially stale)\n  93-inspiration-references.md       (timeless, keep as-is)\n  94-search-improvement-collab.md   (from yesterday, still current)\n\nAFTER:\n  condensed-pre-R75.md              (91 + 92 merged, updated to current state)\n  93-inspiration-references.md       (unchanged — timeless content)\n  94-search-improvement-collab.md   (unchanged — still current)\n  95-R75-sprint-results.md          (NEW — what the sprint changed)\n```\n\n**Condensation rules:**\n- Merge files about the SAME topic into one\n- Update claims to current state (remove \"FTS5 is broken\" if it's fixed)\n- Keep timeless content as-is (references, architecture decisions with rationale)\n- Remove redundant context (if 3 files say \"BrainBar is Swift\", keep it in one place)\n\n---\n\n## STEP 3: UPDATED — Refresh description.md\n\nThe project description file tells the researcher what the project IS. It must reflect current state.\n\n```\nLocation: docs.local/claude-web/projects/<project>/description.md\n```\n\n**Refresh checklist:**\n- [ ] Architecture claims match current code (check recent PRs)\n- [ ] Stats are current (chunk count, entity count, test count)\n- [ ] Open issues are actually still open (not fixed in latest sprint)\n- [ ] \"Known limitations\" haven't been resolved\n- [ ] No claims about features that are stubs (check with /never-fabricate)\n\n**Format:** Facts first, narrative second. Lead with numbers, follow with explanation.\n\n```markdown\n## Current State (as of {date})\n- Chunks: 299,972 (FTS5: 100% synced ← was 3.1% before R75 sprint)\n- Entities: 166 (0.055% coverage ← needs improvement)\n- Tests: 675 passing\n- MCP: BrainBar (Swift daemon), 5 working tools + 3 stubs\n\n## Architecture\n{current architecture, verified against code}\n```\n\n---\n\n## STEP 4: ARCHIVED — Move Implemented Research\n\nResearch results (R-number files) whose findings are fully implemented should move to archived:\n\n```bash\n# Move completed research\nmv docs.local/claude-web/projects/brainlayer/R38-knowledge-graph.md \\\n   docs.local/claude-web/projects/archived/brainlayer/\n```\n\n**Archive criteria:**\n- ALL findings from the research are implemented (check PRs)\n- Benchmark improvements are captured in a sprint results file\n- The research is >1 sprint old (keep recent research active for reference)\n\n**DON'T archive:**\n- Research with partially-implemented findings (keep, mark which are done)\n- Timeless architectural decisions (keep in main project)\n- The LATEST research result (always keep the most recent R-number)\n\n---\n\n## STEP 5: MIRRORED — Drive AND NotebookLM\n\nThe local corpus is the source to push. Drive is where Gemini grounds, so the Drive refresh is blocking; NotebookLM mirroring is conditional on a project notebook existing.\n\n1. **Prove Drive auth and account identity with real calls.** `\"MCP connected\"` is NOT evidence of Drive auth. Call `authGetStatus`; continue only when the real call succeeds and returns authed. Tool discovery or a connected-tool count does not pass this gate. Then verify the active account before any upload, replacement, or deletion:\n   ```bash\n   # Project has a NotebookLM notebook: verify both identities.\n   bash skills/golem-powers/_shared/research/verify-account.sh --expect etanface@gmail.com\n\n   # No project notebook: verify Drive without requiring NotebookLM auth state.\n   bash skills/golem-powers/_shared/research/verify-account.sh \\\n     --expect etanface@gmail.com --drive-only\n   ```\n   Save the successful JSON output in the lifecycle receipt. A call failure or account mismatch is blocking; switch profiles and rerun verification instead of reconciling the wrong Drive corpus.\n\n2. **Resolve the canonical destination.** Use `/drive-usage` for the correct numbered folder and naming convention. Use `/braindrive` to resolve current folder IDs and the Gemini-facing corpus; do not trust stale hard-coded IDs.\n\n3. **Reconcile the managed Drive corpus to local truth.** Upload or replace every current local context file under the canonical project corpus, keeping local and Drive relative names identical. Track the complete lifecycle-managed file set. Delete only previously managed Drive files that are absent locally; never delete unrelated Drive documents. Unexpected duplicate managed names fail the gate.\n\n4. **Verify the refresh with a real Drive read.** List/search and download/read the destination after upload. Record every local and Drive relative name, `modifiedTime`, and SHA-256 content digest in a receipt. The completion command independently walks `--local-root`, hashes every regular file, and rejects a receipt that omits or changes any canonical local entry. `DRIVE_FILESET=PASS` requires the Drive names to equal that derived inventory with no duplicates. `DRIVE_FRESHNESS=PASS` requires every Drive digest to match its local source and every Drive `modifiedTime` to be at least as new. Missing or unverifiable content is `FAIL`.\n\n5. **If the project has a NotebookLM notebook** (see `/gemini-research`), add updated replacement files first:\n   ```\n   source_add(notebook_id, source_type=\"file\", file_path=\"updated-context.md\", wait=True)\n   ```\n\n6. Verify the replacements are indexed and readable, then delete the stale sources:\n   ```\n   source_delete(source_id=stale_source, confirm=True)\n   source_list_drive(notebook_id)\n   ```\n   Record the replacement IDs returned by `source_add`, the stale source IDs, and the final indexed source IDs returned by readback. `NOTEBOOKLM_FRESHNESS=PASS` requires every expected replacement ID to exist and every stale source ID to be absent; a bare `fresh: true` claim does not pass.\n\n7. Update notebook instructions:\n   ```\n   chat_configure(notebook_id, goal=\"custom\",\n     custom_prompt=\"Context files have been updated as of {date}. Previous findings about {X} are now implemented.\")\n   ```\n\n**Remember NP3:** .py/.json/.swift/.yaml files must be renamed to .txt for NotebookLM upload.\n\n---\n\n## GEMINI RESEARCH PROMPT PREFLIGHT — BLOCKING\n\nBefore emitting any Gemini research prompt, require exactly one `# Grounding` block. That block must contain either a Drive document referenced by name or the exact line `None — web-only research`. Never instruct Etan to attach or upload Drive documents; his connected Drive workspace pulls named documents itself.\n\nRun the executable gate against the prompt file. It checks the block structure and invokes the shared no-attach gate:\n\n```bash\nPROMPT=/path/to/R{NN}-prompt.md\nnode skills/golem-powers/research-lifecycle/scripts/lifecycle-gate.mjs \\\n  preflight --prompt \"$PROMPT\"\n```\n\nAny non-zero result means `GEMINI_PREFLIGHT=FAIL`: do not emit or fire the prompt. Add the missing named-document grounding or the explicit web-only line, then rerun the checks.\n\n---\n\n## LIFECYCLE COMPLETION GATE — BLOCKING\n\nWrite the verification evidence to a receipt, then run the same executable gate:\n\n```json\n{\n  \"driveRoute\": {\"canonical\": true, \"resolvedWith\": [\"/drive-usage\", \"/braindrive\"]},\n  \"driveAuth\": {\"callSucceeded\": true, \"authed\": true},\n  \"accountVerification\": {\n    \"callSucceeded\": true,\n    \"drive_account\": \"etanface@gmail.com\",\n    \"notebooklm_account\": \"etanface@gmail.com\",\n    \"expected\": \"etanface@gmail.com\",\n    \"match\": true,\n    \"drive_only\": false\n  },\n  \"localFiles\": [\n    {\"name\": \"01-context.md\", \"sha256\": \"<64 hex chars>\", \"modifiedTime\": \"<ISO-8601>\"}\n  ],\n  \"driveFiles\": [\n    {\"name\": \"01-context.md\", \"sha256\": \"<64 hex chars>\", \"modifiedTime\": \"<ISO-8601>\"}\n  ],\n  \"notebooklm\": {\n    \"exists\": true,\n    \"expectedReplacementIds\": [\"source-new\"],\n    \"indexedSourceIds\": [\"source-new\"],\n    \"staleSourceIds\": [\"source-old\"]\n  }\n}\n```\n\n```bash\nLOCAL_ROOT=docs.local/claude-web/projects/PROJECT\nnode skills/golem-powers/research-lifecycle/scripts/lifecycle-gate.mjs \\\n  completion --receipt /path/to/lifecycle-receipt.json --prompt \"$PROMPT\" \\\n  --local-root \"$LOCAL_ROOT\"\n```\n\nThe lifecycle may be marked complete only when the command exits 0 and every row passes:\n\n| Check | PASS criterion |\n|-------|----------------|\n| `DRIVE_ROUTE` | Receipt names the canonical destination resolved through `/drive-usage` and `/braindrive` |\n| `DRIVE_AUTH` | A real `authGetStatus` call succeeds and returns authed |\n| `DRIVE_ACCOUNT` | `verify-account.sh` succeeds and records the intended active Drive identity |\n| `LOCAL_INVENTORY` | Receipt local names/digests/timestamps exactly equal the inventory derived from `--local-root` |\n| `DRIVE_FILESET` | Managed Drive names exactly equal the derived local inventory; no missing, extra, or duplicate managed file |\n| `DRIVE_FRESHNESS` | Every Drive SHA-256 matches local content and every Drive `modifiedTime` is at least as new |\n| `NOTEBOOKLM_FRESHNESS` | Explicitly not applicable, or source-ID readback proves expected replacements exist and stale sources are absent |\n| `GEMINI_PREFLIGHT` | The next Gemini prompt passes the executable grounding/no-attach preflight |\n\n**If the Drive corpus is older than the local context, the lifecycle is NOT complete.** Auth failure, account mismatch, missing files, or unverifiable Drive freshness also fail the lifecycle; report the failing row instead of silently skipping it.\n\n---\n\n## WHEN TO TRIGGER\n\n| Trigger | Action |\n|---------|--------|\n| Sprint merged PRs that address research findings | Run full lifecycle (Steps 1-5) |\n| Before writing a new R-number research prompt | Run Steps 2-5, then the Gemini prompt preflight |\n| Nightly/project maintenance runs | Check if context files are stale (Step 3 at minimum) |\n| Context file count > 10 | Run Step 2 (condense) |\n| Local context changed | Run Step 5 (Drive refresh is blocking) |\n| NotebookLM notebook exists | Run the NotebookLM portion of Step 5 |\n\n---\n\n## STALENESS DETECTION\n\nA context file is STALE when:\n\n1. **It describes a problem that's been fixed** — e.g., \"FTS5 is 96.9% desynced\" after PR fixing it\n2. **Its benchmark numbers are outdated** — e.g., \"675 tests\" when there are now 720\n3. **Its architecture claims are wrong** — e.g., \"Python MCP\" when it's now Swift BrainBar\n4. **It references PRs as \"open\" that are merged** — check via `gh pr view`\n5. **It's >2 sprints old and never updated** — age alone signals staleness\n\n**Quick staleness check:**\n```bash\n# Find context files older than 7 days with no updates\nfind docs.local/claude-web/projects/PROJECT/research-context/ -name \"*.md\" -mtime +7\n```\n\n---\n\n## INTEGRATION\n\n| Skill | How Research Lifecycle Uses It |\n|-------|------------------------------|\n| Claude/Gemini research runs | Create research results → lifecycle manages them afterward |\n| `/drive-usage` | Select the canonical Drive folder and stable artifact names |\n| `/braindrive` | Resolve current Drive corpus locations and verify Gemini-facing files |\n| `/gemini-research` | Enforce Drive grounding preflight and NotebookLM mirroring rules |\n| Nightly/project maintenance | Should check research context staleness during sweeps |\n| `/never-fabricate` | Verify claims in description.md against actual code before updating |\n| `/orc` W5 | Claude Web research prompts consume these context files |\n\n---\n\n## EXAMPLE: Post-R75 Lifecycle\n\nR75 sprint fixed FTS5 sync, implemented detect_entities_in_prompt, improved search.\n\n1. **NEWEST:** Create `95-R75-sprint-results.md` with: FTS5 3.1%→100%, entity detection implemented, search hybrid mode live\n2. **CONDENSED:** Merge `91-swift-python-root-cause.md` + `92-brainbar-ux-current-state.md` → `condensed-pre-R75.md` (update \"FTS5 broken\" → \"FTS5 fixed in PR #198\")\n3. **UPDATED:** Refresh `description.md` — chunk count, entity count, test count, remove \"FTS5 broken\" from known issues\n4. **ARCHIVED:** Move `R38-knowledge-graph.md` (fully implemented) to `archived/brainlayer/`\n5. **MIRRORED:** Push the current local corpus to Drive, verify Drive freshness, then replace stale NLM sources\n",
+      "evalCount": 7,
+      "assertionCount": 5,
+      "hasFixtures": true,
       "evals": [
         {
           "name": "eval-1",
@@ -3080,10 +3469,21 @@
           "name": "eval-6",
           "assertionCount": 0,
           "assertions": []
+        },
+        {
+          "name": "completed-local-lifecycle-with-stale-drive-must-fail",
+          "assertionCount": 5,
+          "assertions": [
+            "completion-refused",
+            "drive-route-required",
+            "real-auth-required",
+            "grounding-required",
+            "no-attach-instruction"
+          ]
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "session-handoff": {
       "name": "session-handoff",
@@ -3132,7 +3532,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "shell-hardening": {
       "name": "shell-hardening",
@@ -3187,17 +3587,17 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "skill-creator": {
       "name": "skill-creator",
       "command": "/skill-creator",
       "description": "Create/edit/audit/eval golem skills. Triggers: create skill, skill eval, live eval, JSONL mining.",
       "category": "Other",
-      "content": "\n# Skill Creator\n\n> Take skills from \"drafted\" to \"proven\" through rigorous multi-layer evaluation.\n\n## Installation\n\n```bash\nbash ~/Gits/golems/skills/golem-powers/skill-creator/scripts/install.sh\n```\n\nThe installer is idempotent — safe to re-run. It:\n1. Symlinks the skill into `~/.claude/commands/skill-creator` (golem-powers convention)\n2. Ensures `~/Gits/skill-creator/.claude/agents/` and `scripts/` exist as the project-scope home\n3. Symlinks the `session-miner` agent definition into the project-scope agents dir (gates the sub-agent so only skillCreator-family sessions can spawn it)\n4. Symlinks the parser into the project-scope scripts dir\n\nRun `bash scripts/install.sh --dry-run` to preview without changes. `bash scripts/install.sh --help` for usage.\n\n## Core Loop: DRAFT → EVAL → RED → GREEN → SMOKE → SHIP\n\nEvery skill change goes through this pipeline. No exceptions.\n\n### 1. DRAFT — Understand the Skill\n\n- Read the SKILL.md or MCP tool definition completely\n- `brain_search` for: prior evals, user complaints, known issues, related skills\n- Identify: what does this skill claim to do? What's the baseline without it?\n- Document intent, inputs, outputs, edge cases\n- Classify: **capability uplift** (may become obsolete) vs **encoded preference** (durable)\n\n### 2. EVAL DESIGN — Create Structured Test Cases\n\nDesign eval cases as structured JSON in `evals/evals.json`:\n\n```json\n{\n  \"id\": 1,\n  \"name\": \"descriptive-kebab-name\",\n  \"category\": \"compliance|structure|quality\",\n  \"description\": \"What this eval tests\",\n  \"prompt\": \"The input scenario given to the agent\",\n  \"assertions\": [\n    {\n      \"type\": \"tool_usage|content|negative\",\n      \"name\": \"assertion-name\",\n      \"description\": \"What correct behavior looks like\"\n    }\n  ]\n}\n```\n\nCover: happy path, edge cases, failure modes, interaction with other skills.\nSee [references/scoring-rubric.md](references/scoring-rubric.md) for scoring methodology.\n\n### 3. RED — Baseline Measurement (without skill)\n\n- Run each eval WITHOUT the skill loaded\n- Score baseline performance across all eval cases\n- Document baseline scores\n- **Gate:** If baseline >70%, the skill may not be adding value — flag it\n\n### 4. GREEN — With-Skill Measurement\n\n- Run each eval WITH the skill loaded\n- Score delta between with_skill and without_skill\n- **Gate:** Delta <10% = marginal, consider retiring. Delta >30% = clearly valuable.\n- Maximum 3 iterations before flagging for human review\n\n### 5. SMOKE — Live Agent Testing\n\n**Two tiers based on skill importance:**\n\n#### Tier A: Static Smoke (all skills)\n\n- Review evals.json assertions manually\n- Verify no contradictions between skill instructions and assertions\n- Check that strongest discriminators are tested\n\n#### Tier B: Live Agent Smoke (flagship skills only)\n\n- Run `live-eval-runner.sh` for top 3 discriminator evals\n- Agent routing: Claude skills → Sonnet, code skills → Codex, audit skills → Cursor\n- Compare captured output against assertions\n- **Gate:** Live delta must be within 15% of static delta\n- Results stored in `evals/results/live-{date}.json` and `brain_store`'d\n\nSee [workflows/live-eval.md](workflows/live-eval.md) for the full live eval workflow.\n\n### 6. SHIP — Package and Document\n\n- Ensure every skill ships with its evals (no eval = no ship)\n- `brain_store` eval results, delta scores, issues found\n- Update skill metadata (version, last-eval-date, compliance-score)\n- Follow [workflows/create-skill.md](workflows/create-skill.md) and\n  [workflows/audit-skill.md](workflows/audit-skill.md) for SKILL.md structure\n  compliance before shipping structural changes.\n- **REGISTER a NEW skill — committed ≠ installed.** A new golem-powers skill is\n  invisible to every agent until it's symlinked into `~/.claude/skills/<name>` +\n  `~/.claude/commands/<name>` (run `golem-install`, which auto-discovers + links\n  every `golem-powers/*/` dir; or symlink the one new skill). Then VERIFY it\n  appears in the available-skills list — committing/merging does NOT register it.\n  (2026-05-30: `/weave` was committed + merged but unusable by any agent until the\n  symlinks existed. See [workflows/create-skill.md](workflows/create-skill.md)\n  \"Final Step: REGISTER\".)\n\n## Eval Methodology\n\n**with_skill vs without_skill comparison is MANDATORY.** No exceptions.\n\n### Behavioral Compliance Scoring\n\n| Weight | Dimension | What it measures |\n|--------|-----------|-----------------|\n| 70% | Compliance | Does the agent follow the skill's instructions? |\n| 20% | Structure | Does the output match expected format? |\n| 10% | Quality | Is the output actually good/useful? |\n\n### Scoring Thresholds\n\n| Condition | Action |\n|-----------|--------|\n| Baseline >70% | Skill may not add value — flag and explain |\n| Delta <10% | Marginal — consider if complexity is worth it |\n| Delta >30% | Clearly valuable — ship with confidence |\n| Compliance <50% with skill | Instructions unclear — rewrite before shipping |\n\n### Agent Routing for Live Evals\n\n| Skill type | Test with | Why |\n|------------|-----------|-----|\n| Claude behavior skills | Sonnet (default) | Tests actual Claude compliance |\n| Code implementation skills | Codex (default, no model flag) | Tests code quality |\n| Audit/review skills | Cursor (default) | Tests review thoroughness |\n\n## Workflows\n\n| Workflow | When to use |\n|----------|-------------|\n| [create-skill.md](workflows/create-skill.md) | Creating a new skill from scratch |\n| [audit-skill.md](workflows/audit-skill.md) | Auditing existing skill structure, scripts, workflows, and registration before deploy |\n| [live-eval.md](workflows/live-eval.md) | Running live A/B tests with real agents |\n| [ab-compare.md](workflows/ab-compare.md) | Comparing skill versions or platforms |\n| [mine-session.md](workflows/mine-session.md) | Mining a Claude Code session JSONL into a 10-section markdown digest (handoff docs, EOD waves, claim verification) |\n\n## References\n\n| Reference | Content |\n|-----------|---------|\n| [scoring-rubric.md](references/scoring-rubric.md) | Full scoring methodology and rubric |\n| [subagent-vs-skill.md](references/subagent-vs-skill.md) | Classification reference — **READ BEFORE SCAFFOLDING** any new capability. Distinguishes skill (slash-triggered, parent-context) from sub-agent (name-spawned, isolated-context). Documents the misroute pattern (GitHub openai/codex#18823) that even Codex itself routinely makes. |\n\n## Integration with Other Skills\n\n- `/cmux-agents` — spawning live eval agents in cmux panes\n- `/never-fabricate` — Read() every file before reporting results\n- `/pr-loop` — shipping skill changes through the full PR lifecycle\n\n## Packaged Sub-Agents (skill-creator family only)\n\nThese sub-agents ship in BOTH Claude and Codex formats. They are invokable **only** from sessions with cwd inside `~/Gits/skill-creator/` (i.e., skillCreatorClaude / skillCreatorCodex / skillCreatorRepoGolem). Sessions in other repos cannot spawn them directly — they must dispatch a skillCreator first.\n\nCanonical source-of-truth lives in this skill's `agents/` dir. `scripts/install.sh` symlinks them into the project repo's project-scope dirs (`.claude/agents/` for Claude, `.codex/agents/` for Codex). The dual-format packaging means the same sub-agent is available regardless of whether the parent is Claude Code or Codex CLI.\n\n| Sub-agent | Claude format | Codex format | Workflow |\n|---|---|---|---|\n| `session-miner` | `agents/session-miner.md` (model: inherit) | `agents/session-miner.toml` (model: gpt-5.3-codex-spark) | [mine-session.md](workflows/mine-session.md) |\n\nBoth formats invoke the same deterministic parser at `scripts/session-miner.py`. The Claude format uses `subagent_type=\"session-miner\"` via the `Agent` tool; the Codex format is referenced by name in natural-language prompts (`session_miner, mine X to Y`).\n\nFor when to choose sub-agent vs skill: see [references/subagent-vs-skill.md](references/subagent-vs-skill.md).\n\n## Critical Rules\n\n1. **Never claim \"tests pass\" without running them.** Read actual output.\n2. **Every skill ships with evals.** No eval = no ship.\n3. **brain_search BEFORE starting work** — someone may have already evaluated it.\n4. **brain_store AFTER completing work** — results, delta scores, decisions.\n5. **Max 3 iterations** per skill before flagging for human review.\n6. **Read() every file you cite.** No citing from compacted summaries.\n7. **Sequential skill compounding** — build skills one at a time, each learning from the last.\n",
-      "evalCount": 15,
-      "assertionCount": 58,
-      "hasFixtures": false,
+      "content": "\n# Skill Creator\n\n> Take skills from \"drafted\" to \"proven\" through rigorous multi-layer evaluation.\n\n## Installation\n\n```bash\nbash ~/Gits/golems/skills/golem-powers/skill-creator/scripts/install.sh\n```\n\nThe installer is idempotent — safe to re-run. It:\n1. Symlinks the skill into `~/.claude/commands/skill-creator` (golem-powers convention)\n2. Ensures `~/Gits/skill-creator/.claude/agents/` and `scripts/` exist as the project-scope home\n3. Symlinks the `session-miner` agent definition into the project-scope agents dir (gates the sub-agent so only skillCreator-family sessions can spawn it)\n4. Symlinks the parser into the project-scope scripts dir\n\nRun `bash scripts/install.sh --dry-run` to preview without changes. `bash scripts/install.sh --help` for usage.\n\n## Core Loop: DRAFT → EVAL → RED → GREEN → SMOKE → SHIP\n\nEvery skill change goes through this pipeline. No exceptions.\n\n### 1. DRAFT — Understand the Skill\n\n- Read the SKILL.md or MCP tool definition completely\n- `brain_search` for: prior evals, user complaints, known issues, related skills\n- Identify: what does this skill claim to do? What's the baseline without it?\n- Document intent, inputs, outputs, edge cases\n- Classify: **capability uplift** (may become obsolete) vs **encoded preference** (durable)\n\n### 2. EVAL DESIGN — Create Structured Test Cases\n\nDesign eval cases as structured JSON in `evals/evals.json`:\n\n```json\n{\n  \"id\": 1,\n  \"name\": \"descriptive-kebab-name\",\n  \"category\": \"compliance|structure|quality\",\n  \"description\": \"What this eval tests\",\n  \"prompt\": \"The input scenario given to the agent\",\n  \"assertions\": [\n    {\n      \"type\": \"tool_usage|content|negative\",\n      \"name\": \"assertion-name\",\n      \"description\": \"What correct behavior looks like\"\n    }\n  ]\n}\n```\n\nCover: happy path, edge cases, failure modes, interaction with other skills.\nSee [references/scoring-rubric.md](references/scoring-rubric.md) for scoring methodology.\n\n### 3. RED — Baseline Measurement (without skill)\n\n- Run each eval WITHOUT the skill loaded\n- Score baseline performance across all eval cases\n- Document baseline scores\n- **Gate:** If baseline >70%, the skill may not be adding value — flag it\n\n### 4. GREEN — With-Skill Measurement\n\n- Run each eval WITH the skill loaded\n- Score delta between with_skill and without_skill\n- **Gate:** Delta <10% = marginal, consider retiring. Delta >30% = clearly valuable.\n- Maximum 3 iterations before flagging for human review\n\n### 5. SMOKE — Live Agent Testing\n\n**Two tiers based on skill importance:**\n\n#### Tier A: Static Smoke (all skills)\n\n- Review evals.json assertions manually\n- Verify no contradictions between skill instructions and assertions\n- Check that strongest discriminators are tested\n\n#### Tier B: Live Agent Smoke (flagship skills only)\n\n- Run `live-eval-runner.sh` for top 3 discriminator evals\n- Agent routing: Claude skills → Sonnet, code skills → Codex, audit skills → Cursor\n- Compare captured output against assertions\n- **Gate:** Live delta must be within 15% of static delta\n- Results stored in `evals/results/live-{date}.json` and `brain_store`'d\n\nSee [workflows/live-eval.md](workflows/live-eval.md) for the full live eval workflow.\n\n### 6. SHIP — Package and Document\n\n- Ensure every skill ships with its evals (no eval = no ship)\n- `brain_store` eval results, delta scores, issues found\n- Update skill metadata (version, last-eval-date, compliance-score)\n- Follow [workflows/create-skill.md](workflows/create-skill.md) and\n  [workflows/audit-skill.md](workflows/audit-skill.md) for SKILL.md structure\n  compliance before shipping structural changes.\n- **REGISTER a NEW skill — committed ≠ installed.** A new golem-powers skill is\n  invisible to every agent until it's symlinked into `~/.claude/skills/<name>` +\n  `~/.claude/commands/<name>` (run `golem-install`, which auto-discovers + links\n  every `golem-powers/*/` dir; or symlink the one new skill). Then VERIFY it\n  appears in the available-skills list — committing/merging does NOT register it.\n  (2026-05-30: `/weave` was committed + merged but unusable by any agent until the\n  symlinks existed. See [workflows/create-skill.md](workflows/create-skill.md)\n  \"Final Step: REGISTER\".)\n\n## Eval Methodology\n\n**with_skill vs without_skill comparison is MANDATORY.** No exceptions.\n\n### Eval Result Provenance — Validity Gate\n\n**No provenance = no eval.** Every static or live eval result MUST record one\nprovenance entry per agent or eval arm with:\n\n| Field | Required value |\n|---|---|\n| `model_requested` | Alias or model ID requested by the caller |\n| `model_effective` | Model ID observed at runtime |\n| `effort_effective` | Effort observed at runtime |\n| `model_observation_source` | CLI status line, session JSONL `model` field, or API response metadata |\n| `effort_observation_source` | CLI status line, session JSONL `effort` field, or API response metadata |\n\n`model_effective` must be the concrete runtime ID, not a floating alias or\nfriendly display label, and uses an ID token with no whitespace. Observation\nsources begin with the exact case-sensitive labels shown above; append details\nafter `:`, `-`, `—`, or `(` when useful.\n\nJSON records use\n[`eval-result-provenance.schema.json`](evals/eval-result-provenance.schema.json).\nMarkdown records use an `## Eval Provenance` table with these fields plus an\n`agent_or_arm` column. Examples inside fenced code blocks are not evidence.\n\nWhen runtime observation was impossible, the corresponding value and source\nMUST say `NOT DETERMINED`; omission, inference, and silent fallback are invalid.\nThis is valid honesty but the checker marks the result `NON_COMPARABLE`; it\ncannot support a cross-arm/model delta claim. A `NON_COMPARABLE` record that\ncontains any score, delta, or positive comparability claim is mechanically\n`INVALID`, not merely discouraged by prose. Pre-contract historical results may\nuse `provenance: alias-only` and are also non-comparable; an alias-only record\nthat carries a score, delta, or positive comparability claim is likewise\n`INVALID`. New results may not use that historical escape.\n\nBefore publishing or citing a score/delta, run the checker with\n`--require-comparable`. Exit 0 means comparable evidence, exit 3 means honest\nretained history that cannot carry the claim, and exit 1 means invalid input.\nRun the mechanical provenance check in\n[workflows/audit-skill.md](workflows/audit-skill.md) before scoring. An invalid\nresult is not evidence and receives no score, delta, or verdict.\n\nThe requested alias is insufficient: cmuxlayer `spawn_agent.model` has a\nconfirmed defect that silently drops non-alias models while reporting them\nhonored. A requested model records intent, not runtime outcome—the same false\nsurface class as `delivered:true` or exit 0 without live verification.\n\n### Behavioral Compliance Scoring\n\n| Weight | Dimension | What it measures |\n|--------|-----------|-----------------|\n| 70% | Compliance | Does the agent follow the skill's instructions? |\n| 20% | Structure | Does the output match expected format? |\n| 10% | Quality | Is the output actually good/useful? |\n\n### Scoring Thresholds\n\n| Condition | Action |\n|-----------|--------|\n| Baseline >70% | Skill may not add value — flag and explain |\n| Delta <10% | Marginal — consider if complexity is worth it |\n| Delta >30% | Clearly valuable — ship with confidence |\n| Compliance <50% with skill | Instructions unclear — rewrite before shipping |\n\n### Agent Routing for Live Evals\n\n| Skill type | Test with | Why |\n|------------|-----------|-----|\n| Claude behavior skills | Sonnet (default) | Tests actual Claude compliance |\n| Code implementation skills | Codex (default, no model flag) | Tests code quality |\n| Audit/review skills | Cursor (default) | Tests review thoroughness |\n\n## Workflows\n\n| Workflow | When to use |\n|----------|-------------|\n| [create-skill.md](workflows/create-skill.md) | Creating a new skill from scratch |\n| [audit-skill.md](workflows/audit-skill.md) | Auditing existing skill structure, scripts, workflows, and registration before deploy |\n| [live-eval.md](workflows/live-eval.md) | Running live A/B tests with real agents |\n| [ab-compare.md](workflows/ab-compare.md) | Comparing skill versions or platforms |\n| [mine-session.md](workflows/mine-session.md) | Mining a Claude Code session JSONL into a 10-section markdown digest (handoff docs, EOD waves, claim verification) |\n\n## References\n\n| Reference | Content |\n|-----------|---------|\n| [scoring-rubric.md](references/scoring-rubric.md) | Full scoring methodology and rubric |\n| [subagent-vs-skill.md](references/subagent-vs-skill.md) | Classification reference — **READ BEFORE SCAFFOLDING** any new capability. Distinguishes skill (slash-triggered, parent-context) from sub-agent (name-spawned, isolated-context). Documents the misroute pattern (GitHub openai/codex#18823) that even Codex itself routinely makes. |\n\n## Integration with Other Skills\n\n- `/cmux-agents` — spawning live eval agents in cmux panes\n- `/never-fabricate` — Read() every file before reporting results\n- `/pr-loop` — shipping skill changes through the full PR lifecycle\n\n## Packaged Sub-Agents (skill-creator family only)\n\nThese sub-agents ship in BOTH Claude and Codex formats. They are invokable **only** from sessions with cwd inside `~/Gits/skill-creator/` (i.e., skillCreatorClaude / skillCreatorCodex / skillCreatorRepoGolem). Sessions in other repos cannot spawn them directly — they must dispatch a skillCreator first.\n\nCanonical source-of-truth lives in this skill's `agents/` dir. `scripts/install.sh` symlinks them into the project repo's project-scope dirs (`.claude/agents/` for Claude, `.codex/agents/` for Codex). The dual-format packaging means the same sub-agent is available regardless of whether the parent is Claude Code or Codex CLI.\n\n| Sub-agent | Claude format | Codex format | Workflow |\n|---|---|---|---|\n| `session-miner` | `agents/session-miner.md` (model: inherit) | `agents/session-miner.toml` (model: gpt-5.3-codex-spark) | [mine-session.md](workflows/mine-session.md) |\n\nBoth formats invoke the same deterministic parser at `scripts/session-miner.py`. The Claude format uses `subagent_type=\"session-miner\"` via the `Agent` tool; the Codex format is referenced by name in natural-language prompts (`session_miner, mine X to Y`).\n\nFor when to choose sub-agent vs skill: see [references/subagent-vs-skill.md](references/subagent-vs-skill.md).\n\n## Critical Rules\n\n1. **Never claim \"tests pass\" without running them.** Read actual output.\n2. **Every skill ships with evals.** No eval = no ship.\n3. **brain_search BEFORE starting work** — someone may have already evaluated it.\n4. **brain_store AFTER completing work** — results, delta scores, decisions.\n5. **Max 3 iterations** per skill before flagging for human review.\n6. **Read() every file you cite.** No citing from compacted summaries.\n7. **Sequential skill compounding** — build skills one at a time, each learning from the last.\n",
+      "evalCount": 16,
+      "assertionCount": 64,
+      "hasFixtures": true,
       "evals": [
         {
           "name": "brain-search-before-work",
@@ -3346,6 +3746,18 @@
             "provides-actionable-fixes",
             "no-registration-claim-without-check"
           ]
+        },
+        {
+          "name": "effective-model-provenance-gate",
+          "assertionCount": 6,
+          "assertions": [
+            "runs-provenance-checker",
+            "requires-fields-per-arm",
+            "requires-runtime-observation-sources",
+            "allows-explicit-not-determined",
+            "requires-comparable-before-publishing",
+            "no-provenance-no-eval"
+          ]
         }
       ],
       "workflows": [
@@ -3356,7 +3768,7 @@
         "live-eval",
         "mine-session"
       ],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "skills": {
       "name": "skills",
@@ -3400,7 +3812,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "spec-preflight-gate": {
       "name": "spec-preflight-gate",
@@ -3413,7 +3825,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "stitch-design": {
       "name": "stitch-design",
@@ -3426,7 +3838,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "tailnet-sync-gate": {
       "name": "tailnet-sync-gate",
@@ -3439,7 +3851,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "tdd-guard": {
       "name": "tdd-guard",
@@ -3452,7 +3864,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "tmp-block": {
       "name": "tmp-block",
@@ -3465,7 +3877,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "ultracode-depth-gate": {
       "name": "ultracode-depth-gate",
@@ -3478,7 +3890,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-06-25"
+      "lastModified": "2026-08-03"
     },
     "voice-sessions": {
       "name": "voice-sessions",
@@ -3526,7 +3938,7 @@
         "quick",
         "review"
       ],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "weave": {
       "name": "weave",
@@ -3539,7 +3951,7 @@
       "hasFixtures": false,
       "evals": [],
       "workflows": [],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "whats-new": {
       "name": "whats-new",
@@ -3632,7 +4044,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "wispr-mining": {
       "name": "wispr-mining",
@@ -3717,7 +4129,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     },
     "wizard": {
       "name": "wizard",
@@ -3786,7 +4198,7 @@
       "workflows": [
         "setup"
       ],
-      "lastModified": "2026-07-13"
+      "lastModified": "2026-08-03"
     },
     "yash": {
       "name": "yash",
@@ -3856,7 +4268,7 @@
         }
       ],
       "workflows": [],
-      "lastModified": "2026-06-12"
+      "lastModified": "2026-08-03"
     }
   }
 }
