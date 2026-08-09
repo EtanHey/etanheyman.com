@@ -54,3 +54,5 @@ supabase/.temp/
 
 # MCP config (contains secrets)
 .mcp.json
+.worktrees/
+.cmux/worktrees/
