@@ -23,3 +23,12 @@ ALTER FUNCTION public.get_job_stats() SET search_path = public;
 ALTER FUNCTION public.get_pipeline_stats() SET search_path = public;
 ALTER FUNCTION public.get_linkedin_stats() SET search_path = public;
 ALTER FUNCTION public.get_token_stats(integer) SET search_path = public;
+
+-- 2026-08-19 follow-up (applied live the same day): the direct revokes above are
+-- insufficient — EXECUTE also flows through PUBLIC's default grant. Close it:
+REVOKE EXECUTE ON FUNCTION public.get_correction_stats() FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.get_job_status_counts() FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.get_email_category_stats() FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.get_correction_stats() TO service_role;
+GRANT EXECUTE ON FUNCTION public.get_job_status_counts() TO service_role;
+GRANT EXECUTE ON FUNCTION public.get_email_category_stats() TO service_role;
