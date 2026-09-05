@@ -6,17 +6,22 @@ sidebar_position: 1
 
 ## What is Golems?
 
-Golems is an autonomous AI agent ecosystem built for Claude Code. It's a Bun workspace monorepo with **11 packages** — 7 golems (1 orchestrator + 6 domain experts) plus shared infrastructure, tools, and dashboards — each installable as a Claude Code plugin.
+Golems is a Bun monorepo of AI-agent packages, command-line tooling, and evaluated workflow skills. The source is public at [github.com/EtanHey/golems](https://github.com/EtanHey/golems) under the Apache-2.0 license.
 
-- **Orchestrator:** ClaudeGolem — Telegram bot that routes commands to the right golem
-- **Domain Golems:** RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem — each owns a specific knowledge area
-- **Infrastructure:** @golems/shared (foundation + email system), @golems/services (Night Shift, Cloud Worker, Briefing)
-- **Tools:** 55 reusable skills in `skills/golem-powers/`, BrainLayer (284K+ chunk memory layer with 10-field enrichment)
-- **Core Principle:** Golems are domain experts, not I/O channels — they own specific knowledge areas and produce specialized outputs
+Two terms carry most of the weight:
+
+- A **golem** is a domain-focused agent package: code, prompts, and integrations that work together for a bounded job such as recruiting, finance, scheduling, job search, or content.
+- A **skill** is a `SKILL.md` workflow that an AI coding agent such as Claude Code can load and follow. Skills may also ship scripts, references, adapters, fixtures, and executable evals.
+
+At the time of writing the tree has **13 workspace packages** and **88 skills** with a top-level `SKILL.md` under `skills/golem-powers/`. That directory also holds shared, archived, and scaffolding entries that are not installable skills, so re-derive the count from a checkout instead of trusting this page:
+
+```bash
+node scripts/check-skill-library.mjs
+```
+
+**Core principle:** golems are domain experts, not I/O channels. A golem does not care whether a request arrives by Telegram, email, or HTTP. It cares about solving problems in its domain.
 
 ## Architecture Principle
-
-A Golem is a domain expert focused on one area. It doesn't care about how messages arrive (Telegram, email, HTTP) — it cares about solving problems in its domain.
 
 ```mermaid
 flowchart TD
@@ -27,137 +32,119 @@ flowchart TD
         CG["CoachGolem<br/><small>calendar, daily planning</small>"]
         XG["ContentGolem<br/><small>LinkedIn, Soltome</small>"]
     end
-    CL["ClaudeGolem<br/><small>Telegram orchestrator</small>"] --> golems
+    CL["ClaudeGolem<br/><small>Telegram router</small>"] --> golems
     golems --> infra["@golems/shared<br/><small>Supabase · LLM · Email · State</small>"]
 ```
 
-Each golem operates independently and only depends on `@golems/shared`. ClaudeGolem routes Telegram commands to the appropriate domain golem.
+The golem packages depend on `@golems/shared` for Supabase, LLM, email, and state utilities. `@golems/claude` (ClaudeGolem) is the Telegram bot that routes commands to the domain golems.
 
 ## Prerequisites
 
-Before you start, ensure you have:
-
-- **Bun** (v1.0+) — runtime and package manager
-- **Python** 3.10+ — required for BrainLayer package (semantic search)
-- **1Password CLI** (`op` command) — secret management
-- **Claude Code** — the IDE
-- **GitHub** — repo access (SSH key configured)
-- **Node.js** 20+ (installed with Bun)
+- **Bun** — runtime and package manager
+- **Git**
+- **Claude Code**, or another AI coding agent, if you want to run the skills
+- **1Password CLI** (`op`) — optional; the secrets step below uses it, but any secret store works
 
 ## Quick Start
 
-### 1. Clone and Install
+### 1. Clone, install, test
 
 ```bash
 git clone https://github.com/EtanHey/golems.git
 cd golems
 bun install
+bun test
 ```
 
-### 2. Configure Secrets
+The [README](https://github.com/EtanHey/golems#development) records the current test totals, including known failures that show up on a clean clone.
 
-Store secrets in 1Password (not `.env`):
+### 2. Check your environment
 
 ```bash
-# Create 1Password items in your vault:
-# - ANTHROPIC_API_KEY (can name it anything, e.g., "Golems Claude API")
-# - SUPABASE_URL
-# - SUPABASE_SERVICE_KEY (service role key for Email/Teller Golems)
-# - TELEGRAM_BOT_TOKEN
-# - TELEGRAM_CHAT_ID
+bun packages/golems-cli/src/index.ts setup --check
+```
 
-# Load them into shell:
+This reports whether `bun`, `git`, and `claude` are installed and where they were found.
+
+### 3. List and install skills
+
+```bash
+bun packages/golem-skills/src/index.ts skills list
+bun packages/golem-skills/src/index.ts skills install <skill-name>
+```
+
+Both commands read `skills/golem-powers/` on `master` through the GitHub API, so they need network access and report what is published rather than what is in your working tree. The list includes helper directories such as `_shared` and `_archive` that are not installable skills.
+
+### 4. Configure secrets (golem packages only)
+
+Skills run inside your coding agent. The golem packages additionally read their credentials from environment variables, for example `ANTHROPIC_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `TELEGRAM_BOT_TOKEN`, and `TELEGRAM_CHAT_ID`. One way to load them is from 1Password:
+
+```bash
 export ANTHROPIC_API_KEY=$(op read op://YOUR_VAULT/YOUR_ANTHROPIC_ITEM/credential)
 export SUPABASE_URL=$(op read op://YOUR_VAULT/YOUR_SUPABASE_ITEM/url)
 export SUPABASE_SERVICE_KEY=$(op read op://YOUR_VAULT/YOUR_SUPABASE_ITEM/service_key)
-# ... etc
+export TELEGRAM_BOT_TOKEN=$(op read op://YOUR_VAULT/YOUR_TELEGRAM_ITEM/credential)
+export TELEGRAM_CHAT_ID=$(op read op://YOUR_VAULT/YOUR_TELEGRAM_ITEM/chat_id)
 ```
 
-### 3. Start Golems
+See [Environment Variables](/golems/docs/configuration/env-vars) and [Secrets](/golems/docs/configuration/secrets) for the full list.
+
+### 5. Run a golem
 
 ```bash
-# From golems root (CLI must be in PATH or use full path)
-golems status
-
-# Expected output:
-# === GOLEMS STATUS ===
-# Telegram Bot: [status]
-# Ollama: [status]
-# LaunchAgents: [status]
-```
-
-### 4. Run Your First Agent
-
-```bash
-# Start the Telegram bot
+# Telegram bot (ClaudeGolem)
 bun packages/claude/src/telegram-bot.ts
 
-# Route emails through the email system
+# Email routing
 bun packages/shared/src/email/index.ts
 
-# Trigger night shift improvements
+# Night Shift runner
 bun packages/services/src/night-shift.ts
 ```
+
+Each of these expects the environment variables from step 4.
 
 ## Monorepo Structure
 
 ```
-golems/                              # Bun workspace monorepo
-├── packages/shared/                 # @golems/shared — Supabase, LLM, email, state
-├── packages/claude/                 # ClaudeGolem — Telegram orchestrator
-├── packages/recruiter/              # RecruiterGolem — outreach, practice, contacts
-├── packages/teller/                 # TellerGolem — finances, tax categorization
-├── packages/jobs/                   # JobGolem — scraping, matching, MCP tools
-├── packages/content/                # ContentGolem — LinkedIn, Soltome
-├── packages/coach/                  # CoachGolem — calendar, daily planning
-├── packages/services/               # Night Shift, Briefing, Cloud Worker, Wizard
-├── packages/docsite/                # Next.js web dashboard (Vercel)
-├── packages/golems-tui/             # React Ink terminal dashboard
-├── packages/tax-helper/             # Schedule C transaction categorization
-├── skills/golem-powers/             # 55 reusable Claude Code skills
-├── launchd/                         # macOS service plists
-├── Dockerfile                       # Railway cloud worker image
-└── supabase/migrations/             # SQL schema changes
+golems/
+├── packages/claude/             # Telegram notification bot and orchestration adapters
+├── packages/coach/              # Calendar, planning, and coaching primitives
+├── packages/content/            # Content pipelines and Remotion infrastructure
+├── packages/golem-skills/       # Skill installer and update CLI
+├── packages/golems-cli/         # Environment setup CLI
+├── packages/golems-tui/         # React Ink terminal interface
+├── packages/green-invoice-mcp/  # Invoice MCP integration
+├── packages/jobs/               # Job collection and matching
+├── packages/mock-mcp/           # MCP test fixtures
+├── packages/recruiter/          # Outreach and interview-practice workflows
+├── packages/services/           # Briefing, scheduler, doctor, and local services
+├── packages/shared/             # Shared state, LLM, email, and notification utilities
+├── packages/teller/             # Finance and transaction categorization
+├── skills/golem-powers/         # 88 skills, each with a SKILL.md
+├── scripts/                     # Launchers, CI gates, skill-library check
+├── launchd/                     # macOS service plists
+└── Dockerfile                   # Cloud worker image
 ```
 
 ## Next Steps
 
-1. **Read Architecture** — understand Mac vs Cloud split in `/docs/architecture.md`
-2. **Configure Cloud** — set up Supabase and Railway in `/docs/deployment/railway.md`
-3. **Environment Variables** — see `/docs/configuration/env-vars.md` and `/docs/configuration/secrets.md`
-4. **Explore Golems** — dive into each domain expert in `/docs/golems/`
-5. **Join Development** — run tests, create PRs, use Ralph for autonomous stories
+1. **Architecture** — how work splits between a local machine and cloud services: [Architecture](/golems/docs/architecture)
+2. **Cloud deployment** — Supabase and Railway setup: [Railway](/golems/docs/deployment/railway)
+3. **Configuration** — [Environment Variables](/golems/docs/configuration/env-vars) and [Secrets](/golems/docs/configuration/secrets)
+4. **Skills** — browse the published skill pages at [/golems/skills](/golems/skills) or read the [Skills Library](/golems/docs/skills) doc
+5. **Contributing** — [CONTRIBUTING.md](https://github.com/EtanHey/golems/blob/master/CONTRIBUTING.md) covers tests and pull requests
 
 ## Troubleshooting
 
-**Golems status shows disconnected:**
+**`setup --check` reports a missing dependency:** install the tool it names and rerun the check.
+
+**Tests failing after a pull:**
 
 ```bash
-# Check env vars loaded
-op read op://YOUR_VAULT/YOUR_TELEGRAM_ITEM/credential
-
-# Restart a specific service
-golems restart telegram
-
-# Or restart all services (using the 'latest' command)
-golems latest
-```
-
-**Tests failing:**
-
-```bash
-# Clear cache and reinstall
-rm -rf bun.lockb node_modules
+rm -rf node_modules
 bun install
 bun test
 ```
 
-**Memory issues (Node.js OOM):**
-
-```bash
-# Increase heap limit for long-running sessions
-export NODE_OPTIONS="--max-old-space-size=8192"
-bun src/night-shift.ts
-```
-
-See `/docs/configuration/env-vars.md` and `/docs/configuration/secrets.md` for detailed setup guides.
+**A golem exits immediately:** check that the environment variables from step 4 are set in the shell that launched it. See [Environment Variables](/golems/docs/configuration/env-vars).

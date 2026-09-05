@@ -28,9 +28,9 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: {
     template: '%s | Golems',
-    default: 'Golems — Autonomous AI Agent Ecosystem',
+    default: 'Golems — AI-Agent Packages, CLI Tooling and Evaluated Skills',
   },
-  description: 'Autonomous AI agent ecosystem built for Claude Code. Domain-expert golems that work while you sleep.',
+  description: 'Golems is a Bun monorepo of AI-agent packages, command-line tooling, and evaluated workflow skills for Claude Code and other AI coding agents. Public source on GitHub.',
   icons: {
     icon: '/images/golems-logo.svg',
   },
