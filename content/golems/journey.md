@@ -4,7 +4,7 @@ sidebar_position: 8
 
 # Engineering Journey
 
-How one developer and Claude Code built an autonomous AI agent ecosystem — and accidentally invented patterns before the platforms shipped them natively.
+A dated log of how one developer and Claude Code built the Golems monorepo, from the Ralph coding loop to the current skill library.
 
 ## Origins
 
@@ -41,7 +41,7 @@ Instead of building golems first, we built **BrainLayer** (originally Zikaron, H
 
 ### Jan 13: Architecture Crystallizes
 
-Chose monolithic Python daemon over microservices. One process, one database, instant queries. BrainLayer now indexes 284K+ conversation chunks and returns results in under 2 seconds.
+Chose monolithic Python daemon over microservices. One process, one database. BrainLayer's local database has since grown to more than 800,000 conversation chunks (805,430 as of September 2026).
 
 ### Jan 17: First Golem — Email Router
 

@@ -1,10 +1,10 @@
 {
   "generatedAt": "2026-04-10T14:00:00Z",
   "skills": {
-    "count": 60,
-    "withSkillMd": 60,
-    "withEvals": 56,
-    "evalCoverage": "93%",
+    "count": 88,
+    "withSkillMd": 88,
+    "withEvals": 53,
+    "evalCoverage": "60%",
     "adapterLayer": "AI-agnostic (Claude, Cursor, Gemini, Codex, Kiro)"
   },
   "packages": {
