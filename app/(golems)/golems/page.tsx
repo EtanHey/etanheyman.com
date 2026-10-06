@@ -3,6 +3,7 @@ import Image from "next/image";
 import CopyButton from "./components/CopyButton";
 import SkillsShowcase from "./components/SkillsShowcase";
 import golemsStats from "./lib/golems-stats.json";
+import skillsManifest from "./lib/skills-manifest.json";
 
 /* ── Product cards data ────────────────────────────────────────── */
 
@@ -871,7 +872,7 @@ const ecosystemStats = [
   { value: "313K+", label: "Knowledge Chunks", color: "#e59500" },
   { value: "8,790", label: "KG Entities", color: "#c46d3c" },
   {
-    value: String(golemsStats.skills.count),
+    value: String(skillsManifest.skillCount),
     label: "Skills",
     color: "#6ab0f3",
   },
@@ -975,30 +976,6 @@ function BuilderProfile() {
 /* ── Cross-AI Portability Section ──────────────────────────────── */
 
 function CrossAISection() {
-  const evals = [
-    {
-      cli: "Codex",
-      model: "GPT-5.4",
-      score: "8/10",
-      note: "Before universal fallbacks were added",
-      color: "#f97316",
-    },
-    {
-      cli: "Gemini",
-      model: "2.5 Pro",
-      score: "10/10",
-      note: "Perfect — read fallback table correctly",
-      color: "#4285f4",
-    },
-    {
-      cli: "Kiro",
-      model: "Default",
-      score: "9.5/10",
-      note: "One buried detail missed, now explicit",
-      color: "#ec4899",
-    },
-  ];
-
   return (
     <section className="relative bg-gradient-to-b from-[#0a0908] to-[#0c0b0a] py-12 md:py-20">
       <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#f9731626] to-transparent" />
@@ -1007,7 +984,7 @@ function CrossAISection() {
           Skills Work on Any AI
         </h2>
         <p className="mb-10 text-center text-[#b0a89c] italic">
-          3-layer adapter architecture · validated across 3 non-Claude CLIs
+          3-layer adapter architecture · one adapter file per CLI
         </p>
 
         {/* Architecture layers */}
@@ -1056,68 +1033,23 @@ function CrossAISection() {
           ))}
         </div>
 
-        {/* Cross-AI eval results */}
-        <div className="mb-6">
-          <h3 className="mb-4 text-sm font-bold tracking-wider text-[#b0a89c] uppercase">
-            Cross-AI Portability Eval — cmux-agents (Mar 2026)
-          </h3>
-          <div className="space-y-2">
-            {evals.map((e) => (
-              <div
-                key={e.cli}
-                className="flex items-center gap-4 rounded-lg border px-4 py-3"
-                style={{
-                  borderColor: `${e.color}20`,
-                  backgroundColor: `${e.color}06`,
-                }}
-              >
-                <span
-                  className="w-16 shrink-0 font-mono text-sm font-bold"
-                  style={{ color: e.color }}
-                >
-                  {e.cli}
-                </span>
-                <span className="w-20 shrink-0 text-xs text-[#b0a89c]">
-                  {e.model}
-                </span>
-                <span
-                  className="w-14 shrink-0 text-center text-lg font-extrabold"
-                  style={{ color: e.color }}
-                >
-                  {e.score}
-                </span>
-                <span className="text-[0.75rem] text-[#b8ad9e]">{e.note}</span>
-              </div>
-            ))}
-          </div>
-          <p className="mt-3 text-xs text-[#b0a89c]">
-            Scores above are weighted rubric totals (partial credit for 4/5).
-            The{" "}
-            <Link
-              href="/golems/skills/cmux-agents"
-              className="text-[#e59500] no-underline hover:underline"
-            >
-              detail page →
-            </Link>{" "}
-            shows binary assertion pass rates (pass = 5/5 only).
-          </p>
-        </div>
-
         {/* Skills with adapters */}
         <div className="rounded-xl border border-[#e5950014] bg-[#14120e]/90 px-5 py-4">
           <p className="mb-2 text-xs font-bold tracking-wider text-[#b0a89c] uppercase">
             Skills with adapter support
           </p>
           <div className="flex flex-wrap gap-2">
-            {["cmux-agents", "pr-loop", "commit", "coach"].map((s) => (
-              <Link
-                key={s}
-                href={`/golems/skills/${s}`}
-                className="rounded-lg border border-[#e5950020] bg-[#e595000a] px-3 py-1.5 font-mono text-xs font-bold text-[#e59500] no-underline transition-colors hover:border-[#e5950060]"
-              >
-                /{s}
-              </Link>
-            ))}
+            {["cmux-agents", "pr-loop", "coach"]
+              .filter((s) => s in skillsManifest.skills)
+              .map((s) => (
+                <Link
+                  key={s}
+                  href={`/golems/skills/${s}`}
+                  className="rounded-lg border border-[#e5950020] bg-[#e595000a] px-3 py-1.5 font-mono text-xs font-bold text-[#e59500] no-underline transition-colors hover:border-[#e5950060]"
+                >
+                  /{s}
+                </Link>
+              ))}
           </div>
         </div>
       </div>

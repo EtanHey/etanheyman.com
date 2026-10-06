@@ -3,6 +3,7 @@
 
 import type { TerminalTab } from "./components/TerminalShowcase";
 import golemsStats from "@/app/(golems)/golems/lib/golems-stats.json";
+import skillsManifest from "@/app/(golems)/golems/lib/skills-manifest.json";
 
 const terminalData: Record<string, { tabs: TerminalTab[]; title: string }> = {
   brainlayer: {
@@ -296,7 +297,7 @@ const terminalData: Record<string, { tabs: TerminalTab[]; title: string }> = {
         lines: [
           "\x1b[90m$\x1b[0m golems status",
           "",
-          `\x1b[1;33mGolems Ecosystem\x1b[0m  \x1b[90m·\x1b[0m  ${golemsStats.packages.count} packages, ${golemsStats.agents.count} agents, ${golemsStats.skills.count} skills`,
+          `\x1b[1;33mGolems Ecosystem\x1b[0m  \x1b[90m·\x1b[0m  ${golemsStats.packages.count} packages, ${golemsStats.agents.count} agents, ${skillsManifest.skillCount} skills`,
           "",
           "\x1b[32m\u25CF\x1b[0m \x1b[1;37mTelegram Bot\x1b[0m      \x1b[32mrunning\x1b[0m  \x1b[90mport 3847\x1b[0m",
           "\x1b[32m\u25CF\x1b[0m \x1b[1;37mCloud Worker\x1b[0m      \x1b[32mrunning\x1b[0m  \x1b[90mRailway\x1b[0m",

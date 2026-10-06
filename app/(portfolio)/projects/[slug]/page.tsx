@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import golemsStats from "@/app/(golems)/golems/lib/golems-stats.json";
+import skillsManifest from "@/app/(golems)/golems/lib/skills-manifest.json";
 import AdminEditButton from "@/app/components/AdminEditButton";
 import { getProjectBySlugOrId, getAllProjects } from "@/lib/projects";
 import Image from "next/image";
@@ -34,7 +35,7 @@ const PROJECT_DESCRIPTIONS: Record<string, string> = {
     "Terminal orchestration for AI agents. 21 MCP tools across 3 layers: surface control, agent lifecycle (spawn_agent, stop_agent, send_to_agent), and V2 facade. Playwright browser surfaces. 1,423x socket speedup via native MCP.",
   "whatsapp-mcp":
     "Hebrew-compatible WhatsApp MCP fork. Fixed Unicode search (instr() over LOWER+LIKE), dual-bridge personal+business auto-detection, self-chat safety mode. 12 MCP tools for reading and sending messages.",
-  golems: `Autonomous AI agent ecosystem. ${golemsStats.packages.count} packages, ${golemsStats.agents.count} domain agents, ${golemsStats.skills.count} skills, multi-LLM routing, Night Shift autonomous coding at 4am.`,
+  golems: `Autonomous AI agent ecosystem. ${golemsStats.packages.count} packages, ${golemsStats.agents.count} domain agents, ${skillsManifest.skillCount} skills, multi-LLM routing, Night Shift autonomous coding at 4am.`,
 };
 
 export function generateStaticParams() {

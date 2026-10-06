@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import golemsStats from "../lib/golems-stats.json";
+import skillsManifest from "../lib/skills-manifest.json";
 
 // Colors matching the docs site theme
 const C = {
@@ -327,7 +328,7 @@ export default function ArchitectureDiagram() {
             {golemsStats.agents.count} agents
           </span>
           <span className="text-[9px]" style={{ color: C.amber, opacity: 0.5 }}>
-            {golemsStats.skills.count} skills
+            {skillsManifest.skillCount} skills
           </span>
           <span className="text-[9px]" style={{ color: C.cyan, opacity: 0.5 }}>
             {golemsStats.mcp.count} MCP servers
