@@ -21,7 +21,7 @@ const categories = [...new Set(skills.map((s) => s.category))].sort();
 
 export const metadata = {
   title: "Skills Library — Golems",
-  description: `${skills.length} reusable Claude Code skills with eval coverage and one-command install.`,
+  description: `${skills.length} reusable Claude Code skills with one-command install.`,
 };
 
 export default function SkillsIndexPage() {
@@ -61,7 +61,7 @@ export default function SkillsIndexPage() {
       </h1>
       <p className="mb-6 text-[#b0a89c]">
         {skills.length} reusable Claude Code skills. Click any skill for docs,
-        eval results, and install prompt.
+        eval status, and install prompt.
       </p>
       <p className="mb-6 text-sm text-[#8b7355]">
         Looking for retired tools and foundational loops?{" "}
