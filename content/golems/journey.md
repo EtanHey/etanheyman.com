@@ -393,7 +393,7 @@ The `/qa-video` skill ships — a video-based QA pipeline where screen recording
 ### OrcClaude v2.0
 The orchestrator agent reaches v2.0: sprint management, cross-repo coordination via cmux, background agent spawning and monitoring, research dispatch, and collab kickoffs. The planner-worker topology from R31 is now the default: orcClaude plans, domain experts provide intel, workers execute independently.
 
-### 55 Skills with Eval Coverage
+### 55 Skills, 40 with Eval Suites
 The skill library grows from 46 to 55 skills. 40 skills have eval suites with structured assertions. The adapter layer makes every skill AI-agnostic — the same skill works across Claude Code, Cursor, Gemini CLI, Codex, and Kiro.
 
 ### Dashboard Momentum

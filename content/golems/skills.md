@@ -1,11 +1,11 @@
 ---
 title: "Skills Library"
-description: "55 reusable Claude Code skills covering development, operations, content, research, and quality workflows — 46 with eval coverage."
+description: "Reusable Claude Code skills covering development, operations, content, research, and quality workflows."
 ---
 
 # Skills Library
 
-> 55 reusable Claude Code skills with eval coverage across 46 skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
+> Reusable Claude Code skills. Each skill is a focused workflow you can invoke with `/skill-name` in any Claude Code session.
 
 ## What Are Skills?
 
@@ -13,106 +13,15 @@ Skills are Claude Code plugins that provide specialized capabilities. They're st
 
 ## Skill Categories
 
-Note: the live, always-current skills inventory is the auto-generated `/golems/skills` page; this table is a curated overview.
-
-### Development
-
-| Skill | Command | What It Does |
-|-------|---------|-------------|
-| Commit | `/commit` | CodeRabbit review + conventional commit |
-| PR Loop | `/pr-loop` | Full PR loop — branch, test, commit, push, PR, review, fix, merge |
-| Worktrees | `/worktrees` | Git worktree management (create, switch, cleanup) |
-| Test Plan | `/test-plan` | Generate test plan from requirements |
-| Large Plan | `/large-plan` | Multi-phase plan scaffolding and execution |
-| Code Review | `/code-review` | Dispatch reviewers, read feedback, implement fixes |
-| GitHub | `/github` | Git ops, PRs, issues via `gh` CLI |
-| Ralph Commit | `/ralph-commit` | Atomic commit with story validation |
-
-### Operations
-
-| Skill | Command | What It Does |
-|-------|---------|-------------|
-| Railway | `/railway` | Deploy, logs, restart, env vars for cloud worker |
-| 1Password | `/1password` | Secret management, env migration, vault ops |
-| Convex | `/convex` | Schema, deploy, data import/export, troubleshooting |
-| Ecosystem Health | `/ecosystem-health` | MCP connections, BrainLayer stats, skill evals, friction scans |
-| Context Check | `/context-check` | Audit per-project AI context hygiene, report wasted tokens |
-| Maintenance | `/maintenance` | System maintenance and cleanup workflows |
-
-### Content
-
-| Skill | Command | What It Does |
-|-------|---------|-------------|
-| Content | `/content` | Multi-platform content creation and publishing |
-| Nightly Docs Update | `/nightly-docs-update` | Automated documentation updates |
-| YouTube Pipeline | `/youtube-pipeline` | YouTube content processing pipeline |
-| Video Extract | `/video-extract` | Extract gems from YouTube or process QA recordings — two workflows, one entry point |
-
-### Research & Context
-
-| Skill | Command | What It Does |
-|-------|---------|-------------|
-| Research | `/research` | Deep web research orchestrator — routes to best backend |
-| Context7 | `/context7` | Library documentation lookup |
-| GitHub Research | `/github-research` | Explore and document repositories |
-| CLI Agents | `/cli-agents` | Run Gemini, Cursor, Codex, Kiro for research |
-| Claude Web Research | `/claude-web-research` | Self-contained research prompts for Claude Web |
-| Catchup | `/catchup` | Auto-depth context recovery (short break vs long break) |
-
-### Quality
-
-| Skill | Command | What It Does |
-|-------|---------|-------------|
-| CodeRabbit | `/coderabbit` | AI code review with multiple workflows |
-| QA Video | `/qa-video` | Video-based QA pipeline — screen recording processed into structured findings |
-| Critique Waves | `/critique-waves` | Parallel verification agents for consensus |
-| Never Fabricate | `/never-fabricate` | Mandatory verification before reporting on file contents or results |
-| Phoenix Human View | `/phoenix-human-view` | The human-eval UX contract for Phoenix grading views — replay-not-scorecard, frozen suites, mobile-first (eval: 45.8% → 100%) |
-
-### Domain
-
-| Skill | Command | What It Does |
-|-------|---------|-------------|
-| Email Golem | `/email-golem` | Email status, manual triage, recent scores |
-| Nightly Journal | `/nightly-journal` | End-of-day sweep — comms, client activity, diary |
-| Obsidian | `/obsidian` | Search, read, write Obsidian vault notes |
-| Voice Sessions | `/voice-sessions` | Voice I/O workflows via VoiceLayer |
-
-### Orchestration
-
-| Skill | Command | What It Does |
-|-------|---------|-------------|
-| Orc | `/orc` | Multi-agent sprint orchestration, cross-repo coordination |
-| Orchestrator Status | `/orchestrator-status` | Ecosystem-wide status and orientation |
-| cmux Agents | `/cmux-agents` | Spawn AI agents in cmux panes — Claude, Cursor, Gemini, Codex, Kiro |
-| cmux | `/cmux` | Control cmux panes, splits, browser, sidebar, agent-to-agent messaging |
-| Cursor Multitask | `/cursor-multitask` | Route fan-out/parallel work to the right engine — Cursor `/multitask`, headless fan-out, Workflow tool, or cmux fleet (eval: 78.6% → 100%) |
-| Fleet Wrap | `/fleet-wrap` | Quiet-down protocol at sprint close — zero polling crons, one final dashboard + message, then silent (eval: 60% → 100%) |
-
-### Project Management
-
-| Skill | Command | What It Does |
-|-------|---------|-------------|
-| PRD | `/prd` | Generate Product Requirement Documents |
-| Archive | `/archive` | Archive completed PRD stories |
-| Writing Skills | `/writing-skills` | Create and validate new golem-powers skills |
-| Skills | `/skills` | List and discover installed skills |
-
-### Browser & Presentation
-
-| Skill | Command | What It Does |
-|-------|---------|-------------|
-| Brave | `/brave` | Brave browser management (navigation, inspection, debugging) |
-| Presentation Builder | `/presentation-builder` | Generate slide decks from content |
-| Video Showcase | `/video-showcase` | Create video showcases of features |
+The live, always-current inventory is the auto-generated [Skills Library](/golems/skills) page. It is regenerated from `skills/golem-powers/` in the golems repo, so it lists only skills that exist there today, each with its docs, eval status and install command.
 
 ## Using Skills
 
 In any Claude Code session with golem-powers installed:
 
 ```
-/commit              # Invoke the commit skill
-/railway logs        # Check Railway deployment logs
+/pr-loop             # Run the full PR loop
+/large-plan          # Scaffold a multi-phase plan
 ```
 
 ## Adapter Layer
@@ -138,9 +47,9 @@ claude --plugin-dir ~/Gits/golems/skills/golem-powers
 
 Or symlink into your project's `.claude/commands/` directory for per-project access.
 
-## Eval Coverage
+## Evals
 
-46 of 55 skills have eval suites with structured assertions. Evals verify that skills trigger correctly and produce the expected behavior — and that they beat baseline: recent A/B-evaled skills include `/cursor-multitask` (baseline 78.6% → with-skill 100%), `/fleet-wrap` (60% → 100%), and `/phoenix-human-view` (45.8% → 100%), with raw scoring committed in each skill's `evals/results/`. See individual skill pages for eval details.
+Many skills ship eval suites (`evals/evals.json`) with structured assertions that check the skill triggers correctly and produces the expected behavior. No skill has yet been evaluated on current models with the model recorded, so this site publishes no pass rates. Each skill's page shows its eval status.
 
 ## Recent Skill Updates (2026-05-17)
 

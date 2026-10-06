@@ -9,9 +9,8 @@ import CopyButton from "../../components/CopyButton";
 import MermaidDiagram from "../../components/MermaidDiagram";
 import SkillPageTabs from "./SkillPageTabs";
 import OverviewCollapsible from "./OverviewCollapsible";
-import EvalDashboard from "./EvalDashboard";
+import EvalStatusPanel from "./EvalStatusPanel";
 import skillsManifest from "../../lib/skills-manifest.json";
-import { generateEvalResult, GRADE_MAP } from "../../lib/eval-data";
 
 interface SkillEvalEntry {
   name: string;
@@ -331,155 +330,64 @@ export default async function SkillDetailPage({
     </div>
   );
 
-  // Generate per-model eval data from skill assertions
-  const allAssertions = skill.evals.flatMap((e) => e.assertions);
-  const evalData = generateEvalResult({
-    name: skill.name,
-    assertionCount: skill.assertionCount,
-    assertions: allAssertions,
-    evalCount: skill.evalCount,
-  });
+  const evalResults = <EvalStatusPanel />;
 
-  const grade = GRADE_MAP[skill.name] ?? null;
-  const evalResults = evalData ? (
-    <EvalDashboard data={evalData} grade={grade} />
-  ) : null;
-
-  // Build changelog content (data-driven from eval dates + skill metadata)
-  const changelogContent =
-    evalData || skill.lastModified ? (
-      <div className="space-y-0">
-        <div className="mb-4 rounded-lg border border-[#e5950020] bg-[#e5950008] px-4 py-2.5">
-          <p className="text-xs text-[#b0a89c]">
-            Changelog entries are derived from eval runs and skill version
-            updates. Full cascading changelog (Phase 4D) coming soon.
-          </p>
-        </div>
-        <div className="relative border-l-2 border-[#e5950020] pl-6">
-          {/* Eval milestone entry */}
-          {evalData && (
-            <div className="group relative mb-8">
-              <div className="absolute top-1 -left-[1.4rem] h-3 w-3 rounded-full border-2 border-[#28c840] bg-[#0c0b0a]" />
-              <div className="mb-1 flex items-center gap-3">
-                <span className="font-mono text-xs font-bold text-[#28c840]">
-                  Eval Run
-                </span>
-                <span className="text-xs text-[#b0a89c]">
-                  {evalData.lastEvalDate}
-                </span>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-[0.65rem] font-medium ${
-                    evalData.source === "real"
-                      ? "bg-[#28c84015] text-[#28c840]"
-                      : "bg-[#e5950015] text-[#e59500]"
-                  }`}
-                >
-                  {evalData.source === "real" ? "real data" : "mock"}
-                </span>
-              </div>
-              <div className="rounded-lg border border-[#e5950014] bg-[#14120e]/80 p-4">
-                <div className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  <div>
-                    <p className="text-[0.65rem] font-medium tracking-wider text-[#b0a89c] uppercase">
-                      Best Pass Rate
-                    </p>
-                    <p className="mt-0.5 font-mono text-lg font-bold text-[#28c840]">
-                      {Math.round(evalData.bestPassRate * 100)}%
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[0.65rem] font-medium tracking-wider text-[#b0a89c] uppercase">
-                      Assertions
-                    </p>
-                    <p className="mt-0.5 font-mono text-lg font-bold text-[#6ab0f3]">
-                      {evalData.assertions.length}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[0.65rem] font-medium tracking-wider text-[#b0a89c] uppercase">
-                      Models Tested
-                    </p>
-                    <p className="mt-0.5 font-mono text-lg font-bold text-[#c084fc]">
-                      {evalData.models.length}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[0.65rem] font-medium tracking-wider text-[#b0a89c] uppercase">
-                      Evals Run
-                    </p>
-                    <p className="mt-0.5 font-mono text-lg font-bold text-[#e59500]">
-                      {skill.evalCount}
-                    </p>
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  {evalData.models.map((m) => (
-                    <div key={m.model} className="flex items-center gap-2">
-                      <span className="w-2 text-xs text-[#28c840]">✓</span>
-                      <span className="font-mono text-xs text-[#c0b8a8]">
-                        {m.label}
-                      </span>
-                      <span className="font-mono text-xs font-bold text-[#28c840]">
-                        {Math.round(m.passRate * 100)}%
-                      </span>
-                      <span className="text-xs text-[#b0a89c]">
-                        ({m.passed}/{m.total} assertions)
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Initial publish entry */}
-          <div className="relative mb-8">
-            <div className="absolute top-1 -left-[1.4rem] h-3 w-3 rounded-full border-2 border-[#e59500] bg-[#0c0b0a]" />
-            <div className="mb-1 flex items-center gap-3">
-              <span className="font-mono text-xs font-bold text-[#e59500]">
-                v1.0 — Last Updated
-              </span>
-              <span className="text-xs text-[#b0a89c]">
-                {skill.lastModified}
-              </span>
-            </div>
-            <div className="rounded-lg border border-[#e5950014] bg-[#14120e]/80 p-4">
-              <ul className="space-y-1 text-xs text-[#b8ad9e]">
+  // Build changelog content (data-driven from skill metadata)
+  const changelogContent = skill.lastModified ? (
+    <div className="space-y-0">
+      <div className="mb-4 rounded-lg border border-[#e5950020] bg-[#e5950008] px-4 py-2.5">
+        <p className="text-xs text-[#b0a89c]">
+          Changelog entries are derived from skill version updates. Full
+          cascading changelog (Phase 4D) coming soon.
+        </p>
+      </div>
+      <div className="relative border-l-2 border-[#e5950020] pl-6">
+        {/* Initial publish entry */}
+        <div className="relative mb-8">
+          <div className="absolute top-1 -left-[1.4rem] h-3 w-3 rounded-full border-2 border-[#e59500] bg-[#0c0b0a]" />
+          <div className="mb-1 flex items-center gap-3">
+            <span className="font-mono text-xs font-bold text-[#e59500]">
+              v1.0 — Last Updated
+            </span>
+            <span className="text-xs text-[#b0a89c]">{skill.lastModified}</span>
+          </div>
+          <div className="rounded-lg border border-[#e5950014] bg-[#14120e]/80 p-4">
+            <ul className="space-y-1 text-xs text-[#b8ad9e]">
+              <li className="flex items-start gap-2">
+                <span className="text-[#e59500]">+</span>
+                <span>Initial release to Golems skill library</span>
+              </li>
+              {skill.evalCount > 0 && (
                 <li className="flex items-start gap-2">
                   <span className="text-[#e59500]">+</span>
-                  <span>Initial release to Golems skill library</span>
+                  <span>
+                    {skill.assertionCount} assertions across {skill.evalCount}{" "}
+                    eval scenario{skill.evalCount !== 1 ? "s" : ""}
+                  </span>
                 </li>
-                {skill.evalCount > 0 && (
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#e59500]">+</span>
-                    <span>
-                      {skill.assertionCount} assertions across {skill.evalCount}{" "}
-                      eval scenario{skill.evalCount !== 1 ? "s" : ""}
-                    </span>
-                  </li>
-                )}
-                {skill.workflows.length > 0 && (
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#e59500]">+</span>
-                    <span>
-                      {skill.workflows.length} workflow
-                      {skill.workflows.length !== 1 ? "s" : ""} included:{" "}
-                      {skill.workflows.join(", ")}
-                    </span>
-                  </li>
-                )}
-                {skill.hasFixtures && (
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#e59500]">+</span>
-                    <span>Eval fixtures included</span>
-                  </li>
-                )}
-              </ul>
-            </div>
+              )}
+              {skill.workflows.length > 0 && (
+                <li className="flex items-start gap-2">
+                  <span className="text-[#e59500]">+</span>
+                  <span>
+                    {skill.workflows.length} workflow
+                    {skill.workflows.length !== 1 ? "s" : ""} included:{" "}
+                    {skill.workflows.join(", ")}
+                  </span>
+                </li>
+              )}
+              {skill.hasFixtures && (
+                <li className="flex items-start gap-2">
+                  <span className="text-[#e59500]">+</span>
+                  <span>Eval fixtures included</span>
+                </li>
+              )}
+            </ul>
           </div>
         </div>
       </div>
-    ) : null;
+    </div>
+  ) : null;
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-6 pb-16 md:px-6 md:pt-10">
@@ -566,50 +474,6 @@ export default async function SkillDetailPage({
 
         {/* Trust signal bar */}
         <div className="mb-4 flex flex-wrap gap-3">
-          {grade &&
-            (() => {
-              const gradeColors = {
-                Golden: {
-                  border: "border-[#fbbf2430]",
-                  bg: "bg-[#fbbf2408]",
-                  text: "text-[#fbbf24]",
-                  dot: "bg-[#fbbf24]",
-                },
-                Good: {
-                  border: "border-[#28c84030]",
-                  bg: "bg-[#28c84008]",
-                  text: "text-[#28c840]",
-                  dot: "bg-[#28c840]",
-                },
-                Experimental: {
-                  border: "border-[#e5950030]",
-                  bg: "bg-[#e5950008]",
-                  text: "text-[#e59500]",
-                  dot: "bg-[#e59500]",
-                },
-              } as const;
-              const g = gradeColors[grade];
-              return (
-                <div
-                  className={`flex min-h-[44px] items-center gap-2 rounded-lg border px-3.5 py-2 ${g.border} ${g.bg}`}
-                >
-                  <span
-                    className={`inline-block h-2 w-2 rounded-full ${g.dot}`}
-                  />
-                  <span className={`text-sm font-medium ${g.text}`}>
-                    {grade}
-                  </span>
-                </div>
-              );
-            })()}
-          {evalData && (
-            <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#28c84020] bg-[#28c84008] px-3.5 py-2">
-              <span className="inline-block h-2 w-2 rounded-full bg-[#28c840]" />
-              <span className="text-sm font-medium text-[#28c840]">
-                {Math.round(evalData.bestPassRate * 100)}% best pass rate
-              </span>
-            </div>
-          )}
           {skill.assertionCount > 0 && (
             <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#28c84020] bg-[#28c84008] px-3.5 py-2">
               <span className="inline-block h-2 w-2 rounded-full bg-[#28c840]" />
@@ -714,22 +578,6 @@ export default async function SkillDetailPage({
             {/* Metadata */}
             <div className="rounded-xl border border-[#e5950014] bg-[#14120e]/90 p-5">
               <dl className="space-y-3 text-sm">
-                {grade && (
-                  <div className="flex justify-between">
-                    <dt className="text-[#b0a89c]">Grade</dt>
-                    <dd
-                      className={
-                        grade === "Golden"
-                          ? "font-medium text-[#fbbf24]"
-                          : grade === "Good"
-                            ? "font-medium text-[#28c840]"
-                            : "font-medium text-[#e59500]"
-                      }
-                    >
-                      {grade}
-                    </dd>
-                  </div>
-                )}
                 <div className="flex justify-between">
                   <dt className="text-[#b0a89c]">Category</dt>
                   <dd className={catColors.text}>{skill.category}</dd>
@@ -744,7 +592,7 @@ export default async function SkillDetailPage({
                   <div className="flex justify-between">
                     <dt className="text-[#b0a89c]">Assertions</dt>
                     <dd className="font-medium text-[#28c840]">
-                      {skill.assertionCount} passing
+                      {skill.assertionCount}
                     </dd>
                   </div>
                 )}

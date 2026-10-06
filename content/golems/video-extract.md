@@ -111,7 +111,7 @@ Both workflows store results in BrainLayer. Gems get `brain_digest` (full conten
 
 If BrainLayer is unavailable, the skill **loudly flags** the failure and saves a local fallback file — it never silently skips storage.
 
-## Eval Coverage
+## Eval Cases
 
 7 eval cases covering:
 - URL routing (YouTube → gems, local → QA)

@@ -3,6 +3,7 @@
 
 import type { ArchitectureNode } from "./project-showcase-config";
 import golemsStats from "@/app/(golems)/golems/lib/golems-stats.json";
+import { skillStats } from "@/app/(golems)/golems/lib/skill-stats";
 
 export interface CodeExample {
   language: string;
@@ -467,8 +468,7 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
   golems: [
     {
       title: "Monorepo Structure",
-      description:
-        "12 packages in a Bun monorepo. @golems/shared is the foundation: Supabase client, multi-backend LLM routing, email processing, state management. Domain golems (jobs, recruiter, coach, teller, content) are self-contained Claude Code plugins. 60+ AI-agnostic skills with eval framework. The dashboard is a Next.js app with 2D canvas knowledge graph and Neural Observatory. Each package deploys independently but shares types and utilities through the foundation layer.",
+      description: `12 packages in a Bun monorepo. @golems/shared is the foundation: Supabase client, multi-backend LLM routing, email processing, state management. Domain golems (jobs, recruiter, coach, teller, content) are self-contained Claude Code plugins. ${skillStats.count} skills, ${skillStats.withEvalSuites} of them with eval suites. The dashboard is a Next.js app with 2D canvas knowledge graph and Neural Observatory. Each package deploys independently but shares types and utilities through the foundation layer.`,
       diagramNodes: [
         {
           icon: "Package",
@@ -485,7 +485,7 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
         {
           icon: "Layers",
           title: "Skills",
-          subtitle: "60+ AI-agnostic",
+          subtitle: `${skillStats.count} AI-agnostic`,
           children: ["SKILL.md", "Adapters", "Evals"],
         },
         {

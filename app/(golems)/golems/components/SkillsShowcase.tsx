@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
-import golemsStats from "../lib/golems-stats.json";
+import skillsManifest from "../lib/skills-manifest.json";
 import CopyButton from "./CopyButton";
 
 /* ── Skill categories with descriptions ──────────────────────── */
@@ -14,7 +14,7 @@ interface SkillEntry {
   category: string;
 }
 
-const SKILL_CATEGORIES: Record<string, SkillEntry[]> = {
+const CURATED_SKILLS: Record<string, SkillEntry[]> = {
   Development: [
     {
       name: "commit",
@@ -304,11 +304,34 @@ function renderLine(raw: string): ReactNode {
   return parts.length > 0 ? parts : raw;
 }
 
-/* ── Eval badge lookup ───────────────────────────────────────── */
+interface ManifestSkill {
+  evalCount: number;
+  assertionCount: number;
+  hasFixtures: boolean;
+}
+
+const publishedSkills = skillsManifest.skills as Record<string, ManifestSkill>;
+
+// AIDEV-NOTE: Only skills with a published /golems/skills page are shown, so a
+// skill archived in golems drops off the showcase on the next manifest regen.
+export const SKILL_CATEGORIES: Record<string, SkillEntry[]> =
+  Object.fromEntries(
+    Object.entries(CURATED_SKILLS)
+      .map(([category, entries]) => [
+        category,
+        entries.filter((s) => s.name in publishedSkills),
+      ])
+      .filter(([, entries]) => entries.length > 0),
+  );
+
+/* ── Eval definition badge lookup ────────────────────────────── */
 
 function getEvalData(skillName: string) {
-  return golemsStats.evals.find((e) => e.skill === skillName);
+  const skill = publishedSkills[skillName];
+  return skill && skill.evalCount > 0 ? skill : undefined;
 }
+
+const featuredEvals = getEvalData("cmux-agents");
 
 /* ── Install prompt for cmux-agents (reference implementation) ─ */
 
@@ -327,8 +350,12 @@ const installDemoLines = [
   "\x1b[34m=== INSTALLING cmux-agents ===\x1b[0m",
   "",
   "\x1b[36mDownloading:\x1b[0m github.com/EtanHey/golems/skills/golem-powers/cmux-agents/",
-  "  \x1b[32m\u2713\x1b[0m SKILL.md (471 lines)",
-  "  \x1b[32m\u2713\x1b[0m evals/evals.json (3 evals, 18 assertions)",
+  "  \x1b[32m\u2713\x1b[0m SKILL.md",
+  ...(featuredEvals
+    ? [
+        `  \x1b[32m\u2713\x1b[0m evals/evals.json (${featuredEvals.evalCount} evals, ${featuredEvals.assertionCount} assertions)`,
+      ]
+    : []),
   "",
   "\x1b[36mSymlinking:\x1b[0m ~/.claude/commands/cmux-agents/ \u2192 installed",
   "",
@@ -380,7 +407,7 @@ function SkillCard({ skill }: { skill: SkillEntry }) {
 /* ── Featured Skill (cmux-agents) ────────────────────────────── */
 
 function FeaturedSkill() {
-  const evalData = getEvalData("cmux-agents");
+  const evalData = featuredEvals;
 
   return (
     <div className="overflow-hidden rounded-xl border border-[#e5950026] bg-[#0d0d0d] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
@@ -441,8 +468,8 @@ function FeaturedSkill() {
 export default function SkillsShowcase() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const categories = ["All", ...Object.keys(SKILL_CATEGORIES)];
-  const totalAssertions = golemsStats.evals.reduce(
-    (sum, e) => sum + e.assertionCount,
+  const totalAssertions = Object.values(publishedSkills).reduce(
+    (sum, s) => sum + s.assertionCount,
     0,
   );
 
@@ -463,7 +490,7 @@ export default function SkillsShowcase() {
           Skills Library
         </h2>
         <p className="mb-4 text-center text-[#b0a89c] italic">
-          {golemsStats.skills.count} reusable Claude Code skills. Install any
+          {skillsManifest.skillCount} reusable Claude Code skills. Install any
           skill with one paste.
         </p>
 
@@ -471,27 +498,15 @@ export default function SkillsShowcase() {
         <div className="mb-10 flex flex-wrap justify-center gap-4 text-center">
           <div className="rounded-lg border border-[#e5950014] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#e59500]">
-              {golemsStats.skills.count}
+              {skillsManifest.skillCount}
             </div>
             <div className="text-[0.7rem] text-[#b0a89c]">Skills</div>
-          </div>
-          <div className="rounded-lg border border-[#28c84014] bg-[#14120e]/60 px-4 py-2">
-            <div className="text-lg font-bold text-[#28c840]">
-              {golemsStats.skills.withEvals}
-            </div>
-            <div className="text-[0.7rem] text-[#b0a89c]">With Evals</div>
           </div>
           <div className="rounded-lg border border-[#6ab0f314] bg-[#14120e]/60 px-4 py-2">
             <div className="text-lg font-bold text-[#6ab0f3]">
               {totalAssertions}
             </div>
             <div className="text-[0.7rem] text-[#b0a89c]">Assertions</div>
-          </div>
-          <div className="rounded-lg border border-[#40d4d414] bg-[#14120e]/60 px-4 py-2">
-            <div className="text-lg font-bold text-[#40d4d4]">
-              {golemsStats.skills.evalCoverage}
-            </div>
-            <div className="text-[0.7rem] text-[#b0a89c]">Eval Coverage</div>
           </div>
         </div>
 

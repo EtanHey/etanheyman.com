@@ -72,11 +72,11 @@ Yes. RecruiterGolem includes a style adapter that matches tone and formality to 
 
 ## Can I use the skills without the full ecosystem?
 
-Yes. The 55 skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
+Yes. The skills in `skills/golem-powers/` work as standalone Claude Code plugins. Install them individually:
 
 ```bash
-# Just the commit skill
-cp -r ~/Gits/golems/skills/golem-powers/commit .claude/commands/
+# Just the pr-loop skill
+cp -r ~/Gits/golems/skills/golem-powers/pr-loop .claude/commands/
 
 # Or install all skills
 claude --plugin-dir ~/Gits/golems/skills/golem-powers

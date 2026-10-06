@@ -1,5 +1,7 @@
 // Detailed feature content for mini-site /features pages.
 
+import { skillStats } from "@/app/(golems)/golems/lib/skill-stats";
+
 export interface CodeExample {
   language: string;
   code: string;
@@ -421,16 +423,14 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
   golems: [
     {
       iconName: "Layers",
-      title: "55 AI-Agnostic Skills",
-      tagline: "Same skills, any CLI — Claude, Codex, Cursor, Gemini, Kiro",
-      description:
-        "Skills are written once in universal SKILL.md format, then adapted for each AI CLI via a thin adapters/ layer. A capabilities.yaml file routes each skill to the right adapters based on what each CLI supports. 40 skill eval packs with 480+ assertions ensure quality. 96% pass rate across the eval suite. The adapter layer means skills work across 5 different AI CLIs without rewriting.",
+      title: `${skillStats.count} AI-Agnostic Skills`,
+      tagline: "Same skills, any CLI — one adapter file per CLI",
+      description: `Skills are written once in universal SKILL.md format, then adapted for each AI CLI via a thin adapters/ layer. A capabilities.yaml file routes each skill to the right adapters based on what each CLI supports. ${skillStats.withEvalSuites} skills ship eval suites with ${skillStats.assertions} structured assertions. None has been evaluated on current models with the model recorded yet, so no pass rate is published.`,
       highlights: [
-        "55 skills — commit, pr-loop, research, orc, large-plan, and more",
+        `${skillStats.count} skills — pr-loop, orc, large-plan, agent-routing, and more`,
         "3-layer architecture — SKILL.md + adapters/ + capabilities.yaml",
-        "40 eval packs — 480+ assertions, fixture-based testing",
-        "5 CLIs validated — Claude, Codex, Cursor, Gemini, Kiro",
-        "96% pass rate across the full eval suite",
+        `${skillStats.withEvalSuites} eval suites — ${skillStats.assertions} assertions, fixture-based testing`,
+        "Adapters for Claude, Codex, Cursor and Gemini",
       ],
     },
     {

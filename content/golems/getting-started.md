@@ -13,7 +13,7 @@ Two terms carry most of the weight:
 - A **golem** is a domain-focused agent package: code, prompts, and integrations that work together for a bounded job such as recruiting, finance, scheduling, job search, or content.
 - A **skill** is a `SKILL.md` workflow that an AI coding agent such as Claude Code can load and follow. Skills may also ship scripts, references, adapters, fixtures, and executable evals.
 
-At the time of writing the tree has **13 workspace packages** and **88 skills** with a top-level `SKILL.md` under `skills/golem-powers/`. That directory also holds shared, archived, and scaffolding entries that are not installable skills, so re-derive the count from a checkout instead of trusting this page:
+At the time of writing the tree has **13 workspace packages** and **56 skills** with a top-level `SKILL.md` under `skills/golem-powers/`. That directory also holds shared and hook-only entries that are not installable skills, so re-derive the count from a checkout instead of trusting this page:
 
 ```bash
 node scripts/check-skill-library.mjs
@@ -121,7 +121,7 @@ golems/
 ├── packages/services/           # Briefing, scheduler, doctor, and local services
 ├── packages/shared/             # Shared state, LLM, email, and notification utilities
 ├── packages/teller/             # Finance and transaction categorization
-├── skills/golem-powers/         # 88 skills, each with a SKILL.md
+├── skills/golem-powers/         # Skill library, one SKILL.md per skill
 ├── scripts/                     # Launchers, CI gates, skill-library check
 ├── launchd/                     # macOS service plists
 └── Dockerfile                   # Cloud worker image

@@ -22,11 +22,12 @@ list_basenames() { ls -d "$1"/*/ 2>/dev/null | while read -r d; do basename "$d"
 echo "📊 Generating golems ecosystem stats..."
 
 # ── 1. Skills ────────────────────────────────────────────────────
-SKILLS_DIR="$GOLEMS_DIR/skills/golem-powers"
-skills_count=$(count_dirs "$SKILLS_DIR")
-skills_with_evals=$(ls "$SKILLS_DIR"/*/evals/evals.json 2>/dev/null | wc -l | tr -d ' ')
-skills_with_skillmd=$(ls "$SKILLS_DIR"/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
-echo "  Skills: $skills_count dirs, $skills_with_skillmd with SKILL.md, $skills_with_evals with evals"
+# Skill numbers are NOT stored here. The site reads them from the generated
+# skills manifest (npm run generate:skills), and no eval-coverage claim is
+# published until provenance-stamped eval results exist.
+MANIFEST="$REPO_ROOT/app/(golems)/golems/lib/skills-manifest.json"
+skills_count=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['skillCount'])" "$MANIFEST")
+echo "  Skills (from manifest): $skills_count"
 
 # ── 2. Packages ──────────────────────────────────────────────────
 packages_count=$(count_dirs "$GOLEMS_DIR/packages")
@@ -109,50 +110,12 @@ echo "  MCP servers: $mcp_count"
 agents_count=7  # Known: ClaudeGolem, RecruiterGolem, TellerGolem, JobGolem, CoachGolem, ContentGolem, Services
 echo "  Agents: $agents_count"
 
-# ── 7. Per-skill eval data ───────────────────────────────────────
-evals_json="["
-first=true
-for eval_file in "$SKILLS_DIR"/*/evals/evals.json; do
-  [[ -f "$eval_file" ]] || continue
-  skill_name=$(basename "$(dirname "$(dirname "$eval_file")")")
-  eval_data=$(python3 -c "
-import json
-with open('$eval_file') as f:
-    d = json.load(f)
-    evals = d.get('evals', d if isinstance(d, list) else [])
-    if not isinstance(evals, list):
-        evals = []
-    eval_count = len(evals)
-    total_assertions = sum(len(e.get('assertions', [])) for e in evals if isinstance(e, dict))
-    print(f'{eval_count},{total_assertions}')
-" 2>/dev/null || echo "0,0")
-  eval_count=$(echo "$eval_data" | cut -d, -f1)
-  assertion_count=$(echo "$eval_data" | cut -d, -f2)
-
-  has_fixtures="false"
-  [[ -d "$(dirname "$eval_file")/fixtures" ]] && has_fixtures="true"
-
-  if [[ "$first" == "true" ]]; then
-    first=false
-  else
-    evals_json+=","
-  fi
-  evals_json+="{\"skill\":\"$skill_name\",\"evalCount\":$eval_count,\"assertionCount\":$assertion_count,\"hasFixtures\":$has_fixtures}"
-done
-evals_json+="]"
-
 # ── 8. Write JSON ────────────────────────────────────────────────
 generated_at=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 cat > "$OUTPUT" << JSONEOF
 {
   "generatedAt": "$generated_at",
-  "skills": {
-    "count": $skills_count,
-    "withSkillMd": $skills_with_skillmd,
-    "withEvals": $skills_with_evals,
-    "evalCoverage": "$(echo "scale=0; $skills_with_evals * 100 / $skills_count" | bc)%"
-  },
   "packages": {
     "count": $packages_count,
     "list": "$(echo "$packages_list" | sed 's/,/, /g')"
@@ -174,8 +137,7 @@ cat > "$OUTPUT" << JSONEOF
   },
   "agents": {
     "count": $agents_count
-  },
-  "evals": $evals_json
+  }
 }
 JSONEOF
 
