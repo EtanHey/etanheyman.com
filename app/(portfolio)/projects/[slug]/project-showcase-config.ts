@@ -1,6 +1,8 @@
 // Static showcase data per featured project.
 // Stats, features, install commands — things not in Supabase.
 
+import { skillStats } from "@/app/(golems)/golems/lib/skill-stats";
+
 export interface ProjectStat {
   value: number;
   suffix?: string;
@@ -310,22 +312,20 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     isMiniSite: true,
     stats: [
       { value: 11, label: "Packages" },
-      { value: 55, label: "Skills" },
-      { value: 5, label: "Supported CLIs" },
+      { value: skillStats.count, label: "Skills" },
+      { value: 4, label: "Supported CLIs" },
       { value: 321, suffix: "+", label: "PRs merged" },
     ],
     features: [
       {
         iconName: "Layers",
         title: "AI-Agnostic Skills",
-        description:
-          "55 skills with 3-layer architecture: SKILL.md (universal) + adapters/ (per-CLI) + capabilities.yaml (routing). Validated across Claude, Codex, Cursor, Gemini, and Kiro.",
+        description: `${skillStats.count} skills with 3-layer architecture: SKILL.md (universal) + adapters/ (per-CLI) + capabilities.yaml (routing).`,
       },
       {
         iconName: "Shield",
         title: "Eval Framework",
-        description:
-          "40 skill eval packs with 480+ assertions and fixture-based testing. 96% pass rate. Skills are measured, not assumed to work.",
+        description: `${skillStats.withEvalSuites} skills ship eval suites with ${skillStats.assertions} assertions and fixture-based testing. No results are published until runs on current models record the model used.`,
       },
       {
         iconName: "Bot",
@@ -363,11 +363,15 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       { icon: "Bot", title: "OrcClaude v2", subtitle: "Multi-agent sprints" },
       {
         icon: "Layers",
-        title: "55 Skills",
-        subtitle: "5 CLI adapters",
-        children: ["Claude", "Codex", "Cursor", "Gemini", "Kiro"],
+        title: `${skillStats.count} Skills`,
+        subtitle: "4 CLI adapters",
+        children: ["Claude", "Codex", "Cursor", "Gemini"],
       },
-      { icon: "Shield", title: "Eval Framework", subtitle: "480+ assertions" },
+      {
+        icon: "Shield",
+        title: "Eval Framework",
+        subtitle: `${skillStats.assertions} assertions`,
+      },
       { icon: "Cloud", title: "Cloud + Local", subtitle: "Railway + Mac" },
     ],
   },

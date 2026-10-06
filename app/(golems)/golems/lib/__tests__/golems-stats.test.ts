@@ -4,6 +4,7 @@ import { join } from "path";
 import golemsStats from "../golems-stats.json";
 import skillsManifest from "../skills-manifest.json";
 import { SKILL_CATEGORIES } from "../../components/SkillsShowcase";
+import { skillStats } from "../skill-stats";
 
 /**
  * The landing page used to read skill count, "With Evals" and "Eval
@@ -39,9 +40,45 @@ describe("golems-stats.json", () => {
       expect(src, `${file} publishes an eval-coverage claim`).not.toMatch(
         /Eval Coverage|evalCoverage/,
       );
+      expect(src, `${file} publishes a pass rate`).not.toMatch(
+        /\d+%\s*pass rate|pass rate across/i,
+      );
       // Withdrawn March 2026 cmux-agents cross-AI rubric scores.
       expect(src, `${file} publishes withdrawn cross-AI scores`).not.toMatch(
         /Portability Eval|GPT-5\.4/,
+      );
+    }
+  });
+});
+
+describe("skillStats", () => {
+  it("derives every number from the skills manifest", () => {
+    const entries = Object.values(skillsManifest.skills);
+    expect(skillStats.count).toBe(skillsManifest.skillCount);
+    expect(skillStats.count).toBe(entries.length);
+    expect(skillStats.withEvalSuites).toBe(
+      entries.filter((s) => s.evalCount > 0).length,
+    );
+    expect(skillStats.assertions).toBe(
+      entries.reduce((sum, s) => sum + s.assertionCount, 0),
+    );
+  });
+});
+
+describe("public docs prose", () => {
+  it("repeats no stale skill-count or eval-coverage claim", () => {
+    const root = join(APP_DIR, "..");
+    const docsDir = join(root, "content/golems");
+    const files = [
+      ...readdirSync(docsDir)
+        .filter((f) => f.endsWith(".md"))
+        .map((f) => join(docsDir, f)),
+      join(root, "public/llms.txt"),
+    ];
+    for (const file of files) {
+      const src = readFileSync(file, "utf-8");
+      expect(src, `${file} repeats a stale claim`).not.toMatch(
+        /eval coverage|\b88 skills|Portability Eval/i,
       );
     }
   });

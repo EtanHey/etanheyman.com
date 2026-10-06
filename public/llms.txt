@@ -23,7 +23,7 @@ Based in Israel. Works in English and Hebrew.
 - [About](https://www.etanheyman.com/about): Background, timeline, and technology stack.
 - [Projects](https://www.etanheyman.com/projects): Full project index, open-source and client work.
 - [Golems docs](https://www.etanheyman.com/golems): Architecture, getting started, and agent-skill documentation.
-- [Golems skills](https://www.etanheyman.com/golems/skills): Catalog of authored agent skills, each with its eval coverage.
+- [Golems skills](https://www.etanheyman.com/golems/skills): Catalog of authored agent skills with docs, eval status and install commands.
 - [Contact](https://www.etanheyman.com/contact): Direct contact form and email.
 
 ## Resume
