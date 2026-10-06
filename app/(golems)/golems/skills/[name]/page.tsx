@@ -14,8 +14,6 @@ import skillsManifest from "../../lib/skills-manifest.json";
 
 interface SkillEvalEntry {
   name: string;
-  assertionCount: number;
-  assertions: string[];
 }
 
 interface SkillData {
@@ -25,7 +23,6 @@ interface SkillData {
   category: string;
   content: string;
   evalCount: number;
-  assertionCount: number;
   hasFixtures: boolean;
   evals: SkillEvalEntry[];
   workflows: string[];
@@ -165,7 +162,7 @@ function getRelatedSkills(
       (s) =>
         s.name !== currentSkill.name && s.category === currentSkill.category,
     )
-    .sort((a, b) => b.assertionCount - a.assertionCount)
+    .sort((a, b) => a.name.localeCompare(b.name))
     .slice(0, max);
 }
 
@@ -361,8 +358,8 @@ export default async function SkillDetailPage({
                 <li className="flex items-start gap-2">
                   <span className="text-[#e59500]">+</span>
                   <span>
-                    {skill.assertionCount} assertions across {skill.evalCount}{" "}
-                    eval scenario{skill.evalCount !== 1 ? "s" : ""}
+                    {skill.evalCount} eval scenario
+                    {skill.evalCount !== 1 ? "s" : ""} defined
                   </span>
                 </li>
               )}
@@ -474,14 +471,6 @@ export default async function SkillDetailPage({
 
         {/* Trust signal bar */}
         <div className="mb-4 flex flex-wrap gap-3">
-          {skill.assertionCount > 0 && (
-            <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#28c84020] bg-[#28c84008] px-3.5 py-2">
-              <span className="inline-block h-2 w-2 rounded-full bg-[#28c840]" />
-              <span className="text-sm font-medium text-[#28c840]">
-                {skill.assertionCount} assertions
-              </span>
-            </div>
-          )}
           {skill.evalCount > 0 && (
             <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#6ab0f320] bg-[#6ab0f308] px-3.5 py-2">
               <span className="inline-block h-2 w-2 rounded-full bg-[#6ab0f3]" />
@@ -586,14 +575,6 @@ export default async function SkillDetailPage({
                   <div className="flex justify-between">
                     <dt className="text-[#b0a89c]">Evals</dt>
                     <dd className="text-[#c0b8a8]">{skill.evalCount}</dd>
-                  </div>
-                )}
-                {skill.assertionCount > 0 && (
-                  <div className="flex justify-between">
-                    <dt className="text-[#b0a89c]">Assertions</dt>
-                    <dd className="font-medium text-[#28c840]">
-                      {skill.assertionCount}
-                    </dd>
                   </div>
                 )}
                 <div className="flex justify-between">

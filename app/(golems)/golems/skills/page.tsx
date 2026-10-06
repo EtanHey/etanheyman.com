@@ -8,7 +8,6 @@ interface SkillData {
   description: string;
   category: string;
   evalCount: number;
-  assertionCount: number;
   hasFixtures: boolean;
   workflows: string[];
 }
@@ -29,7 +28,7 @@ export default function SkillsIndexPage() {
     category: cat,
     skills: skills
       .filter((s) => s.category === cat)
-      .sort((a, b) => b.assertionCount - a.assertionCount),
+      .sort((a, b) => a.name.localeCompare(b.name)),
   }));
 
   return (
@@ -115,12 +114,6 @@ export default function SkillsIndexPage() {
                   <code className="rounded bg-[#e595000f] px-2 py-0.5 font-mono text-xs font-bold text-[#e59500]">
                     {skill.command}
                   </code>
-                  {skill.assertionCount > 0 && (
-                    <span className="flex items-center gap-1 rounded-full bg-[#28c84015] px-2 py-0.5 text-[0.65rem] font-medium text-[#28c840]">
-                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-                      {skill.assertionCount} assertions
-                    </span>
-                  )}
                 </div>
                 <p className="m-0 text-[0.78rem] leading-relaxed text-[#b0a89c]">
                   {skill.description}
