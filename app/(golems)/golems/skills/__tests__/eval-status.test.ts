@@ -50,6 +50,15 @@ describe("skills pages have no eval result source", () => {
     );
   });
 
+  it("skill pages render no assertion counts", () => {
+    // Written assertions are not run assertions; next to "Not yet evaluated"
+    // a count reads as test evidence (golemsLead ruling, 2026-10-06).
+    for (const page of ["page.tsx", "[name]/page.tsx"]) {
+      const src = readFileSync(join(SKILLS_ROUTE, page), "utf-8");
+      expect(src, `${page} renders assertions`).not.toMatch(/assertion/i);
+    }
+  });
+
   it("no skills/lib source renders pass rates, grades or old model labels", () => {
     const files = [...sourceFiles(SKILLS_ROUTE), ...sourceFiles(LIB_DIR)];
     expect(files.length).toBeGreaterThan(0);

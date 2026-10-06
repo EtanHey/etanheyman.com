@@ -425,11 +425,11 @@ WHERE instr(LOWER(chats.name), LOWER(?)) > 0
       iconName: "Layers",
       title: `${skillStats.count} AI-Agnostic Skills`,
       tagline: "Same skills, any CLI — one adapter file per CLI",
-      description: `Skills are written once in universal SKILL.md format, then adapted for each AI CLI via a thin adapters/ layer. A capabilities.yaml file routes each skill to the right adapters based on what each CLI supports. ${skillStats.withEvalSuites} skills ship eval suites with ${skillStats.assertions} structured assertions. None has been evaluated on current models with the model recorded yet, so no pass rate is published.`,
+      description: `Skills are written once in universal SKILL.md format, then adapted for each AI CLI via a thin adapters/ layer. A capabilities.yaml file routes each skill to the right adapters based on what each CLI supports. ${skillStats.withEvalSuites} skills ship eval suites with structured assertions. None has been evaluated on current models with the model recorded yet, so no pass rate is published.`,
       highlights: [
         `${skillStats.count} skills — pr-loop, orc, large-plan, agent-routing, and more`,
         "3-layer architecture — SKILL.md + adapters/ + capabilities.yaml",
-        `${skillStats.withEvalSuites} eval suites — ${skillStats.assertions} assertions, fixture-based testing`,
+        `${skillStats.withEvalSuites} eval suites — structured assertions, fixture-based testing`,
         "Adapters for Claude, Codex, Cursor and Gemini",
       ],
     },

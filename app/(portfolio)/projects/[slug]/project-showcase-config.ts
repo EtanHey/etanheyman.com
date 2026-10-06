@@ -325,7 +325,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       {
         iconName: "Shield",
         title: "Eval Framework",
-        description: `${skillStats.withEvalSuites} skills ship eval suites with ${skillStats.assertions} assertions and fixture-based testing. No results are published until runs on current models record the model used.`,
+        description: `${skillStats.withEvalSuites} skills ship eval suites with structured assertions and fixture-based testing. No results are published until runs on current models record the model used.`,
       },
       {
         iconName: "Bot",
@@ -370,7 +370,7 @@ const configs: Record<string, ProjectShowcaseConfig> = {
       {
         icon: "Shield",
         title: "Eval Framework",
-        subtitle: `${skillStats.assertions} assertions`,
+        subtitle: `${skillStats.withEvalSuites} eval suites`,
       },
       { icon: "Cloud", title: "Cloud + Local", subtitle: "Railway + Mac" },
     ],

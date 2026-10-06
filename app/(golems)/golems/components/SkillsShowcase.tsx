@@ -306,7 +306,6 @@ function renderLine(raw: string): ReactNode {
 
 interface ManifestSkill {
   evalCount: number;
-  assertionCount: number;
   hasFixtures: boolean;
 }
 
@@ -353,7 +352,7 @@ const installDemoLines = [
   "  \x1b[32m\u2713\x1b[0m SKILL.md",
   ...(featuredEvals
     ? [
-        `  \x1b[32m\u2713\x1b[0m evals/evals.json (${featuredEvals.evalCount} evals, ${featuredEvals.assertionCount} assertions)`,
+        `  \x1b[32m\u2713\x1b[0m evals/evals.json (${featuredEvals.evalCount} evals)`,
       ]
     : []),
   "",
@@ -393,7 +392,7 @@ function SkillCard({ skill }: { skill: SkillEntry }) {
         {evalData && (
           <span className="flex items-center gap-1 rounded-full bg-[#28c84015] px-2 py-0.5 text-[0.65rem] font-medium text-[#28c840]">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-            {evalData.evalCount} evals · {evalData.assertionCount} assertions
+            {evalData.evalCount} evals
           </span>
         )}
       </div>
@@ -451,7 +450,7 @@ function FeaturedSkill() {
         {evalData && (
           <span className="flex items-center gap-1 rounded-full bg-[#28c84015] px-2.5 py-1 text-[0.7rem] font-medium text-[#28c840]">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#28c840]" />
-            {evalData.evalCount} evals · {evalData.assertionCount} assertions
+            {evalData.evalCount} evals
             {evalData.hasFixtures && " · fixtures"}
           </span>
         )}
@@ -468,10 +467,6 @@ function FeaturedSkill() {
 export default function SkillsShowcase() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const categories = ["All", ...Object.keys(SKILL_CATEGORIES)];
-  const totalAssertions = Object.values(publishedSkills).reduce(
-    (sum, s) => sum + s.assertionCount,
-    0,
-  );
 
   const filteredSkills =
     activeCategory === "All"
@@ -501,12 +496,6 @@ export default function SkillsShowcase() {
               {skillsManifest.skillCount}
             </div>
             <div className="text-[0.7rem] text-[#b0a89c]">Skills</div>
-          </div>
-          <div className="rounded-lg border border-[#6ab0f314] bg-[#14120e]/60 px-4 py-2">
-            <div className="text-lg font-bold text-[#6ab0f3]">
-              {totalAssertions}
-            </div>
-            <div className="text-[0.7rem] text-[#b0a89c]">Assertions</div>
           </div>
         </div>
 

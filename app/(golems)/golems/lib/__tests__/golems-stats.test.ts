@@ -59,8 +59,24 @@ describe("skillStats", () => {
     expect(skillStats.withEvalSuites).toBe(
       entries.filter((s) => s.evalCount > 0).length,
     );
-    expect(skillStats.assertions).toBe(
-      entries.reduce((sum, s) => sum + s.assertionCount, 0),
+  });
+
+  it("publishes no aggregate assertion count", () => {
+    // Written assertions are not run assertions; a total reads as test
+    // evidence. golemsLead ruling 2026-10-06: drop it everywhere.
+    expect(skillStats).not.toHaveProperty("assertions");
+    for (const file of sourceFiles(APP_DIR)) {
+      const src = readFileSync(file, "utf-8");
+      expect(src, `${file} renders an assertion total`).not.toMatch(
+        /skillStats\.assertions|totalAssertions/,
+      );
+    }
+    const showcase = readFileSync(
+      join(__dirname, "../../components/SkillsShowcase.tsx"),
+      "utf-8",
+    );
+    expect(showcase, "the /golems showcase renders assertions").not.toMatch(
+      /assertion/i,
     );
   });
 });
