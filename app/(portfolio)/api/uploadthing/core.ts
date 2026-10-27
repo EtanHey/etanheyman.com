@@ -1,14 +1,14 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { requireOwner } from "@/lib/auth/require-owner";
-import { rasterUploadConfig } from "./raster";
+import { imageUploadConfig } from "./image-types";
 
 const f = createUploadthing();
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define routes for project logo and journey images
-  projectLogo: f(rasterUploadConfig)
+  projectLogo: f(imageUploadConfig.projectLogo)
     .middleware(async ({ files }) => {
       if (!(await requireOwner())) {
         throw new UploadThingError({ code: "FORBIDDEN", message: "Unauthorized" });
@@ -24,7 +24,7 @@ export const ourFileRouter = {
       return { fileUrl: file.url, fileKey: file.key };
     }),
 
-  journeyImage: f(rasterUploadConfig)
+  journeyImage: f(imageUploadConfig.journeyImage)
     .middleware(async ({ files }) => {
       if (!(await requireOwner())) {
         throw new UploadThingError({ code: "FORBIDDEN", message: "Unauthorized" });

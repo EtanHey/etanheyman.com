@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { imageUploadConfig } from "@/app/(portfolio)/api/uploadthing/image-types";
 
 type ImageUploaderProps = {
   endpoint: "projectLogo" | "journeyImage";
@@ -206,7 +207,7 @@ export default function ImageUploader({
                 and drop
               </p>
               <p className="text-xs text-gray-500">
-                PNG, JPG or GIF (MAX. 4MB)
+                PNG, JPEG, WebP, GIF, AVIF{endpoint === "projectLogo" ? ", SVG" : ""} (MAX. 4MB)
               </p>
             </div>
             <input
@@ -214,7 +215,7 @@ export default function ImageUploader({
               type="file"
               className="hidden"
               onChange={handleFileChange}
-              accept="image/*"
+              accept={Object.keys(imageUploadConfig[endpoint]).join(",")}
               disabled={isUploading}
             />
           </label>

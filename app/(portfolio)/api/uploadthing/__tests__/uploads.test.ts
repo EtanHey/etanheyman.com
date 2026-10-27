@@ -77,7 +77,6 @@ describe.each(endpoints)("owner-only uploads: %s", endpoint => {
   });
   it.each([
     [], ["not a file"], [image(1, "text/plain")], [image(4 * 1024 * 1024 + 1)], [image(), image()],
-    [new File(["<svg/>"], "image.svg", { type: "image/svg+xml" })],
     [new File(["plain text"], "image.png", { type: "image/png" })],
     [new File([pngHeader], "image.jpg", { type: "image/jpeg" })], [image(0)], [image(7)],
     [new File([pngHeader], "image.bmp", { type: "image/bmp" })],
@@ -102,7 +101,6 @@ describe.each(endpoints)("owner-only uploads: %s", endpoint => {
     expect(providerFetch).toHaveBeenCalledOnce();
   });
   it.each([
-    [{ name: "image.svg", type: "image/svg+xml", size: 8 }],
     [{ name: "image.bmp", type: "image/bmp", size: 8 }], [],
     [{ name: "image.png", type: "image/png", size: 8 }, { name: "image.jpg", type: "image/jpeg", size: 8 }],
     [{ name: "file.txt", type: "text/plain", size: 1 }],
@@ -112,6 +110,35 @@ describe.each(endpoints)("owner-only uploads: %s", endpoint => {
     expect((await standardPOST(standardRequest(endpoint, files))).status).toBe(400);
     expect(providerFetch).not.toHaveBeenCalled();
   });
+  it("accepts SVG only for logos on both upload paths", async () => {
+    const file = new File(['<?xml version="1.0"?>\n<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0"/></svg>'], "logo.svg", { type: "image/svg+xml" });
+    const allowed = endpoint === "projectLogo";
+    expect((await directPOST(directRequest(endpoint, [file]))).status).toBe(allowed ? 200 : 400);
+    expect(uploadFiles).toHaveBeenCalledTimes(allowed ? 1 : 0);
+    expect((await standardPOST(standardRequest(endpoint, [{ name: file.name, type: file.type, size: file.size }]))).status).toBe(allowed ? 200 : 400);
+    expect(providerFetch).toHaveBeenCalledTimes(allowed ? 1 : 0);
+  });
+  it.each([
+    [new File([pngHeader], "image.bmp", { type: "image/bmp" }), "Unsupported image type for this upload"],
+    [new File(["text"], "image.png", { type: "image/png" }), "Image content does not match its type"],
+    [image(4 * 1024 * 1024 + 1), "Image must be 4MB or smaller"],
+  ])("explains rejected direct uploads: %s", async (file, message) => {
+    const response = await directPOST(directRequest(endpoint, [file]));
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ error: message });
+    expect(uploadFiles).not.toHaveBeenCalled();
+  });
+});
+
+it.each([
+  '<svg><script>alert(1)</script></svg>', '<svg onload="alert(1)"/>',
+  '<svg ONCLICK = "alert(1)"/>', '<svg><a href="javascript:alert(1)"/></svg>',
+  '<svg><foreignObject/></svg>', '<html><svg/></html>', '<svg-not-a-root/>',
+  Buffer.from([0xff, 0x3c, 0x73, 0x76, 0x67, 0x2f, 0x3e]),
+])("rejects unsafe or invalid SVG logo content: %s", async content => {
+  const file = new File([content], "logo.svg", { type: "image/svg+xml" });
+  expect((await directPOST(directRequest("projectLogo", [file]))).status).toBe(400);
+  expect(uploadFiles).not.toHaveBeenCalled();
 });
 
 it.each(["", "unknown"])("rejects invalid direct endpoints: %s", async endpoint => {
