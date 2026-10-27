@@ -1,5 +1,8 @@
 import { createClient } from "./supabase/server";
 
+// AIDEV-NOTE: Hide broken Casona pending undeploy; revisit after the security lead confirms its disposition.
+export const HIDDEN_PROJECT_SLUGS = ["casona-diez-diez"] as const;
+
 // Database types (snake_case from Supabase)
 export interface ProjectDB {
   id: string;
@@ -126,7 +129,9 @@ export async function getAllProjects(): Promise<Project[]> {
       .order('order_index', { ascending: true });
 
     if (error) throw error;
-    return (data || []).map((dbProject: ProjectDB) => mapProjectFromDB(dbProject));
+    return (data || [])
+      .filter((project: ProjectDB) => !HIDDEN_PROJECT_SLUGS.some((slug) => slug === project.slug))
+      .map((dbProject: ProjectDB) => mapProjectFromDB(dbProject));
   } catch (error) {
     console.error("Error fetching projects:", error);
     throw error;
@@ -153,6 +158,8 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       if (projectError.code === 'PGRST116') return null;
       throw projectError;
     }
+
+    if (HIDDEN_PROJECT_SLUGS.some((slug) => slug === projectData.slug)) return null;
 
     const { data: journeyData, error: journeyError } = await supabase
       .from('project_journey_steps')
@@ -192,6 +199,8 @@ export async function getProjectById(id: string): Promise<Project | null> {
     }
 
     // Fetch journey steps
+    if (HIDDEN_PROJECT_SLUGS.some((slug) => slug === projectData.slug)) return null;
+
     const { data: journeyData, error: journeyError } = await supabase
       .from('project_journey_steps')
       .select('*')
