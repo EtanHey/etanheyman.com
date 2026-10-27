@@ -49,6 +49,7 @@ export default async function ProjectLayout({
 
   const config = getProjectShowcaseConfig(slug);
   const accent = config?.accent ?? getDefaultAccent();
+  const notice = config?.maintenanceNotice;
   const project = await getProjectBySlugOrId(slug);
 
   const jsonLd = project ? buildJsonLd(project, slug) : null;
@@ -70,6 +71,21 @@ export default async function ProjectLayout({
         title={project?.title ?? slug}
         logoUrl={project?.logoUrl ?? null}
       />
+      {notice && (
+        <aside className="mx-auto mt-4 w-full max-w-5xl px-4 md:px-8" aria-label="Maintenance notice">
+          <p className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-[12px] leading-5 text-white/70 md:text-sm">
+            {notice.beforeLink}
+            <a
+              href={notice.link.href}
+              className="rounded-sm underline underline-offset-2 hover:brightness-125 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+              style={{ color: accent.color }}
+            >
+              {notice.link.text}
+            </a>
+            {notice.afterLink}
+          </p>
+        </aside>
+      )}
       {children}
     </>
   );
