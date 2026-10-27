@@ -35,6 +35,8 @@ describe("async auth guard lint", () => {
 
   it.each([
     route,
+    "app/(portfolio)/api/uploadthing/core.ts",
+    "app/(portfolio)/contact/actions.ts",
     "app/(portfolio)/layout.tsx",
     "middleware.ts",
     "lib/auth/require-owner.ts",
@@ -59,5 +61,14 @@ describe("async auth guard lint", () => {
     expect(
       config.rules["@typescript-eslint/no-misused-promises"],
     ).toBeUndefined();
+    expect(config.rules["react-hooks/rules-of-hooks"]).toEqual([2]);
+  });
+
+  it.each([
+    "app/(golems)/golems/docs/[...slug]/page.tsx",
+    "app/(golems)/golems/skills/[name]/page.tsx",
+  ])("limits the MDX hook warning exception to %s", async (filePath) => {
+    const config = await eslint.calculateConfigForFile(filePath);
+    expect(config.rules["react-hooks/rules-of-hooks"]).toEqual([1]);
   });
 });

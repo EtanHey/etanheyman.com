@@ -15,7 +15,6 @@ const eslintConfig = [
       ".worktrees/**",
       ".cmux/**",
       "next-env.d.ts",
-      "app/(golems)/golems/lib/skills-manifest.json",
       "__tests__/fixtures/**",
     ],
   },
@@ -23,7 +22,7 @@ const eslintConfig = [
   {
     // Existing debt surfaced by restoring lint; keep it visible without a source sweep.
     rules: {
-      "react-hooks/rules-of-hooks": "warn",
+      "react-hooks/rules-of-hooks": "error",
       "react/no-unescaped-entities": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
       "react/display-name": "warn",
@@ -31,8 +30,18 @@ const eslintConfig = [
     },
   },
   {
+    // useMDXComponents is an MDX component map, not a React hook.
+    files: [
+      "app/(golems)/golems/docs/\\[...slug\\]/page.tsx",
+      "app/(golems)/golems/skills/\\[name\\]/page.tsx",
+    ],
+    rules: { "react-hooks/rules-of-hooks": "warn" },
+  },
+  {
     files: [
       "app/**/route.ts",
+      "app/**/api/**/*.ts",
+      "app/**/actions.ts",
       "app/**/layout.tsx",
       "middleware.ts",
       "lib/**/*.ts",
