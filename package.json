@@ -8,7 +8,7 @@
     "build": "next build",
     "generate:skills": "tsx scripts/generate-skills-manifest.ts",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,html}\"",
     "test": "vitest",
     "test:run": "vitest run",
@@ -69,6 +69,7 @@
     "tailwindcss": "^4.0.9",
     "tsx": "^4.8.1",
     "typescript": "^5",
+    "typescript-eslint": "^8.72.1",
     "vitest": "^4.0.18"
   }
 }
