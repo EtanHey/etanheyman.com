@@ -32,6 +32,7 @@ export default async function ProjectsPage() {
             key={project.id}
             project={project}
             priority={index < 4}
+            revealIndex={index}
           />
         ))}
       </div>

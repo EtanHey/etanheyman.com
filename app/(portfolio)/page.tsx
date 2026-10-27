@@ -88,8 +88,12 @@ export default async function Home() {
 
           {/* Other Projects - Grid */}
           <div className="flex flex-col gap-8 sm:gap-10 md:grid md:grid-cols-2 md:gap-8 lg:gap-10 xl:gap-12">
-            {otherProjects.map((project) => (
-              <HomeProjectCard key={project.id} project={project} />
+            {otherProjects.map((project, index) => (
+              <HomeProjectCard
+                key={project.id}
+                project={project}
+                revealIndex={index}
+              />
             ))}
           </div>
 
