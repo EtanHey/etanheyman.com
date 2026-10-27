@@ -22,6 +22,17 @@ describe.each([
   "/projects/add/",
   "/projects/example/edit",
   "/projects/example/edit/",
+  "/projects/%61dd",
+  "/projects/x/%65dit",
+  "/admin/%67olem",
+  "/projects%2Fadd",
+  "/projects/x%2Fedit",
+  "/admin%2Fgolem",
+  "/%E0%A4%A",
+  "/projects/%E0%A4%A",
+  "/projects//%61dd",
+  "/projects/x//%65dit",
+  "/admin//%67olem",
 ])("owner-only page %s", (pathname) => {
   it("redirects anonymous visitors to login with a callback", async () => {
     vi.mocked(getToken).mockResolvedValue(null);

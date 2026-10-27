@@ -9,13 +9,24 @@ const PROTECTED_ROUTES = [
   /^\/projects\/[^/]+\/edit(?:\/|$)/,
 ];
 
+function safeDecodePathname(pathname: string): string | null {
+  try {
+    return decodeURIComponent(pathname).replace(/\/+/g, "/");
+  } catch {
+    return null;
+  }
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const decodedPathname = safeDecodePathname(pathname);
+  const normalizedPathname = pathname.replace(/\/+/g, "/");
 
-  // Check if this is a protected route
-  const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
-    route.test(pathname),
-  );
+  const isProtectedRoute =
+    decodedPathname === null ||
+    PROTECTED_ROUTES.some(
+      (route) => route.test(normalizedPathname) || route.test(decodedPathname),
+    );
 
   if (isProtectedRoute) {
     // Check for valid session token
@@ -27,11 +38,16 @@ export async function middleware(request: NextRequest) {
     if (!token) {
       // Redirect to login page
       const loginUrl = new URL("/admin", request.url);
-      loginUrl.searchParams.set("callbackUrl", pathname + request.nextUrl.search);
+      loginUrl.searchParams.set(
+        "callbackUrl",
+        pathname + request.nextUrl.search,
+      );
       return NextResponse.redirect(loginUrl);
     }
 
-    if (!isOwner({ email: token.email, githubUsername: token.githubUsername })) {
+    if (
+      !isOwner({ email: token.email, githubUsername: token.githubUsername })
+    ) {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
   }
