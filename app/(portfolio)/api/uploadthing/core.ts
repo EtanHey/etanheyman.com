@@ -1,4 +1,6 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { UploadThingError } from "uploadthing/server";
+import { requireOwner } from "@/lib/auth/require-owner";
 
 const f = createUploadthing();
 
@@ -7,8 +9,9 @@ export const ourFileRouter = {
   // Define routes for project logo and journey images
   projectLogo: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
     .middleware(async () => {
-      // This code runs on your server before upload
-      // If you throw, the user will not be able to upload
+      if (!(await requireOwner())) {
+        throw new UploadThingError({ code: "FORBIDDEN", message: "Unauthorized" });
+      }
       return { projectType: "logo" };
     })
     .onUploadComplete(async ({ metadata, file }) => {
@@ -21,6 +24,9 @@ export const ourFileRouter = {
 
   journeyImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
     .middleware(async () => {
+      if (!(await requireOwner())) {
+        throw new UploadThingError({ code: "FORBIDDEN", message: "Unauthorized" });
+      }
       return { projectType: "journey" };
     })
     .onUploadComplete(async ({ metadata, file }) => {
