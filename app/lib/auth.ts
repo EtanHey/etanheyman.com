@@ -1,6 +1,20 @@
 import GitHubProvider from "next-auth/providers/github"
 import type { NextAuthOptions } from "next-auth"
 
+export function isOwner({ email, githubUsername }: { email?: string | null; githubUsername?: unknown }): boolean {
+  const allowedEmails = (process.env.ALLOWED_EMAILS || '').split(',').map(value => value.trim()).filter(Boolean)
+  const allowedUsernames = (process.env.ALLOWED_GITHUB_USERNAMES || '').split(',').map(value => value.trim()).filter(Boolean)
+
+  if (allowedEmails.length === 0 && allowedUsernames.length === 0) {
+    console.error('Owner access denied: configure ALLOWED_EMAILS or ALLOWED_GITHUB_USERNAMES.')
+    return false
+  }
+  return Boolean(
+    (email && allowedEmails.includes(email)) ||
+    (typeof githubUsername === 'string' && allowedUsernames.includes(githubUsername))
+  )
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
@@ -17,28 +31,10 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile }) {
-      // Only allow specific GitHub users to sign in
-      // You can use email, username, or user ID
-      const allowedEmails = process.env.ALLOWED_EMAILS?.split(',') || []
-      const allowedUsernames = process.env.ALLOWED_GITHUB_USERNAMES?.split(',') || []
-
-      if (account?.provider === 'github') {
-        // Check if user email is in allowed list
-        if (allowedEmails.length > 0 && user.email && allowedEmails.includes(user.email)) {
-          return true
-        }
-        // Check if GitHub username is in allowed list
-        if (allowedUsernames.length > 0 && (profile as any)?.login && allowedUsernames.includes((profile as any).login as string)) {
-          return true
-        }
-        // If no restrictions are set, allow all GitHub users (not recommended for production)
-        if (allowedEmails.length === 0 && allowedUsernames.length === 0) {
-          console.warn('No access restrictions set for GitHub OAuth. This is not recommended for production.')
-          return true
-        }
-        return false
-      }
-      return false
+      return account?.provider === 'github' && isOwner({
+        email: user.email,
+        githubUsername: profile && 'login' in profile ? profile.login : undefined,
+      })
     },
     async jwt({ token, user, account, profile }) {
       if (user) {
