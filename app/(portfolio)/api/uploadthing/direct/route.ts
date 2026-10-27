@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { UTApi } from "uploadthing/server";
 import { requireOwner } from "@/lib/auth/require-owner";
+import { matchesImageMime } from "../image-content";
+import { imageUploadConfig } from "../image-types";
 
 const utapi = new UTApi();
 
@@ -29,14 +31,22 @@ export async function POST(request: NextRequest) {
       typeof file === "string" ||
       formData.getAll("file").length !== 1 ||
       formData.getAll("endpoint").length !== 1 ||
-      Array.from(formData.values()).filter(value => typeof value !== "string").length !== 1 ||
-      !file.type.startsWith("image/") ||
-      file.size > 4 * 1024 * 1024
+      Array.from(formData.values()).filter(value => typeof value !== "string").length !== 1
     ) {
       return NextResponse.json(
-        { error: "Upload exactly one image up to 4MB" },
+        { error: "Upload exactly one image" },
         { status: 400 },
       );
+    }
+
+    if (!Object.hasOwn(imageUploadConfig[endpoint], file.type)) {
+      return NextResponse.json({ error: "Unsupported image type for this upload" }, { status: 400 });
+    }
+    if (file.size > 4 * 1024 * 1024) {
+      return NextResponse.json({ error: "Image must be 4MB or smaller" }, { status: 400 });
+    }
+    if (!(await matchesImageMime(file))) {
+      return NextResponse.json({ error: "Image content does not match its type" }, { status: 400 });
     }
 
     // Upload file

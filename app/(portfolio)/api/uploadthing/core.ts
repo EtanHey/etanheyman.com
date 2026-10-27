@@ -1,17 +1,19 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { requireOwner } from "@/lib/auth/require-owner";
+import { imageUploadConfig } from "./image-types";
 
 const f = createUploadthing();
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define routes for project logo and journey images
-  projectLogo: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
-    .middleware(async () => {
+  projectLogo: f(imageUploadConfig.projectLogo)
+    .middleware(async ({ files }) => {
       if (!(await requireOwner())) {
         throw new UploadThingError({ code: "FORBIDDEN", message: "Unauthorized" });
       }
+      if (files.length !== 1) throw new UploadThingError({ code: "BAD_REQUEST", message: "Upload exactly one image" });
       return { projectType: "logo" };
     })
     .onUploadComplete(async ({ metadata, file }) => {
@@ -22,11 +24,12 @@ export const ourFileRouter = {
       return { fileUrl: file.url, fileKey: file.key };
     }),
 
-  journeyImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
-    .middleware(async () => {
+  journeyImage: f(imageUploadConfig.journeyImage)
+    .middleware(async ({ files }) => {
       if (!(await requireOwner())) {
         throw new UploadThingError({ code: "FORBIDDEN", message: "Unauthorized" });
       }
+      if (files.length !== 1) throw new UploadThingError({ code: "BAD_REQUEST", message: "Upload exactly one image" });
       return { projectType: "journey" };
     })
     .onUploadComplete(async ({ metadata, file }) => {
