@@ -22,3 +22,8 @@ it("server-renders a fresh signed token on every request", () => {
     vi.advanceTimersByTime(1000);
   }
 });
+
+it("keeps the contact page available without the signing secret", () => {
+  vi.stubEnv("NEXTAUTH_SECRET", "");
+  expect(Contact().props.timingToken).toBe("");
+});

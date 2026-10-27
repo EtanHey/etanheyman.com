@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { EmailIcon } from "@/app/components/contact/EmailIcon";
 import { LocationIcon } from "@/app/components/contact/LocationIcon";
@@ -12,6 +13,7 @@ import { SocialLinks } from "@/app/components/SocialLinks";
 import { CONTACT_INFO } from "@/app/hooks/useRegion";
 
 export default function ContactForm({ timingToken }: { timingToken: string }) {
+  const router = useRouter();
   const [formValues, setFormValues] = useState({
     fullName: "",
     email: "",
@@ -75,6 +77,7 @@ export default function ContactForm({ timingToken }: { timingToken: string }) {
         setError(
           result.error || "Failed to send your message. Please try again.",
         );
+        if (result.code === "invalid_timing") router.refresh();
       }
     } catch (err) {
       setError("An unexpected error occurred. Please try again later.");
@@ -107,6 +110,7 @@ export default function ContactForm({ timingToken }: { timingToken: string }) {
                   type="text"
                   id="fullName"
                   name="fullName"
+                  maxLength={100}
                   required
                   value={formValues.fullName}
                   onChange={handleChange}
@@ -124,6 +128,7 @@ export default function ContactForm({ timingToken }: { timingToken: string }) {
                   type="email"
                   id="email"
                   name="email"
+                  maxLength={254}
                   required
                   value={formValues.email}
                   onChange={handleChange}
@@ -156,6 +161,7 @@ export default function ContactForm({ timingToken }: { timingToken: string }) {
                 <textarea
                   id="message"
                   name="message"
+                  maxLength={5000}
                   required
                   value={formValues.message}
                   onChange={handleChange}

@@ -11,21 +11,30 @@ import {
 } from "./security";
 export type { ContactFormData } from "./security";
 
-type ContactResult = { success: true } | { success: false; error: string };
+type ContactError =
+  | "unavailable"
+  | "invalid"
+  | "invalid_timing"
+  | "rate_limited"
+  | "send_failed"
+  | "error";
+type ContactResult =
+  | { success: true }
+  | { success: false; code: ContactError; error: string };
 
 export async function submitContactForm(
   input: unknown,
 ): Promise<ContactResult> {
   const submissionId = randomUUID();
-  const reject = (outcome: string, error: string): ContactResult => {
+  const reject = (outcome: ContactError, error: string): ContactResult => {
     console.info({ submissionId, outcome });
-    return { success: false, error };
+    return { success: false, code: outcome, error };
   };
   try {
-    if (!allowContactAttempt(await headers())) {
+    if (!process.env.NEXTAUTH_SECRET) {
       return reject(
-        "rate_limited",
-        "Too many attempts. Please try again in ten minutes.",
+        "unavailable",
+        "The contact form is temporarily unavailable. Please email me at etan@heyman.net.",
       );
     }
     const formData = parseContactForm(input);
@@ -34,6 +43,12 @@ export async function submitContactForm(
         "invalid",
         "Please check your contact details and message length.",
       );
+    if (!allowContactAttempt(await headers())) {
+      return reject(
+        "rate_limited",
+        "Too many attempts. Please try again in ten minutes.",
+      );
+    }
     if (formData.website) {
       console.info({ submissionId, outcome: "honeypot" });
       return { success: true };
@@ -41,7 +56,7 @@ export async function submitContactForm(
     if (!validContactToken(formData.timingToken)) {
       return reject(
         "invalid_timing",
-        "Please reload the form and wait at least three seconds before sending.",
+        "Your form session needs refreshing. Please wait at least three seconds and try again.",
       );
     }
     const resend = new Resend(process.env.RESEND_API_KEY);
@@ -75,6 +90,7 @@ ${formData.message}
       console.error({ submissionId, outcome: "send_failed" });
       return {
         success: false,
+        code: "send_failed",
         error: "Failed to send your message. Please try again later.",
       };
     }
@@ -85,6 +101,7 @@ ${formData.message}
     console.error({ submissionId, outcome: "error" });
     return {
       success: false,
+      code: "error",
       error: "An unexpected error occurred. Please try again later.",
     };
   }

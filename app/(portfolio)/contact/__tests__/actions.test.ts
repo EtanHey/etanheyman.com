@@ -1,4 +1,5 @@
 import { createHmac } from "node:crypto";
+import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { send, requestHeaders } = vi.hoisted(() => ({
@@ -11,9 +12,6 @@ vi.mock("resend", () => ({
   },
 }));
 vi.mock("next/headers", () => ({ headers: async () => requestHeaders }));
-vi.mock("@/app/components/contact/EmailTemplate", () => ({
-  EmailTemplate: vi.fn(() => "<div>Test Email</div>"),
-}));
 
 const NOW = 1_800_000_000_000;
 const SECRET = "contact-test-secret-not-production";
@@ -119,7 +117,14 @@ describe("contact submission boundary", () => {
 
   it("fails closed without the signing secret", async () => {
     vi.stubEnv("NEXTAUTH_SECRET", "");
-    expect((await submit(validFormData())).success).toBe(false);
+    expect(await submit(validFormData())).toMatchObject({
+      success: false,
+      code: "unavailable",
+      error: expect.stringContaining("temporarily unavailable"),
+    });
+    expect(JSON.stringify(await submit(validFormData()))).not.toMatch(
+      /reload|three seconds/,
+    );
     expect(send).not.toHaveBeenCalled();
   });
 
@@ -169,21 +174,25 @@ describe("contact submission boundary", () => {
     expect(send).toHaveBeenCalledTimes(1);
   });
 
-  it("trims fields and strips control characters before sending", async () => {
+  it("keeps paragraphs and tabs in escaped HTML and text, with safe single-line fields", async () => {
     await submit({
       ...validFormData(),
       fullName: "  John\r\nDoe\u0000  ",
       email: " john@example.com ",
       phone: " +1234567890 ",
-      message: " \u0000Hello\nworld\t! ",
+      message: " \u0000Hi Etan,\r\n\r\nLine two\t<em>&\u0007 ",
     });
     expect(send).toHaveBeenCalledWith(
       expect.objectContaining({
-        subject: "New contact message from JohnDoe",
+        subject: "New contact message from John Doe",
         replyTo: "john@example.com",
-        text: expect.stringContaining("Message:\nHelloworld!"),
+        text: expect.stringContaining("Message:\nHi Etan,\n\nLine two\t<em>&"),
       }),
     );
+    const html = renderToStaticMarkup(send.mock.calls[0][0].react);
+    expect(html).toContain("Hi Etan,\n\nLine two\t&lt;em&gt;&amp;");
+    expect(html).toContain("white-space:pre-wrap");
+    expect(html).not.toContain("<em>");
   });
 
   it("allows only three concurrent submissions per IP in ten minutes", async () => {
@@ -200,10 +209,63 @@ describe("contact submission boundary", () => {
     expect(send).toHaveBeenCalledTimes(5);
   });
 
-  it("counts invalid attempts against the IP limit", async () => {
-    for (let i = 0; i < 3; i++)
+  it("does not charge ordinary field-validation mistakes to the IP limit", async () => {
+    for (let i = 0; i < 10; i++)
       await submit({ ...validFormData(), email: "invalid" });
+    expect((await submit(validFormData())).success).toBe(true);
+    expect(send).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(["honeypot", "invalid_timing"])(
+    "limits repeated %s attempts",
+    async (kind) => {
+      const bad =
+        kind === "honeypot"
+          ? { website: "spam" }
+          : { timingToken: token(NOW - 5000, "attacker") };
+      for (let i = 0; i < 3; i++) await submit({ ...validFormData(), ...bad });
+      expect(await submit(validFormData())).toMatchObject({
+        success: false,
+        code: "rate_limited",
+      });
+      expect(send).not.toHaveBeenCalled();
+    },
+  );
+
+  it("groups IPv6 privacy addresses and equivalent notation by /64", async () => {
+    for (const ip of [
+      "2001:db8:1:2::1",
+      "2001:0db8:0001:0002:abcd:0:0:2",
+      "2001:db8:1:2::3",
+    ]) {
+      requestHeaders.set("x-forwarded-for", ip);
+      expect((await submit(validFormData())).success).toBe(true);
+    }
+    requestHeaders.set("x-forwarded-for", "2001:db8:1:2::4");
     expect((await submit(validFormData())).success).toBe(false);
+    requestHeaders.set("x-forwarded-for", "2001:db8:1:3::1");
+    expect((await submit(validFormData())).success).toBe(true);
+    expect(send).toHaveBeenCalledTimes(4);
+  });
+
+  it("evicts the oldest bucket when full and admits a new visitor", async () => {
+    const { allowContactAttempt } = await import("../security");
+    const oldest = new Headers({ "x-forwarded-for": "198.18.0.0" });
+    for (let i = 0; i < 3; i++) expect(allowContactAttempt(oldest)).toBe(true);
+    expect(allowContactAttempt(oldest)).toBe(false);
+    for (let i = 1; i < 10_000; i++) {
+      expect(
+        allowContactAttempt(
+          new Headers({
+            "x-forwarded-for": `198.18.${Math.floor(i / 256)}.${i % 256}`,
+          }),
+        ),
+      ).toBe(true);
+    }
+    expect(
+      allowContactAttempt(new Headers({ "x-forwarded-for": "203.0.113.99" })),
+    ).toBe(true);
+    expect(allowContactAttempt(oldest)).toBe(true);
     expect(send).not.toHaveBeenCalled();
   });
 
