@@ -1,5 +1,8 @@
 import { deleteProject, getProjectById, updateProject, type Project } from "@/lib/projects";
 import { NextResponse } from "next/server";
+import { requireOwner } from "@/lib/auth/require-owner";
+
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function GET(
   request: Request,
@@ -27,7 +30,13 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!(await requireOwner())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
   const { id } = await params;
+  if (!UUID_PATTERN.test(id)) {
+    return NextResponse.json({ error: "Invalid project ID" }, { status: 400 });
+  }
   try {
     const body = await request.json();
     const updatedProject = await updateProject(
@@ -49,7 +58,13 @@ export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!(await requireOwner())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
   const { id } = await params;
+  if (!UUID_PATTERN.test(id)) {
+    return NextResponse.json({ error: "Invalid project ID" }, { status: 400 });
+  }
   try {
     await deleteProject(id);
     return new NextResponse(null, { status: 204 });
