@@ -1,9 +1,27 @@
 'use client';
 
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { Github, Bot, Briefcase, Bell, Moon, FileText } from 'lucide-react';
+
+const signInErrorMessages = new Map([
+  ['OAuthCallback', 'GitHub sign-in could not be completed. Please try again.'],
+  ['OAuthSignin', 'Could not start GitHub sign-in. Please try again.'],
+  ['AccessDenied', 'This GitHub account is not authorized to access the admin area.'],
+  ['Callback', 'Sign-in could not be completed. Please try again.'],
+  ['Configuration', 'Sign-in is temporarily unavailable. Please try again later.'],
+]);
+
+function SignInError() {
+  const error = useSearchParams().get('error');
+  return error ? (
+    <p role="alert" className="text-center text-sm text-red-400">
+      {signInErrorMessages.get(error) ?? 'Sign-in failed. Please try again.'}
+    </p>
+  ) : null;
+}
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
@@ -108,6 +126,9 @@ export default function AdminPage() {
           <h1 className="text-2xl font-bold text-white mb-2">Admin Login</h1>
           <p className="text-white/60 text-sm">Sign in with your authorized GitHub account</p>
         </div>
+        <Suspense fallback={null}>
+          <SignInError />
+        </Suspense>
         
         <button
           onClick={handleGitHubSignIn}
