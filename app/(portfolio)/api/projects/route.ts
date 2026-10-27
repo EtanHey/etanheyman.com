@@ -1,5 +1,6 @@
 import { createProject, getAllProjects, type Project } from "@/lib/projects";
 import { NextResponse } from "next/server";
+import { requireOwner } from "@/lib/auth/require-owner";
 
 export async function GET() {
   try {
@@ -15,6 +16,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!(await requireOwner())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
   try {
     const body = await request.json();
     const project = await createProject(body as Omit<Project, "id" | "created_at" | "updated_at">);

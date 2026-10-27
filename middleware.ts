@@ -1,16 +1,20 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { isOwner } from "@/lib/auth/owner";
 
-// Routes that require authentication
-const PROTECTED_ROUTES = ["/admin/golem"];
+const PROTECTED_ROUTES = [
+  /^\/admin\/golem(?:\/|$)/,
+  /^\/projects\/add(?:\/|$)/,
+  /^\/projects\/[^/]+\/edit(?:\/|$)/,
+];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Check if this is a protected route
   const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
-    pathname.startsWith(route),
+    route.test(pathname),
   );
 
   if (isProtectedRoute) {
@@ -23,19 +27,12 @@ export async function middleware(request: NextRequest) {
     if (!token) {
       // Redirect to login page
       const loginUrl = new URL("/admin", request.url);
-      loginUrl.searchParams.set("callbackUrl", pathname);
+      loginUrl.searchParams.set("callbackUrl", pathname + request.nextUrl.search);
       return NextResponse.redirect(loginUrl);
     }
 
-    // Optional: Check if user is in allowed list (extra security layer)
-    const allowedUsernames =
-      process.env.ALLOWED_GITHUB_USERNAMES?.split(",") || [];
-    if (allowedUsernames.length > 0) {
-      const username = token.githubUsername as string | undefined;
-      if (!username || !allowedUsernames.includes(username)) {
-        // User authenticated but not authorized
-        return NextResponse.redirect(new URL("/unauthorized", request.url));
-      }
+    if (!isOwner({ email: token.email, githubUsername: token.githubUsername })) {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
   }
 
