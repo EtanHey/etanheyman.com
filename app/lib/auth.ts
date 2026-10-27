@@ -1,13 +1,15 @@
 import GitHubProvider from "next-auth/providers/github"
 import type { NextAuthOptions } from "next-auth"
 import { isOwner } from "@/lib/auth/owner"
+import { cleanEnvValue } from "@/lib/auth/env"
 export { isOwner } from "@/lib/auth/owner"
 
 export const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      // AIDEV-NOTE: Prod secret had a literal "\n" suffix; GitHub rejected every token exchange.
+      clientId: cleanEnvValue(process.env.GITHUB_CLIENT_ID)!,
+      clientSecret: cleanEnvValue(process.env.GITHUB_CLIENT_SECRET)!,
     })
   ],
   session: {
