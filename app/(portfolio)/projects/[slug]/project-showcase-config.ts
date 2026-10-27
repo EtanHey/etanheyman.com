@@ -401,6 +401,9 @@ export function isArchived(config: ProjectShowcaseConfig | null): boolean {
   return Boolean(config?.maintenanceNotice);
 }
 
+export const getProjectSiteLink = (config: ProjectShowcaseConfig | null, href: string | null) =>
+  href ? { href, label: isArchived(config) ? "Site" : "Live" } : null;
+
 export function isMiniSiteProject(slug: string): boolean {
   const config = configs[slug];
   return config?.isMiniSite === true;
