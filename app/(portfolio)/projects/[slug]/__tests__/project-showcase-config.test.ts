@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getProjectShowcaseConfig } from "../project-showcase-config";
+import { getProjectShowcaseConfig, isArchived } from "../project-showcase-config";
 
 // Regression guard: the VoiceLayer showcase must reflect the current install
 // story (Homebrew tap + socat daemon socket), not the retired
@@ -31,6 +31,21 @@ describe("voicelayer showcase config", () => {
 });
 
 describe("maintenance notice", () => {
+  it("marks cmuxLayer as archived", () => {
+    expect(isArchived(getProjectShowcaseConfig("cmuxlayer"))).toBe(true);
+  });
+
+  it.each(["brainlayer", "voicelayer", "golems", "whatsapp-mcp"])(
+    "keeps %s active",
+    (slug) => expect(isArchived(getProjectShowcaseConfig(slug))).toBe(false),
+  );
+
+  it("derives archived state from notice presence, not project identity", () => {
+    const config = getProjectShowcaseConfig("cmuxlayer")!;
+    expect(isArchived({ ...config, maintenanceNotice: undefined })).toBe(false);
+    expect(isArchived(null)).toBe(false);
+  });
+
   it("announces cmuxLayer's move to T3 Code", () => {
     const notice = getProjectShowcaseConfig("cmuxlayer")?.maintenanceNotice;
     expect(notice).toEqual({

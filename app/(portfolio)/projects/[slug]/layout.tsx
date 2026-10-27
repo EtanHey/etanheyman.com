@@ -73,10 +73,12 @@ export default async function ProjectLayout({
       />
       {notice && (
         <aside className="mx-auto mt-4 w-full max-w-5xl px-4 md:px-8" aria-label="Maintenance notice">
-          <p className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-[12px] leading-5 text-white/70 md:text-sm">
+          <p className="rounded-lg border border-white/[0.06] bg-[#00003F] px-3 py-2 text-[12px] leading-5 text-white/70 md:text-sm">
             {notice.beforeLink}
             <a
               href={notice.link.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-sm underline underline-offset-2 hover:brightness-125 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               style={{ color: accent.color }}
             >

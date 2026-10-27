@@ -14,6 +14,7 @@ import {
 import {
   getProjectShowcaseConfig,
   getDefaultAccent,
+  isArchived,
 } from "./project-showcase-config";
 import { StatsBar } from "./components/StatsBar";
 import { FeaturesGrid } from "./components/FeaturesGrid";
@@ -229,7 +230,11 @@ export default async function ProjectPage({
                   </a>
                 ))}
 
-              {project.liveUrl && (
+              {isArchived(showcase) ? (
+                <span className="rounded-full border border-white/[0.06] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/60 md:text-[13px]">
+                  Archived
+                </span>
+              ) : project.liveUrl && (
                 <a
                   href={project.liveUrl}
                   target="_blank"
