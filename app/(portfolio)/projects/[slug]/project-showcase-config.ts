@@ -38,6 +38,11 @@ export interface ProjectShowcaseConfig {
   accent: ProjectAccent;
   tagline?: string;
   isMiniSite?: boolean;
+  maintenanceNotice?: {
+    beforeLink: string;
+    link: { text: string; href: string };
+    afterLink: string;
+  };
   stats: ProjectStat[];
   features: ProjectFeature[];
   installTabs: InstallTab[];
@@ -177,6 +182,11 @@ const configs: Record<string, ProjectShowcaseConfig> = {
     accent: { color: "#10B981", colorRgb: "16, 185, 129" },
     tagline: "@golems/cmux-mcp",
     isMiniSite: true,
+    maintenanceNotice: {
+      beforeLink: "cmuxLayer is no longer maintained. We used it before moving to ",
+      link: { text: "T3 Code", href: "https://github.com/pingdotgg/t3code" },
+      afterLink: ", which now covers most of what it did.",
+    },
     stats: [
       { value: 21, label: "MCP tools" },
       { value: 5, label: "Supported CLIs" },

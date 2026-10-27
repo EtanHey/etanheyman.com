@@ -29,3 +29,19 @@ describe("voicelayer showcase config", () => {
     expect(commands).toContain("voicelayer-mcp.sock");
   });
 });
+
+describe("maintenance notice", () => {
+  it("announces cmuxLayer's move to T3 Code", () => {
+    const notice = getProjectShowcaseConfig("cmuxlayer")?.maintenanceNotice;
+    expect(notice).toEqual({
+      beforeLink: "cmuxLayer is no longer maintained. We used it before moving to ",
+      link: { text: "T3 Code", href: "https://github.com/pingdotgg/t3code" },
+      afterLink: ", which now covers most of what it did.",
+    });
+  });
+
+  it.each(["brainlayer", "voicelayer", "golems", "whatsapp-mcp"])(
+    "does not show a maintenance notice for %s",
+    (slug) => expect(getProjectShowcaseConfig(slug)).not.toHaveProperty("maintenanceNotice"),
+  );
+});
