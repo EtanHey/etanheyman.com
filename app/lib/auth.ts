@@ -1,19 +1,7 @@
 import GitHubProvider from "next-auth/providers/github"
 import type { NextAuthOptions } from "next-auth"
-
-export function isOwner({ email, githubUsername }: { email?: string | null; githubUsername?: unknown }): boolean {
-  const allowedEmails = (process.env.ALLOWED_EMAILS || '').split(',').map(value => value.trim()).filter(Boolean)
-  const allowedUsernames = (process.env.ALLOWED_GITHUB_USERNAMES || '').split(',').map(value => value.trim()).filter(Boolean)
-
-  if (allowedEmails.length === 0 && allowedUsernames.length === 0) {
-    console.error('Owner access denied: configure ALLOWED_EMAILS or ALLOWED_GITHUB_USERNAMES.')
-    return false
-  }
-  return Boolean(
-    (email && allowedEmails.includes(email)) ||
-    (typeof githubUsername === 'string' && allowedUsernames.includes(githubUsername))
-  )
-}
+import { isOwner } from "@/lib/auth/owner"
+export { isOwner } from "@/lib/auth/owner"
 
 export const authOptions: NextAuthOptions = {
   providers: [
