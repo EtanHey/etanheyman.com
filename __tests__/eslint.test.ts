@@ -1,9 +1,12 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { ESLint } from "eslint";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 
-const eslint = new ESLint();
+// Type-aware projectService startup can exceed Vitest's defaults on a loaded host.
+vi.setConfig({ testTimeout: 60_000, hookTimeout: 60_000 });
+
+let eslint: ESLint;
 const fixture = readFileSync(
   path.resolve("__tests__/fixtures/async-auth-guard.ts.txt"),
   "utf8",
@@ -11,6 +14,10 @@ const fixture = readFileSync(
 const route = "app/(portfolio)/api/uploadthing/delete/route.ts";
 
 describe("async auth guard lint", () => {
+  beforeAll(() => {
+    eslint = new ESLint();
+  });
+
   it("rejects floating, voided, and conditional requireOwner promises", async () => {
     const [result] = await eslint.lintText(fixture, { filePath: route });
     expect(
