@@ -2,85 +2,66 @@
 
 import { Resend } from "resend";
 import { EmailTemplate } from "@/app/components/contact/EmailTemplate";
+import { randomUUID } from "node:crypto";
+import { headers } from "next/headers";
+import {
+  allowContactAttempt,
+  parseContactForm,
+  validContactToken,
+} from "./security";
+export type { ContactFormData } from "./security";
 
-// Initialize Resend - you'll need to add your API key to your environment variables
-const resend = new Resend(process.env.RESEND_API_KEY);
+type ContactError =
+  | "unavailable"
+  | "invalid"
+  | "invalid_timing"
+  | "rate_limited"
+  | "send_failed"
+  | "error";
+type ContactResult =
+  | { success: true }
+  | { success: false; code: ContactError; error: string };
 
-export type ContactFormData = {
-  fullName: string;
-  email: string;
-  phone: string;
-  message: string;
-  // Anti-spam fields
-  website?: string; // Honeypot - should always be empty
-  formLoadedAt?: number; // Timestamp when form was loaded
-};
-
-// Simple phone number validation that accepts a variety of formats
-// This is more lenient to accommodate different formats from the PhoneInput
-function isValidPhoneNumber(phone: string): boolean {
-  // If empty, consider it valid (since phone is optional)
-  if (!phone || phone.trim() === "") return true;
-
-  // Remove all non-digit characters except for the leading +
-  const cleaned = phone.replace(/[^\d+]/g, "");
-
-  // Basic check: must start with + and have at least 7 digits after that
-  // or must be all digits with at least 7 digits
-  return (
-    (cleaned.startsWith("+") && cleaned.length >= 8) ||
-    (!cleaned.includes("+") && cleaned.length >= 7)
-  );
-}
-
-// Minimum time (in ms) a human would take to fill the form
-const MIN_FORM_TIME_MS = 3000; // 3 seconds
-
-export async function submitContactForm(formData: ContactFormData) {
+export async function submitContactForm(
+  input: unknown,
+): Promise<ContactResult> {
+  const submissionId = randomUUID();
+  const reject = (outcome: ContactError, error: string): ContactResult => {
+    console.info({ submissionId, outcome });
+    return { success: false, code: outcome, error };
+  };
   try {
-    // SPAM CHECK 1: Honeypot field should be empty
-    // Bots typically fill all fields, including hidden ones
+    if (!process.env.NEXTAUTH_SECRET) {
+      return reject(
+        "unavailable",
+        "The contact form is temporarily unavailable. Please email me at etan@heyman.net.",
+      );
+    }
+    const formData = parseContactForm(input);
+    if (!formData)
+      return reject(
+        "invalid",
+        "Please check your contact details and message length.",
+      );
+    if (!allowContactAttempt(await headers())) {
+      return reject(
+        "rate_limited",
+        "Too many attempts. Please try again in ten minutes.",
+      );
+    }
     if (formData.website) {
-      // Silently reject - don't reveal to bots that we detected them
-      console.log("Spam detected: honeypot field filled");
-      return { success: true }; // Fake success to confuse bots
+      console.info({ submissionId, outcome: "honeypot" });
+      return { success: true };
     }
-
-    // SPAM CHECK 2: Time-based validation
-    // Real humans take at least a few seconds to fill a form
-    const loadedAt = Number(formData.formLoadedAt);
-    if (!Number.isFinite(loadedAt) || loadedAt <= 0) {
-      // Missing or invalid timestamp = likely bot bypassing client-side code
-      console.log("Spam detected: missing or invalid formLoadedAt");
-      return { success: true }; // Fake success to confuse bots
+    if (!validContactToken(formData.timingToken)) {
+      return reject(
+        "invalid_timing",
+        "Your form session needs refreshing. Please wait at least three seconds and try again.",
+      );
     }
-    const timeSpent = Date.now() - loadedAt;
-    if (timeSpent < MIN_FORM_TIME_MS) {
-      console.log(`Spam detected: form submitted too fast (${timeSpent}ms)`);
-      return { success: true }; // Fake success to confuse bots
-    }
-
-    // Validate the form data
-    if (!formData.fullName || !formData.email || !formData.message) {
-      return { success: false, error: "Please fill out all required fields" };
-    }
-
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      return { success: false, error: "Please enter a valid email address" };
-    }
-
-    // Phone number validation (if provided)
-    if (formData.phone && !isValidPhoneNumber(formData.phone)) {
-      return { success: false, error: "Please enter a valid phone number" };
-    }
-
-    // Log the form data for debugging
-    console.log("Form data received:", formData);
-
+    const resend = new Resend(process.env.RESEND_API_KEY);
     // Send the email using Resend
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: "no-reply@contact.heymans.dev", // Using subdomain for better deliverability
       to: "etan@heyman.net", // Replace with your actual email
       subject: `New contact message from ${formData.fullName}`,
@@ -105,20 +86,22 @@ Message:
 ${formData.message}
       `.trim(),
     });
-    console.log(data);
     if (error) {
-      console.error("Error submitting form:", error);
+      console.error({ submissionId, outcome: "send_failed" });
       return {
         success: false,
+        code: "send_failed",
         error: "Failed to send your message. Please try again later.",
       };
     }
 
+    console.info({ submissionId, outcome: "sent" });
     return { success: true };
-  } catch (error) {
-    console.error("Error submitting form:", error);
+  } catch {
+    console.error({ submissionId, outcome: "error" });
     return {
       success: false,
+      code: "error",
       error: "An unexpected error occurred. Please try again later.",
     };
   }
