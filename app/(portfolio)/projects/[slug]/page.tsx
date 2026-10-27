@@ -6,7 +6,7 @@ import { getProjectBySlugOrId, getAllProjects } from "@/lib/projects";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Github, BookOpen, ExternalLink } from "lucide-react";
+import { Github, BookOpen, ExternalLink, Archive } from "lucide-react";
 import {
   TechIconWrapper,
   TechIconName,
@@ -14,6 +14,8 @@ import {
 import {
   getProjectShowcaseConfig,
   getDefaultAccent,
+  getProjectSiteLink,
+  isArchived,
 } from "./project-showcase-config";
 import { StatsBar } from "./components/StatsBar";
 import { FeaturesGrid } from "./components/FeaturesGrid";
@@ -108,6 +110,8 @@ export default async function ProjectPage({
 
   const showcase = getProjectShowcaseConfig(slug);
   const accent = showcase?.accent ?? getDefaultAccent();
+  const archived = isArchived(showcase);
+  const siteLink = getProjectSiteLink(showcase, project.liveUrl);
   const allProjects = await getAllProjects();
 
   const isGitPrivate = project.gitUrl === "private";
@@ -229,16 +233,24 @@ export default async function ProjectPage({
                   </a>
                 ))}
 
-              {project.liveUrl && (
+              {archived && (
+                <span className="flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 md:text-[13px]">
+                  <Archive className="h-3.5 w-3.5" />
+                  Archived
+                </span>
+              )}
+              {siteLink && (
                 <a
-                  href={project.liveUrl}
+                  href={siteLink.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-full px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white transition-colors md:text-[13px]"
-                  style={{ backgroundColor: accent.color }}
+                  className={archived
+                    ? "flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 transition-colors hover:border-white/20 hover:text-white/75 md:text-[13px]"
+                    : "flex items-center gap-2 rounded-full px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white transition-colors md:text-[13px]"}
+                  style={archived ? undefined : { backgroundColor: accent.color }}
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
-                  Live
+                  {siteLink.label}
                 </a>
               )}
             </div>

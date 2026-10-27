@@ -397,6 +397,13 @@ export function getDefaultAccent(): ProjectAccent {
   return { color: "#0F82EB", colorRgb: "15, 130, 235" };
 }
 
+export function isArchived(config: ProjectShowcaseConfig | null): boolean {
+  return Boolean(config?.maintenanceNotice);
+}
+
+export const getProjectSiteLink = (config: ProjectShowcaseConfig | null, href: string | null) =>
+  href ? { href, label: isArchived(config) ? "Site" : "Live" } : null;
+
 export function isMiniSiteProject(slug: string): boolean {
   const config = configs[slug];
   return config?.isMiniSite === true;
