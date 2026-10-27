@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { UTApi } from "uploadthing/server";
 import { requireOwner } from "@/lib/auth/require-owner";
+import { matchesRasterMime, rasterUploadConfig } from "../raster";
 
 const utapi = new UTApi();
 
@@ -30,8 +31,9 @@ export async function POST(request: NextRequest) {
       formData.getAll("file").length !== 1 ||
       formData.getAll("endpoint").length !== 1 ||
       Array.from(formData.values()).filter(value => typeof value !== "string").length !== 1 ||
-      !file.type.startsWith("image/") ||
-      file.size > 4 * 1024 * 1024
+      !Object.hasOwn(rasterUploadConfig, file.type) ||
+      file.size > 4 * 1024 * 1024 ||
+      !(await matchesRasterMime(file))
     ) {
       return NextResponse.json(
         { error: "Upload exactly one image up to 4MB" },

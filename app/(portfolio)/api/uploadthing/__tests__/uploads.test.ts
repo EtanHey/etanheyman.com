@@ -22,8 +22,9 @@ const { POST: standardPOST } = createRouteHandler({
   },
 });
 const endpoints = ["projectLogo", "journeyImage"];
-const image = (size = 1, type = "image/png") =>
-  new File([new Uint8Array(size)], "image.png", { type });
+const pngHeader = Buffer.from("89504e470d0a1a0a", "hex");
+const image = (size = 8, type = "image/png") =>
+  new File([pngHeader.subarray(0, size), new Uint8Array(Math.max(0, size - 8))], "image.png", { type });
 function directRequest(endpoint: string, files: (File | string)[] = [image()]) {
   const body = new FormData();
   body.append("endpoint", endpoint);
@@ -76,11 +77,34 @@ describe.each(endpoints)("owner-only uploads: %s", endpoint => {
   });
   it.each([
     [], ["not a file"], [image(1, "text/plain")], [image(4 * 1024 * 1024 + 1)], [image(), image()],
+    [new File(["<svg/>"], "image.svg", { type: "image/svg+xml" })],
+    [new File(["plain text"], "image.png", { type: "image/png" })],
+    [new File([pngHeader], "image.jpg", { type: "image/jpeg" })], [image(0)], [image(7)],
+    [new File([pngHeader], "image.bmp", { type: "image/bmp" })],
+    [new File([Buffer.from("c7c9c6b8b9e1", "hex")], "image.gif", { type: "image/gif" })],
+    [new File(["RIFFxxxxWAVE"], "image.webp", { type: "image/webp" })],
+    [new File(["not-ftypavif"], "image.avif", { type: "image/avif" })],
   ])("rejects invalid direct files without uploading: %j", async (...files) => {
     expect((await directPOST(directRequest(endpoint, files))).status).toBe(400);
     expect(uploadFiles).not.toHaveBeenCalled();
   });
   it.each([
+    ["png", "89504e470d0a1a0a"], ["jpeg", "ffd8ffe000104a4649460001"],
+    ["webp", "524946460c0000005745425056503820"], ["gif", "474946383961"],
+    ["gif", "474946383761"], ["avif", "00000018667479706176696600000000617669666d696631"],
+    ["avif", "00000018667479706d69663100000000617669666d696631"],
+    ["avif", "00000018667479706176697300000000617669666d696631"],
+  ])("accepts matching %s headers through both paths", async (type, hex) => {
+    const file = new File([Buffer.from(hex, "hex")], `image.${type}`, { type: `image/${type}` });
+    expect((await directPOST(directRequest(endpoint, [file]))).status).toBe(200);
+    expect(uploadFiles).toHaveBeenCalledOnce();
+    expect((await standardPOST(standardRequest(endpoint, [{ name: file.name, type: file.type, size: file.size }]))).status).toBe(200);
+    expect(providerFetch).toHaveBeenCalledOnce();
+  });
+  it.each([
+    [{ name: "image.svg", type: "image/svg+xml", size: 8 }],
+    [{ name: "image.bmp", type: "image/bmp", size: 8 }], [],
+    [{ name: "image.png", type: "image/png", size: 8 }, { name: "image.jpg", type: "image/jpeg", size: 8 }],
     [{ name: "file.txt", type: "text/plain", size: 1 }],
     [{ name: "image.png", type: "image/png", size: 4 * 1024 * 1024 + 1 }],
     Array(2).fill({ name: "image.png", type: "image/png", size: 1 }),
