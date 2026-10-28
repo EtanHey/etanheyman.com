@@ -1,0 +1,84 @@
+[
+  {
+    "project": "desktop1280x800",
+    "state": "neutral",
+    "before_file": "desktop1280x800-before.png",
+    "after_file": "desktop1280x800-after.png",
+    "before_size": [
+      1280,
+      488
+    ],
+    "after_size": [
+      1280,
+      488
+    ],
+    "different_pixels": 0,
+    "total_pixels": 624640,
+    "percentage": 0.0,
+    "bbox": null
+  },
+  {
+    "project": "m390390x844",
+    "state": "neutral",
+    "before_file": "m390390x844-before.png",
+    "after_file": "m390390x844-after.png",
+    "before_size": [
+      1170,
+      2586
+    ],
+    "after_size": [
+      1170,
+      2586
+    ],
+    "different_pixels": 0,
+    "total_pixels": 3025620,
+    "percentage": 0.0,
+    "bbox": null
+  },
+  {
+    "project": "desktop1280x800",
+    "state": "focus-name",
+    "before_file": "desktop1280x800-before-focus-name.png",
+    "after_file": "desktop1280x800-after-focus-name.png",
+    "before_size": [
+      1280,
+      488
+    ],
+    "after_size": [
+      1280,
+      488
+    ],
+    "different_pixels": 6921,
+    "total_pixels": 624640,
+    "percentage": 1.1079982069672132,
+    "bbox": [
+      157,
+      190,
+      467,
+      435
+    ]
+  },
+  {
+    "project": "desktop1280x800",
+    "state": "focus-portfolio",
+    "before_file": "desktop1280x800-before-focus-portfolio.png",
+    "after_file": "desktop1280x800-after-focus-portfolio.png",
+    "before_size": [
+      1280,
+      488
+    ],
+    "after_size": [
+      1280,
+      488
+    ],
+    "different_pixels": 4,
+    "total_pixels": 624640,
+    "percentage": 0.0006403688524590163,
+    "bbox": [
+      188,
+      220,
+      222,
+      221
+    ]
+  }
+]
