@@ -1,0 +1,62 @@
+[
+  {
+    "image": "page-desktop1280x800.png",
+    "beforeOriginal": [
+      1280,
+      800
+    ],
+    "beforeNormalized": [
+      1280,
+      800
+    ],
+    "after": [
+      1280,
+      1273
+    ],
+    "canvas": [
+      1280,
+      1273
+    ],
+    "changedPixels": 1559447
+  },
+  {
+    "image": "page-m390390x844.png",
+    "beforeOriginal": [
+      1170,
+      2532
+    ],
+    "beforeNormalized": [
+      390,
+      844
+    ],
+    "after": [
+      390,
+      1303
+    ],
+    "canvas": [
+      390,
+      1303
+    ],
+    "changedPixels": 491827
+  },
+  {
+    "image": "footer-desktop1280x800.png",
+    "beforeOriginal": [
+      1280,
+      178
+    ],
+    "beforeNormalized": [
+      1280,
+      178
+    ],
+    "after": [
+      1280,
+      178
+    ],
+    "canvas": [
+      1280,
+      178
+    ],
+    "changedPixels": 3003
+  }
+]

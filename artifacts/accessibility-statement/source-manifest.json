@@ -1,0 +1,10 @@
+{
+  "sourceHead": "aabc3363cd6c623c86c66d66f144400bdaa009fb",
+  "base": "0d80afd25fbde4daba79338e933d028abb7b199d",
+  "files": {
+    "__tests__/accessibility.test.ts": "d83ebb2c91f914bc9d9a1f711ead67b4b26ed0f05a32861b668a9233b0e2ef25",
+    "app/(portfolio)/accessibility/page.tsx": "da73937db6ccdbcf802852fec3415ba24fdbc661b250f28866a145d8e16e7890",
+    "app/components/Footer.tsx": "0e63473ddfe6e54876137e1dc9ff91a3bad76127f0f9eb60be7364a43e6c104e",
+    "e2e/accessibility.spec.ts": "61c173dcc2d24dea8480ebf757cda77200899b80ebb7b4af51e621277350c3ce"
+  }
+}

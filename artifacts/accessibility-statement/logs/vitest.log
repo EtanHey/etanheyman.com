@@ -1,0 +1,15 @@
+
+> etanheyman.com@0.1.0 test:run
+> vitest run
+
+(node:84016) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+ RUN  v4.1.12 /Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba
+
+
+ Test Files  21 passed (21)
+      Tests  173 passed (173)
+   Start at  01:04:10
+   Duration  2.49s (transform 1.54s, setup 0ms, import 3.99s, tests 4.77s, environment 1ms)
+

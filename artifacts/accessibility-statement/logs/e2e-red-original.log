@@ -1,0 +1,808 @@
+[WebServer] (node:92465) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:92466) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+[WebServer] (Use `node --trace-deprecation ...` to show where the warning was created)
+[WebServer] Error fetching projects: Error: Dynamic server usage: Route /sitemap.xml couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at i (.next/server/app/sitemap.xml/route.js:1:8897)
+[WebServer]     at F (.next/server/app/sitemap.xml/route.js:1:950)
+[WebServer]     at G (.next/server/app/sitemap.xml/route.js:1:1489)
+[WebServer]     at J (.next/server/app/sitemap.xml/route.js:1:2444) {
+[WebServer]   description: "Route /sitemap.xml couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching projects: Error: Dynamic server usage: Route / couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at i (.next/server/app/sitemap.xml/route.js:1:8897)
+[WebServer]     at m (.next/server/app/(portfolio)/page.js:2:15785)
+[WebServer]     at stringify (<anonymous>) {
+[WebServer]   description: "Route / couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching projects: Error: Dynamic server usage: Route /projects couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at i (.next/server/app/sitemap.xml/route.js:1:8897)
+[WebServer]     at h (.next/server/app/(portfolio)/projects/page.js:2:8437)
+[WebServer]     at stringify (<anonymous>) {
+[WebServer]   description: "Route /projects couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4486) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4090) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4486) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4090) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4486) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4090) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4486) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4090) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4486) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/docs/page.js:1:4090) {
+[WebServer]   description: "Route /projects/[slug]/docs couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13837) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13423) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13837) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13423) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13837) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13423) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13837) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13423) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at s (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:9113) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.r (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:8677) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at o (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13837) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/app/sitemap.xml/route.js:1:8095)
+[WebServer]     at k (.next/server/app/sitemap.xml/route.js:1:9181)
+[WebServer]     at j (.next/server/app/sitemap.xml/route.js:1:9125)
+[WebServer]     at Module.n (.next/server/app/(portfolio)/projects/[slug]/features/page.js:2:13423) {
+[WebServer]   description: "Route /projects/[slug]/features couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at E (.next/server/app/(portfolio)/projects/[slug]/page.js:1:309058) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug brainlayer: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at Module.D (.next/server/app/(portfolio)/projects/[slug]/page.js:1:308626) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at E (.next/server/app/(portfolio)/projects/[slug]/page.js:1:309058) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at Module.D (.next/server/app/(portfolio)/projects/[slug]/page.js:1:308626) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at E (.next/server/app/(portfolio)/projects/[slug]/page.js:1:309058) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at Module.D (.next/server/app/(portfolio)/projects/[slug]/page.js:1:308626) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at E (.next/server/app/(portfolio)/projects/[slug]/page.js:1:309058) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at Module.D (.next/server/app/(portfolio)/projects/[slug]/page.js:1:308626) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at s (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:9113) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug voicelayer: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at Module.r (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:8677) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at s (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:9113) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug whatsapp-mcp: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at Module.r (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:8677) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at s (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:9113) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug cmuxlayer: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at Module.r (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:8677) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at s (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:9113) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at Module.r (.next/server/app/(portfolio)/projects/[slug]/architecture/page.js:49:8677) {
+[WebServer]   description: "Route /projects/[slug]/architecture couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at h (.next/server/chunks/1743.js:1:19325) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at E (.next/server/app/(portfolio)/projects/[slug]/page.js:1:309058) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+[WebServer] Error fetching project with slug golems: Error: Dynamic server usage: Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+[WebServer]     at s (.next/server/chunks/7770.js:1:30928)
+[WebServer]     at n (.next/server/chunks/2574.js:1:5865)
+[WebServer]     at f (.next/server/chunks/1743.js:1:229)
+[WebServer]     at k (.next/server/chunks/1743.js:1:1315)
+[WebServer]     at j (.next/server/chunks/1743.js:1:1259)
+[WebServer]     at Module.D (.next/server/app/(portfolio)/projects/[slug]/page.js:1:308626) {
+[WebServer]   description: "Route /projects/[slug] couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+[WebServer]   digest: 'DYNAMIC_SERVER_USAGE'
+[WebServer] }
+
+Running 4 tests using 1 worker
+
+(node:93302) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:93302) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop1280x800] › e2e/accessibility.spec.ts:19:5 › accessibility statement resolves with one heading and contact route (879ms)
+(node:93403) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:93403) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [desktop1280x800] › e2e/accessibility.spec.ts:48:5 › footer omits privacy and its accessibility link resolves (5.4s)
+(node:93517) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:93517) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [m390390x844] › e2e/accessibility.spec.ts:19:5 › accessibility statement resolves with one heading and contact route (173ms)
+(node:93526) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:93526) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 [m390390x844] › e2e/accessibility.spec.ts:48:5 › footer omits privacy and its accessibility link resolves (5.4s)
+
+
+  1) [desktop1280x800] › e2e/accessibility.spec.ts:19:5 › accessibility statement resolves with one heading and contact route 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      24 |   await page.evaluate(() => document.fonts.ready);
+      25 |   await capture(page, "page", info);
+    > 26 |   expect(response?.status()).toBe(200);
+         |                              ^
+      27 |   await expect(page.locator("h1")).toHaveCount(1);
+      28 |   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      29 |     "Accessibility statement",
+        at /Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/e2e/accessibility.spec.ts:26:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    docs.local/e2e/results/accessibility-accessibilit-0bddc-e-heading-and-contact-route-desktop1280x800/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: docs.local/e2e/results/accessibility-accessibilit-0bddc-e-heading-and-contact-route-desktop1280x800/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    docs.local/e2e/results/accessibility-accessibilit-0bddc-e-heading-and-contact-route-desktop1280x800/trace.zip
+    Usage:
+
+        npx playwright show-trace docs.local/e2e/results/accessibility-accessibilit-0bddc-e-heading-and-contact-route-desktop1280x800/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop1280x800] › e2e/accessibility.spec.ts:48:5 › footer omits privacy and its accessibility link resolves 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('contentinfo').locator('a[href="/privacy"]')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for getByRole('contentinfo').locator('a[href="/privacy"]')
+        9 × locator resolved to 1 element
+          - unexpected value "1"
+
+
+      56 |   await footer.scrollIntoViewIfNeeded();
+      57 |   await capture(footer, "footer", info);
+    > 58 |   await expect(footer.locator('a[href="/privacy"]')).toHaveCount(0);
+         |                                                      ^
+      59 |   const link = footer.getByRole("link", { name: "Accessibility", exact: true });
+      60 |   await expect(link).toHaveAttribute("href", "/accessibility");
+      61 |   await link.click();
+        at /Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/e2e/accessibility.spec.ts:58:54
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    docs.local/e2e/results/accessibility-footer-omits-22c60-accessibility-link-resolves-desktop1280x800/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: docs.local/e2e/results/accessibility-footer-omits-22c60-accessibility-link-resolves-desktop1280x800/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    docs.local/e2e/results/accessibility-footer-omits-22c60-accessibility-link-resolves-desktop1280x800/trace.zip
+    Usage:
+
+        npx playwright show-trace docs.local/e2e/results/accessibility-footer-omits-22c60-accessibility-link-resolves-desktop1280x800/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [m390390x844] › e2e/accessibility.spec.ts:19:5 › accessibility statement resolves with one heading and contact route 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      24 |   await page.evaluate(() => document.fonts.ready);
+      25 |   await capture(page, "page", info);
+    > 26 |   expect(response?.status()).toBe(200);
+         |                              ^
+      27 |   await expect(page.locator("h1")).toHaveCount(1);
+      28 |   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      29 |     "Accessibility statement",
+        at /Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/e2e/accessibility.spec.ts:26:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    docs.local/e2e/results/accessibility-accessibilit-0bddc-e-heading-and-contact-route-m390390x844/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: docs.local/e2e/results/accessibility-accessibilit-0bddc-e-heading-and-contact-route-m390390x844/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    docs.local/e2e/results/accessibility-accessibilit-0bddc-e-heading-and-contact-route-m390390x844/trace.zip
+    Usage:
+
+        npx playwright show-trace docs.local/e2e/results/accessibility-accessibilit-0bddc-e-heading-and-contact-route-m390390x844/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [m390390x844] › e2e/accessibility.spec.ts:48:5 › footer omits privacy and its accessibility link resolves 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('contentinfo').locator('a[href="/privacy"]')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for getByRole('contentinfo').locator('a[href="/privacy"]')
+        9 × locator resolved to 1 element
+          - unexpected value "1"
+
+
+      56 |   await footer.scrollIntoViewIfNeeded();
+      57 |   await capture(footer, "footer", info);
+    > 58 |   await expect(footer.locator('a[href="/privacy"]')).toHaveCount(0);
+         |                                                      ^
+      59 |   const link = footer.getByRole("link", { name: "Accessibility", exact: true });
+      60 |   await expect(link).toHaveAttribute("href", "/accessibility");
+      61 |   await link.click();
+        at /Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/e2e/accessibility.spec.ts:58:54
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    docs.local/e2e/results/accessibility-footer-omits-22c60-accessibility-link-resolves-m390390x844/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: docs.local/e2e/results/accessibility-footer-omits-22c60-accessibility-link-resolves-m390390x844/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    docs.local/e2e/results/accessibility-footer-omits-22c60-accessibility-link-resolves-m390390x844/trace.zip
+    Usage:
+
+        npx playwright show-trace docs.local/e2e/results/accessibility-footer-omits-22c60-accessibility-link-resolves-m390390x844/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [desktop1280x800] › e2e/accessibility.spec.ts:19:5 › accessibility statement resolves with one heading and contact route 
+    [desktop1280x800] › e2e/accessibility.spec.ts:48:5 › footer omits privacy and its accessibility link resolves 
+    [m390390x844] › e2e/accessibility.spec.ts:19:5 › accessibility statement resolves with one heading and contact route 
+    [m390390x844] › e2e/accessibility.spec.ts:48:5 › footer omits privacy and its accessibility link resolves 
+
+To open last HTML report run:
+
+  npx playwright show-report docs.local/e2e/report
+

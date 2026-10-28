@@ -1,0 +1,68 @@
+
+> etanheyman.com@0.1.0 lint
+> eslint .
+
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(golems)/golems/components/ArchitectureDiagram.tsx
+  56:10  warning  'FlowDot' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(golems)/golems/docs/[...slug]/page.tsx
+  24:10  warning  'getAllDocPaths' is defined but never used                           @typescript-eslint/no-unused-vars
+  95:26  warning  React Hook "useMDXComponents" cannot be called in an async function  react-hooks/rules-of-hooks
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(golems)/golems/layout.tsx
+  7:27  warning  'DocNavItem' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(golems)/golems/skills/[name]/page.tsx
+  218:26  warning  React Hook "useMDXComponents" cannot be called in an async function  react-hooks/rules-of-hooks
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(portfolio)/about/page.tsx
+  130:14  warning  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(portfolio)/contact/ContactForm.tsx
+   23:9   warning  'phoneInputRef' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   23:32  warning  Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+  148:68  warning  Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(portfolio)/page.tsx
+  113:18  warning  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  121:18  warning  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(portfolio)/projects/[slug]/components/ComparisonTable.tsx
+  15:3  warning  'accentColor' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(portfolio)/projects/[slug]/components/MiniSiteNav.tsx
+   72:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  102:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/(portfolio)/projects/[slug]/page.tsx
+  155:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/components/ProjectCard.tsx
+  254:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  282:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/components/Projects.tsx
+   2:8   warning  'Image' is defined but never used  @typescript-eslint/no-unused-vars
+  27:31  warning  'index' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/components/contact/CountrySelect.tsx
+  17:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  41:6   warning  'rest' is defined but never used          @typescript-eslint/no-unused-vars
+  51:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/app/components/ui/phone-input.tsx
+   81:23  warning  Component definition is missing display name  react/display-name
+  142:29  warning  Component definition is missing display name  react/display-name
+  162:23  warning  Component definition is missing display name  react/display-name
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/scripts/convert-responsive-svg.js
+  1:12  warning  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  warning  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/etanheyman/.t3/worktrees/etanheyman.com/t3-f208f2ba/scripts/convert-svg-to-tsx-direct.js
+  1:12  warning  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  warning  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+✖ 29 problems (0 errors, 29 warnings)
+
