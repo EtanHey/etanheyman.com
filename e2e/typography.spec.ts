@@ -24,14 +24,27 @@ test.describe("desktop section headings", () => {
   }
 });
 
+const intros = [
+  { route: "/", selector: 'h2:text-is("Golems Ecosystem") + p' },
+  { route: "/projects", selector: 'h1:text-is("All Projects") + p' },
+  { route: "/projects/brainlayer", selector: "main h1 + p" },
+];
+
+test.describe("desktop intro body copy", () => {
+  test.skip(({ isMobile }) => isMobile, "desktop scale only");
+
+  for (const width of [1280, 1440]) {
+    for (const { route, selector } of intros) {
+      test(`${route} intro paragraph is 18px at ${width}`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 800 });
+        expect(await fontSize(page, route, selector)).toBe("18px");
+      });
+    }
+  }
+});
+
 test.describe("phone intro body copy", () => {
   test.skip(({ isMobile }) => !isMobile, "phone scale only");
-
-  const intros = [
-    { route: "/", selector: 'h2:text-is("Golems Ecosystem") + p' },
-    { route: "/projects", selector: 'h1:text-is("All Projects") + p' },
-    { route: "/projects/brainlayer", selector: "main h1 + p" },
-  ];
 
   for (const { route, selector } of intros) {
     test(`${route} intro paragraph is 14px`, async ({ page }) => {
