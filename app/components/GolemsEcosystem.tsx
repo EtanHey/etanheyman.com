@@ -86,11 +86,12 @@ function EcosystemCard({ product }: { product: EcosystemProduct }) {
           </div>
           <h3 className="font-[Nutmeg] text-[20px] font-semibold text-white sm:text-[22px]">
             {/* AIDEV-NOTE: Stretch this link across the card without nesting the portfolio link. */}
+            {/* AIDEV-NOTE: The focus ring is drawn inset on the overlay because the card's overflow-hidden clips anything outside it; 15px = card radius minus its 1px border. */}
             <a
               href={product.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="after:absolute after:inset-0"
+              className="outline-none after:absolute after:inset-0 after:rounded-[15px] focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-white"
             >
               {product.name}
             </a>
