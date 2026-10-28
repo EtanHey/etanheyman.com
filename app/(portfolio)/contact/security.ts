@@ -58,6 +58,7 @@ export function parseContactForm(input: unknown): ContactFormData | null {
 function signature(issuedAt: string, secret: string) {
   return createHmac("sha256", secret).update(`contact:${issuedAt}`).digest();
 }
+// AIDEV-NOTE: NEXTAUTH_SECRET is a historical env name; retain it for contact timing-token HMACs.
 export function createContactToken() {
   const secret = process.env.NEXTAUTH_SECRET;
   if (!secret) return "";

@@ -72,7 +72,7 @@ framework: Next.js 15 (App Router, Turbopack)
 language: TypeScript 5.x (strict mode)
 styling: Tailwind CSS v4
 database: Supabase (PostgreSQL)
-auth: NextAuth (GitHub OAuth)
+access: Public; no authenticated surface
 deployment: Vercel
 ```
 
@@ -91,7 +91,7 @@ app/
 ├── (golems)/         # Golems docs site: golems/docs/, golems/skills/
 ├── components/       # ui/, tech-icons/, navigation/, contact/
 └── lib/              # supabase/
-types/                # database.types.ts (generated), auth.ts
+types/                # database.types.ts (generated)
 ```
 
 ---
@@ -336,12 +336,8 @@ npx supabase gen types typescript --project-id mkijzwkuubtfjqcemorx > types/data
 NEXT_PUBLIC_SUPABASE_URL="https://mkijzwkuubtfjqcemorx.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="..."
 
-# NextAuth
-NEXTAUTH_URL="http://localhost:3000"
+# Contact form timing-token HMAC (historical env name)
 NEXTAUTH_SECRET="..."
-GITHUB_CLIENT_ID="..."
-GITHUB_CLIENT_SECRET="..."
-ALLOWED_EMAILS="..."
 
 # Services
 RESEND_API_KEY="..."
@@ -354,21 +350,11 @@ RESEND_API_KEY="..."
 
 ---
 
-## NextAuth Setup
+## Public Access
 
-1. Create GitHub OAuth App
-2. Set callback URL: `{url}/api/auth/callback/github`
-3. Add env variables
-4. Wrap app in SessionProvider
-
-### Usage
-```typescript
-// Client
-import { useSession, signIn, signOut } from 'next-auth/react';
-
-const { data: session } = useSession();
-await signIn('github', { callbackUrl: '/' });
-```
+There is no authenticated surface or session provider. Keep `NEXTAUTH_SECRET` for
+contact timing-token HMACs; the env name is historical. Retired admin/editor/upload
+paths remain 404 tombstones in `middleware.ts`.
 
 ---
 
