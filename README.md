@@ -14,11 +14,9 @@ A modern, performant portfolio website built with Next.js 15, TypeScript, and Su
 | **Language** | TypeScript 5.x (strict mode) |
 | **Styling** | Tailwind CSS v4 |
 | **Database** | Supabase (PostgreSQL) |
-| **Auth** | NextAuth.js (GitHub OAuth) |
 | **UI Components** | Radix UI + shadcn/ui |
 | **Animations** | Framer Motion |
 | **Content** | MDX (next-mdx-remote, rehype, remark) |
-| **File Uploads** | Uploadthing |
 | **Email** | Resend |
 | **Icons** | lucide-react |
 | **Deployment** | Vercel |
@@ -32,8 +30,6 @@ A modern, performant portfolio website built with Next.js 15, TypeScript, and Su
   "framer-motion": "Latest",
   "next-mdx-remote": "Latest",
   "lucide-react": "Latest",
-  "next-auth": "Latest",
-  "uploadthing": "Latest",
   "resend": "Latest"
 }
 ```
@@ -47,10 +43,7 @@ app/
 ├── (portfolio)/          # Portfolio routes
 │   ├── about/            # About page
 │   ├── contact/          # Contact form
-│   ├── projects/         # Project showcase (list, [slug], add)
-│   ├── admin/            # Admin panel
-│   ├── api/              # API routes (auth, projects, uploadthing)
-│   └── unauthorized/     # Auth error page
+│   └── projects/         # Project showcase (list, [slug])
 ├── (golems)/             # Golems documentation site
 │   └── golems/           # Docs, skills browser
 ├── components/
@@ -63,9 +56,7 @@ app/
     └── supabase/        # Client & server Supabase instances
 
 types/
-├── database.types.ts    # Auto-generated from Supabase
-├── auth.ts              # Auth type definitions
-└── next-auth.d.ts       # NextAuth type augmentations
+└── database.types.ts    # Auto-generated from Supabase
 
 supabase/
 └── migrations/          # SQL migration files
@@ -151,15 +142,10 @@ Includes: AWS, Axios, Docker, FastAPI, HuggingFace, Next.js, NextJS, Python, PyT
    NEXT_PUBLIC_SUPABASE_URL=https://mkijzwkuubtfjqcemorx.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
 
-   # NextAuth
-   NEXTAUTH_URL=http://localhost:3000
+   # Contact form timing-token HMAC (historical env name)
    NEXTAUTH_SECRET=<generate-with: openssl rand -base64 32>
-   GITHUB_CLIENT_ID=<your-github-oauth-id>
-   GITHUB_CLIENT_SECRET=<your-github-oauth-secret>
-   ALLOWED_EMAILS=<comma-separated-emails>
 
    # Services
-   UPLOADTHING_TOKEN=<your-uploadthing-token>
    RESEND_API_KEY=<your-resend-api-key>
    ```
 
@@ -222,43 +208,11 @@ npm run type-check  # TypeScript validation
 
 ---
 
-## Authentication (NextAuth + GitHub OAuth)
+## Public Access
 
-### Setup Steps
-
-1. **Create GitHub OAuth App**
-   - Go to GitHub Settings → Developer settings → OAuth Apps
-   - Create new OAuth App
-   - Set Authorization callback URL to: `http://localhost:3000/api/auth/callback/github`
-
-2. **Add credentials to `.env.local`**
-   ```env
-   GITHUB_CLIENT_ID=your_client_id
-   GITHUB_CLIENT_SECRET=your_client_secret
-   ```
-
-3. **Configure allowed emails**
-   ```env
-   ALLOWED_EMAILS=your-email@example.com,other@example.com
-   ```
-
-### Usage in Components
-
-```typescript
-// Client component
-'use client';
-import { useSession, signIn, signOut } from 'next-auth/react';
-
-export default function AuthButton() {
-  const { data: session } = useSession();
-
-  if (session) {
-    return <button onClick={() => signOut()}>Sign Out</button>;
-  }
-
-  return <button onClick={() => signIn('github')}>Sign In</button>;
-}
-```
+The site has no authenticated surface. The admin dashboard, editor, uploads and
+OAuth/session endpoints have been retired. Keep `NEXTAUTH_SECRET`: its historical
+name remains in use for the public contact form's timing-token HMAC.
 
 ---
 
@@ -325,22 +279,15 @@ bg-red          /* #E70E0E - Red/errors */
    Set on Vercel dashboard (Project Settings → Environment Variables):
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `NEXTAUTH_URL` (set to production domain)
-   - `NEXTAUTH_SECRET`
-   - `GITHUB_CLIENT_ID`
-   - `GITHUB_CLIENT_SECRET`
-   - `ALLOWED_EMAILS`
-   - `UPLOADTHING_TOKEN`
+   - `NEXTAUTH_SECRET` (contact timing-token HMAC)
    - `RESEND_API_KEY`
 
 ### Production Checklist
 
 - [ ] All env variables set on Vercel
-- [ ] GitHub OAuth callback URL updated for production domain
-- [ ] NextAuth secret is strong and unique
+- [ ] Contact timing-token secret (`NEXTAUTH_SECRET`) is strong and unique
 - [ ] Supabase policies are configured for production
 - [ ] Email service (Resend) is properly configured
-- [ ] File uploads (Uploadthing) are configured
 - [ ] Backups configured in Supabase
 - [ ] Monitoring/error tracking set up (optional: Sentry, LogRocket)
 
@@ -388,27 +335,12 @@ export default function Component() {
 }
 ```
 
-### API Routes
+### Project Data Access
 
-```typescript
-// app/api/projects/route.ts
-import { createClient } from '@/lib/supabase/server';
-
-export async function GET() {
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.from('projects').select('*');
-
-    if (error) throw error;
-    return Response.json(data);
-  } catch (error) {
-    return Response.json(
-      { error: error.message },
-      { status: 500 }
-    );
-  }
-}
-```
+Public pages use the read-only helpers in `lib/projects.ts`. The admin dashboard,
+project editor, project API and upload endpoints are retired. Project content
+changes go through repository work and reviewed Supabase migrations. Existing
+hosted project images and public `/golems` documentation remain available.
 
 ### Server Actions
 

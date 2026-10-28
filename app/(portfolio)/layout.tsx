@@ -9,8 +9,6 @@ import {
   TopMobileBgCover,
 } from "@/app/components/navigation/mobileBgCover";
 import Nav from "@/app/components/navigation/Nav";
-import AuthSessionProvider from "@/app/providers/SessionProvider";
-import AdminFloatingMenu from "@/app/components/AdminFloatingMenu";
 
 // Configure Nutmeg font for headers (purchased web fonts)
 const nutmeg = localFont({
@@ -117,19 +115,16 @@ export default function RootLayout({
       <body
         className={`${nutmeg.variable} relative -z-20 flex h-full min-h-screen flex-col justify-center overscroll-none antialiased *:text-white`}
       >
-        <AuthSessionProvider>
-          {/* Top SVGs (fixed to viewport) */}
-          <Nav />
-          {/* Main content */}
-          <div className="bg-background relative z-0 flex h-full grow flex-col items-center justify-center">
-            <TopMobileBgCover />
-            <BottomMobileBgCover />
-            {children}
-          </div>
-          <Footer />
-          <Toaster />
-          <AdminFloatingMenu />
-        </AuthSessionProvider>
+        {/* Top SVGs (fixed to viewport) */}
+        <Nav />
+        {/* Main content */}
+        <div className="bg-background relative z-0 flex h-full grow flex-col items-center justify-center">
+          <TopMobileBgCover />
+          <BottomMobileBgCover />
+          {children}
+        </div>
+        <Footer />
+        <Toaster />
       </body>
     </html>
   );

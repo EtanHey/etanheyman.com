@@ -1,11 +1,6 @@
 export default function Loading() {
   return (
     <main className="relative z-10 mx-auto max-w-5xl animate-pulse overflow-x-hidden px-4 py-8 md:px-8 md:py-16">
-      {/* Admin edit placeholder */}
-      <div className="mb-12 flex items-center justify-end">
-        <div className="h-8 w-8 rounded bg-white/[0.03]" />
-      </div>
-
       {/* Hero: logo + title + description + badges */}
       <section className="mb-14">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-10">

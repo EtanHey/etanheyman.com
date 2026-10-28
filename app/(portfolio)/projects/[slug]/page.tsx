@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import golemsStats from "@/app/(golems)/golems/lib/golems-stats.json";
 import skillsManifest from "@/app/(golems)/golems/lib/skills-manifest.json";
-import AdminEditButton from "@/app/components/AdminEditButton";
 import { getProjectBySlugOrId, getAllProjects } from "@/lib/projects";
 import Image from "next/image";
 import Link from "next/link";
@@ -142,11 +141,6 @@ export default async function ProjectPage({
           background: `radial-gradient(ellipse, ${accent.color}, transparent 70%)`,
         }}
       />
-
-      {/* Admin edit (back link is now in MiniSiteNav header) */}
-      <div className="relative z-20 mb-12 flex items-center justify-end">
-        <AdminEditButton projectId={project.id} />
-      </div>
 
       {/* ─── Hero ─── */}
       <section className="relative z-20 mb-14">

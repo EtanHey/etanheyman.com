@@ -40,7 +40,6 @@ alwaysApply: true
   "@radix-ui/*": "UI primitives",
   "react-hook-form": "Form state management",
   "zod": "Schema validation",
-  "uploadthing": "File upload service",
   "resend": "Email service",
   "lucide-react": "Icon library",
   "date-fns": "Date utilities"

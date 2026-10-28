@@ -11,15 +11,15 @@ const fixture = readFileSync(
   path.resolve("__tests__/fixtures/async-auth-guard.ts.txt"),
   "utf8",
 );
-const route = "app/(portfolio)/api/uploadthing/delete/route.ts";
+const serverPath = "app/(portfolio)/contact/actions.ts";
 
-describe("async auth guard lint", () => {
+describe("async server promise lint", () => {
   beforeAll(() => {
     eslint = new ESLint();
   });
 
-  it("rejects floating, voided, and conditional requireOwner promises", async () => {
-    const [result] = await eslint.lintText(fixture, { filePath: route });
+  it("rejects floating, voided, and conditional checkRequest promises", async () => {
+    const [result] = await eslint.lintText(fixture, { filePath: serverPath });
     expect(
       result.messages
         .filter((message) => message.severity === 2)
@@ -31,23 +31,20 @@ describe("async auth guard lint", () => {
     ]);
   });
 
-  it("accepts the same guard calls when awaited", async () => {
+  it("accepts the same async calls when awaited", async () => {
     const [result] = await eslint.lintText(
-      fixture.replaceAll("requireOwner()", "await requireOwner()"),
-      { filePath: route },
+      fixture.replaceAll("checkRequest()", "await checkRequest()"),
+      { filePath: serverPath },
     );
     expect(result.errorCount).toBe(0);
     expect(result.warningCount).toBe(0);
   });
 
   it.each([
-    route,
-    "app/(portfolio)/api/uploadthing/core.ts",
     "app/(portfolio)/contact/actions.ts",
     "app/(portfolio)/layout.tsx",
     "middleware.ts",
-    "lib/auth/require-owner.ts",
-    "app/lib/auth.ts",
+    "lib/projects.ts",
   ])("enforces both rules as errors in %s", async (filePath) => {
     const config = await eslint.calculateConfigForFile(filePath);
     expect(config.rules["@typescript-eslint/no-floating-promises"]).toEqual([
