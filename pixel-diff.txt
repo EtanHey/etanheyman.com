@@ -1,0 +1,7 @@
+1280-resting size=1280x494/1280x494 pixels>5%=0 (0) exact-diff=0 (0)
+1280-hover size=1280x494/1280x494 pixels>5%=0 (0) exact-diff=0 (0)
+1280-mousedown size=1280x494/1280x494 pixels>5%=0 (0) exact-diff=0 (0)
+1280-focus-name size=1280x494/1280x494 pixels>5%=3136 (0.00495951) exact-diff=3210 (0.00507654)
+390-resting size=1170x2574/1170x2574 pixels>5%=0 (0) exact-diff=0 (0)
+390-mousedown size=1170x2574/1170x2574 pixels>5%=0 (0) exact-diff=0 (0)
+390-focus-name size=1170x2574/1170x2574 pixels>5%=15926 (0.00528825) exact-diff=15967 (0.00530187)

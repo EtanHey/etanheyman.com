@@ -1,0 +1,268 @@
+{
+  "head": "1737ac029c9ade233601d8bf050fa446de2860ab",
+  "start": "2026-10-28T18:58:11.618Z",
+  "visits": [
+    {
+      "width": "1280",
+      "mode": "before",
+      "url": "https://www.etanheyman.com/",
+      "states": [
+        {
+          "step": 0,
+          "tag": "A",
+          "text": "BrainLayer",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+        },
+        {
+          "step": 1,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        },
+        {
+          "step": 2,
+          "tag": "A",
+          "text": "VoiceLayer",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+        },
+        {
+          "step": 3,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        },
+        {
+          "step": 4,
+          "tag": "A",
+          "text": "cmuxLayer",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+        },
+        {
+          "step": 5,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        }
+      ],
+      "status": 200,
+      "introText": "3 open-source MCP servers. 28 tools. Persistent memory, voice I/O, and multi-agent orchestration for AI coding assistants.",
+      "tabsToBrainLayer": 15,
+      "mousedown": {
+        "tag": "A",
+        "text": "BrainLayer",
+        "focusVisible": false,
+        "outline": "none",
+        "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+      }
+    },
+    {
+      "width": "1280",
+      "mode": "after",
+      "url": "http://127.0.0.1:45320/",
+      "states": [
+        {
+          "step": 0,
+          "tag": "A",
+          "text": "BrainLayer",
+          "focusVisible": true,
+          "outline": "none",
+          "afterOutline": "solid 2px rgb(255, 255, 255) offset -2px"
+        },
+        {
+          "step": 1,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        },
+        {
+          "step": 2,
+          "tag": "A",
+          "text": "VoiceLayer",
+          "focusVisible": true,
+          "outline": "none",
+          "afterOutline": "solid 2px rgb(255, 255, 255) offset -2px"
+        },
+        {
+          "step": 3,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        },
+        {
+          "step": 4,
+          "tag": "A",
+          "text": "cmuxLayer",
+          "focusVisible": true,
+          "outline": "none",
+          "afterOutline": "solid 2px rgb(255, 255, 255) offset -2px"
+        },
+        {
+          "step": 5,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        }
+      ],
+      "status": 200,
+      "introText": "3 open-source MCP servers. 28 tools. Persistent memory, voice I/O, and multi-agent orchestration for AI coding assistants.",
+      "tabsToBrainLayer": 15,
+      "mousedown": {
+        "tag": "A",
+        "text": "BrainLayer",
+        "focusVisible": false,
+        "outline": "none",
+        "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+      }
+    },
+    {
+      "width": "390",
+      "mode": "before",
+      "url": "https://www.etanheyman.com/",
+      "states": [
+        {
+          "step": 0,
+          "tag": "A",
+          "text": "BrainLayer",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+        },
+        {
+          "step": 1,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        },
+        {
+          "step": 2,
+          "tag": "A",
+          "text": "VoiceLayer",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+        },
+        {
+          "step": 3,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        },
+        {
+          "step": 4,
+          "tag": "A",
+          "text": "cmuxLayer",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+        },
+        {
+          "step": 5,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        }
+      ],
+      "status": 200,
+      "introText": "3 open-source MCP servers. 28 tools. Persistent memory, voice I/O, and multi-agent orchestration for AI coding assistants.",
+      "tabsToBrainLayer": 15,
+      "mousedown": {
+        "tag": "A",
+        "text": "BrainLayer",
+        "focusVisible": false,
+        "outline": "none",
+        "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+      }
+    },
+    {
+      "width": "390",
+      "mode": "after",
+      "url": "http://127.0.0.1:45320/",
+      "states": [
+        {
+          "step": 0,
+          "tag": "A",
+          "text": "BrainLayer",
+          "focusVisible": true,
+          "outline": "none",
+          "afterOutline": "solid 2px rgb(255, 255, 255) offset -2px"
+        },
+        {
+          "step": 1,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        },
+        {
+          "step": 2,
+          "tag": "A",
+          "text": "VoiceLayer",
+          "focusVisible": true,
+          "outline": "none",
+          "afterOutline": "solid 2px rgb(255, 255, 255) offset -2px"
+        },
+        {
+          "step": 3,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        },
+        {
+          "step": 4,
+          "tag": "A",
+          "text": "cmuxLayer",
+          "focusVisible": true,
+          "outline": "none",
+          "afterOutline": "solid 2px rgb(255, 255, 255) offset -2px"
+        },
+        {
+          "step": 5,
+          "tag": "A",
+          "text": "View in portfolio →",
+          "focusVisible": true,
+          "outline": "auto",
+          "afterOutline": "none 0px oklab(0.999994 0.0000455678 0.0000200868 / 0.4) offset 0px"
+        }
+      ],
+      "status": 200,
+      "introText": "3 open-source MCP servers. 28 tools. Persistent memory, voice I/O, and multi-agent orchestration for AI coding assistants.",
+      "tabsToBrainLayer": 15,
+      "mousedown": {
+        "tag": "A",
+        "text": "BrainLayer",
+        "focusVisible": false,
+        "outline": "none",
+        "afterOutline": "none 0px rgb(255, 255, 255) offset 0px"
+      }
+    }
+  ],
+  "completed": true,
+  "end": "2026-10-28T18:58:52.449Z"
+}
