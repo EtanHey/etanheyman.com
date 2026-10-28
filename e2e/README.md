@@ -27,3 +27,5 @@ one SVG has documented CRLF-only normalization. No private backing data copied.
 Full card/overflow/focus/hydration/no-JS/screenshot gates and Linux CI/baseline
 workflow belong to the next infra slice, preserved at commit 7abd6d3. Their
 known REDs/unrun states remain open. Smoke never grants visual/site acceptance.
+
+`npm run test:e2e:adapters` checks REST and browser-route isolation without Chromium.

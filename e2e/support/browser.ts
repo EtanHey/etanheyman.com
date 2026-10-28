@@ -21,6 +21,15 @@ export async function installFixtureRoutes(page: Page) {
         body: readFileSync(join("e2e/fixtures", asset.file)),
         contentType: asset.contentType,
       });
+    if (url.pathname === "/_next/image") {
+      const source = url.searchParams.get("url");
+      if (
+        !source?.startsWith("/") ||
+        source.startsWith("//") ||
+        source.includes("\\")
+      )
+        return route.abort();
+    }
     if (url.origin === "http://127.0.0.1:45320") return route.continue();
     return route.abort();
   });
