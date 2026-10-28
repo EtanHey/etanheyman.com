@@ -1,0 +1,85 @@
+[
+  {
+    "variant": "before-prod",
+    "config": "1440",
+    "scrollWidth": 1452,
+    "clientWidth": 1440,
+    "innerWidth": 1440,
+    "coverClasses": [
+      "pointer-events-none absolute top-0 left-0 h-fit w-full",
+      "pointer-events-none absolute bottom-0 left-0 h-fit w-full"
+    ]
+  },
+  {
+    "variant": "before-prod",
+    "config": "1280",
+    "scrollWidth": 1292,
+    "clientWidth": 1280,
+    "innerWidth": 1280,
+    "coverClasses": [
+      "pointer-events-none absolute top-0 left-0 h-fit w-full",
+      "pointer-events-none absolute bottom-0 left-0 h-fit w-full"
+    ]
+  },
+  {
+    "variant": "before-prod",
+    "config": "390",
+    "scrollWidth": 402,
+    "clientWidth": 390,
+    "innerWidth": 402,
+    "coverClasses": [
+      "pointer-events-none absolute top-0 left-0 h-fit w-full",
+      "pointer-events-none absolute bottom-0 left-0 h-fit w-full"
+    ],
+    "swipe": [
+      {
+        "i": 0,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 1
+      },
+      {
+        "i": 1,
+        "scrollX": 0,
+        "vvLeft": 12,
+        "vvScale": 1
+      },
+      {
+        "i": 2,
+        "scrollX": 0,
+        "vvLeft": 12,
+        "vvScale": 1
+      },
+      {
+        "i": 3,
+        "scrollX": 0,
+        "vvLeft": 12,
+        "vvScale": 1
+      },
+      {
+        "i": 4,
+        "scrollX": 0,
+        "vvLeft": 12,
+        "vvScale": 1
+      },
+      {
+        "i": 5,
+        "scrollX": 0,
+        "vvLeft": 12,
+        "vvScale": 1
+      },
+      {
+        "i": 6,
+        "scrollX": 0,
+        "vvLeft": 12,
+        "vvScale": 1
+      },
+      {
+        "i": 7,
+        "scrollX": 0,
+        "vvLeft": 12,
+        "vvScale": 1
+      }
+    ]
+  }
+]
