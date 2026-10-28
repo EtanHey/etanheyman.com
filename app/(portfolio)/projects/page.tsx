@@ -19,7 +19,7 @@ export default async function ProjectsPage() {
         <h1 className="mb-4 font-[Nutmeg] text-[34px] font-semibold text-blue-200 md:text-[64px]">
           All Projects
         </h1>
-        <p className="font-[Nutmeg] text-[15px] leading-[1.2] font-light text-white/80 md:text-[20px]">
+        <p className="font-[Nutmeg] text-[14px] leading-[1.2] font-light text-white/80 md:text-[20px]">
           Explore my complete portfolio of web development, machine learning,
           and software engineering projects
         </p>
