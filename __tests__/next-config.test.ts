@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import nextConfig from "../next.config";
 
 describe("response security headers", () => {
@@ -27,33 +27,58 @@ describe("response security headers", () => {
     ]);
   });
 
-  it("ships a compatible CSP in report-only mode without enforcing it", async () => {
+  it("enforces a CSP limited to resources used by the public site", async () => {
     const routes = await nextConfig.headers?.();
     const headers = routes?.find(
       (route) => route.source === "/:path*",
     )?.headers;
     expect(headers).toBeDefined();
     expect(
-      headers?.some((header) => header.key === "Content-Security-Policy"),
+      headers?.some(
+        (header) => header.key === "Content-Security-Policy-Report-Only",
+      ),
     ).toBe(false);
 
     const policy = headers?.find(
-      (header) => header.key === "Content-Security-Policy-Report-Only",
+      (header) => header.key === "Content-Security-Policy",
     )?.value;
     expect(policy).toBeDefined();
     const directives = policy?.split(";").map((directive) => directive.trim());
-    expect(directives).toEqual(
-      expect.arrayContaining([
-        "default-src 'self'",
-        "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
-        "style-src 'self' 'unsafe-inline'",
-        "img-src 'self' data: blob: https://utfs.io https://mkijzwkuubtfjqcemorx.supabase.co https://avatars.githubusercontent.com",
-        "font-src 'self' data:",
-        "connect-src 'self' https://mkijzwkuubtfjqcemorx.supabase.co wss://mkijzwkuubtfjqcemorx.supabase.co https://vitals.vercel-insights.com https://vitals.vercel-analytics.com",
-        "frame-ancestors 'none'",
-        "object-src 'none'",
-        "base-uri 'self'",
-      ]),
-    );
+    expect(directives).toEqual([
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https://utfs.io https://mkijzwkuubtfjqcemorx.supabase.co",
+      "font-src 'self'",
+      "connect-src 'self'",
+      "frame-src 'none'",
+      "frame-ancestors 'none'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ]);
+    expect(policy).not.toContain("'unsafe-eval'");
   });
+
+  it.each(["development", "production"])(
+    "allows eval only for Next's development runtime (%s)",
+    async (environment) => {
+      vi.stubEnv("NODE_ENV", environment);
+      vi.resetModules();
+      try {
+        const { default: config } = await import("../next.config");
+        const routes = await config.headers?.();
+        const policy = routes?.[0].headers.find(
+          (header) => header.key === "Content-Security-Policy",
+        )?.value;
+        expect(policy).toBeDefined();
+        expect(policy?.includes("'unsafe-eval'")).toBe(
+          environment === "development",
+        );
+      } finally {
+        vi.unstubAllEnvs();
+        vi.resetModules();
+      }
+    },
+  );
 });
