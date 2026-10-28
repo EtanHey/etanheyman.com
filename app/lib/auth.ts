@@ -16,9 +16,6 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/admin",
-  },
   callbacks: {
     async signIn({ user, account, profile }) {
       return account?.provider === 'github' && isOwner({

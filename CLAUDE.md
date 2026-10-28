@@ -80,7 +80,6 @@ deployment: Vercel
 - UI: @radix-ui/*, shadcn/ui
 - Animations: framer-motion
 - Content: next-mdx-remote, rehype, remark
-- Files: uploadthing
 - Email: resend
 - Icons: lucide-react
 - Database: @supabase/supabase-js, @supabase/ssr
@@ -88,7 +87,7 @@ deployment: Vercel
 ### Directory Structure
 ```
 app/
-├── (portfolio)/      # Pages: about/, contact/, projects/, admin/
+├── (portfolio)/      # Pages: about/, contact/, projects/
 ├── (golems)/         # Golems docs site: golems/docs/, golems/skills/
 ├── components/       # ui/, tech-icons/, navigation/, contact/
 └── lib/              # supabase/
@@ -248,34 +247,21 @@ export default function Component() {
 
 ## Core Patterns
 
-### API Routes
+The retired admin dashboard, project editor, project APIs and uploads are removed.
+Public project pages read Supabase directly through `lib/projects.ts`; update content
+through repository work and reviewed database migrations. Public `/golems` docs remain.
+
+### Public Project Reads
 ```typescript
-import { createClient } from '@/lib/supabase/server';
+import { getAllProjects } from '@/lib/projects';
 
-export async function GET() {
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.from('projects').select('*');
-
-    if (error) throw error;
-    return Response.json(data);
-  } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
-  }
-}
+const projects = await getAllProjects();
 ```
 
 ### Server Actions
-```typescript
-'use server';
-
-import { createClient } from '@/lib/supabase/server';
-
-export async function createProject(formData: FormData) {
-  const supabase = await createClient();
-  // Validate with zod, perform action
-}
-```
+The public contact form uses `app/(portfolio)/contact/actions.ts`. Keep its
+validation, timing token and email-delivery safeguards intact; project mutations
+are no longer exposed as server actions or API routes.
 
 ---
 
@@ -358,7 +344,6 @@ GITHUB_CLIENT_SECRET="..."
 ALLOWED_EMAILS="..."
 
 # Services
-UPLOADTHING_TOKEN="..."
 RESEND_API_KEY="..."
 ```
 

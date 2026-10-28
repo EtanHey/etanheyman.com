@@ -10,7 +10,6 @@ import {
 } from "@/app/components/navigation/mobileBgCover";
 import Nav from "@/app/components/navigation/Nav";
 import AuthSessionProvider from "@/app/providers/SessionProvider";
-import AdminFloatingMenu from "@/app/components/AdminFloatingMenu";
 
 // Configure Nutmeg font for headers (purchased web fonts)
 const nutmeg = localFont({
@@ -128,7 +127,6 @@ export default function RootLayout({
           </div>
           <Footer />
           <Toaster />
-          <AdminFloatingMenu />
         </AuthSessionProvider>
       </body>
     </html>

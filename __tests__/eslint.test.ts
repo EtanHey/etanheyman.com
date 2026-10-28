@@ -11,7 +11,7 @@ const fixture = readFileSync(
   path.resolve("__tests__/fixtures/async-auth-guard.ts.txt"),
   "utf8",
 );
-const route = "app/(portfolio)/api/uploadthing/delete/route.ts";
+const route = "app/(portfolio)/api/auth/[...nextauth]/route.ts";
 
 describe("async auth guard lint", () => {
   beforeAll(() => {
@@ -42,7 +42,6 @@ describe("async auth guard lint", () => {
 
   it.each([
     route,
-    "app/(portfolio)/api/uploadthing/core.ts",
     "app/(portfolio)/contact/actions.ts",
     "app/(portfolio)/layout.tsx",
     "middleware.ts",
