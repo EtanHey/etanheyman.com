@@ -27,11 +27,10 @@ import { getTerminalShowcaseData } from "./terminal-showcase-config";
 import { highlightCode } from "@/lib/highlight";
 
 const PROJECT_DESCRIPTIONS: Record<string, string> = {
-  // AIDEV-NOTE: VoiceLayer and cmuxlayer copy is pending Etan's decisions.
+  // AIDEV-NOTE: VoiceLayer copy is pending Etan's decision.
   voicelayer:
     "Bi-directional voice I/O layer for AI assistants. VoiceBar MCP daemon with LaunchAgent auto-start. TTS via edge-tts, STT via whisper.cpp + Wispr Flow (~300ms). 2 tools (voice_speak, voice_ask) with auto-mode detection. 359 tests.",
-  cmuxlayer:
-    "Terminal orchestration for AI agents. 21 MCP tools across 3 layers: surface control, agent lifecycle (spawn_agent, stop_agent, send_to_agent), and V2 facade. Playwright browser surfaces. 1,423x socket speedup via native MCP.",
+
 };
 
 export function generateStaticParams() {
