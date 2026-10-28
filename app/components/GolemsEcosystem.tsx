@@ -51,10 +51,7 @@ function EcosystemCard({ product }: { product: EcosystemProduct }) {
   const [isHovering, setIsHovering] = useState(false);
 
   return (
-    <a
-      href={product.href}
-      target="_blank"
-      rel="noopener noreferrer"
+    <div
       className="group/eco block"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
@@ -88,7 +85,15 @@ function EcosystemCard({ product }: { product: EcosystemProduct }) {
             {product.icon}
           </div>
           <h3 className="font-[Nutmeg] text-[20px] font-semibold text-white sm:text-[22px]">
-            {product.name}
+            {/* AIDEV-NOTE: Stretch this link across the card without nesting the portfolio link. */}
+            <a
+              href={product.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="after:absolute after:inset-0"
+            >
+              {product.name}
+            </a>
           </h3>
           <ArrowUpRight className="ml-auto h-5 w-5 text-white/40 transition-all duration-300 group-hover/eco:translate-x-0.5 group-hover/eco:-translate-y-0.5 group-hover/eco:text-white/80" />
         </div>
@@ -102,14 +107,13 @@ function EcosystemCard({ product }: { product: EcosystemProduct }) {
         <div className="mt-4 border-t border-white/5 pt-3">
           <a
             href={`/projects/${product.projectSlug}`}
-            onClick={(e) => e.stopPropagation()}
-            className="font-[Nutmeg] text-[13px] font-light text-white/40 transition-colors hover:text-white/70"
+            className="relative z-10 font-[Nutmeg] text-[13px] font-light text-white/40 transition-colors hover:text-white/70"
           >
             View in portfolio &rarr;
           </a>
         </div>
       </div>
-    </a>
+    </div>
   );
 }
 
