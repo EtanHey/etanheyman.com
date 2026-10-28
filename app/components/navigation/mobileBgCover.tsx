@@ -131,9 +131,11 @@ const BottomMobileBgCover = () => {
     return null;
   }
 
+  // AIDEV-NOTE: overflow-x-clip on both covers keeps the -right-3 glows from widening
+  // the page (+12px). clip, unlike hidden, leaves overflow-y visible for the vertical bleed.
   return (
     <div
-      className="pointer-events-none absolute bottom-0 left-0 h-fit w-full"
+      className="pointer-events-none absolute bottom-0 left-0 h-fit w-full overflow-x-clip"
       aria-hidden="true"
     >
       {/* Bottom Right SVG */}
@@ -172,7 +174,7 @@ const TopMobileBgCover = () => {
 
   return (
     <div
-      className="pointer-events-none absolute top-0 left-0 h-fit w-full"
+      className="pointer-events-none absolute top-0 left-0 h-fit w-full overflow-x-clip"
       aria-hidden="true"
     >
       {/* Top Right SVG - fixed position for all pages */}
