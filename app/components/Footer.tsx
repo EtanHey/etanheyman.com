@@ -42,12 +42,6 @@ const Footer = () => {
           </Link>
           <Link
             className="text-sm font-medium text-white/80 transition-colors hover:text-white"
-            href="/privacy"
-          >
-            Privacy
-          </Link>
-          <Link
-            className="text-sm font-medium text-white/80 transition-colors hover:text-white"
             href="/accessibility"
           >
             Accessibility
