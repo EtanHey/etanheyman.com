@@ -175,7 +175,7 @@ export default async function ProjectPage({
             <h1 className="mb-3 font-[Nutmeg] text-[30px] leading-[1.1] font-bold text-white md:text-[52px]">
               {project.title}
             </h1>
-            <p className="mb-5 max-w-[620px] font-[Nutmeg] text-[15px] leading-relaxed font-light text-white/55 md:text-[17px]">
+            <p className="mb-5 max-w-[620px] font-[Nutmeg] text-[14px] leading-relaxed font-light text-white/55 md:text-[17px]">
               {project.description}
             </p>
 

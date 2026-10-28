@@ -123,10 +123,10 @@ export default function GolemsEcosystem() {
       <div className="mx-auto max-w-[354px] sm:max-w-[500px] md:max-w-none">
         {/* Section header */}
         <div className="mb-8 md:mb-10">
-          <h2 className="font-[Nutmeg] text-[26px] leading-none font-semibold text-blue-200 sm:text-[32px] md:text-[36px] lg:text-[42px]">
+          <h2 className="font-[Nutmeg] text-[26px] leading-none font-semibold text-blue-200 sm:text-[32px] md:text-[36px] lg:text-[42px] xl:text-[48px]">
             Golems Ecosystem
           </h2>
-          <p className="mt-2 font-[Nutmeg] text-[15px] leading-[1.3] font-light text-white/60 sm:text-[17px] md:text-[18px]">
+          <p className="mt-2 font-[Nutmeg] text-[14px] leading-[1.3] font-light text-white/60 sm:text-[17px] md:text-[18px]">
             3 open-source MCP servers. 28 tools. Persistent memory, voice I/O,
             and multi-agent orchestration for AI coding assistants.
           </p>
