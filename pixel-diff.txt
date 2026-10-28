@@ -1,0 +1,18 @@
+insitu A/B (same build, clip toggled, base cropped to 1440x900) 1440 top differing_pixels=284905 (0.219834) fuzz1%=1 fuzz2%=0 fuzz5%=0 PSNR=56.1841
+production before vs fixture after (cropped to 1440x900) 1440 top differing_pixels=357426 (0.275792) fuzz1%=0 fuzz2%=0 fuzz5%=0 PSNR=49.2231
+insitu A/B (same build, clip toggled, base cropped to 1440x1337) 1440 grid differing_pixels=452965 (0.235272) fuzz1%=0 fuzz2%=0 fuzz5%=0 PSNR=55.9065
+production before vs fixture after (cropped to 1440x1337) 1440 grid differing_pixels=495432 (0.25733) fuzz1%=0 fuzz2%=0 fuzz5%=0 PSNR=49.1504
+insitu A/B (same build, clip toggled, base cropped to 1440x3685) 1440 full differing_pixels=554874 (0.104567) fuzz1%=0 fuzz2%=0 fuzz5%=0 PSNR=54.8341
+production before vs fixture after (cropped to 1440x3685) 1440 full differing_pixels=487945 (0.0919541) fuzz1%=0 fuzz2%=0 fuzz5%=0 PSNR=57.4556
+insitu A/B (same build, clip toggled, base cropped to 1280x800) 1280 top differing_pixels=197940 (0.193301) fuzz1%=4 fuzz2%=0 fuzz5%=0 PSNR=57.5878
+production before vs fixture after (cropped to 1280x800) 1280 top differing_pixels=269896 (0.26357) fuzz1%=6 fuzz2%=0 fuzz5%=0 PSNR=50.8505
+insitu A/B (same build, clip toggled, base cropped to 1280x1337) 1280 grid differing_pixels=0 (0) fuzz1%=0 fuzz2%=0 fuzz5%=0 PSNR=120
+production before vs fixture after (cropped to 1280x1337) 1280 grid differing_pixels=494925 (0.2892) fuzz1%=0 fuzz2%=0 fuzz5%=0 PSNR=51.3241
+insitu A/B (same build, clip toggled, base cropped to 1280x3753) 1280 full differing_pixels=129 (2.68535e-05) fuzz1%=35 fuzz2%=10 fuzz5%=0 PSNR=84.5473
+production before vs fixture after (cropped to 1280x3753) 1280 full differing_pixels=517491 (0.107724) fuzz1%=35 fuzz2%=8 fuzz5%=0 PSNR=54.7184
+insitu A/B (same build, clip toggled, base cropped to 1170x2532) 390 top differing_pixels=0 (0) fuzz1%=0 fuzz2%=0 fuzz5%=0 PSNR=120
+production before vs fixture after (cropped to 1170x2532) 390 top differing_pixels=820658 (0.277021) fuzz1%=1192 fuzz2%=0 fuzz5%=0 PSNR=49.1749
+insitu A/B (same build, clip toggled, base cropped to 1170x2364) 390 grid differing_pixels=1229 (0.000444343) fuzz1%=188 fuzz2%=68 fuzz5%=0 PSNR=73.6638
+production before vs fixture after (cropped to 1170x2364) 390 grid differing_pixels=1.32496e+06 (0.479037) fuzz1%=197 fuzz2%=62 fuzz5%=0 PSNR=48.5386
+insitu A/B (same build, clip toggled, base cropped to 1170x13620) 390 full differing_pixels=2059 (0.000129209) fuzz1%=468 fuzz2%=218 fuzz5%=64 PSNR=72.7038
+production before vs fixture after (cropped to 1170x13620) 390 full differing_pixels=1.88262e+06 (0.118141) fuzz1%=500 fuzz2%=218 fuzz5%=64 PSNR=53.3072

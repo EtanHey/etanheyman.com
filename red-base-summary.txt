@@ -1,0 +1,22 @@
+  ✓   1 [desktop1280x800] › e2e/horizontal-overflow.spec.ts:57:7 › / background cover adds no horizontal overflow (896ms)
+  ✓   2 [desktop1280x800] › e2e/horizontal-overflow.spec.ts:67:7 › / has no horizontal document overflow (185ms)
+  ✓   3 [desktop1280x800] › e2e/horizontal-overflow.spec.ts:57:7 › /projects background cover adds no horizontal overflow (195ms)
+  ✓   4 [desktop1280x800] › e2e/horizontal-overflow.spec.ts:67:7 › /projects has no horizontal document overflow (197ms)
+  ✓   5 [desktop1280x800] › e2e/horizontal-overflow.spec.ts:57:7 › /projects/brainlayer background cover adds no horizontal overflow (279ms)
+  ✓   6 [desktop1280x800] › e2e/horizontal-overflow.spec.ts:67:7 › /projects/brainlayer has no horizontal document overflow (245ms)
+  ✓   7 [desktop1280x800] › e2e/horizontal-overflow.spec.ts:57:7 › /about background cover adds no horizontal overflow (359ms)
+  ✘   8 [desktop1280x800] › e2e/horizontal-overflow.spec.ts:67:7 › /about has no horizontal document overflow (459ms)
+  ✓   9 [m390390x844] › e2e/horizontal-overflow.spec.ts:57:7 › / background cover adds no horizontal overflow (332ms)
+  ✓  10 [m390390x844] › e2e/horizontal-overflow.spec.ts:67:7 › / has no horizontal document overflow (194ms)
+  ✓  11 [m390390x844] › e2e/horizontal-overflow.spec.ts:57:7 › /projects background cover adds no horizontal overflow (179ms)
+  ✓  12 [m390390x844] › e2e/horizontal-overflow.spec.ts:67:7 › /projects has no horizontal document overflow (182ms)
+  ✓  13 [m390390x844] › e2e/horizontal-overflow.spec.ts:57:7 › /projects/brainlayer background cover adds no horizontal overflow (195ms)
+  ✓  14 [m390390x844] › e2e/horizontal-overflow.spec.ts:67:7 › /projects/brainlayer has no horizontal document overflow (215ms)
+  ✓  15 [m390390x844] › e2e/horizontal-overflow.spec.ts:57:7 › /about background cover adds no horizontal overflow (472ms)
+  ✘  16 [m390390x844] › e2e/horizontal-overflow.spec.ts:67:7 › /about has no horizontal document overflow (517ms)
+    Error: scrollWidth 1441, clientWidth 1280, innerWidth 1280; offenders: [
+    docs.local/e2e/results/horizontal-overflow--about-9e807-orizontal-document-overflow-desktop1280x800/test-failed-1.png
+    Error: scrollWidth 436, clientWidth 390, innerWidth 436; offenders: [
+    docs.local/e2e/results/horizontal-overflow--about-9e807-orizontal-document-overflow-m390390x844/test-failed-1.png
+  2 failed
+  14 passed (1.5m)

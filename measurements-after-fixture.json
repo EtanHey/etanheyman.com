@@ -1,0 +1,186 @@
+[
+  {
+    "variant": "head",
+    "config": "1440",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "innerWidth": 1440,
+    "gridRect": {
+      "left": 579,
+      "top": 111,
+      "right": 1522,
+      "bottom": 1368
+    },
+    "bandClass": "-mx-4.5 self-stretch overflow-x-clip px-4.5 sm:-mx-20 sm:px-20"
+  },
+  {
+    "variant": "insitu-base",
+    "config": "1440",
+    "scrollWidth": 1522,
+    "clientWidth": 1440,
+    "innerWidth": 1440,
+    "gridRect": {
+      "left": 579,
+      "top": 111,
+      "right": 1522,
+      "bottom": 1368
+    },
+    "bandClass": "-mx-4.5 self-stretch px-4.5 sm:-mx-20 sm:px-20"
+  },
+  {
+    "variant": "head",
+    "config": "1280",
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "innerWidth": 1280,
+    "gridRect": {
+      "left": 498,
+      "top": 111,
+      "right": 1441,
+      "bottom": 1368
+    },
+    "bandClass": "-mx-4.5 self-stretch overflow-x-clip px-4.5 sm:-mx-20 sm:px-20"
+  },
+  {
+    "variant": "insitu-base",
+    "config": "1280",
+    "scrollWidth": 1441,
+    "clientWidth": 1280,
+    "innerWidth": 1280,
+    "gridRect": {
+      "left": 498,
+      "top": 111,
+      "right": 1441,
+      "bottom": 1368
+    },
+    "bandClass": "-mx-4.5 self-stretch px-4.5 sm:-mx-20 sm:px-20"
+  },
+  {
+    "variant": "head",
+    "config": "390",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "innerWidth": 390,
+    "gridRect": {
+      "left": -64,
+      "top": 549,
+      "right": 434,
+      "bottom": 1257
+    },
+    "bandClass": "-mx-4.5 self-stretch overflow-x-clip px-4.5 sm:-mx-20 sm:px-20",
+    "swipe": [
+      {
+        "i": 0,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 1
+      },
+      {
+        "i": 1,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 1
+      },
+      {
+        "i": 2,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 1
+      },
+      {
+        "i": 3,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 1
+      },
+      {
+        "i": 4,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 1
+      },
+      {
+        "i": 5,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 1
+      },
+      {
+        "i": 6,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 1
+      },
+      {
+        "i": 7,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 1
+      }
+    ]
+  },
+  {
+    "variant": "insitu-base",
+    "config": "390",
+    "scrollWidth": 436,
+    "clientWidth": 390,
+    "innerWidth": 436,
+    "gridRect": {
+      "left": -64,
+      "top": 549,
+      "right": 434,
+      "bottom": 1257
+    },
+    "bandClass": "-mx-4.5 self-stretch px-4.5 sm:-mx-20 sm:px-20",
+    "swipe": [
+      {
+        "i": 0,
+        "scrollX": 0,
+        "vvLeft": 0,
+        "vvScale": 0.9999999403953552
+      },
+      {
+        "i": 1,
+        "scrollX": 0,
+        "vvLeft": 41,
+        "vvScale": 0.9999999403953552
+      },
+      {
+        "i": 2,
+        "scrollX": 0,
+        "vvLeft": 45,
+        "vvScale": 0.9999999403953552
+      },
+      {
+        "i": 3,
+        "scrollX": 0,
+        "vvLeft": 45,
+        "vvScale": 0.9999999403953552
+      },
+      {
+        "i": 4,
+        "scrollX": 0,
+        "vvLeft": 45,
+        "vvScale": 0.9999999403953552
+      },
+      {
+        "i": 5,
+        "scrollX": 0,
+        "vvLeft": 45,
+        "vvScale": 0.9999999403953552
+      },
+      {
+        "i": 6,
+        "scrollX": 0,
+        "vvLeft": 45,
+        "vvScale": 0.9999999403953552
+      },
+      {
+        "i": 7,
+        "scrollX": 0,
+        "vvLeft": 45,
+        "vvScale": 0.9999999403953552
+      }
+    ]
+  }
+]
