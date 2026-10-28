@@ -1,0 +1,88 @@
+{
+  "https://utfs.io/f/INJgjiKdCVD58uDU9DAIn2T6V3tGJ04IDmEAWcCOu15jfYrX": {
+    "file": "assets/cantaloupe-ai.svg",
+    "sha256": "49a346ddeb422ce6d38a21a7a9337ed714653c6a2d82c1e96aa2b5ae23eb7ade",
+    "sourceFile": "assets/cantaloupe-ai-prev",
+    "contentType": "image/svg+xml"
+  },
+  "/images/projects/hand-detection-logo.svg": {
+    "file": "assets/hand-sign-detection.svg",
+    "sha256": "1f21226169ef43d123486eef8554b13b06176a6e88f3c8bf5a9eb3b4620b36c8",
+    "sourceFile": "assets/hand-sign-detection-prev",
+    "contentType": "image/svg+xml"
+  },
+  "/logos/brainlayer.svg": {
+    "file": "assets/brainlayer.svg",
+    "sha256": "1ef309f4748f740ecfe3d34e03ea1b8b44c807ed1410e7066b4032cc3a79df61",
+    "sourceFile": "assets/brainlayer-logo",
+    "contentType": "image/svg+xml"
+  },
+  "/logos/voicelayer.svg": {
+    "file": "assets/voicelayer.svg",
+    "sha256": "1ff47194031e3957402c7af13df5e10f4daf1c9699ed2f642235c51b72f62ae8",
+    "sourceFile": "assets/voicelayer-logo",
+    "contentType": "image/svg+xml"
+  },
+  "https://utfs.io/f/INJgjiKdCVD5dgL1oQwBeTRNZszV7OFcQ4t3YqSak2ux59Dr": {
+    "file": "assets/mayart-candles.png",
+    "sha256": "268a9198dfa01b806a5d45cc20772992731f5f3de7d88bdcdadb5dd532b93ded",
+    "sourceFile": "assets/mayart-candles-prev",
+    "contentType": "image/png"
+  },
+  "https://utfs.io/f/INJgjiKdCVD5lkTxTIqcNpWPSsfrYRK8C7gQ1eh04vJydAlG": {
+    "file": "assets/golems.png",
+    "sha256": "b86b497efcea0970bf825db1d86ab5695841d03d8126aef0a89feb9bcebf74c6",
+    "sourceFile": "assets/golems-prev",
+    "contentType": "image/png"
+  },
+  "https://mkijzwkuubtfjqcemorx.supabase.co/storage/v1/object/public/assets/logos/cmuxlayer-logo.svg": {
+    "file": "assets/cmuxlayer.svg",
+    "sha256": "bf402132a6e720de6dfb7320c417ee70cb72a6903fe902c8274781473c3e76db",
+    "sourceFile": "assets/cmuxlayer-logo",
+    "contentType": "image/svg+xml"
+  },
+  "https://utfs.io/f/INJgjiKdCVD5oDcgUszPTYsP5KU0zqVQ17kEt9hNWnBJp6b2": {
+    "file": "assets/casona-diez-diez.png",
+    "sha256": "5352e5a181cf76a6c920a8cca7bdcba946b1beec33eb67829e2e46cb5366f408",
+    "sourceFile": "assets/casona-diez-diez-prev",
+    "contentType": "image/png"
+  },
+  "https://utfs.io/f/INJgjiKdCVD5XjkF2AdyCoYnFE30JUK4pq9SZwAPNmhzOvRj": {
+    "file": "assets/beili-photographer.png",
+    "sha256": "f96a637c4c15362c50eba88060d967d9f40b9322188dc526688854a8a48fd0f1",
+    "sourceFile": "assets/beili-photographer-prev",
+    "contentType": "image/png"
+  },
+  "https://utfs.io/f/INJgjiKdCVD5Dvy9F1lMbd7g9r3XRneQuk56EGaSZpJWOCcz": {
+    "file": "assets/ofektive-fitness.svg",
+    "sha256": "89bdc212dea85549467fd77fc414b791972bae470591f2055ad47228d05b8659",
+    "sourceFile": "assets/ofektive-fitness-prev",
+    "contentType": "image/svg+xml",
+    "sourceSHA256": "d963f363aa481497ecc3da5667216579ae05f6e46fe73d7dddda2c2935641260",
+    "normalization": "CRLF to LF only; original QA source bytes retained unchanged"
+  },
+  "https://utfs.io/f/INJgjiKdCVD5TuhQ5GkYXEOFyQZm5VHJW6U82tPnMdhLk7g0": {
+    "file": "assets/100-days-css.png",
+    "sha256": "823ea25f162e1bcea3797354ba376ff737985a7fd76ffc8528eecc874d5d6324",
+    "sourceFile": "assets/100-days-css-prev",
+    "contentType": "image/png"
+  },
+  "https://utfs.io/f/INJgjiKdCVD5WcSaknxDlXQA7voTawMgCx2r0P3fp4jsZLER": {
+    "file": "assets/gvi-mvp.svg",
+    "sha256": "bcea1965f36c5a0275441c05699a403598d3c91556f990d482074c1e635535fc",
+    "sourceFile": "assets/gvi-mvp-prev",
+    "contentType": "image/svg+xml"
+  },
+  "https://utfs.io/f/INJgjiKdCVD5YbkvwwmdWjeJQIYxowrqs0vTXCBPbtpZuLlF": {
+    "file": "assets/sharon-fitness.svg",
+    "sha256": "c3ed6a280786c46b45fc0b7c674a69183a6b3064631e6bf5993a434a9912a48d",
+    "sourceFile": "assets/sharon-fitness-prev",
+    "contentType": "image/svg+xml"
+  },
+  "https://mkijzwkuubtfjqcemorx.supabase.co/storage/v1/object/public/assets/logos/songscript-logo.png": {
+    "file": "assets/songscript.png",
+    "sha256": "c062665706096e3ea44dea2a436f1015279e0774e93e83706e1adb89adbab86b",
+    "sourceFile": "assets/songscript-logo",
+    "contentType": "image/png"
+  }
+}

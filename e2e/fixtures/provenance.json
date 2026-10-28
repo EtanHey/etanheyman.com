@@ -1,0 +1,7 @@
+{
+  "source": "www.etanheyman.com/projects public-page snapshot inherited by slice-b-independent/fixture",
+  "projectsSHA256": "a244c1c3f5e3895f7dbcc2cee0212edd588e74914b49e3606ed1f2815166bf22",
+  "rows": 17,
+  "policy": "Public portfolio rows and rendered artwork only; no HTML, logs, environment, credentials or private backing data. Not current production facts.",
+  "assets": "assets.json records original filenames and SHA256; projects.json unchanged."
+}
