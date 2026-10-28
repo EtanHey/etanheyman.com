@@ -1,0 +1,12 @@
+home-eco-h2 1440 diff_pixels=15580 (0.112703) base=1440x90 after=1440x96
+home-eco-h2 1280 diff_pixels=15039 (0.122388) base=1280x90 after=1280x96
+home-eco-h2 390 diff_pixels=12338 (0.0475013) base=1170x222 after=1170x222
+home-eco-intro 1440 diff_pixels=18229 (0.0843935) base=1440x144 after=1440x150
+home-eco-intro 1280 diff_pixels=18229 (0.112137) base=1280x121 after=1280x127
+home-eco-intro 390 diff_pixels=37532 (0.0763777) base=1170x420 after=1170x408
+projects-intro 1440 diff_pixels=0 (0) base=1440x184 after=1440x184
+projects-intro 1280 diff_pixels=0 (0) base=1280x184 after=1280x184
+projects-intro 390 diff_pixels=40737 (0.0686745) base=1170x507 after=1170x495
+detail-intro 1440 diff_pixels=0 (0) base=1440x423 after=1440x423
+detail-intro 1280 diff_pixels=0 (0) base=1280x423 after=1280x423
+detail-intro 390 diff_pixels=191614 (0.114928) base=1170x1425 after=1170x1362

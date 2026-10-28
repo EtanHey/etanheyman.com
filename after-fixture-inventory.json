@@ -1,0 +1,2684 @@
+{
+  "1440 /": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "Etan Heyman.",
+        "fontSize": "64px",
+        "lineHeight": "64px",
+        "fontFamily": "nutmeg",
+        "width": 620,
+        "height": 64
+      },
+      {
+        "tag": "p",
+        "text": "Building open-source tools for AI agents.",
+        "fontSize": "40px",
+        "lineHeight": "40px",
+        "fontFamily": "nutmeg",
+        "width": 620,
+        "height": 80
+      },
+      {
+        "tag": "h2",
+        "text": "Golems Ecosystem",
+        "fontSize": "48px",
+        "lineHeight": "48px",
+        "fontFamily": "nutmeg",
+        "width": 1120,
+        "height": 48
+      },
+      {
+        "tag": "p",
+        "text": "3 open-source MCP servers. 28 tools. Persistent memory, voic",
+        "fontSize": "18px",
+        "lineHeight": "23.4px",
+        "fontFamily": "nutmeg",
+        "width": 1120,
+        "height": 47
+      },
+      {
+        "tag": "p",
+        "text": "AI memory layer — hybrid search, knowledge graph, and 16 MCP",
+        "fontSize": "15px",
+        "lineHeight": "21px",
+        "fontFamily": "nutmeg",
+        "width": 307,
+        "height": 63
+      },
+      {
+        "tag": "p",
+        "text": "Voice I/O for AI agents — local STT via whisper.cpp, neural ",
+        "fontSize": "15px",
+        "lineHeight": "21px",
+        "fontFamily": "nutmeg",
+        "width": 307,
+        "height": 63
+      },
+      {
+        "tag": "p",
+        "text": "Terminal multiplexer MCP server — spawn and orchestrate AI a",
+        "fontSize": "15px",
+        "lineHeight": "21px",
+        "fontFamily": "nutmeg",
+        "width": 307,
+        "height": 63
+      },
+      {
+        "tag": "p",
+        "text": "Enterprise-grade AI-powered recruitment platform with voice ",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 1038,
+        "height": 48
+      },
+      {
+        "tag": "p",
+        "text": "A production-ready computer vision model that detects and cl",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 486,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "12 MCP tools, 335K+ indexed chunks, hybrid semantic+keyword ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 486,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "2 MCP tools (voice_speak + voice_ask) + 9 QA tools, whisper.",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 486,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "A comprehensive e-commerce platform for handmade candles fea",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 486,
+        "height": 45
+      },
+      {
+        "tag": "h2",
+        "text": "Let's build something.",
+        "fontSize": "48px",
+        "lineHeight": "48px",
+        "fontFamily": "nutmeg",
+        "width": 663,
+        "height": 48
+      },
+      {
+        "tag": "p",
+        "text": "Looking for an AI engineer who ships production tools.",
+        "fontSize": "32px",
+        "lineHeight": "32px",
+        "fontFamily": "nutmeg",
+        "width": 663,
+        "height": 64
+      }
+    ],
+    "scrollWidth": 1452,
+    "innerWidth": 1440
+  },
+  "1440 /projects": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "All Projects",
+        "fontSize": "64px",
+        "lineHeight": "96px",
+        "fontFamily": "nutmeg",
+        "width": 1152,
+        "height": 96
+      },
+      {
+        "tag": "p",
+        "text": "Explore my complete portfolio of web development, machine le",
+        "fontSize": "20px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 1152,
+        "height": 24
+      },
+      {
+        "tag": "p",
+        "text": "Enterprise-grade AI-powered recruitment platform with voice ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "A production-ready computer vision model that detects and cl",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "12 MCP tools, 335K+ indexed chunks, hybrid semantic+keyword ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "2 MCP tools (voice_speak + voice_ask) + 9 QA tools, whisper.",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "A comprehensive e-commerce platform for handmade candles fea",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "Autonomous AI agent ecosystem — 12 Bun workspace packages, 7",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "25 MCP tools across 3 layers. Spawn and orchestrate Claude, ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "Hebrew-compatible WhatsApp MCP fork. Fixed Unicode search wi",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "A full-featured hostel booking and management platform for C",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "A professional photography portfolio website for a specializ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "A professional fitness studio website for Ofek Yehia's perso",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "Advanced CSS animation showcase featuring 11 completed chall",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "A platform to bridge the gap between founders and investors.",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "A responsive personal trainer landing page for Sharon, an Is",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "Learn song lyrics in any language through phonetic translite",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "AI-powered real estate aggregation and market analysis platf",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "Enterprise B2B platform for influencer marketing with voice ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      }
+    ],
+    "scrollWidth": 1452,
+    "innerWidth": 1440
+  },
+  "1440 /projects/brainlayer": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "BrainLayer — Persistent Memory for AI Agents",
+        "fontSize": "52px",
+        "lineHeight": "57.2px",
+        "fontFamily": "nutmeg",
+        "width": 780,
+        "height": 114
+      },
+      {
+        "tag": "p",
+        "text": "BrainLayer is a local-first memory layer that gives any MCP-",
+        "fontSize": "17px",
+        "lineHeight": "27.625px",
+        "fontFamily": "nutmeg",
+        "width": 620,
+        "height": 249
+      },
+      {
+        "tag": "h2",
+        "text": "See it in action",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "p",
+        "text": "Based on your codebase history, you implemented JWT auth mid",
+        "fontSize": "12.48px",
+        "lineHeight": "20.28px",
+        "fontFamily": "nutmeg",
+        "width": 918,
+        "height": 61
+      },
+      {
+        "tag": "h2",
+        "text": "Built with",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "h2",
+        "text": "Key features",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "p",
+        "text": "Semantic vectors (bge-large-en-v1.5) + FTS5 keyword search, ",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 68
+      },
+      {
+        "tag": "p",
+        "text": "Native macOS Swift daemon (209KB) providing MCP over Unix so",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 91
+      },
+      {
+        "tag": "p",
+        "text": "3 core (search, store, recall) + 9 knowledge graph (digest, ",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 91
+      },
+      {
+        "tag": "p",
+        "text": "Unified brain_digest with 3 modes: full content ingestion, f",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 91
+      },
+      {
+        "tag": "h2",
+        "text": "How it works",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "p",
+        "text": "Conversation",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 115,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "CC sessions → JSONL",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 115,
+        "height": 13
+      },
+      {
+        "tag": "p",
+        "text": "Indexing",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 110,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "Chunk + deduplicate",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 110,
+        "height": 13
+      },
+      {
+        "tag": "p",
+        "text": "Embedding",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 103,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "bge-large 1024-dim",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 103,
+        "height": 13
+      },
+      {
+        "tag": "p",
+        "text": "Hybrid Search",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 98,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "Vec + FTS5 + RRF",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 98,
+        "height": 13
+      },
+      {
+        "tag": "p",
+        "text": "BrainBar",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 102,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "12 tools, Unix socket",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 102,
+        "height": 13
+      },
+      {
+        "tag": "h2",
+        "text": "Get started",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "h2",
+        "text": "Part of the ecosystem",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "p",
+        "text": "2 MCP tools (voice_speak + voice_ask) + 9 QA tools, whisper.",
+        "fontSize": "13px",
+        "lineHeight": "21.125px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 63
+      },
+      {
+        "tag": "p",
+        "text": "Autonomous AI agent ecosystem — 12 Bun workspace packages, 7",
+        "fontSize": "13px",
+        "lineHeight": "21.125px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 63
+      }
+    ],
+    "scrollWidth": 1452,
+    "innerWidth": 1440
+  },
+  "1440 /about": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "Etan Heyman",
+        "fontSize": "64px",
+        "lineHeight": "64px",
+        "fontFamily": "nutmeg",
+        "width": 540,
+        "height": 80
+      },
+      {
+        "tag": "p",
+        "text": "Highly motivated front-end developer with a strong work ethi",
+        "fontSize": "20px",
+        "lineHeight": "28px",
+        "fontFamily": "nutmeg",
+        "width": 540,
+        "height": 196
+      },
+      {
+        "tag": "h2",
+        "text": "My career journey",
+        "fontSize": "24px",
+        "lineHeight": "32px",
+        "fontFamily": "nutmeg",
+        "width": 1280,
+        "height": 32
+      },
+      {
+        "tag": "p",
+        "text": "Built AI-powered hiring platform with Vapi.ai voice intervie",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1180,
+        "height": 68
+      },
+      {
+        "tag": "p",
+        "text": "Developed as a front-end developer in a team, full-stack dev",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1180,
+        "height": 91
+      },
+      {
+        "tag": "p",
+        "text": "Ensured exceptional customer experience for vision needs whi",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1180,
+        "height": 46
+      },
+      {
+        "tag": "p",
+        "text": "Worked as part of a team of 3 junior developers building a j",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1180,
+        "height": 68
+      },
+      {
+        "tag": "p",
+        "text": "Developed a map platform for technicians and executives to f",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1180,
+        "height": 46
+      },
+      {
+        "tag": "p",
+        "text": "Completed comprehensive full-stack development training at I",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1180,
+        "height": 68
+      },
+      {
+        "tag": "p",
+        "text": "Worked in customer-facing roles, building strong communicati",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1180,
+        "height": 46
+      },
+      {
+        "tag": "p",
+        "text": "Completed mandatory military service in the Israel Defense F",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1180,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Studied visual arts and creative design, developing a strong",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1180,
+        "height": 46
+      },
+      {
+        "tag": "h2",
+        "text": "Like what you see?",
+        "fontSize": "24px",
+        "lineHeight": "32px",
+        "fontFamily": "nutmeg",
+        "width": 482,
+        "height": 32
+      },
+      {
+        "tag": "p",
+        "text": "Don’t hesitate to contact me right away!",
+        "fontSize": "22px",
+        "lineHeight": "22px",
+        "fontFamily": "nutmeg",
+        "width": 482,
+        "height": 22
+      }
+    ],
+    "scrollWidth": 1522,
+    "innerWidth": 1440
+  },
+  "1440 /contact": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "Contact Etan Heyman",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 1,
+        "height": 1
+      },
+      {
+        "tag": "h2",
+        "text": "Contact Form",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 1,
+        "height": 1
+      },
+      {
+        "tag": "h2",
+        "text": "Contact Information",
+        "fontSize": "20px",
+        "lineHeight": "28px",
+        "fontFamily": "nutmeg",
+        "width": 688,
+        "height": 28
+      },
+      {
+        "tag": "p",
+        "text": "Reach out directly using the information below!",
+        "fontSize": "14px",
+        "lineHeight": "20px",
+        "fontFamily": "nutmeg",
+        "width": 688,
+        "height": 20
+      }
+    ],
+    "scrollWidth": 1452,
+    "innerWidth": 1440
+  },
+  "1280 /": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "Etan Heyman.",
+        "fontSize": "64px",
+        "lineHeight": "64px",
+        "fontFamily": "nutmeg",
+        "width": 590,
+        "height": 64
+      },
+      {
+        "tag": "p",
+        "text": "Building open-source tools for AI agents.",
+        "fontSize": "40px",
+        "lineHeight": "40px",
+        "fontFamily": "nutmeg",
+        "width": 590,
+        "height": 80
+      },
+      {
+        "tag": "h2",
+        "text": "Golems Ecosystem",
+        "fontSize": "48px",
+        "lineHeight": "48px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 48
+      },
+      {
+        "tag": "p",
+        "text": "3 open-source MCP servers. 28 tools. Persistent memory, voic",
+        "fontSize": "18px",
+        "lineHeight": "23.4px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 47
+      },
+      {
+        "tag": "p",
+        "text": "AI memory layer — hybrid search, knowledge graph, and 16 MCP",
+        "fontSize": "15px",
+        "lineHeight": "21px",
+        "fontFamily": "nutmeg",
+        "width": 254,
+        "height": 84
+      },
+      {
+        "tag": "p",
+        "text": "Voice I/O for AI agents — local STT via whisper.cpp, neural ",
+        "fontSize": "15px",
+        "lineHeight": "21px",
+        "fontFamily": "nutmeg",
+        "width": 254,
+        "height": 84
+      },
+      {
+        "tag": "p",
+        "text": "Terminal multiplexer MCP server — spawn and orchestrate AI a",
+        "fontSize": "15px",
+        "lineHeight": "21px",
+        "fontFamily": "nutmeg",
+        "width": 254,
+        "height": 84
+      },
+      {
+        "tag": "p",
+        "text": "Enterprise-grade AI-powered recruitment platform with voice ",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 878,
+        "height": 48
+      },
+      {
+        "tag": "p",
+        "text": "A production-ready computer vision model that detects and cl",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 406,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "12 MCP tools, 335K+ indexed chunks, hybrid semantic+keyword ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 406,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "2 MCP tools (voice_speak + voice_ask) + 9 QA tools, whisper.",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 406,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "A comprehensive e-commerce platform for handmade candles fea",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 406,
+        "height": 45
+      },
+      {
+        "tag": "h2",
+        "text": "Let's build something.",
+        "fontSize": "48px",
+        "lineHeight": "48px",
+        "fontFamily": "nutmeg",
+        "width": 503,
+        "height": 96
+      },
+      {
+        "tag": "p",
+        "text": "Looking for an AI engineer who ships production tools.",
+        "fontSize": "32px",
+        "lineHeight": "32px",
+        "fontFamily": "nutmeg",
+        "width": 503,
+        "height": 64
+      }
+    ],
+    "scrollWidth": 1292,
+    "innerWidth": 1280
+  },
+  "1280 /projects": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "All Projects",
+        "fontSize": "64px",
+        "lineHeight": "96px",
+        "fontFamily": "nutmeg",
+        "width": 1152,
+        "height": 96
+      },
+      {
+        "tag": "p",
+        "text": "Explore my complete portfolio of web development, machine le",
+        "fontSize": "20px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 1152,
+        "height": 24
+      },
+      {
+        "tag": "p",
+        "text": "Enterprise-grade AI-powered recruitment platform with voice ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "A production-ready computer vision model that detects and cl",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "12 MCP tools, 335K+ indexed chunks, hybrid semantic+keyword ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "2 MCP tools (voice_speak + voice_ask) + 9 QA tools, whisper.",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "A comprehensive e-commerce platform for handmade candles fea",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "Autonomous AI agent ecosystem — 12 Bun workspace packages, 7",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "25 MCP tools across 3 layers. Spawn and orchestrate Claude, ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "Hebrew-compatible WhatsApp MCP fork. Fixed Unicode search wi",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "A full-featured hostel booking and management platform for C",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "A professional photography portfolio website for a specializ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "A professional fitness studio website for Ofek Yehia's perso",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "Advanced CSS animation showcase featuring 11 completed chall",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "A platform to bridge the gap between founders and investors.",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "A responsive personal trainer landing page for Sharon, an Is",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "Learn song lyrics in any language through phonetic translite",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "AI-powered real estate aggregation and market analysis platf",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      },
+      {
+        "tag": "p",
+        "text": "Enterprise B2B platform for influencer marketing with voice ",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 514,
+        "height": 45
+      }
+    ],
+    "scrollWidth": 1292,
+    "innerWidth": 1280
+  },
+  "1280 /projects/brainlayer": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "BrainLayer — Persistent Memory for AI Agents",
+        "fontSize": "52px",
+        "lineHeight": "57.2px",
+        "fontFamily": "nutmeg",
+        "width": 780,
+        "height": 114
+      },
+      {
+        "tag": "p",
+        "text": "BrainLayer is a local-first memory layer that gives any MCP-",
+        "fontSize": "17px",
+        "lineHeight": "27.625px",
+        "fontFamily": "nutmeg",
+        "width": 620,
+        "height": 249
+      },
+      {
+        "tag": "h2",
+        "text": "See it in action",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "p",
+        "text": "Based on your codebase history, you implemented JWT auth mid",
+        "fontSize": "12.48px",
+        "lineHeight": "20.28px",
+        "fontFamily": "nutmeg",
+        "width": 918,
+        "height": 61
+      },
+      {
+        "tag": "h2",
+        "text": "Built with",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "h2",
+        "text": "Key features",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "p",
+        "text": "Semantic vectors (bge-large-en-v1.5) + FTS5 keyword search, ",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 68
+      },
+      {
+        "tag": "p",
+        "text": "Native macOS Swift daemon (209KB) providing MCP over Unix so",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 91
+      },
+      {
+        "tag": "p",
+        "text": "3 core (search, store, recall) + 9 knowledge graph (digest, ",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 91
+      },
+      {
+        "tag": "p",
+        "text": "Unified brain_digest with 3 modes: full content ingestion, f",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 91
+      },
+      {
+        "tag": "h2",
+        "text": "How it works",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "p",
+        "text": "Conversation",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 115,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "CC sessions → JSONL",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 115,
+        "height": 13
+      },
+      {
+        "tag": "p",
+        "text": "Indexing",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 110,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "Chunk + deduplicate",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 110,
+        "height": 13
+      },
+      {
+        "tag": "p",
+        "text": "Embedding",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 103,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "bge-large 1024-dim",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 103,
+        "height": 13
+      },
+      {
+        "tag": "p",
+        "text": "Hybrid Search",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 98,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "Vec + FTS5 + RRF",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 98,
+        "height": 13
+      },
+      {
+        "tag": "p",
+        "text": "BrainBar",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 102,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "12 tools, Unix socket",
+        "fontSize": "10px",
+        "lineHeight": "12.5px",
+        "fontFamily": "nutmeg",
+        "width": 102,
+        "height": 13
+      },
+      {
+        "tag": "h2",
+        "text": "Get started",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "h2",
+        "text": "Part of the ecosystem",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "fontFamily": "nutmeg",
+        "width": 960,
+        "height": 18
+      },
+      {
+        "tag": "p",
+        "text": "2 MCP tools (voice_speak + voice_ask) + 9 QA tools, whisper.",
+        "fontSize": "13px",
+        "lineHeight": "21.125px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 63
+      },
+      {
+        "tag": "p",
+        "text": "Autonomous AI agent ecosystem — 12 Bun workspace packages, 7",
+        "fontSize": "13px",
+        "lineHeight": "21.125px",
+        "fontFamily": "nutmeg",
+        "width": 422,
+        "height": 63
+      }
+    ],
+    "scrollWidth": 1292,
+    "innerWidth": 1280
+  },
+  "1280 /about": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "Etan Heyman",
+        "fontSize": "64px",
+        "lineHeight": "64px",
+        "fontFamily": "nutmeg",
+        "width": 460,
+        "height": 80
+      },
+      {
+        "tag": "p",
+        "text": "Highly motivated front-end developer with a strong work ethi",
+        "fontSize": "20px",
+        "lineHeight": "28px",
+        "fontFamily": "nutmeg",
+        "width": 460,
+        "height": 252
+      },
+      {
+        "tag": "h2",
+        "text": "My career journey",
+        "fontSize": "24px",
+        "lineHeight": "32px",
+        "fontFamily": "nutmeg",
+        "width": 1120,
+        "height": 32
+      },
+      {
+        "tag": "p",
+        "text": "Built AI-powered hiring platform with Vapi.ai voice intervie",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1020,
+        "height": 68
+      },
+      {
+        "tag": "p",
+        "text": "Developed as a front-end developer in a team, full-stack dev",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1020,
+        "height": 91
+      },
+      {
+        "tag": "p",
+        "text": "Ensured exceptional customer experience for vision needs whi",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1020,
+        "height": 46
+      },
+      {
+        "tag": "p",
+        "text": "Worked as part of a team of 3 junior developers building a j",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1020,
+        "height": 68
+      },
+      {
+        "tag": "p",
+        "text": "Developed a map platform for technicians and executives to f",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1020,
+        "height": 68
+      },
+      {
+        "tag": "p",
+        "text": "Completed comprehensive full-stack development training at I",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1020,
+        "height": 91
+      },
+      {
+        "tag": "p",
+        "text": "Worked in customer-facing roles, building strong communicati",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1020,
+        "height": 46
+      },
+      {
+        "tag": "p",
+        "text": "Completed mandatory military service in the Israel Defense F",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1020,
+        "height": 46
+      },
+      {
+        "tag": "p",
+        "text": "Studied visual arts and creative design, developing a strong",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 1020,
+        "height": 46
+      },
+      {
+        "tag": "h2",
+        "text": "Like what you see?",
+        "fontSize": "24px",
+        "lineHeight": "32px",
+        "fontFamily": "nutmeg",
+        "width": 482,
+        "height": 32
+      },
+      {
+        "tag": "p",
+        "text": "Don’t hesitate to contact me right away!",
+        "fontSize": "22px",
+        "lineHeight": "22px",
+        "fontFamily": "nutmeg",
+        "width": 482,
+        "height": 22
+      }
+    ],
+    "scrollWidth": 1441,
+    "innerWidth": 1280
+  },
+  "1280 /contact": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "Contact Etan Heyman",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 1,
+        "height": 1
+      },
+      {
+        "tag": "h2",
+        "text": "Contact Form",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 1,
+        "height": 1
+      },
+      {
+        "tag": "h2",
+        "text": "Contact Information",
+        "fontSize": "20px",
+        "lineHeight": "28px",
+        "fontFamily": "nutmeg",
+        "width": 688,
+        "height": 28
+      },
+      {
+        "tag": "p",
+        "text": "Reach out directly using the information below!",
+        "fontSize": "14px",
+        "lineHeight": "20px",
+        "fontFamily": "nutmeg",
+        "width": 688,
+        "height": 20
+      }
+    ],
+    "scrollWidth": 1292,
+    "innerWidth": 1280
+  },
+  "390 /": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "Etan Heyman.",
+        "fontSize": "34px",
+        "lineHeight": "34px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 34
+      },
+      {
+        "tag": "p",
+        "text": "Building open-source tools for AI agents.",
+        "fontSize": "26px",
+        "lineHeight": "26px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 52
+      },
+      {
+        "tag": "h2",
+        "text": "Golems Ecosystem",
+        "fontSize": "26px",
+        "lineHeight": "26px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 26
+      },
+      {
+        "tag": "p",
+        "text": "3 open-source MCP servers. 28 tools. Persistent memory, voic",
+        "fontSize": "14px",
+        "lineHeight": "18.2px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 55
+      },
+      {
+        "tag": "p",
+        "text": "AI memory layer — hybrid search, knowledge graph, and 16 MCP",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "fontFamily": "nutmeg",
+        "width": 304,
+        "height": 59
+      },
+      {
+        "tag": "p",
+        "text": "Voice I/O for AI agents — local STT via whisper.cpp, neural ",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "fontFamily": "nutmeg",
+        "width": 304,
+        "height": 59
+      },
+      {
+        "tag": "p",
+        "text": "Terminal multiplexer MCP server — spawn and orchestrate AI a",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "fontFamily": "nutmeg",
+        "width": 304,
+        "height": 59
+      },
+      {
+        "tag": "p",
+        "text": "Enterprise-grade AI-powered recruitment platform with voice ",
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "fontFamily": "nutmeg",
+        "width": 304,
+        "height": 42
+      },
+      {
+        "tag": "p",
+        "text": "A production-ready computer vision model that detects and cl",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 312,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "12 MCP tools, 335K+ indexed chunks, hybrid semantic+keyword ",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 312,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "2 MCP tools (voice_speak + voice_ask) + 9 QA tools, whisper.",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 312,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "A comprehensive e-commerce platform for handmade candles fea",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 312,
+        "height": 39
+      },
+      {
+        "tag": "h2",
+        "text": "Let's build something.",
+        "fontSize": "26px",
+        "lineHeight": "26px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 26
+      },
+      {
+        "tag": "p",
+        "text": "Looking for an AI engineer who ships production tools.",
+        "fontSize": "22px",
+        "lineHeight": "22px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 44
+      }
+    ],
+    "scrollWidth": 402,
+    "innerWidth": 402
+  },
+  "390 /projects": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "All Projects",
+        "fontSize": "34px",
+        "lineHeight": "51px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 51
+      },
+      {
+        "tag": "p",
+        "text": "Explore my complete portfolio of web development, machine le",
+        "fontSize": "14px",
+        "lineHeight": "16.8px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 50
+      },
+      {
+        "tag": "p",
+        "text": "Enterprise-grade AI-powered recruitment platform with voice ",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "A production-ready computer vision model that detects and cl",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "12 MCP tools, 335K+ indexed chunks, hybrid semantic+keyword ",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "2 MCP tools (voice_speak + voice_ask) + 9 QA tools, whisper.",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "A comprehensive e-commerce platform for handmade candles fea",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "Autonomous AI agent ecosystem — 12 Bun workspace packages, 7",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "25 MCP tools across 3 layers. Spawn and orchestrate Claude, ",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tests",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 41,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "Hebrew-compatible WhatsApp MCP fork. Fixed Unicode search wi",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "0",
+        "fontSize": "15px",
+        "lineHeight": "22.5px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 23
+      },
+      {
+        "tag": "p",
+        "text": "Tools",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 44,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "A full-featured hostel booking and management platform for C",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "A professional photography portfolio website for a specializ",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "A professional fitness studio website for Ofek Yehia's perso",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "Advanced CSS animation showcase featuring 11 completed chall",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "A platform to bridge the gap between founders and investors.",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "A responsive personal trainer landing page for Sharon, an Is",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "Learn song lyrics in any language through phonetic translite",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "AI-powered real estate aggregation and market analysis platf",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      },
+      {
+        "tag": "p",
+        "text": "Enterprise B2B platform for influencer marketing with voice ",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 316,
+        "height": 39
+      }
+    ],
+    "scrollWidth": 402,
+    "innerWidth": 402
+  },
+  "390 /projects/brainlayer": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "BrainLayer — Persistent Memory for AI Agents",
+        "fontSize": "30px",
+        "lineHeight": "33px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 99
+      },
+      {
+        "tag": "p",
+        "text": "BrainLayer is a local-first memory layer that gives any MCP-",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 296
+      },
+      {
+        "tag": "h2",
+        "text": "See it in action",
+        "fontSize": "11px",
+        "lineHeight": "16.5px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 17
+      },
+      {
+        "tag": "p",
+        "text": "Based on your codebase history, you implemented JWT auth mid",
+        "fontSize": "11.52px",
+        "lineHeight": "18.72px",
+        "fontFamily": "nutmeg",
+        "width": 324,
+        "height": 112
+      },
+      {
+        "tag": "h2",
+        "text": "Built with",
+        "fontSize": "11px",
+        "lineHeight": "16.5px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 17
+      },
+      {
+        "tag": "h2",
+        "text": "Key features",
+        "fontSize": "11px",
+        "lineHeight": "16.5px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 17
+      },
+      {
+        "tag": "p",
+        "text": "Semantic vectors (bge-large-en-v1.5) + FTS5 keyword search, ",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 306,
+        "height": 114
+      },
+      {
+        "tag": "p",
+        "text": "Native macOS Swift daemon (209KB) providing MCP over Unix so",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 306,
+        "height": 137
+      },
+      {
+        "tag": "p",
+        "text": "3 core (search, store, recall) + 9 knowledge graph (digest, ",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 306,
+        "height": 114
+      },
+      {
+        "tag": "p",
+        "text": "Unified brain_digest with 3 modes: full content ingestion, f",
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "fontFamily": "nutmeg",
+        "width": 306,
+        "height": 114
+      },
+      {
+        "tag": "h2",
+        "text": "How it works",
+        "fontSize": "11px",
+        "lineHeight": "16.5px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 17
+      },
+      {
+        "tag": "p",
+        "text": "Conversation",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "CC sessions → JSONL",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "Indexing",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "Chunk + deduplicate",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "Embedding",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "bge-large 1024-dim",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "Hybrid Search",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "Vec + FTS5 + RRF",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 15
+      },
+      {
+        "tag": "p",
+        "text": "BrainBar",
+        "fontSize": "13px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 20
+      },
+      {
+        "tag": "p",
+        "text": "12 tools, Unix socket",
+        "fontSize": "10px",
+        "lineHeight": "15px",
+        "fontFamily": "nutmeg",
+        "width": 264,
+        "height": 15
+      },
+      {
+        "tag": "h2",
+        "text": "Get started",
+        "fontSize": "11px",
+        "lineHeight": "16.5px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 17
+      },
+      {
+        "tag": "h2",
+        "text": "Part of the ecosystem",
+        "fontSize": "11px",
+        "lineHeight": "16.5px",
+        "fontFamily": "nutmeg",
+        "width": 358,
+        "height": 17
+      },
+      {
+        "tag": "p",
+        "text": "2 MCP tools (voice_speak + voice_ask) + 9 QA tools, whisper.",
+        "fontSize": "13px",
+        "lineHeight": "21.125px",
+        "fontFamily": "nutmeg",
+        "width": 308,
+        "height": 85
+      },
+      {
+        "tag": "p",
+        "text": "Autonomous AI agent ecosystem — 12 Bun workspace packages, 7",
+        "fontSize": "13px",
+        "lineHeight": "21.125px",
+        "fontFamily": "nutmeg",
+        "width": 308,
+        "height": 85
+      }
+    ],
+    "scrollWidth": 402,
+    "innerWidth": 402
+  },
+  "390 /about": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "Etan Heyman",
+        "fontSize": "34px",
+        "lineHeight": "22px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 30
+      },
+      {
+        "tag": "p",
+        "text": "Highly motivated front-end developer with a strong work ethi",
+        "fontSize": "14px",
+        "lineHeight": "20px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 160
+      },
+      {
+        "tag": "h2",
+        "text": "My career journey",
+        "fontSize": "24px",
+        "lineHeight": "32px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 32
+      },
+      {
+        "tag": "p",
+        "text": "Built AI-powered hiring platform with Vapi.ai voice intervie",
+        "fontSize": "12px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 278,
+        "height": 176
+      },
+      {
+        "tag": "p",
+        "text": "Developed as a front-end developer in a team, full-stack dev",
+        "fontSize": "12px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 278,
+        "height": 234
+      },
+      {
+        "tag": "p",
+        "text": "Ensured exceptional customer experience for vision needs whi",
+        "fontSize": "12px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 278,
+        "height": 137
+      },
+      {
+        "tag": "p",
+        "text": "Worked as part of a team of 3 junior developers building a j",
+        "fontSize": "12px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 278,
+        "height": 176
+      },
+      {
+        "tag": "p",
+        "text": "Developed a map platform for technicians and executives to f",
+        "fontSize": "12px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 278,
+        "height": 156
+      },
+      {
+        "tag": "p",
+        "text": "Completed comprehensive full-stack development training at I",
+        "fontSize": "12px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 278,
+        "height": 234
+      },
+      {
+        "tag": "p",
+        "text": "Worked in customer-facing roles, building strong communicati",
+        "fontSize": "12px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 278,
+        "height": 98
+      },
+      {
+        "tag": "p",
+        "text": "Completed mandatory military service in the Israel Defense F",
+        "fontSize": "12px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 278,
+        "height": 78
+      },
+      {
+        "tag": "p",
+        "text": "Studied visual arts and creative design, developing a strong",
+        "fontSize": "12px",
+        "lineHeight": "19.5px",
+        "fontFamily": "nutmeg",
+        "width": 278,
+        "height": 98
+      },
+      {
+        "tag": "h2",
+        "text": "Like what you see?",
+        "fontSize": "24px",
+        "lineHeight": "32px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 32
+      },
+      {
+        "tag": "p",
+        "text": "Don’t hesitate to contact me right away!",
+        "fontSize": "22px",
+        "lineHeight": "22px",
+        "fontFamily": "nutmeg",
+        "width": 354,
+        "height": 44
+      }
+    ],
+    "scrollWidth": 436,
+    "innerWidth": 436
+  },
+  "390 /contact": {
+    "rows": [
+      {
+        "tag": "h1",
+        "text": "Contact Etan Heyman",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 1,
+        "height": 1
+      },
+      {
+        "tag": "h2",
+        "text": "Contact Form",
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "fontFamily": "nutmeg",
+        "width": 1,
+        "height": 1
+      },
+      {
+        "tag": "h2",
+        "text": "Contact Information",
+        "fontSize": "20px",
+        "lineHeight": "28px",
+        "fontFamily": "nutmeg",
+        "width": 274,
+        "height": 28
+      },
+      {
+        "tag": "p",
+        "text": "Reach out directly using the information below!",
+        "fontSize": "14px",
+        "lineHeight": "20px",
+        "fontFamily": "nutmeg",
+        "width": 274,
+        "height": 40
+      }
+    ],
+    "scrollWidth": 402,
+    "innerWidth": 402
+  }
+}

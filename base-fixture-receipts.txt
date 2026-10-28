@@ -1,0 +1,12 @@
+base 390 home-eco-h2 26px 26px 354w 1 lines sw=402/cw=390/iw=402
+base 390 home-eco-intro 15px 19.5px 354w 3 lines sw=402/cw=390/iw=402
+base 390 projects-intro 15px 18px 358w 3 lines sw=402/cw=390/iw=402
+base 390 detail-intro 15px 24.375px 358w 13 lines sw=402/cw=390/iw=402
+base 1280 home-eco-h2 42px 42px 960w 1 lines sw=1292/cw=1280/iw=1280
+base 1280 home-eco-intro 18px 23.4px 960w 2 lines sw=1292/cw=1280/iw=1280
+base 1280 projects-intro 20px 24px 1152w 1 lines sw=1292/cw=1280/iw=1280
+base 1280 detail-intro 17px 27.625px 620w 9 lines sw=1292/cw=1280/iw=1280
+base 1440 home-eco-h2 42px 42px 1120w 1 lines sw=1452/cw=1440/iw=1440
+base 1440 home-eco-intro 18px 23.4px 1120w 2 lines sw=1452/cw=1440/iw=1440
+base 1440 projects-intro 20px 24px 1152w 1 lines sw=1452/cw=1440/iw=1440
+base 1440 detail-intro 17px 27.625px 620w 9 lines sw=1452/cw=1440/iw=1440

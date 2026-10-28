@@ -1,0 +1,8 @@
+  ✓   1 [desktop1280x800] › e2e/typography.spec.ts:18:9 › desktop section headings › home Golems Ecosystem h2 is 48px at 1280 (563ms)
+  ✓   2 [desktop1280x800] › e2e/typography.spec.ts:18:9 › desktop section headings › home Golems Ecosystem h2 is 48px at 1440 (542ms)
+  ✓   9 [m390390x844] › e2e/typography.spec.ts:37:9 › phone intro body copy › / intro paragraph is 14px (289ms)
+  ✓  10 [m390390x844] › e2e/typography.spec.ts:37:9 › phone intro body copy › /projects intro paragraph is 14px (595ms)
+  ✓  11 [m390390x844] › e2e/typography.spec.ts:37:9 › phone intro body copy › /projects/brainlayer intro paragraph is 14px (777ms)
+  ✓  12 [m390390x844] › e2e/typography.spec.ts:42:7 › phone intro body copy › home Golems Ecosystem h2 stays 26px (614ms)
+  6 skipped
+  6 passed (16.0s)
