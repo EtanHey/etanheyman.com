@@ -53,42 +53,54 @@ const AboutPage = () => {
 
   return (
     <div className="z-20 flex min-h-screen w-full flex-col items-start justify-items-center gap-20 px-4.5 py-8 sm:p-20">
-      <div className="flex w-full place-content-between gap-20 max-xl:flex-col sm:items-center 2xl:place-content-around">
-        <div className="flex max-w-[654px] flex-col gap-4">
-          <h1 className="pb-2 text-[34px] leading-5.5 font-bold xl:pb-4 xl:text-[64px] xl:leading-16 xl:text-nowrap">
-            Etan Heyman
-          </h1>
-          <div className="flex items-center gap-4">
-            <LaptopIcon />
-            <h3 className="text-2xl font-light xl:text-[32px]">AI Engineer</h3>
+      {/* AIDEV-NOTE: the rotated tech-icon grid bleeds past the viewport edge (+161px at 1280,
+          +46px at 390). This band cancels the page padding (-mx + px) so its edges are the
+          viewport edges, and overflow-x-clip trims only the off-screen part. clip, unlike
+          hidden, leaves overflow-y visible, so the rotated corners still bleed vertically.
+          Keep -mx/px in sync with the page padding above. */}
+      <div className="-mx-4.5 self-stretch overflow-x-clip px-4.5 sm:-mx-20 sm:px-20">
+        <div className="flex w-full place-content-between gap-20 max-xl:flex-col sm:items-center 2xl:place-content-around">
+          <div className="flex max-w-[654px] flex-col gap-4">
+            <h1 className="pb-2 text-[34px] leading-5.5 font-bold xl:pb-4 xl:text-[64px] xl:leading-16 xl:text-nowrap">
+              Etan Heyman
+            </h1>
+            <div className="flex items-center gap-4">
+              <LaptopIcon />
+              <h3 className="text-2xl font-light xl:text-[32px]">
+                AI Engineer
+              </h3>
+            </div>
+            <div className="flex items-center gap-4">
+              <LocationIcon />
+              <h3 className="text-2xl font-light xl:text-[32px]">
+                {CONTACT_INFO.location}
+              </h3>
+            </div>
+            <p className="text-sm font-light xl:text-xl">
+              Highly motivated front-end developer with a strong work ethic and
+              a proven ability to quickly learn new technologies. Experienced in
+              developing dynamic web applications using Next.js and Tailwind
+              CSS, as well as React.js with plain CSS and Node.js backend. Adept
+              at leading teams and managing projects to successful completion.
+            </p>
+            <Link
+              href="/projects"
+              className="w-full rounded-[80px] bg-blue-500 py-4 text-center text-xl text-white xl:mt-4 xl:text-2xl"
+            >
+              View My Projects
+            </Link>
           </div>
-          <div className="flex items-center gap-4">
-            <LocationIcon />
-            <h3 className="text-2xl font-light xl:text-[32px]">
-              {CONTACT_INFO.location}
-            </h3>
-          </div>
-          <p className="text-sm font-light xl:text-xl">
-            Highly motivated front-end developer with a strong work ethic and a
-            proven ability to quickly learn new technologies. Experienced in
-            developing dynamic web applications using Next.js and Tailwind CSS,
-            as well as React.js with plain CSS and Node.js backend. Adept at
-            leading teams and managing projects to successful completion.
-          </p>
-          <Link
-            href="/projects"
-            className="w-full rounded-[80px] bg-blue-500 py-4 text-center text-xl text-white xl:mt-4 xl:text-2xl"
-          >
-            View My Projects
-          </Link>
-        </div>
 
-        {/* Tech Icons Section */}
-        <div className="relative -left-7 flex h-fit max-w-max rotate-[10deg] items-center justify-center max-xl:w-screen xl:-mr-24 xl:min-w-[756px]">
-          <div className="grid grid-cols-6 gap-[23.45px] xl:gap-11">
-            {Object.keys(techIconMap).map((techName) => (
-              <TechIconWrapper key={techName} name={techName as TechIconName} />
-            ))}
+          {/* Tech Icons Section */}
+          <div className="relative -left-7 flex h-fit max-w-max rotate-[10deg] items-center justify-center max-xl:w-screen xl:-mr-24 xl:min-w-[756px]">
+            <div className="grid grid-cols-6 gap-[23.45px] xl:gap-11">
+              {Object.keys(techIconMap).map((techName) => (
+                <TechIconWrapper
+                  key={techName}
+                  name={techName as TechIconName}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
