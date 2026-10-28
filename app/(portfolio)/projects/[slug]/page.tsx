@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import golemsStats from "@/app/(golems)/golems/lib/golems-stats.json";
-import skillsManifest from "@/app/(golems)/golems/lib/skills-manifest.json";
 import { getProjectBySlugOrId, getAllProjects } from "@/lib/projects";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,14 +27,11 @@ import { getTerminalShowcaseData } from "./terminal-showcase-config";
 import { highlightCode } from "@/lib/highlight";
 
 const PROJECT_DESCRIPTIONS: Record<string, string> = {
-  brainlayer: `Persistent memory layer for AI coding assistants. ${golemsStats.brainlayer.chunksDisplay} deduplicated chunks, ${golemsStats.brainlayer.mcpTools} MCP tools (search, store, recall + knowledge graph), 119 KG entities, hybrid semantic search with sqlite-vec. Faceted enrichment v2 with Gemini 2.5 Flash.`,
+  // AIDEV-NOTE: VoiceLayer and cmuxlayer copy is pending Etan's decisions.
   voicelayer:
     "Bi-directional voice I/O layer for AI assistants. VoiceBar MCP daemon with LaunchAgent auto-start. TTS via edge-tts, STT via whisper.cpp + Wispr Flow (~300ms). 2 tools (voice_speak, voice_ask) with auto-mode detection. 359 tests.",
   cmuxlayer:
     "Terminal orchestration for AI agents. 21 MCP tools across 3 layers: surface control, agent lifecycle (spawn_agent, stop_agent, send_to_agent), and V2 facade. Playwright browser surfaces. 1,423x socket speedup via native MCP.",
-  "whatsapp-mcp":
-    "Hebrew-compatible WhatsApp MCP fork. Fixed Unicode search (instr() over LOWER+LIKE), dual-bridge personal+business auto-detection, self-chat safety mode. 12 MCP tools for reading and sending messages.",
-  golems: `Autonomous AI agent ecosystem. ${golemsStats.packages.count} packages, ${golemsStats.agents.count} domain agents, ${skillsManifest.skillCount} skills, multi-LLM routing, Night Shift autonomous coding at 4am.`,
 };
 
 export function generateStaticParams() {
