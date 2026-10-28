@@ -65,12 +65,6 @@ for (const route of routes) {
   });
 
   test(`${route} has no horizontal document overflow`, async ({ page }) => {
-    // AIDEV-NOTE: the about tech-icon grid (rotate-[10deg], xl:-mr-24) is a separate
-    // offender from the background glows. Remove this once its own fix lands.
-    test.fail(
-      route === "/about",
-      "about tech-icon grid overflows the layout width",
-    );
     const result = await measure(page, route);
     const message = `scrollWidth ${result.scrollWidth}, clientWidth ${result.clientWidth}, innerWidth ${result.innerWidth}; offenders: ${JSON.stringify(result.offenders, null, 2)}`;
     // Mobile emulation widens innerWidth to fit overflowing content, so clientWidth is the real bound.
