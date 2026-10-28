@@ -76,6 +76,7 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   const raw = readFileSync(filePath, 'utf-8');
   const { data, content } = matter(raw);
   const pageTitle = data.title || content.match(/^#\s+(.+)/m)?.[1] || slug[slug.length - 1];
+  const headingTitle = content.match(/^#\s+(.+)/m)?.[1] || pageTitle;
   const badges = [
     typeof data.type === 'string' ? data.type : null,
     data.retired ? 'retired' : null,
@@ -123,6 +124,7 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
     <div className="max-w-6xl mx-auto px-4 md:px-6 pt-4 md:pt-8 pb-12 flex gap-8">
       <article className="flex-1 min-w-0 max-w-3xl">
         <Breadcrumbs title={pageTitle} />
+        <h1 className="sr-only">{headingTitle}</h1>
         {badges.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
             {badges.map((badge) => (
