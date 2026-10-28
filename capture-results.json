@@ -1,0 +1,272 @@
+{
+  "head": "c063f333693cad9e3c61339b29ae596dbeb0d3b3",
+  "start": "2026-10-28T19:09:43.531Z",
+  "visits": [
+    {
+      "width": "1440",
+      "mode": "before",
+      "route": "/projects",
+      "status": 200,
+      "intro": {
+        "fontSize": "20px",
+        "lineHeight": "24px",
+        "rect": {
+          "x": 144,
+          "y": 232,
+          "width": 1152,
+          "height": 24
+        },
+        "text": "Explore my complete portfolio of web development, machine learning, and software engineering projects"
+      },
+      "clipHeight": 288
+    },
+    {
+      "width": "1440",
+      "mode": "before",
+      "route": "/projects/brainlayer",
+      "status": 200,
+      "intro": {
+        "fontSize": "17px",
+        "lineHeight": "27.625px",
+        "rect": {
+          "x": 420,
+          "y": 325.375,
+          "width": 620,
+          "height": 276.25
+        },
+        "text": "BrainLayer gives any MCP-compatible AI agent persistent memory across conversations. It indexes agent session transcript"
+      },
+      "clipHeight": 634
+    },
+    {
+      "width": "1440",
+      "mode": "after",
+      "route": "/projects",
+      "status": 200,
+      "intro": {
+        "fontSize": "18px",
+        "lineHeight": "21.6px",
+        "rect": {
+          "x": 144,
+          "y": 232,
+          "width": 1152,
+          "height": 21.59375
+        },
+        "text": "Explore my complete portfolio of web development, machine learning, and software engineering projects"
+      },
+      "clipHeight": 286,
+      "insituOld": {
+        "fontSize": "20px",
+        "lineHeight": "24px",
+        "rect": {
+          "x": 144,
+          "y": 232,
+          "width": 1152,
+          "height": 24
+        },
+        "text": "Explore my complete portfolio of web development, machine learning, and software engineering projects"
+      },
+      "insituClipHeight": 288
+    },
+    {
+      "width": "1440",
+      "mode": "after",
+      "route": "/projects/brainlayer",
+      "status": 200,
+      "intro": {
+        "fontSize": "18px",
+        "lineHeight": "29.25px",
+        "rect": {
+          "x": 420,
+          "y": 325.375,
+          "width": 620,
+          "height": 263.25
+        },
+        "text": "BrainLayer is a local-first memory layer that gives any MCP-compatible AI agent persistent memory across conversations. "
+      },
+      "clipHeight": 621,
+      "insituOld": {
+        "fontSize": "17px",
+        "lineHeight": "27.625px",
+        "rect": {
+          "x": 420,
+          "y": 325.375,
+          "width": 620,
+          "height": 248.625
+        },
+        "text": "BrainLayer is a local-first memory layer that gives any MCP-compatible AI agent persistent memory across conversations. "
+      },
+      "insituClipHeight": 621
+    },
+    {
+      "width": "1280",
+      "mode": "before",
+      "route": "/projects",
+      "status": 200,
+      "intro": {
+        "fontSize": "20px",
+        "lineHeight": "24px",
+        "rect": {
+          "x": 64,
+          "y": 232,
+          "width": 1152,
+          "height": 24
+        },
+        "text": "Explore my complete portfolio of web development, machine learning, and software engineering projects"
+      },
+      "clipHeight": 288
+    },
+    {
+      "width": "1280",
+      "mode": "before",
+      "route": "/projects/brainlayer",
+      "status": 200,
+      "intro": {
+        "fontSize": "17px",
+        "lineHeight": "27.625px",
+        "rect": {
+          "x": 340,
+          "y": 325.375,
+          "width": 620,
+          "height": 276.25
+        },
+        "text": "BrainLayer gives any MCP-compatible AI agent persistent memory across conversations. It indexes agent session transcript"
+      },
+      "clipHeight": 634
+    },
+    {
+      "width": "1280",
+      "mode": "after",
+      "route": "/projects",
+      "status": 200,
+      "intro": {
+        "fontSize": "18px",
+        "lineHeight": "21.6px",
+        "rect": {
+          "x": 64,
+          "y": 232,
+          "width": 1152,
+          "height": 21.59375
+        },
+        "text": "Explore my complete portfolio of web development, machine learning, and software engineering projects"
+      },
+      "clipHeight": 286,
+      "insituOld": {
+        "fontSize": "20px",
+        "lineHeight": "24px",
+        "rect": {
+          "x": 64,
+          "y": 232,
+          "width": 1152,
+          "height": 24
+        },
+        "text": "Explore my complete portfolio of web development, machine learning, and software engineering projects"
+      },
+      "insituClipHeight": 288
+    },
+    {
+      "width": "1280",
+      "mode": "after",
+      "route": "/projects/brainlayer",
+      "status": 200,
+      "intro": {
+        "fontSize": "18px",
+        "lineHeight": "29.25px",
+        "rect": {
+          "x": 340,
+          "y": 325.375,
+          "width": 620,
+          "height": 263.25
+        },
+        "text": "BrainLayer is a local-first memory layer that gives any MCP-compatible AI agent persistent memory across conversations. "
+      },
+      "clipHeight": 621,
+      "insituOld": {
+        "fontSize": "17px",
+        "lineHeight": "27.625px",
+        "rect": {
+          "x": 340,
+          "y": 325.375,
+          "width": 620,
+          "height": 248.625
+        },
+        "text": "BrainLayer is a local-first memory layer that gives any MCP-compatible AI agent persistent memory across conversations. "
+      },
+      "insituClipHeight": 621
+    },
+    {
+      "width": "390",
+      "mode": "before",
+      "route": "/projects",
+      "status": 200,
+      "intro": {
+        "fontSize": "14px",
+        "lineHeight": "16.8px",
+        "rect": {
+          "x": 16,
+          "y": 187,
+          "width": 358,
+          "height": 50.390625
+        },
+        "text": "Explore my complete portfolio of web development, machine learning, and software engineering projects"
+      },
+      "clipHeight": 270
+    },
+    {
+      "width": "390",
+      "mode": "before",
+      "route": "/projects/brainlayer",
+      "status": 200,
+      "intro": {
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "rect": {
+          "x": 16,
+          "y": 400.5,
+          "width": 358,
+          "height": 318.5
+        },
+        "text": "BrainLayer gives any MCP-compatible AI agent persistent memory across conversations. It indexes agent session transcript"
+      },
+      "clipHeight": 751
+    },
+    {
+      "width": "390",
+      "mode": "after",
+      "route": "/projects",
+      "status": 200,
+      "intro": {
+        "fontSize": "14px",
+        "lineHeight": "16.8px",
+        "rect": {
+          "x": 16,
+          "y": 187,
+          "width": 358,
+          "height": 50.390625
+        },
+        "text": "Explore my complete portfolio of web development, machine learning, and software engineering projects"
+      },
+      "clipHeight": 270
+    },
+    {
+      "width": "390",
+      "mode": "after",
+      "route": "/projects/brainlayer",
+      "status": 200,
+      "intro": {
+        "fontSize": "14px",
+        "lineHeight": "22.75px",
+        "rect": {
+          "x": 16,
+          "y": 400.5,
+          "width": 358,
+          "height": 295.75
+        },
+        "text": "BrainLayer is a local-first memory layer that gives any MCP-compatible AI agent persistent memory across conversations. "
+      },
+      "clipHeight": 729
+    }
+  ],
+  "completed": true,
+  "end": "2026-10-28T19:10:26.408Z"
+}

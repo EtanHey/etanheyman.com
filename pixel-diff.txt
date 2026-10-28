@@ -1,0 +1,23 @@
+prod-vs-head 1440 projects size=1440x288/1440x286 pixels>5%=7377 (0.0177879)
+prod-vs-head 1440 brainlayer size=1440x634/1440x621 pixels>5%=36467 (0.0399437)
+prod-vs-head 1280 projects size=1280x288/1280x286 pixels>5%=7377 (0.0200114)
+prod-vs-head 1280 brainlayer size=1280x634/1280x621 pixels>5%=36467 (0.0449367)
+prod-vs-head 390 projects size=1170x810/1170x810 pixels>5%=0 (0)
+prod-vs-head 390 brainlayer size=1170x2253/1170x2187 pixels>5%=137623 (0.0522088)
+insitu old-vs-new 1440 projects pixels>5%=7201 (0.0173635)
+insitu old-vs-new 1440 brainlayer pixels>5%=35183 (0.039344)
+insitu old-vs-new 1280 projects pixels>5%=7201 (0.019534)
+insitu old-vs-new 1280 brainlayer pixels>5%=35183 (0.044262)
+insitu 1440 projects diff-bbox=1093x21+145+235
+insitu 1440 brainlayer diff-bbox=617x290+420+331
+insitu 1280 projects diff-bbox=1093x21+65+235
+insitu 1280 brainlayer diff-bbox=617x290+340+331
+1440 /projects p y=232.0..253.6 x=144.0..1296.0
+1440 /projects/brainlayer p y=325.4..588.6 x=420.0..1040.0
+1280 /projects p y=232.0..253.6 x=64.0..1216.0
+1280 /projects/brainlayer p y=325.4..588.6 x=340.0..960.0
+390 /projects p y=187.0..237.4 x=16.0..374.0
+390 /projects/brainlayer p y=400.5..696.2 x=16.0..374.0
+prod-vs-head 390 brainlayer diff-bbox=1070x1034+48+1219
+prod-vs-head 1440 brainlayer diff-bbox=618x303+420+331
+prod-vs-head 1280 brainlayer diff-bbox=618x303+340+331
