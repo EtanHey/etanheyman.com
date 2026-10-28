@@ -24,8 +24,10 @@ app/
 **Server Components (Default)**
 ```typescript
 // No 'use client' directive
+import { getAllProjects } from '@/lib/projects';
+
 export default async function ProjectsPage() {
-  const projects = await db.project.findMany();
+  const projects = await getAllProjects();
   return <ProjectGrid projects={projects} />;
 }
 ```
@@ -42,48 +44,15 @@ export function ContactForm() {
 
 ### Database Patterns
 
-**Singleton Connection**
-```typescript
-// lib/db.ts
-const globalForPrisma = global as { prisma?: PrismaClient };
-export const db = globalForPrisma.prisma || new PrismaClient();
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
-```
+Use `lib/supabase/server.ts` for server reads and `lib/supabase/client.ts` for
+client reads. Public project pages use the read-only `lib/projects.ts` helpers.
+Schema and content changes go through reviewed Supabase migrations.
 
-**Query Patterns**
-```typescript
-// Always handle errors
-try {
-  const projects = await db.project.findMany({
-    orderBy: [
-      { featured: 'desc' },
-      { orderIndex: 'asc' }
-    ]
-  });
-} catch (error) {
-  console.error('Failed to fetch projects:', error);
-  return [];
-}
-```
+### Project Data Access
 
-### API Route Patterns
-
-**Standard REST Pattern**
-```typescript
-// GET /api/projects
-export async function GET() {
-  const projects = await db.project.findMany();
-  return NextResponse.json(projects);
-}
-
-// POST with validation
-export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const validated = projectSchema.parse(body);
-  const project = await db.project.create({ data: validated });
-  return NextResponse.json(project, { status: 201 });
-}
-```
+Public pages use the read-only helpers in `lib/projects.ts`. The project API,
+admin dashboard, editor and upload endpoints have been removed. Project content
+changes go through repository work and reviewed database migrations.
 
 ### Server Action Patterns
 
@@ -178,14 +147,6 @@ export interface ApiResponse<T> {
   sizes="(max-width: 768px) 100vw, 50vw"
   priority={featured}
 />
-```
-
-**Dynamic Imports**
-```typescript
-const ProjectEditor = dynamic(
-  () => import('./ProjectEditor'),
-  { ssr: false }
-);
 ```
 
 ### Security Patterns

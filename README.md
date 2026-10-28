@@ -18,7 +18,6 @@ A modern, performant portfolio website built with Next.js 15, TypeScript, and Su
 | **UI Components** | Radix UI + shadcn/ui |
 | **Animations** | Framer Motion |
 | **Content** | MDX (next-mdx-remote, rehype, remark) |
-| **File Uploads** | Uploadthing |
 | **Email** | Resend |
 | **Icons** | lucide-react |
 | **Deployment** | Vercel |
@@ -33,7 +32,6 @@ A modern, performant portfolio website built with Next.js 15, TypeScript, and Su
   "next-mdx-remote": "Latest",
   "lucide-react": "Latest",
   "next-auth": "Latest",
-  "uploadthing": "Latest",
   "resend": "Latest"
 }
 ```
@@ -47,9 +45,8 @@ app/
 ├── (portfolio)/          # Portfolio routes
 │   ├── about/            # About page
 │   ├── contact/          # Contact form
-│   ├── projects/         # Project showcase (list, [slug], add)
-│   ├── admin/            # Admin panel
-│   ├── api/              # API routes (auth, projects, uploadthing)
+│   ├── projects/         # Project showcase (list, [slug])
+│   ├── api/              # Auth API (pending NextAuth removal)
 │   └── unauthorized/     # Auth error page
 ├── (golems)/             # Golems documentation site
 │   └── golems/           # Docs, skills browser
@@ -159,7 +156,6 @@ Includes: AWS, Axios, Docker, FastAPI, HuggingFace, Next.js, NextJS, Python, PyT
    ALLOWED_EMAILS=<comma-separated-emails>
 
    # Services
-   UPLOADTHING_TOKEN=<your-uploadthing-token>
    RESEND_API_KEY=<your-resend-api-key>
    ```
 
@@ -388,27 +384,12 @@ export default function Component() {
 }
 ```
 
-### API Routes
+### Project Data Access
 
-```typescript
-// app/api/projects/route.ts
-import { createClient } from '@/lib/supabase/server';
-
-export async function GET() {
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.from('projects').select('*');
-
-    if (error) throw error;
-    return Response.json(data);
-  } catch (error) {
-    return Response.json(
-      { error: error.message },
-      { status: 500 }
-    );
-  }
-}
-```
+Public pages use the read-only helpers in `lib/projects.ts`. The admin dashboard,
+project editor, project API and upload endpoints are retired. Project content
+changes go through repository work and reviewed Supabase migrations. Existing
+hosted project images and public `/golems` documentation remain available.
 
 ### Server Actions
 

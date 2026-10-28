@@ -99,24 +99,6 @@ function mapJourneyStepFromDB(dbStep: ProjectJourneyStepDB): ProjectJourneyStep 
   };
 }
 
-function mapProjectToDB(project: Partial<Omit<Project, "id" | "createdAt" | "updatedAt" | "projectJourney">>): Partial<Omit<ProjectDB, "id" | "created_at" | "updated_at">> {
-  const dbProject: any = {};
-  if (project.title !== undefined) dbProject.title = project.title;
-  if (project.description !== undefined) dbProject.description = project.description;
-  if (project.shortDescription !== undefined) dbProject.short_description = project.shortDescription;
-  if (project.logoPath !== undefined) dbProject.logo_path = project.logoPath;
-  if (project.logoUrl !== undefined) dbProject.logo_url = project.logoUrl;
-  if (project.previewImage !== undefined) dbProject.preview_image = project.previewImage;
-  if (project.technologies !== undefined) dbProject.technologies = project.technologies;
-  if (project.gitUrl !== undefined) dbProject.git_url = project.gitUrl;
-  if (project.liveUrl !== undefined) dbProject.live_url = project.liveUrl;
-  if (project.docsUrl !== undefined) dbProject.docs_url = project.docsUrl;
-  if (project.framework !== undefined) dbProject.framework = project.framework;
-  if (project.featured !== undefined) dbProject.featured = project.featured;
-  if (project.orderIndex !== undefined) dbProject.order_index = project.orderIndex;
-  return dbProject;
-}
-
 export async function getAllProjects(): Promise<Project[]> {
   try {
     const supabase = await createClient();
@@ -220,62 +202,6 @@ export async function getProjectJourneySteps(projectId: string): Promise<Project
     return (data || []).map((dbStep: ProjectJourneyStepDB) => mapJourneyStepFromDB(dbStep));
   } catch (error) {
     console.error(`Error fetching journey steps for project ${projectId}:`, error);
-    throw error;
-  }
-}
-
-export async function createProject(projectData: Omit<Project, "id" | "createdAt" | "updatedAt" | "projectJourney">) {
-  try {
-    const supabase = await createClient();
-    const dbData = mapProjectToDB(projectData);
-    const { data, error } = await supabase
-      .from('projects')
-      .insert(dbData)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return mapProjectFromDB(data as ProjectDB);
-  } catch (error) {
-    console.error("Error creating project:", error);
-    throw error;
-  }
-}
-
-export async function updateProject(
-  id: string,
-  projectData: Partial<Omit<Project, "id" | "createdAt" | "updatedAt" | "projectJourney">>,
-) {
-  try {
-    const supabase = await createClient();
-    const dbData = mapProjectToDB(projectData);
-    const { data, error } = await supabase
-      .from('projects')
-      .update(dbData)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return mapProjectFromDB(data as ProjectDB);
-  } catch (error) {
-    console.error(`Error updating project with id ${id}:`, error);
-    throw error;
-  }
-}
-
-export async function deleteProject(id: string) {
-  try {
-    const supabase = await createClient();
-    const { error } = await supabase
-      .from('projects')
-      .delete()
-      .eq('id', id);
-
-    if (error) throw error;
-    return { success: true };
-  } catch (error) {
-    console.error(`Error deleting project with id ${id}:`, error);
     throw error;
   }
 }

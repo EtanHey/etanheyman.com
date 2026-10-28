@@ -16,11 +16,6 @@ const Nav = () => {
     setIsOpen(false);
   }, [pathname]);
 
-  // Hide nav for golem admin dashboard (has its own nav)
-  if (pathname?.startsWith("/admin/golem")) {
-    return null;
-  }
-
   return (
     <nav className="bg-background sticky top-0 z-10 h-full w-full px-4.5 pt-3 pb-4">
       <div className="relative flex h-15 items-center justify-between gap-3.75 rounded-[80px] bg-white px-4 py-2.5">

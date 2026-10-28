@@ -1,17 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { SocialLinks } from "./SocialLinks";
 
 const Footer = () => {
-  const pathname = usePathname();
-
-  // Hide footer for golem admin dashboard (full-screen app)
-  if (pathname?.startsWith("/admin/golem")) {
-    return null;
-  }
-
   return (
     <footer
       className="relative z-10 w-full bg-blue-800 px-6 py-8 md:px-12 md:py-10"
