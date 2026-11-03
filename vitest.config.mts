@@ -11,7 +11,7 @@ export default defineConfig({
     environment: "node",
     globals: true,
     include: ["**/__tests__/**/*.test.ts"],
-    exclude: [...configDefaults.exclude, "e2e/**"],
+    exclude: [...configDefaults.exclude, "e2e/**", ".worktrees/**", "docs.local/**"],
   },
   resolve: {
     alias: {
