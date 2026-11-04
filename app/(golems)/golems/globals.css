@@ -3,13 +3,133 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * AIDEV-NOTE: Golems route-local design tokens ("slip & cobalt").
+ * Only this route group loads this stylesheet (it has its own root layout), so
+ * nothing here reaches the portfolio. Grey-green slip ground, slate ink, cobalt
+ * glaze accent, ochre for fixtures, and a dark "kiln" surface for code/terminal.
+ * Text pairs are checked >= 4.5:1 (see docs/golems-redesign/README.md).
+ */
+@theme {
+  --color-g-slip: #dedfd8;
+  --color-g-raised: #e9eae4;
+  --color-g-sunk: #d2d4cc;
+  --color-g-rule: #b9bbb2;
+  --color-g-edge: #6b716b;
+  --color-g-ink: #1b2321;
+  --color-g-ash: #4f5651;
+  --color-g-cobalt: #2340a0;
+  --color-g-cobalt-deep: #1a3080;
+  --color-g-ochre: #7a4e07;
+  --color-g-kiln: #1b2321;
+  --color-g-kiln-2: #253029;
+  --color-g-kiln-text: #e4e5df;
+  --color-g-kiln-muted: #a9aea6;
+  --color-g-glaze: #8fa6ff;
+
+  --font-g-display: var(--font-golems-display), "Young Serif", Georgia, serif;
+  --font-g-sans: var(--font-golems-sans), "IBM Plex Sans", system-ui, sans-serif;
+  --font-g-mono: var(--font-golems-mono), "IBM Plex Mono", ui-monospace, monospace;
+  --font-g-hebrew: var(--font-golems-hebrew), "Frank Ruhl Libre", serif;
+
+  --ease-g-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-g-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
 @layer base {
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--color-g-rule, currentColor);
+  }
+
+  html {
+    background: var(--color-g-slip);
+    color: var(--color-g-ink);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-g-sans);
+    font-feature-settings: "kern";
+  }
+
+  ::selection {
+    background: #c9d3f5;
+    color: var(--color-g-ink);
+  }
+
+  /* One focus treatment across the site: a cobalt ring that clears the element. */
+  :focus-visible {
+    outline: 2px solid var(--color-g-cobalt);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .g-on-kiln :focus-visible,
+  .g-on-kiln:focus-visible {
+    outline-color: var(--color-g-glaze);
+  }
+}
+
+@layer components {
+  /* Pressable feedback: small, fast, and only on real presses. */
+  .g-press {
+    transition:
+      transform 160ms var(--ease-g-out),
+      background-color 160ms ease,
+      color 160ms ease,
+      border-color 160ms ease;
+  }
+
+  .g-press:active {
+    transform: scale(0.97);
+  }
+
+  .g-link {
+    color: var(--color-g-cobalt);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--color-g-cobalt) 40%, transparent);
+    transition: text-decoration-color 160ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .g-link:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  /* Status glyphs for the eval ledger. Shape carries meaning, not only colour. */
+  .g-mark {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 0.625rem;
+    height: 0.625rem;
+  }
+
+  .g-mark-written {
+    background: var(--color-g-cobalt);
+    border-radius: 2px;
+  }
+
+  .g-mark-fixtures {
+    background: var(--color-g-ochre);
+    border-radius: 999px;
+  }
+
+  .g-mark-pending {
+    border: 1.5px solid var(--color-g-ash);
+    border-radius: 999px;
+  }
+
+  .g-mark-none {
+    height: 1.5px;
+    background: var(--color-g-ash);
   }
 }
 
@@ -25,7 +145,7 @@
 
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: #b0a89c40 transparent;
+    scrollbar-color: #6b716b66 transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -38,41 +158,79 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: #b0a89c40;
+    background: #6b716b66;
     border-radius: 3px;
   }
 
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: #b0a89c60;
+  .g-tabular {
+    font-variant-numeric: lining-nums tabular-nums;
   }
 }
 
-/* Respect user's motion preferences */
+/* Code panels rendered by rehype-pretty-code sit on the kiln surface. */
+[data-rehype-pretty-code-figure] {
+  margin: 0;
+}
+
+/* Emet inscription: the aleph is erased with a clip, not removed from layout. */
+.g-aleph {
+  display: inline-block;
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path 420ms var(--ease-g-in-out),
+    opacity 420ms ease;
+}
+
+[data-erased="true"] .g-aleph {
+  clip-path: inset(0 0 0 100%);
+  opacity: 0.15;
+}
+
+.g-emet-gloss {
+  transition: opacity 200ms ease;
+}
+
+/* Hero entrance: one orchestrated moment on first paint, nothing on scroll. */
+@keyframes g-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.g-rise {
+  animation: g-rise 600ms var(--ease-g-out) both;
+}
+
+/* Respect reduced motion: keep opacity changes, drop movement. */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
 
-/* Golems docsite animations */
-@keyframes lineReveal {
-  from { opacity: 0; transform: translateY(2px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  .g-press:active {
+    transform: none;
+  }
 
-@keyframes blink {
-  50% { opacity: 0; }
-}
+  .g-aleph {
+    clip-path: none !important;
+    transition: opacity 200ms ease;
+  }
 
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  [data-erased="true"] .g-aleph {
+    opacity: 0;
+  }
 }
 
 /* Account for sticky header when scrolling to anchors */
 [id] {
-  scroll-margin-top: 4rem;
+  scroll-margin-top: 5rem;
 }
