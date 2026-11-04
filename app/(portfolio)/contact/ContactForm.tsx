@@ -88,8 +88,14 @@ export default function ContactForm({ timingToken }: { timingToken: string }) {
   };
 
   return (
-    <main className="z-20 flex min-h-screen w-full flex-col items-center justify-center px-4.5 py-8 pb-20">
-      <h1 className="sr-only">Contact Etan Heyman</h1>
+    <main className="z-20 flex w-full flex-col items-center px-4.5 py-8 pb-20">
+      <div className="mb-10 w-full max-w-3xl pt-4 md:pt-10">
+        <h1 className="pf-h1">Contact Etan Heyman</h1>
+        <p className="pf-lede mt-4">
+          Tell me about the role, the collaboration or the project. The form reaches my inbox;
+          phone, WhatsApp and email are below it.
+        </p>
+      </div>
       <div className="flex w-full max-w-3xl flex-col gap-10 overflow-hidden rounded-[20px] bg-white p-4 shadow-lg">
         {/* Contact Form */}
         <section aria-labelledby="contact-form-heading">

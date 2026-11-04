@@ -1,137 +1,101 @@
-"use client";
-
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
-import LaptopIcon from "@/app/components/navigation/about/LaptopIcon";
-import LocationIcon from "@/app/components/navigation/about/LocationIcon";
-import SendIcon from "@/app/components/navigation/about/SendIcon";
 import TimelineParallax from "@/app/components/navigation/about/TimelineParallax";
 import {
   techIconMap,
-  TechIconName,
+  type TechIconName,
   TechIconWrapper,
 } from "@/app/components/tech-icons/TechIconWrapper";
 import { CONTACT_INFO } from "@/app/hooks/useRegion";
+import ContactBand from "../_components/ContactBand";
 
-const AboutPage = () => {
-  const careerSectionRef = useRef<HTMLDivElement>(null);
-  const [careerSectionPosition, setCareerSectionPosition] = useState(0);
-  const [isInitialized, setIsInitialized] = useState(false);
-  const positionCalculatedRef = useRef(false);
-
-  // Calculate the position only once after initial render
-  const calculateInitialPosition = useCallback(() => {
-    if (careerSectionRef.current && !positionCalculatedRef.current) {
-      const rect = careerSectionRef.current.getBoundingClientRect();
-      // Add a small offset to ensure the position is accurate
-      const position = Math.round(window.scrollY + rect.top);
-      setCareerSectionPosition(position);
-      setIsInitialized(true);
-      positionCalculatedRef.current = true;
-    }
-  }, []);
-
-  useEffect(() => {
-    // Calculate position on initial render
-    calculateInitialPosition();
-
-    // Recalculate on window resize
-    window.addEventListener("resize", calculateInitialPosition);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("resize", calculateInitialPosition);
-    };
-  }, [calculateInitialPosition]);
-
-  // Debug log for career section position
-  useEffect(() => {
-    if (isInitialized) {
-      console.log(`Career section position: ${careerSectionPosition}px`);
-    }
-  }, [isInitialized, careerSectionPosition]);
-
-  return (
-    <div className="z-20 flex min-h-screen w-full flex-col items-start justify-items-center gap-20 px-4.5 py-8 sm:p-20">
-      {/* AIDEV-NOTE: the rotated tech-icon grid bleeds past the viewport edge (+161px at 1280,
-          +46px at 390). This band cancels the page padding (-mx + px) so its edges are the
-          viewport edges, and overflow-x-clip trims only the off-screen part. clip, unlike
-          hidden, leaves overflow-y visible, so the rotated corners still bleed vertically.
-          Keep -mx/px in sync with the page padding above. */}
-      <div className="-mx-4.5 self-stretch overflow-x-clip px-4.5 sm:-mx-20 sm:px-20">
-        <div className="flex w-full place-content-between gap-20 max-xl:flex-col sm:items-center 2xl:place-content-around">
-          <div className="flex max-w-[654px] flex-col gap-4">
-            <h1 className="pb-2 text-[34px] leading-5.5 font-bold xl:pb-4 xl:text-[64px] xl:leading-16 xl:text-nowrap">
-              Etan Heyman
-            </h1>
-            <div className="flex items-center gap-4">
-              <LaptopIcon />
-              <h3 className="text-2xl font-light xl:text-[32px]">
-                AI Engineer
-              </h3>
-            </div>
-            <div className="flex items-center gap-4">
-              <LocationIcon />
-              <h3 className="text-2xl font-light xl:text-[32px]">
-                {CONTACT_INFO.location}
-              </h3>
-            </div>
-            <p className="text-sm font-light xl:text-xl">
-              Highly motivated front-end developer with a strong work ethic and
-              a proven ability to quickly learn new technologies. Experienced in
-              developing dynamic web applications using Next.js and Tailwind
-              CSS, as well as React.js with plain CSS and Node.js backend. Adept
-              at leading teams and managing projects to successful completion.
-            </p>
-            <Link
-              href="/projects"
-              className="w-full rounded-[80px] bg-blue-500 py-4 text-center text-xl text-white xl:mt-4 xl:text-2xl"
-            >
-              View My Projects
-            </Link>
-          </div>
-
-          {/* Tech Icons Section */}
-          <div className="relative -left-7 flex h-fit max-w-max rotate-[10deg] items-center justify-center max-xl:w-screen xl:-mr-24 xl:min-w-[756px]">
-            <div className="grid grid-cols-6 gap-[23.45px] xl:gap-11">
-              {Object.keys(techIconMap).map((techName) => (
-                <TechIconWrapper
-                  key={techName}
-                  name={techName as TechIconName}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Career Journey Section */}
-      <div
-        ref={careerSectionRef}
-        className="flex w-full flex-col gap-2 pt-4"
-        id="career-section"
-      >
-        <h2 className="text-2xl font-bold text-blue-200">My career journey</h2>
-        <TimelineParallax />
-      </div>
-      <div className="flex w-full flex-col items-center justify-center gap-6 pb-12">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-2xl font-bold text-blue-200">
-            Like what you see?
-          </h2>
-          <p className="pr-5 text-[22px] leading-5.5 font-light">
-            Don’t hesitate to contact me right away!
-          </p>
-        </div>
-        <Link
-          href="/contact"
-          className="flex w-full items-center justify-center gap-2 rounded-[80px] bg-blue-500 py-4 text-xl text-white transition-colors hover:bg-blue-600"
-        >
-          Let's talk now! <SendIcon />
-        </Link>
-      </div>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "About | Etan Heyman",
+  description:
+    "Etan Heyman, AI engineer in Rehovot, Israel: career history from INT College to Weby and Cantaloupe AI, and the tools he builds with.",
+  alternates: { canonical: "/about" },
 };
 
-export default AboutPage;
+// AIDEV-NOTE: Server component. The old page was a client component that only
+// measured the career section for a console.log; the timeline handles its own scroll.
+export default function AboutPage() {
+  // The icon map holds aliases (e.g. "NextJS" and "Next.js") for DB spellings;
+  // show each icon once, under its first name.
+  const seen = new Set<unknown>();
+  const tools = (Object.keys(techIconMap) as TechIconName[]).filter((name) => {
+    if (seen.has(techIconMap[name])) return false;
+    seen.add(techIconMap[name]);
+    return true;
+  });
+
+  return (
+    <main className="flex w-full flex-col">
+      <section aria-labelledby="about-heading">
+        <div className="pf-container grid gap-10 pt-12 pb-16 md:grid-cols-[auto_1fr] md:gap-14 md:pt-20 md:pb-24">
+          <Image
+            src="/images/me/Me2.png"
+            alt="Portrait of Etan Heyman"
+            width={280}
+            height={280}
+            sizes="(min-width: 768px) 280px, 160px"
+            className="pf-portrait h-40 w-40 md:h-[280px] md:w-[280px]"
+            priority
+          />
+          <div>
+            <h1 id="about-heading" className="pf-h1">
+              Etan Heyman
+            </h1>
+            <p className="mt-4 text-[20px] text-[var(--pf-sky)] md:text-[24px]">
+              AI engineer in {CONTACT_INFO.location}
+            </p>
+            <p className="pf-prose mt-6">
+              Highly motivated front-end developer with a strong work ethic and a proven
+              ability to quickly learn new technologies. Experienced in developing dynamic
+              web applications using Next.js and Tailwind CSS, as well as React.js with plain
+              CSS and Node.js backend. Adept at leading teams and managing projects to
+              successful completion.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link href="/projects" className="pf-btn pf-btn-primary">
+                See my projects
+              </Link>
+              <a href="/Etan_Heyman_resume.pdf" className="pf-btn pf-btn-ghost">
+                Download résumé (PDF)
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="career-heading" id="career-section">
+        <div className="pf-container pb-16 md:pb-24">
+          <h2 id="career-heading" className="pf-h2 mb-8">
+            Career
+          </h2>
+          <TimelineParallax />
+        </div>
+      </section>
+
+      <section aria-labelledby="tools-heading">
+        <div className="pf-container pb-20 md:pb-28">
+          <h2 id="tools-heading" className="pf-h2">
+            Tools I&apos;ve shipped with
+          </h2>
+          <p className="pf-prose mt-4 text-[var(--pf-sky)]">
+            Languages, frameworks and services used across the projects on this site.
+          </p>
+          <ul className="mt-10 grid grid-cols-4 gap-x-4 gap-y-8 sm:grid-cols-6 lg:grid-cols-10">
+            {tools.map((name) => (
+              <li key={name} className="flex justify-center">
+                <TechIconWrapper name={name} showLabel />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <ContactBand />
+    </main>
+  );
+}

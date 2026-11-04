@@ -3,7 +3,7 @@ import { getProjectBySlugOrId, getAllProjects } from "@/lib/projects";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Github, BookOpen, ExternalLink, Archive } from "lucide-react";
+import { ArrowUpRight, Archive } from "lucide-react";
 import {
   TechIconWrapper,
   TechIconName,
@@ -11,10 +11,8 @@ import {
 import {
   getProjectShowcaseConfig,
   getDefaultAccent,
-  getProjectSiteLink,
   isArchived,
 } from "./project-showcase-config";
-import { StatsBar } from "./components/StatsBar";
 import { FeaturesGrid } from "./components/FeaturesGrid";
 import { CodeBlock } from "./components/CodeBlock";
 import { CrossLinks } from "./components/CrossLinks";
@@ -25,6 +23,7 @@ import { TerminalShowcase } from "./components/TerminalShowcase";
 import { ClaudeUIMockup } from "./components/ClaudeUIMockup";
 import { getTerminalShowcaseData } from "./terminal-showcase-config";
 import { highlightCode } from "@/lib/highlight";
+import { claimStatusOf, evidenceOf } from "../../_lib/portfolio-content";
 
 const PROJECT_DESCRIPTIONS: Record<string, string> = {
   // AIDEV-NOTE: VoiceLayer copy is pending Etan's decision.
@@ -104,10 +103,9 @@ export default async function ProjectPage({
   const showcase = getProjectShowcaseConfig(slug);
   const accent = showcase?.accent ?? getDefaultAccent();
   const archived = isArchived(showcase);
-  const siteLink = getProjectSiteLink(showcase, project.liveUrl);
   const allProjects = await getAllProjects();
-
-  const isGitPrivate = project.gitUrl === "private";
+  const claim = claimStatusOf(project);
+  const evidence = evidenceOf(project).filter((link) => link.kind !== "case-study");
   const terminalData = getTerminalShowcaseData(slug);
 
   // Pre-highlight install tab commands server-side
@@ -127,15 +125,7 @@ export default async function ProjectPage({
     : undefined;
 
   return (
-    <main className="relative z-10 mx-auto w-full max-w-5xl overflow-x-hidden px-4 py-8 md:px-8 md:py-16">
-      {/* Ambient accent glow */}
-      <div
-        className="pointer-events-none fixed top-0 left-1/2 h-[500px] w-[700px] -translate-x-1/2 opacity-[0.06]"
-        style={{
-          background: `radial-gradient(ellipse, ${accent.color}, transparent 70%)`,
-        }}
-      />
-
+    <main className="pf-container relative z-10 w-full max-w-[1100px] overflow-x-clip py-10 md:py-16">
       {/* ─── Hero ─── */}
       <section className="relative z-20 mb-14">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-10">
@@ -171,11 +161,13 @@ export default async function ProjectPage({
           )}
 
           <div className="flex-1">
-            <h1 className="mb-3 font-[Nutmeg] text-[30px] leading-[1.1] font-bold text-white md:text-[52px]">
-              {project.title}
-            </h1>
-            <p className="mb-5 max-w-[620px] font-[Nutmeg] text-[14px] leading-relaxed font-light text-white/55 md:text-[18px]">
-              {project.description}
+            <h1 className="pf-h1 mb-5">{project.title}</h1>
+            <p className="pf-prose mb-4 text-[18px] md:text-[19px]">{project.description}</p>
+            <p className={`pf-claim mt-0 mb-6 ${claim.checked ? "pf-claim-checked" : ""}`}>
+              <span className="pf-claim-dot" aria-hidden="true" />
+              {claim.checked
+                ? `Description checked against the repository, ${claim.date}`
+                : "Description not yet checked against the repository"}
             </p>
 
             {/* Badges + action buttons */}
@@ -188,58 +180,35 @@ export default async function ProjectPage({
                 />
               )}
 
-              {!isGitPrivate && project.gitUrl && (
-                <a
-                  href={project.gitUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 transition-colors hover:border-white/20 hover:text-white/75 md:text-[13px]"
-                >
-                  <Github className="h-3.5 w-3.5" />
-                  Source
-                </a>
-              )}
-
-              {project.docsUrl &&
-                (project.docsUrl.startsWith("/") ? (
-                  <Link
-                    href={project.docsUrl}
-                    className="flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 transition-colors hover:border-white/20 hover:text-white/75 md:text-[13px]"
-                  >
-                    <BookOpen className="h-3.5 w-3.5" />
-                    Docs
-                  </Link>
-                ) : (
+              {evidence.map((link) =>
+                link.external ? (
                   <a
-                    href={project.docsUrl}
+                    key={link.href}
+                    href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 transition-colors hover:border-white/20 hover:text-white/75 md:text-[13px]"
+                    className="pf-btn pf-btn-ghost min-h-[40px] px-4 py-1.5 text-[15px]"
                   >
-                    <BookOpen className="h-3.5 w-3.5" />
-                    Docs
+                    {link.label}
+                    <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+                    <span className="sr-only"> (opens in a new tab)</span>
                   </a>
-                ))}
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="pf-btn pf-btn-ghost min-h-[40px] px-4 py-1.5 text-[15px]"
+                  >
+                    {link.label}
+                  </Link>
+                ),
+              )}
 
               {archived && (
-                <span className="flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 md:text-[13px]">
-                  <Archive className="h-3.5 w-3.5" />
+                <span className="flex min-h-[40px] items-center gap-2 rounded-full border border-[var(--pf-line)] px-4 py-1.5 text-[15px] text-[var(--pf-sky)]">
+                  <Archive aria-hidden="true" className="h-3.5 w-3.5" />
                   Archived
                 </span>
-              )}
-              {siteLink && (
-                <a
-                  href={siteLink.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={archived
-                    ? "flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white/50 transition-colors hover:border-white/20 hover:text-white/75 md:text-[13px]"
-                    : "flex items-center gap-2 rounded-full px-4 py-2 font-[Nutmeg] text-[12px] font-light text-white transition-colors md:text-[13px]"}
-                  style={archived ? undefined : { backgroundColor: accent.color }}
-                >
-                  <ExternalLink className="h-3.5 w-3.5" />
-                  {siteLink.label}
-                </a>
               )}
             </div>
           </div>
@@ -249,6 +218,7 @@ export default async function ProjectPage({
       {/* ─── Terminal Showcase ─── */}
       {terminalData && (
         <section className="relative z-20 mb-14">
+          <p className="pf-small mb-3">Illustrative mockup of the CLI, not a live recording.</p>
           <TerminalShowcase
             tabs={terminalData.tabs}
             title={terminalData.title}
@@ -260,24 +230,22 @@ export default async function ProjectPage({
       {/* ─── Claude UI Mockup (BrainLayer only) ─── */}
       {slug === "brainlayer" && (
         <section className="relative z-20 mb-14">
-          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+          <h2 className="pf-h3 mb-6">
             See it in action
           </h2>
+          <p className="pf-small mb-3">Illustrative mockup of an agent using BrainLayer, not a live recording.</p>
           <ClaudeUIMockup accentColor={accent.color} />
         </section>
       )}
 
-      {/* ─── Stats Bar ─── */}
-      {showcase?.stats && (
-        <section className="relative z-20 mb-14">
-          <StatsBar stats={showcase.stats} accentColor={accent.color} />
-        </section>
-      )}
-
+      {/* AIDEV-NOTE: StatsBar is intentionally not rendered. Its showcase numbers
+          (e.g. BrainLayer "12 MCP tools") contradict the claim-checked descriptions
+          ("16 tools") and it counted up from 0, so reduced-motion visitors saw "0".
+          Re-enable only with figures checked against the repos. */}
       {/* ─── Technologies ─── */}
       {project.technologies && project.technologies.length > 0 && (
         <section className="relative z-20 mb-14">
-          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+          <h2 className="pf-h3 mb-6">
             Built with
           </h2>
           <div className="grid grid-cols-4 gap-5 sm:grid-cols-6 md:grid-cols-8 xl:gap-11">
@@ -295,7 +263,7 @@ export default async function ProjectPage({
       {/* ─── Features Grid ─── */}
       {showcase?.features && (
         <section className="relative z-20 mb-14">
-          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+          <h2 className="pf-h3 mb-6">
             Key features
           </h2>
           <FeaturesGrid
@@ -309,7 +277,7 @@ export default async function ProjectPage({
       {/* ─── How It Works ─── */}
       {showcase?.architectureFlow && (
         <section className="relative z-20 mb-14">
-          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+          <h2 className="pf-h3 mb-6">
             How it works
           </h2>
           <ArchitectureDiagram
@@ -323,7 +291,7 @@ export default async function ProjectPage({
       {/* ─── Getting Started ─── */}
       {showcase?.installTabs && (
         <section className="relative z-20 mb-14">
-          <h2 className="mb-6 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+          <h2 className="pf-h3 mb-6">
             Get started
           </h2>
           <CodeBlock
@@ -336,7 +304,7 @@ export default async function ProjectPage({
       {/* ─── Project Journey ─── */}
       {project.projectJourney && project.projectJourney.length > 0 && (
         <section className="relative z-20 mb-14">
-          <h2 className="mb-8 font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase md:text-[12px]">
+          <h2 className="pf-h3 mb-8">
             The journey
           </h2>
           <JourneyTimeline

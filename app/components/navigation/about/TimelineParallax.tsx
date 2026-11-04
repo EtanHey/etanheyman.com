@@ -10,7 +10,7 @@ import {
   useMotionValueEvent,
   useReducedMotion,
 } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SendRightPointer from "./SendRightPointer";
 
 // --- Brand color constants (single source of truth) ---
@@ -298,7 +298,7 @@ function TimelineCard({
 
           {/* Description */}
           <motion.p
-            className="text-xs leading-relaxed font-light sm:text-sm"
+            className="text-sm leading-relaxed sm:text-[15px]"
             animate={{
               color: isActive
                 ? "rgba(209, 213, 219, 1)"
@@ -316,7 +316,13 @@ function TimelineCard({
 
 // --- Main Timeline Component ---
 const TimelineParallax = () => {
-  const reducedMotion = useReducedMotion();
+  // AIDEV-NOTE: useReducedMotion() is null during SSR but true on a reduced-motion
+  // client, so reading it on the first render caused React hydration error #418.
+  // Apply the preference only after mount so server and first client render match.
+  const prefersReducedMotion = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const reducedMotion = mounted && !!prefersReducedMotion;
   const timelineRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);

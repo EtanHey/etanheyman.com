@@ -30,6 +30,8 @@ const TechWrapper: React.FC<TechWrapperProps> = ({
   useEffect(() => {
     const el = elRef.current;
     if (!el) return;
+    // Decorative shimmer: skip it entirely for reduced-motion visitors.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const base = 0.5 + Math.random() * 0.5;
     const speed = 0.0002 + Math.random() * 0.0003;
