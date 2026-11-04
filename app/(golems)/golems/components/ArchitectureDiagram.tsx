@@ -129,15 +129,9 @@ export default function ArchitectureDiagram() {
         }
       `}</style>
 
-      {/* Desktop: full SVG */}
-      <div className="my-8 hidden md:block">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/img/architecture-flow.svg"
-          alt="Architecture — Surfaces flow into Golem Plugins which connect to Infrastructure"
-          className="mx-auto w-full max-w-[920px] rounded-lg"
-        />
-      </div>
+      {/* AIDEV-NOTE: Desktop shows the same /img/architecture-flow.svg that
+          content/golems/architecture.md already embeds, so only the mobile
+          fallback renders here (it previously appeared twice on desktop). */}
 
       {/* Mobile: vertical interactive layout */}
       <div className="my-6 space-y-0 md:hidden">

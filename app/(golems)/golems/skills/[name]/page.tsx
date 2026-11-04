@@ -4,9 +4,11 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
-import { useMDXComponents } from "@/mdx-components";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import CommandBlock from "../../components/CommandBlock";
 import CopyButton from "../../components/CopyButton";
-import MermaidDiagram from "../../components/MermaidDiagram";
+import { golemsMdxComponents } from "../../lib/golems-mdx";
+import { formatDay } from "../../lib/skill-evidence";
 import SkillPageTabs from "./SkillPageTabs";
 import OverviewCollapsible from "./OverviewCollapsible";
 import EvalStatusPanel from "./EvalStatusPanel";
@@ -50,18 +52,6 @@ export async function generateMetadata({
 }
 
 /* ── Helpers ──────────────────────────────────────────────── */
-
-function extractTextContent(node: React.ReactNode): string {
-  if (typeof node === "string") return node;
-  if (typeof node === "number") return String(node);
-  if (!node) return "";
-  if (Array.isArray(node)) return node.map(extractTextContent).join("");
-  if (typeof node === "object" && "props" in node) {
-    const el = node as React.ReactElement<{ children?: React.ReactNode }>;
-    return extractTextContent(el.props.children);
-  }
-  return "";
-}
 
 /** Strip LLM-directive sections (CARDINAL RULE, ANTI-PATTERNS, etc.) for human-friendly Overview */
 function stripLLMSections(content: string): string {
@@ -166,19 +156,14 @@ function getRelatedSkills(
     .slice(0, max);
 }
 
-/* ── Category badge colors ─────────────────────────────────── */
+/* ── Install ─────────────────────────────────────────────── */
 
-const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
-  Development: { bg: "bg-[#6ab0f318]", text: "text-[#6ab0f3]" },
-  Operations: { bg: "bg-[#e5950018]", text: "text-[#e59500]" },
-  "Research & Context": { bg: "bg-[#40d4d418]", text: "text-[#40d4d4]" },
-  "Content & Communication": { bg: "bg-[#c084fc18]", text: "text-[#c084fc]" },
-  Quality: { bg: "bg-[#28c84018]", text: "text-[#28c840]" },
-  Domain: { bg: "bg-[#ff7eb318]", text: "text-[#ff7eb3]" },
-  Other: { bg: "bg-[#a8907818]", text: "text-[#b0a89c]" },
-};
-
-/* ── Install prompt ──────────────────────────────────────── */
+// AIDEV-NOTE: Matches content/golems/getting-started.md: skills install from a
+// golems checkout through packages/golem-skills. There is no published global
+// "golems-cli skills install" binary, so the page no longer shows one.
+function getInstallLines(skill: SkillData): string[] {
+  return [`bun packages/golem-skills/src/index.ts skills install ${skill.name}`];
+}
 
 function getInstallPrompt(skill: SkillData): string {
   return `Install and configure the ${skill.name} skill for Claude Code.
@@ -199,11 +184,11 @@ export default async function SkillDetailPage({
   const skill = skills[name];
   if (!skill) notFound();
 
-  const catColors = CATEGORY_COLORS[skill.category] || CATEGORY_COLORS.Other;
   const relativeTime = getRelativeTime(skill.lastModified);
   const relatedSkills = getRelatedSkills(skill, skills, 3);
-  const installCommand = `golems-cli skills install ${skill.name}`;
+  const installLines = getInstallLines(skill);
   const installPrompt = getInstallPrompt(skill);
+  const sourceUrl = `https://github.com/EtanHey/golems/tree/master/skills/golem-powers/${skill.name}`;
 
   // Strip first H1 + LLM-directive sections for Overview tab
   const overviewSource = stripLLMSections(
@@ -215,49 +200,6 @@ export default async function SkillDetailPage({
   // Full content for SKILL.md tab (just strip first H1)
   const rawSource = skill.content.replace(/^#\s+.+\n?/m, "");
 
-  const baseComponents = useMDXComponents({});
-  const components = {
-    ...baseComponents,
-    pre: ({
-      children,
-      ...props
-    }: React.ComponentPropsWithoutRef<"pre"> & {
-      children?: React.ReactNode;
-      "data-language"?: string;
-    }) => {
-      const child = children as
-        | React.ReactElement<{
-            className?: string;
-            children?: React.ReactNode;
-          }>
-        | undefined;
-      const lang =
-        props["data-language"] ||
-        child?.props?.className?.replace("language-", "");
-      if (lang === "mermaid") {
-        const chart = extractTextContent(children);
-        return <MermaidDiagram chart={chart} />;
-      }
-      const codeText = extractTextContent(children);
-      return (
-        <div className="group relative mb-4">
-          <pre
-            className="scrollbar-thin overflow-x-auto rounded-lg border border-[#e5950026] bg-[#0d0d0d] p-4 text-sm [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[inherit]"
-            style={{
-              fontFamily:
-                "var(--font-golems-mono), 'JetBrains Mono', 'Fira Code', monospace",
-            }}
-            {...props}
-          >
-            {children}
-          </pre>
-          {codeText.trim() && <CopyButton text={codeText} />}
-        </div>
-      );
-    },
-  };
-
-  // Pre-render MDX for both tabs (server-rendered, toggled via CSS on client)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rehype plugin tuple types
   const mdxOpts: any = {
     mdxOptions: {
@@ -273,382 +215,190 @@ export default async function SkillDetailPage({
     },
   };
 
-  const summaryMdx = (
-    <MDXRemote
-      source={overviewSummary}
-      components={components}
-      options={mdxOpts}
-    />
-  );
-
-  const restMdx = overviewRest ? (
-    <MDXRemote
-      source={overviewRest}
-      components={components}
-      options={mdxOpts}
-    />
-  ) : null;
-
   const overviewMdx = (
     <OverviewCollapsible
-      summary={summaryMdx}
-      rest={restMdx}
+      summary={<MDXRemote source={overviewSummary} components={golemsMdxComponents} options={mdxOpts} />}
+      rest={overviewRest ? <MDXRemote source={overviewRest} components={golemsMdxComponents} options={mdxOpts} /> : null}
       hasMore={!!overviewRest}
     />
   );
 
   const rawMdx = (
     <div>
-      <div className="mb-4 rounded-lg border border-[#e5950020] bg-[#e5950008] px-4 py-2.5">
-        <p className="text-xs text-[#b0a89c]">
-          Full SKILL.md source — includes LLM directives, anti-patterns, and
-          technical instructions stripped from the Overview tab.
-        </p>
-      </div>
-      <div className="rounded-xl border border-[#e5950015] bg-[#0d0c0a] p-5">
-        <MDXRemote
-          source={rawSource}
-          components={components}
-          options={{
-            mdxOptions: {
-              format: "md",
-              remarkPlugins: [remarkGfm],
-              rehypePlugins: [
-                rehypeSlug,
-                [
-                  rehypePrettyCode,
-                  { theme: "github-dark-dimmed", keepBackground: false },
-                ],
-              ],
-            },
-          }}
-        />
-      </div>
+      <p className="mb-6 rounded-lg bg-g-raised px-4 py-3 text-[0.95rem] leading-relaxed text-g-ash">
+        The full SKILL.md, including the agent-facing directives and
+        anti-patterns that the Overview leaves out.
+      </p>
+      <MDXRemote source={rawSource} components={golemsMdxComponents} options={mdxOpts} />
     </div>
   );
 
-  const evalResults = <EvalStatusPanel />;
-
-  // Build changelog content (data-driven from skill metadata)
-  const changelogContent = skill.lastModified ? (
-    <div className="space-y-0">
-      <div className="mb-4 rounded-lg border border-[#e5950020] bg-[#e5950008] px-4 py-2.5">
-        <p className="text-xs text-[#b0a89c]">
-          Changelog entries are derived from skill version updates. Full
-          cascading changelog (Phase 4D) coming soon.
+  const evalContent = (
+    <div className="max-w-2xl">
+      <EvalStatusPanel evalCount={skill.evalCount} hasFixtures={skill.hasFixtures} />
+      <p className="mt-6 text-[0.98rem] leading-relaxed text-g-ash">
+        Written scenarios describe the prompts and behaviour this skill is
+        checked against. They are not results. A score appears here only after
+        a run records the model that produced it.{" "}
+        <Link href="/golems#ladder-heading" className="g-link">
+          How a skill earns a score
+        </Link>
+      </p>
+      {skill.evalCount > 0 && (
+        <p className="mt-4 text-[0.98rem]">
+          <a href={`${sourceUrl}/evals`} className="g-link" target="_blank" rel="noopener noreferrer">
+            Read the scenarios on GitHub
+          </a>
         </p>
-      </div>
-      <div className="relative border-l-2 border-[#e5950020] pl-6">
-        {/* Initial publish entry */}
-        <div className="relative mb-8">
-          <div className="absolute top-1 -left-[1.4rem] h-3 w-3 rounded-full border-2 border-[#e59500] bg-[#0c0b0a]" />
-          <div className="mb-1 flex items-center gap-3">
-            <span className="font-mono text-xs font-bold text-[#e59500]">
-              v1.0 — Last Updated
-            </span>
-            <span className="text-xs text-[#b0a89c]">{skill.lastModified}</span>
-          </div>
-          <div className="rounded-lg border border-[#e5950014] bg-[#14120e]/80 p-4">
-            <ul className="space-y-1 text-xs text-[#b8ad9e]">
-              <li className="flex items-start gap-2">
-                <span className="text-[#e59500]">+</span>
-                <span>Initial release to Golems skill library</span>
-              </li>
-              {skill.evalCount > 0 && (
-                <li className="flex items-start gap-2">
-                  <span className="text-[#e59500]">+</span>
-                  <span>
-                    {skill.evalCount} eval scenario
-                    {skill.evalCount !== 1 ? "s" : ""} defined
-                  </span>
-                </li>
-              )}
-              {skill.workflows.length > 0 && (
-                <li className="flex items-start gap-2">
-                  <span className="text-[#e59500]">+</span>
-                  <span>
-                    {skill.workflows.length} workflow
-                    {skill.workflows.length !== 1 ? "s" : ""} included:{" "}
-                    {skill.workflows.join(", ")}
-                  </span>
-                </li>
-              )}
-              {skill.hasFixtures && (
-                <li className="flex items-start gap-2">
-                  <span className="text-[#e59500]">+</span>
-                  <span>Eval fixtures included</span>
-                </li>
-              )}
-            </ul>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
-  ) : null;
+  );
+
+  // Facts only: everything here is read from the generated manifest.
+  const recordContent = (
+    <div className="max-w-2xl">
+    <dl className=" divide-y divide-g-rule border-y border-g-rule text-[0.98rem]">
+      {[
+        ["Last changed", `${formatDay(skill.lastModified)} (${relativeTime})`],
+        ["Category", skill.category],
+        ["Eval scenarios", skill.evalCount > 0 ? String(skill.evalCount) : "None yet"],
+        ["Fixtures", skill.hasFixtures ? "Included" : "None"],
+        ["Workflows", skill.workflows.length > 0 ? skill.workflows.join(", ") : "None"],
+      ].map(([term, value]) => (
+        <div key={term} className="grid gap-1 py-3 sm:grid-cols-[12rem_1fr]">
+          <dt className="text-g-ash">{term}</dt>
+          <dd className="text-g-ink">{value}</dd>
+        </div>
+      ))}
+    </dl>
+      <p className="mt-4 text-[0.98rem]">
+        <a href={`https://github.com/EtanHey/golems/commits/master/skills/golem-powers/${skill.name}`} className="g-link" target="_blank" rel="noopener noreferrer">
+          Full change history on GitHub
+        </a>
+      </p>
+    </div>
+  );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-6 pb-16 md:px-6 md:pt-10">
-      {/* Navigation bar */}
-      <div className="mb-6 flex items-center justify-between">
+    <div className="mx-auto max-w-[1200px] px-4 pt-6 pb-20 md:px-6 md:pt-10">
+      <div className="mb-8 flex items-center justify-between gap-4">
         <Link
-          href="/golems#skills"
-          className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#b0a89c] transition-colors hover:text-[#e59500]"
+          href="/golems/skills"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-sm text-[0.95rem] text-g-ash transition-colors duration-150 hover:text-g-ink"
         >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Skills Library
+          <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+          Skill ledger
         </Link>
         <a
-          href={`https://github.com/EtanHey/golems/tree/master/skills/golem-powers/${skill.name}`}
-          className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#b0a89c] transition-colors hover:text-[#c0b8a8]"
+          href={sourceUrl}
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-sm text-[0.95rem] text-g-ash transition-colors duration-150 hover:text-g-ink"
           target="_blank"
           rel="noopener noreferrer"
         >
-          View on GitHub
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            />
-          </svg>
+          Source on GitHub
+          <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+          <span className="sr-only">(opens in a new tab)</span>
         </a>
       </div>
 
-      {/* ═══ Business Card Header ═══ */}
-      <header className="mb-8">
-        {/* Category badge */}
-        <span
-          className={`mb-3 inline-block rounded-full px-3 py-1 text-xs font-medium ${catColors.bg} ${catColors.text}`}
-        >
-          {skill.category}
-        </span>
-
-        {/* Skill name */}
-        <h1 className="mb-2 font-mono text-3xl font-bold text-[#f0ebe0] md:text-4xl">
-          {skill.command}
-        </h1>
-
-        {/* Description */}
-        <p className="mb-6 max-w-2xl text-base leading-relaxed text-[#b8ad9e]">
-          {skill.description}
-        </p>
-
-        {/* Install CTA (hero element) */}
-        <div className="group relative mb-6 max-w-xl">
-          <div className="overflow-hidden rounded-lg border border-[#2dd4a830] bg-[#0d0d0d]">
-            <div className="flex items-center px-4 py-3 pr-14">
-              <code
-                className="font-mono text-sm text-[#2dd4a8]"
-                style={{
-                  fontFamily:
-                    "var(--font-golems-mono), 'JetBrains Mono', monospace",
-                }}
-              >
-                <span className="text-[#b0a89c]">$</span> {installCommand}
-              </code>
-            </div>
-            <CopyButton text={installCommand} />
+      <header className="mb-10 grid gap-8 border-b border-g-ink pb-10 lg:grid-cols-[1.4fr_1fr] lg:gap-12">
+        <div className="min-w-0">
+          <p className="text-[0.95rem] text-g-ash">{skill.category} skill</p>
+          <h1 className="mt-2 font-g-mono text-[2.2rem] leading-tight font-medium break-words text-g-ink md:text-[3rem]">
+            {skill.command}
+          </h1>
+          <p className="mt-4 max-w-[60ch] text-[1.08rem] leading-relaxed text-g-ink">
+            {skill.description}
+          </p>
+          <p className="mt-3 text-[0.95rem] text-g-ash">
+            Changed {relativeTime}
+            {skill.workflows.length > 0 && (
+              <>
+                , ships {skill.workflows.length} workflow{skill.workflows.length !== 1 ? "s" : ""}
+              </>
+            )}
+          </p>
+          <div className="mt-6 max-w-xl">
+            <p className="mb-2 text-sm text-g-ash">Install from a golems checkout</p>
+            <CommandBlock lines={installLines} label={`Install ${skill.name}`} />
           </div>
         </div>
-
-        {/* Trust signal bar */}
-        <div className="mb-4 flex flex-wrap gap-3">
-          {skill.evalCount > 0 && (
-            <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#6ab0f320] bg-[#6ab0f308] px-3.5 py-2">
-              <span className="inline-block h-2 w-2 rounded-full bg-[#6ab0f3]" />
-              <span className="text-sm font-medium text-[#6ab0f3]">
-                {skill.evalCount} eval{skill.evalCount !== 1 ? "s" : ""}
-              </span>
-            </div>
-          )}
-          {skill.hasFixtures && (
-            <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#e5950020] bg-[#e5950008] px-3.5 py-2">
-              <span className="inline-block h-2 w-2 rounded-full bg-[#e59500]" />
-              <span className="text-sm font-medium text-[#e59500]">
-                fixtures
-              </span>
-            </div>
-          )}
-          {skill.workflows.length > 0 && (
-            <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-[#c084fc20] bg-[#c084fc08] px-3.5 py-2">
-              <span className="inline-block h-2 w-2 rounded-full bg-[#c084fc]" />
-              <span className="text-sm font-medium text-[#c084fc]">
-                {skill.workflows.length} workflow
-                {skill.workflows.length !== 1 ? "s" : ""}
-              </span>
-            </div>
-          )}
+        <div className="lg:self-start">
+          <EvalStatusPanel evalCount={skill.evalCount} hasFixtures={skill.hasFixtures} compact />
         </div>
-
-        {/* Last updated */}
-        <p className="text-sm text-[#b0a89c]">Updated {relativeTime}</p>
       </header>
 
-      {/* ═══ Two Column Layout ═══ */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_280px]">
-        {/* Main content */}
-        <main className="min-w-0">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="min-w-0">
           <SkillPageTabs
             overviewContent={overviewMdx}
             rawContent={rawMdx}
-            evalContent={evalResults}
-            changelogContent={changelogContent}
+            evalContent={evalContent}
+            recordContent={recordContent}
           />
 
-          {/* Workflows (below tabs) */}
           {skill.workflows.length > 0 && (
-            <section className="mt-10">
-              <h2 className="mb-4 text-lg font-bold text-[#f0ebe0]">
+            <section aria-labelledby="workflows-heading" className="mt-14 border-t border-g-rule pt-8">
+              <h2 id="workflows-heading" className="mb-4 font-g-display text-[1.5rem] text-g-ink">
                 Workflows
               </h2>
-              <div className="flex flex-wrap gap-2">
+              <ul className="flex flex-wrap gap-2">
                 {skill.workflows.map((w) => (
-                  <span
+                  <li
                     key={w}
-                    className="rounded-lg border border-[#c084fc20] bg-[#c084fc08] px-4 py-2 font-mono text-sm text-[#c084fc]"
+                    className="rounded-md border border-g-edge px-3 py-1.5 font-g-mono text-[0.88rem] text-g-ink"
                   >
                     {skill.command}:{w}
-                  </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
           )}
-        </main>
+        </div>
 
-        {/* ═══ Sidebar ═══ */}
-        <aside>
-          <div className="scrollbar-thin space-y-5 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-2">
-            {/* Quick Install */}
-            <div className="rounded-xl border border-[#2dd4a826] bg-[#14120e]/90 p-5">
-              <h3 className="mb-3 text-sm font-bold text-[#2dd4a8]">
-                Quick Install
-              </h3>
-              <div className="group relative mb-3">
-                <CopyButton text={installCommand} />
-                <pre
-                  className="scrollbar-none overflow-x-auto rounded-lg border border-[#2dd4a81a] bg-black/40 p-3 font-mono text-[0.75rem] leading-relaxed text-[#2dd4a8]"
-                  aria-label={`Install command: ${installCommand}`}
-                >
-                  {installCommand}
-                </pre>
-              </div>
-              <p className="mb-2 text-xs text-[#b0a89c]">
-                Or paste into Claude Code:
+        <aside aria-label="Install and related skills">
+          <div className="space-y-8 lg:sticky lg:top-24">
+            <section aria-labelledby="prompt-heading">
+              <h2 id="prompt-heading" className="font-g-display text-[1.2rem] text-g-ink">
+                Or ask your agent
+              </h2>
+              <p className="mt-1.5 mb-3 text-[0.92rem] leading-relaxed text-g-ash">
+                Paste this into a Claude Code session.
               </p>
-              <div className="group relative">
-                <CopyButton text={installPrompt} />
+              <div className="g-on-kiln relative rounded-lg bg-g-kiln">
                 <pre
-                  className="scrollbar-none max-h-32 overflow-x-auto overflow-y-auto rounded-lg border border-[#2dd4a81a] bg-black/40 p-3 font-mono text-[0.65rem] leading-relaxed text-[#2dd4a8]/80"
+                  className="scrollbar-thin max-h-48 overflow-auto py-3 pr-11 pl-3.5 font-g-mono text-[0.76rem] leading-relaxed whitespace-pre-wrap text-g-kiln-text [overflow-wrap:anywhere]"
                   aria-label="Install prompt for Claude Code"
                 >
                   {installPrompt}
                 </pre>
+                <CopyButton text={installPrompt} label="Copy install prompt" />
               </div>
-            </div>
+            </section>
 
-            {/* Metadata */}
-            <div className="rounded-xl border border-[#e5950014] bg-[#14120e]/90 p-5">
-              <dl className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <dt className="text-[#b0a89c]">Category</dt>
-                  <dd className={catColors.text}>{skill.category}</dd>
-                </div>
-                {skill.evalCount > 0 && (
-                  <div className="flex justify-between">
-                    <dt className="text-[#b0a89c]">Evals</dt>
-                    <dd className="text-[#c0b8a8]">{skill.evalCount}</dd>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <dt className="text-[#b0a89c]">Fixtures</dt>
-                  <dd
-                    className={
-                      skill.hasFixtures ? "text-[#28c840]" : "text-[#b0a89c]"
-                    }
-                  >
-                    {skill.hasFixtures ? "Included" : "None"}
-                  </dd>
-                </div>
-                {skill.workflows.length > 0 && (
-                  <div className="flex justify-between">
-                    <dt className="text-[#b0a89c]">Workflows</dt>
-                    <dd className="text-[#c0b8a8]">{skill.workflows.length}</dd>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <dt className="text-[#b0a89c]">Updated</dt>
-                  <dd className="text-[#c0b8a8]">{relativeTime}</dd>
-                </div>
-              </dl>
-
-              <div className="mt-4 border-t border-[#e5950014] pt-4">
-                <a
-                  href={`https://github.com/EtanHey/golems/tree/master/skills/golem-powers/${skill.name}`}
-                  className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#b0a89c] transition-colors hover:text-[#c0b8a8]"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View source on GitHub
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-            {/* Related Skills */}
             {relatedSkills.length > 0 && (
-              <div className="rounded-xl border border-[#e5950014] bg-[#14120e]/90 p-5">
-                <h3 className="mb-3 text-sm font-bold text-[#f0ebe0]">
-                  Related Skills
-                </h3>
-                <div className="space-y-2">
+              <section aria-labelledby="related-heading">
+                <h2 id="related-heading" className="mb-2 font-g-display text-[1.2rem] text-g-ink">
+                  More in {skill.category}
+                </h2>
+                <ul className="divide-y divide-g-rule border-y border-g-rule">
                   {relatedSkills.map((rs) => (
-                    <Link
-                      key={rs.name}
-                      href={`/golems/skills/${rs.name}`}
-                      className="block rounded-lg border border-[#e5950014] p-3 no-underline transition-colors hover:border-[#e5950040] hover:bg-[#e595000a]"
-                    >
-                      <code className="font-mono text-xs font-bold text-[#e59500]">
-                        {rs.command}
-                      </code>
-                      <p className="mt-1 text-[0.72rem] leading-snug text-[#b8ad9e]">
-                        {rs.description.length > 80
-                          ? rs.description.slice(0, 80) + "..."
-                          : rs.description}
-                      </p>
-                    </Link>
+                    <li key={rs.name}>
+                      <Link
+                        href={`/golems/skills/${rs.name}`}
+                        className="group block py-3 transition-colors duration-150 hover:bg-g-raised/70"
+                      >
+                        <span className="font-g-mono text-[0.9rem] font-medium text-g-cobalt underline decoration-transparent underline-offset-4 group-hover:decoration-current">
+                          {rs.command}
+                        </span>
+                        <span className="mt-1 line-clamp-2 block text-[0.88rem] leading-snug text-g-ash">
+                          {rs.description}
+                        </span>
+                      </Link>
+                    </li>
                   ))}
-                </div>
-              </div>
+                </ul>
+              </section>
             )}
           </div>
         </aside>

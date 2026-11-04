@@ -1,128 +1,89 @@
 import Link from "next/link";
-import CopyButton from "../components/CopyButton";
-import skillsManifest from "../lib/skills-manifest.json";
+import SkillLedger from "../components/SkillLedger";
+import type { LedgerRow } from "../components/LedgerTable";
+import {
+  evidenceTotals,
+  formatDay,
+  manifestGeneratedAt,
+  manifestSkills,
+} from "../lib/skill-evidence";
 
-interface SkillData {
-  name: string;
-  command: string;
-  description: string;
-  category: string;
-  evalCount: number;
-  hasFixtures: boolean;
-  workflows: string[];
-}
-
-const skills = Object.values(
-  skillsManifest.skills as Record<string, SkillData>,
-);
-
-const categories = [...new Set(skills.map((s) => s.category))].sort();
+const categories = [...new Set(manifestSkills.map((s) => s.category))].sort();
 
 export const metadata = {
   title: "Skills Library — Golems",
-  description: `${skills.length} reusable Claude Code skills with one-command install.`,
+  description: `${manifestSkills.length} reusable Claude Code skills, each with its eval status and install command.`,
 };
 
 export default function SkillsIndexPage() {
-  const grouped = categories.map((cat) => ({
-    category: cat,
-    skills: skills
-      .filter((s) => s.category === cat)
-      .sort((a, b) => a.name.localeCompare(b.name)),
+  // Rows are computed on the server so the large manifest never ships to the
+  // browser; the client filter only receives these small records.
+  const rows: LedgerRow[] = manifestSkills.map((s) => ({
+    name: s.name,
+    command: s.command,
+    summary: s.description,
+    category: s.category,
+    evalCount: s.evalCount,
+    hasFixtures: s.hasFixtures,
+    updated: formatDay(s.lastModified),
   }));
 
   return (
-    <div className="mx-auto max-w-5xl px-4 pt-6 pb-16 md:px-6 md:pt-10">
-      <div className="mb-6">
-        <Link
-          href="/golems"
-          className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-[#b0a89c] transition-colors hover:text-[#e59500]"
-        >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Golems Home
-        </Link>
-      </div>
+    <div className="mx-auto max-w-[1200px] px-4 pt-10 pb-20 md:px-6 md:pt-16">
+      <header className="mb-10 grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <div>
+          <h1 className="font-g-display text-[2.4rem] leading-[1.05] md:text-[3.4rem]">
+            The skill ledger
+          </h1>
+          <p className="mt-4 max-w-[60ch] text-[1.05rem] leading-relaxed text-g-ash md:text-[1.15rem]">
+            Every published skill in <code className="font-g-mono text-[0.9em] text-g-ink">skills/golem-powers</code>,
+            generated on {formatDay(manifestGeneratedAt)}. Descriptions are the
+            skills&apos; own trigger text, written for agents. Open a skill for
+            a readable overview, its eval status, and how to install it.
+          </p>
+        </div>
+        <dl className="grid grid-cols-3 gap-4 border-t-2 border-g-ink pt-4 text-sm text-g-ash">
+          <div className="flex flex-col-reverse">
+            <dt className="mt-1.5">skills</dt>
+            <dd className="font-g-display text-[2rem] leading-none text-g-ink">{evidenceTotals.skills}</dd>
+          </div>
+          <div className="flex flex-col-reverse">
+            <dt className="mt-1.5">with scenarios written</dt>
+            <dd className="flex items-center gap-2 font-g-display text-[2rem] leading-none text-g-ink">
+              {evidenceTotals.withSuite}
+              <span aria-hidden="true" className="g-mark g-mark-written" />
+            </dd>
+          </div>
+          <div className="flex flex-col-reverse">
+            <dt className="mt-1.5">with fixtures</dt>
+            <dd className="flex items-center gap-2 font-g-display text-[2rem] leading-none text-g-ink">
+              {evidenceTotals.withFixtures}
+              <span aria-hidden="true" className="g-mark g-mark-fixtures" />
+            </dd>
+          </div>
+        </dl>
+      </header>
 
-      <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-[#f0ebe0] md:text-4xl">
-        Skills Library
-      </h1>
-      <p className="mb-6 text-[#b0a89c]">
-        {skills.length} reusable Claude Code skills. Click any skill for docs,
-        eval status, and install prompt.
+      <p className="mb-8 flex items-start gap-3 rounded-lg bg-g-raised px-4 py-3 text-[0.95rem] leading-relaxed text-g-ink">
+        <span aria-hidden="true" className="g-mark g-mark-pending mt-1.5" />
+        <span>
+          No skill has results on current models yet, so this ledger lists
+          written scenarios, not scores.{" "}
+          <Link href="/golems#ladder-heading" className="g-link">
+            How a skill earns a score
+          </Link>
+        </span>
       </p>
-      <p className="mb-6 text-sm text-[#8b7355]">
+
+      <SkillLedger rows={rows} categories={categories} />
+
+      <p className="mt-10 text-[0.95rem] text-g-ash">
         Looking for retired tools and foundational loops?{" "}
-        <Link
-          href="/golems/docs/heritage/ralph"
-          className="font-medium text-[#e59500] transition-colors hover:text-[#f0b13a]"
-        >
+        <Link href="/golems/docs/heritage/ralph" className="g-link">
           Visit Heritage
         </Link>
         .
       </p>
-
-      {/* Terminal install hero */}
-      <div className="mb-10 overflow-hidden rounded-xl border border-[#e5950020] bg-[#0d0d0d]">
-        <div className="flex items-center gap-2 border-b border-[#e5950015] bg-[#14120e] px-4 py-2">
-          <span className="h-3 w-3 rounded-full bg-[#ff5f56]" />
-          <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-          <span className="h-3 w-3 rounded-full bg-[#27c93f]" />
-          <span className="ml-2 font-mono text-xs text-[#b0a89c]">
-            golems-cli
-          </span>
-        </div>
-        <div className="group relative space-y-1 p-4 font-mono text-sm">
-          <div className="text-[#b0a89c]">
-            <span className="text-[#2dd4a8]">$</span> golems-cli skills list
-          </div>
-          <div className="text-[#b0a89c]">
-            Found <span className="text-[#e59500]">{skills.length}</span> skills
-            across <span className="text-[#e59500]">{categories.length}</span>{" "}
-            categories
-          </div>
-          <div className="mt-2 text-[#b0a89c]">
-            <span className="text-[#2dd4a8]">$</span> golems-cli skills install{" "}
-            <span className="text-[#6ab0f3]">&lt;skill-name&gt;</span>
-          </div>
-          <CopyButton text="golems-cli skills list" />
-        </div>
-      </div>
-
-      {grouped.map(({ category, skills: catSkills }) => (
-        <section key={category} className="mb-10">
-          <h2 className="mb-4 text-lg font-bold text-[#e59500]">{category}</h2>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {catSkills.map((skill) => (
-              <Link
-                key={skill.name}
-                href={`/golems/skills/${skill.name}`}
-                className="group block rounded-lg border border-[#e5950014] bg-[#14120e]/90 p-4 no-underline transition-colors hover:border-[#e5950040]"
-              >
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <code className="rounded bg-[#e595000f] px-2 py-0.5 font-mono text-xs font-bold text-[#e59500]">
-                    {skill.command}
-                  </code>
-                </div>
-                <p className="m-0 text-[0.78rem] leading-relaxed text-[#b0a89c]">
-                  {skill.description}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ))}
     </div>
   );
 }
