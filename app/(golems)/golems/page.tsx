@@ -1,1074 +1,381 @@
 import Link from "next/link";
-import Image from "next/image";
-import CopyButton from "./components/CopyButton";
+import { ArrowUpRight } from "lucide-react";
+import CommandBlock from "./components/CommandBlock";
+import EmetInscription from "./components/EmetInscription";
 import SkillsShowcase from "./components/SkillsShowcase";
-import golemsStats from "./lib/golems-stats.json";
-import skillsManifest from "./lib/skills-manifest.json";
+import { evidenceTotals, formatDay, manifestGeneratedAt } from "./lib/skill-evidence";
 
-/* ── Product cards data ────────────────────────────────────────── */
+// AIDEV-NOTE: Every number on this page comes from the generated skills
+// manifest via lib/skill-evidence.ts. The hand-maintained golems-stats.json
+// (dated 2026-04) is intentionally not read here: its chunk/test counts were
+// already contradicted by the journey doc. No eval results are published.
 
-const products = [
-  {
-    name: "BrainLayer",
-    tagline: "Persistent memory for AI agents",
-    description: `${golemsStats.brainlayer.chunksDisplay} chunks indexed. ${golemsStats.brainlayer.entitiesDisplay} KG entities. Search quality 2.6 → ${golemsStats.brainlayer.enrichmentQuality} after v2 prompt rewrite.`,
-    href: "https://brainlayer.etanheyman.com",
-    color: "#e59500",
-    icon: (
-      <svg
-        width="28"
-        height="28"
-        viewBox="0 0 28 28"
-        fill="none"
-        aria-hidden="true"
-      >
-        <circle
-          cx="14"
-          cy="14"
-          r="12"
-          stroke="#e59500"
-          strokeWidth="1.5"
-          opacity="0.3"
-        />
-        <circle cx="14" cy="10" r="3" fill="#e59500" opacity="0.8" />
-        <circle cx="9" cy="17" r="2.5" fill="#e59500" opacity="0.6" />
-        <circle cx="19" cy="17" r="2.5" fill="#e59500" opacity="0.6" />
-        <line
-          x1="14"
-          y1="13"
-          x2="9"
-          y2="15"
-          stroke="#e59500"
-          strokeWidth="1"
-          opacity="0.4"
-        />
-        <line
-          x1="14"
-          y1="13"
-          x2="19"
-          y2="15"
-          stroke="#e59500"
-          strokeWidth="1"
-          opacity="0.4"
-        />
-        <line
-          x1="9"
-          y1="17"
-          x2="19"
-          y2="17"
-          stroke="#e59500"
-          strokeWidth="1"
-          opacity="0.3"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "VoiceLayer",
-    tagline: "Voice I/O for AI agents",
-    description: `${golemsStats.voicelayer.tests} tests. 11 MCP tools. Talk to your agents, hear them respond.`,
-    href: "https://voicelayer.etanheyman.com",
-    color: "#2dd4a8",
-    icon: (
-      <svg
-        width="28"
-        height="28"
-        viewBox="0 0 28 28"
-        fill="none"
-        aria-hidden="true"
-      >
-        <rect
-          x="11"
-          y="4"
-          width="6"
-          height="12"
-          rx="3"
-          stroke="#2dd4a8"
-          strokeWidth="1.5"
-          opacity="0.8"
-        />
-        <path
-          d="M8 13a6 6 0 0 0 12 0"
-          stroke="#2dd4a8"
-          strokeWidth="1.5"
-          opacity="0.5"
-        />
-        <line
-          x1="14"
-          y1="19"
-          x2="14"
-          y2="23"
-          stroke="#2dd4a8"
-          strokeWidth="1.5"
-          opacity="0.5"
-        />
-        <line
-          x1="10"
-          y1="23"
-          x2="18"
-          y2="23"
-          stroke="#2dd4a8"
-          strokeWidth="1.5"
-          opacity="0.4"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "cmuxLayer",
-    tagline: "Multi-terminal orchestration",
-    description: `${golemsStats.cmuxlayer.tests} tests. ${golemsStats.cmuxlayer.socketSpeedup} faster than shell. Spawn, coordinate, and monitor AI agents.`,
-    href: "https://cmuxlayer.etanheyman.com",
-    color: "#6ab0f3",
-    icon: (
-      <svg
-        width="28"
-        height="28"
-        viewBox="0 0 28 28"
-        fill="none"
-        aria-hidden="true"
-      >
-        <rect
-          x="3"
-          y="4"
-          width="10"
-          height="9"
-          rx="2"
-          stroke="#6ab0f3"
-          strokeWidth="1.5"
-          opacity="0.7"
-        />
-        <rect
-          x="15"
-          y="4"
-          width="10"
-          height="9"
-          rx="2"
-          stroke="#6ab0f3"
-          strokeWidth="1.5"
-          opacity="0.7"
-        />
-        <rect
-          x="3"
-          y="15"
-          width="10"
-          height="9"
-          rx="2"
-          stroke="#6ab0f3"
-          strokeWidth="1.5"
-          opacity="0.7"
-        />
-        <rect
-          x="15"
-          y="15"
-          width="10"
-          height="9"
-          rx="2"
-          stroke="#6ab0f3"
-          strokeWidth="1.5"
-          opacity="0.7"
-        />
-      </svg>
-    ),
-  },
-];
+/* ── Hero ─────────────────────────────────────────────────────── */
 
-/* ── Connection Diagram (static SVG) ──────────────────────────── */
-
-function ConnectionDiagram() {
+function Hero() {
   return (
-    <svg
-      viewBox="0 0 720 260"
-      fill="none"
-      className="mx-auto w-full max-w-[720px]"
-      role="img"
-      aria-label="Diagram showing how VoiceLayer, BrainLayer, and cmuxLayer connect through Claude Code"
-    >
-      {/* Subtle grid background */}
-      <defs>
-        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-          <path
-            d="M 40 0 L 0 0 0 40"
-            fill="none"
-            stroke="#e5950008"
-            strokeWidth="0.5"
-          />
-        </pattern>
-      </defs>
-      <rect width="720" height="260" fill="url(#grid)" />
-
-      {/* Connection lines — drawn behind nodes */}
-      {/* You → VoiceLayer */}
-      <path
-        d="M 105 70 L 195 70"
-        stroke="#2dd4a8"
-        strokeWidth="1.5"
-        opacity="0.4"
-        strokeDasharray="4 4"
-      />
-      {/* VoiceLayer → Claude Code */}
-      <path
-        d="M 305 70 L 395 70"
-        stroke="#c0b8a8"
-        strokeWidth="1.5"
-        opacity="0.3"
-      />
-      {/* Claude Code → BrainLayer */}
-      <path
-        d="M 505 70 L 595 70"
-        stroke="#e59500"
-        strokeWidth="1.5"
-        opacity="0.4"
-      />
-      {/* Claude Code → cmuxLayer (down) */}
-      <path
-        d="M 450 100 L 450 150"
-        stroke="#6ab0f3"
-        strokeWidth="1.5"
-        opacity="0.4"
-      />
-      {/* cmuxLayer → 3 agent panes */}
-      <path
-        d="M 370 195 L 310 230"
-        stroke="#6ab0f3"
-        strokeWidth="1"
-        opacity="0.25"
-      />
-      <path
-        d="M 450 210 L 450 230"
-        stroke="#6ab0f3"
-        strokeWidth="1"
-        opacity="0.25"
-      />
-      <path
-        d="M 530 195 L 590 230"
-        stroke="#6ab0f3"
-        strokeWidth="1"
-        opacity="0.25"
-      />
-      {/* BrainLayer → remembers label */}
-      <path
-        d="M 650 100 L 650 140"
-        stroke="#e59500"
-        strokeWidth="1"
-        opacity="0.25"
-        strokeDasharray="3 3"
-      />
-
-      {/* ── Nodes ── */}
-      {/* You */}
-      <rect
-        x="40"
-        y="48"
-        width="65"
-        height="44"
-        rx="10"
-        fill="#14120e"
-        stroke="#c0b8a830"
-        strokeWidth="1"
-      />
-      <text
-        x="72"
-        y="75"
-        textAnchor="middle"
-        fill="#c0b8a8"
-        fontSize="13"
-        fontFamily="monospace"
-      >
-        You
-      </text>
-
-      {/* VoiceLayer */}
-      <rect
-        x="195"
-        y="44"
-        width="110"
-        height="52"
-        rx="12"
-        fill="#14120e"
-        stroke="#2dd4a840"
-        strokeWidth="1.5"
-      />
-      <circle cx="220" cy="70" r="6" fill="#2dd4a8" opacity="0.2" />
-      <circle cx="220" cy="70" r="3" fill="#2dd4a8" opacity="0.6" />
-      <text
-        x="258"
-        y="75"
-        textAnchor="middle"
-        fill="#2dd4a8"
-        fontSize="12"
-        fontWeight="bold"
-        fontFamily="sans-serif"
-      >
-        VoiceLayer
-      </text>
-
-      {/* Claude Code (center) */}
-      <rect
-        x="395"
-        y="44"
-        width="110"
-        height="52"
-        rx="12"
-        fill="#14120e"
-        stroke="#c0b8a850"
-        strokeWidth="1.5"
-      />
-      <text
-        x="450"
-        y="66"
-        textAnchor="middle"
-        fill="#f0ebe0"
-        fontSize="11"
-        fontWeight="bold"
-        fontFamily="sans-serif"
-      >
-        Claude Code
-      </text>
-      <text
-        x="450"
-        y="82"
-        textAnchor="middle"
-        fill="#b0a89c"
-        fontSize="9"
-        fontFamily="monospace"
-      >
-        orchestrates
-      </text>
-
-      {/* BrainLayer */}
-      <rect
-        x="595"
-        y="44"
-        width="110"
-        height="52"
-        rx="12"
-        fill="#14120e"
-        stroke="#e5950040"
-        strokeWidth="1.5"
-      />
-      <circle cx="620" cy="70" r="6" fill="#e59500" opacity="0.2" />
-      <circle cx="620" cy="70" r="3" fill="#e59500" opacity="0.6" />
-      <text
-        x="660"
-        y="75"
-        textAnchor="middle"
-        fill="#e59500"
-        fontSize="12"
-        fontWeight="bold"
-        fontFamily="sans-serif"
-      >
-        BrainLayer
-      </text>
-
-      {/* cmuxLayer */}
-      <rect
-        x="395"
-        y="150"
-        width="110"
-        height="52"
-        rx="12"
-        fill="#14120e"
-        stroke="#6ab0f340"
-        strokeWidth="1.5"
-      />
-      <circle cx="420" cy="176" r="6" fill="#6ab0f3" opacity="0.2" />
-      <circle cx="420" cy="176" r="3" fill="#6ab0f3" opacity="0.6" />
-      <text
-        x="458"
-        y="181"
-        textAnchor="middle"
-        fill="#6ab0f3"
-        fontSize="12"
-        fontWeight="bold"
-        fontFamily="sans-serif"
-      >
-        cmuxLayer
-      </text>
-
-      {/* Agent panes */}
-      <rect
-        x="270"
-        y="232"
-        width="60"
-        height="24"
-        rx="6"
-        fill="#6ab0f30a"
-        stroke="#6ab0f320"
-        strokeWidth="1"
-      />
-      <text
-        x="300"
-        y="248"
-        textAnchor="middle"
-        fill="#6ab0f3"
-        fontSize="9"
-        fontFamily="monospace"
-        opacity="0.7"
-      >
-        test
-      </text>
-
-      <rect
-        x="420"
-        y="232"
-        width="60"
-        height="24"
-        rx="6"
-        fill="#6ab0f30a"
-        stroke="#6ab0f320"
-        strokeWidth="1"
-      />
-      <text
-        x="450"
-        y="248"
-        textAnchor="middle"
-        fill="#6ab0f3"
-        fontSize="9"
-        fontFamily="monospace"
-        opacity="0.7"
-      >
-        lint
-      </text>
-
-      <rect
-        x="560"
-        y="232"
-        width="60"
-        height="24"
-        rx="6"
-        fill="#6ab0f30a"
-        stroke="#6ab0f320"
-        strokeWidth="1"
-      />
-      <text
-        x="590"
-        y="248"
-        textAnchor="middle"
-        fill="#6ab0f3"
-        fontSize="9"
-        fontFamily="monospace"
-        opacity="0.7"
-      >
-        deploy
-      </text>
-
-      {/* Remembers label */}
-      <text
-        x="650"
-        y="156"
-        textAnchor="middle"
-        fill="#e59500"
-        fontSize="9"
-        fontFamily="monospace"
-        opacity="0.45"
-      >
-        remembers
-      </text>
-
-      {/* Flow arrows (small triangles) */}
-      <polygon points="193,70 187,66 187,74" fill="#2dd4a8" opacity="0.5" />
-      <polygon points="393,70 387,66 387,74" fill="#c0b8a8" opacity="0.4" />
-      <polygon points="593,70 587,66 587,74" fill="#e59500" opacity="0.5" />
-      <polygon points="450,148 446,142 454,142" fill="#6ab0f3" opacity="0.5" />
-    </svg>
-  );
-}
-
-/* ── Hero Section ──────────────────────────────────────────────── */
-
-function HomepageHero() {
-  return (
-    <header className="relative overflow-hidden bg-[#0c0b0a] pb-12 md:pb-20">
-      {/* Ambient glow */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 600px 400px at 50% 20%, rgba(229,149,0,0.08) 0%, transparent 70%), radial-gradient(ellipse 400px 300px at 30% 60%, rgba(45,212,168,0.05) 0%, transparent 70%), radial-gradient(ellipse 400px 300px at 70% 60%, rgba(106,176,243,0.04) 0%, transparent 70%)",
-        }}
-      />
-
-      <div className="relative z-[2] mx-auto max-w-[900px] px-4 pt-10 md:px-6 md:pt-16">
-        {/* Logo + tagline */}
-        <div className="mb-8 flex flex-col items-center gap-4 text-center">
-          <Image
-            src="/images/golems-logo.svg"
-            alt="Golems logo"
-            width={64}
-            height={64}
-            className="h-12 w-12 drop-shadow-[0_0_24px_rgba(229,149,0,0.4)] md:h-16 md:w-16"
-          />
-
-          <div className="flex items-center gap-1.5 font-mono text-[0.7rem] text-[#b0a89c] sm:text-xs">
-            <span className="text-[#a09080]">Spawn</span>
-            <span className="text-[#c46d3c] opacity-70">&rarr;</span>
-            <span className="text-[#a09080]">Work</span>
-            <span className="text-[#c46d3c] opacity-70">&rarr;</span>
-            <span className="text-[#a09080]">Die</span>
-            <span className="text-[#c46d3c] opacity-70">&rarr;</span>
-            <span className="text-[#2dd4a8] drop-shadow-[0_0_16px_rgba(45,212,168,0.35)]">
-              Remember
-            </span>
-          </div>
-
-          <h1 className="m-0 max-w-[640px] bg-gradient-to-br from-[#f0ebe0] to-[#e59500] bg-clip-text text-3xl leading-tight font-black tracking-tight text-transparent sm:text-4xl md:text-5xl">
-            Your AI agents work alone. They don&apos;t have to.
+    <section aria-labelledby="hero-heading" className="mx-auto max-w-[1200px] px-4 pt-12 pb-10 md:px-6 md:pt-20 md:pb-14">
+      <div className="grid items-stretch gap-8 lg:grid-cols-[1.15fr_1fr] lg:gap-14">
+        <div className="g-rise flex flex-col justify-center">
+          <h1
+            id="hero-heading"
+            className="font-g-display text-[2.6rem] leading-[1.04] tracking-[-0.01em] text-balance sm:text-[3.4rem] lg:text-[4.1rem]"
+          >
+            Agent skills that say exactly what has been tested.
           </h1>
-
-          <p className="m-0 max-w-[560px] text-base leading-relaxed text-[#b0a89c] sm:text-lg">
-            Three open-source MCP servers that give AI agents persistent memory,
-            voice I/O, and multi-terminal coordination.{" "}
-            <span className="text-[#c0b8a8]">
-              {golemsStats.brainlayer.mcpTools + 11 + 22} tools.
-            </span>{" "}
-            One ecosystem.
+          <p className="mt-6 max-w-[38rem] text-[1.1rem] leading-[1.6] text-g-ash md:text-[1.2rem]">
+            Golems is an open-source monorepo of skills and tooling for Claude
+            Code, Codex, and other coding agents. A skill is a{" "}
+            <code className="font-g-mono text-[0.9em] text-g-ink">SKILL.md</code>{" "}
+            workflow an agent loads and follows. Each skill page shows which
+            eval scenarios are written, and that none has been scored on
+            current models yet.
           </p>
-        </div>
-
-        {/* Connection diagram */}
-        <div className="mb-10 hidden sm:block">
-          <ConnectionDiagram />
-        </div>
-
-        {/* Mobile: simplified flow text */}
-        <div className="mb-8 flex flex-col items-center gap-2 text-center sm:hidden">
-          <div className="flex items-center gap-2 text-sm text-[#b0a89c]">
-            <span className="font-bold text-[#2dd4a8]">Voice</span>
-            <span className="text-[#c46d3c] opacity-60">&rarr;</span>
-            <span className="font-bold text-[#f0ebe0]">Claude</span>
-            <span className="text-[#c46d3c] opacity-60">&rarr;</span>
-            <span className="font-bold text-[#e59500]">Memory</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-[#b0a89c]">
-            <span className="font-bold text-[#f0ebe0]">Claude</span>
-            <span className="text-[#c46d3c] opacity-60">&rarr;</span>
-            <span className="font-bold text-[#6ab0f3]">Orchestrate</span>
-          </div>
-        </div>
-
-        {/* Product cards */}
-        <div className="mb-10 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-3">
-          {products.map((p) => (
-            <a
-              key={p.name}
-              href={p.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex flex-col rounded-xl border bg-[#14120e]/90 p-5 no-underline transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_32px_rgba(229,149,0,0.08)]"
-              style={{
-                borderColor: `${p.color}20`,
-              }}
-            >
-              <div className="mb-3 flex items-center gap-3">
-                <div
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-                  style={{ backgroundColor: `${p.color}10` }}
-                >
-                  {p.icon}
-                </div>
-                <div>
-                  <div className="text-sm font-bold" style={{ color: p.color }}>
-                    {p.name}
-                  </div>
-                  <div className="text-[0.72rem] text-[#b0a89c]">
-                    {p.tagline}
-                  </div>
-                </div>
-              </div>
-              <p className="m-0 flex-1 text-[0.78rem] leading-snug text-[#a09080]">
-                {p.description}
-              </p>
-              <div
-                className="mt-3 text-[0.72rem] font-medium opacity-0 transition-opacity group-hover:opacity-100"
-                style={{ color: p.color }}
-              >
-                Visit site &rarr;
-              </div>
-            </a>
-          ))}
-        </div>
-
-        {/* Install CTA */}
-        <div className="flex flex-col items-center gap-4">
-          <div className="group relative w-full max-w-md">
-            <div className="flex items-center rounded-lg border border-[#2dd4a830] bg-[#0d0d0d] px-4 py-2.5 pr-14">
-              <code className="font-mono text-[0.75rem] text-[#2dd4a8] sm:text-sm">
-                <span className="text-[#b0a89c]">$</span> npx golems-cli install
-              </code>
-            </div>
-            <CopyButton text="npx golems-cli install" />
-          </div>
-
-          <p className="m-0 text-center text-[0.72rem] text-[#b0a89c]">
-            Or install individually:{" "}
-            <code className="text-[#e59500]">pip install brainlayer</code>
-            {" \u00B7 "}
-            <code className="text-[#2dd4a8]">npm i voicelayer-mcp</code>
-            {" \u00B7 "}
-            <code className="text-[#6ab0f3]">npm i cmuxlayer</code>
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/golems/docs/getting-started"
-              className="flex min-h-11 items-center justify-center rounded-lg bg-gradient-to-br from-[#e59500] to-[#c46d3c] px-6 py-2 text-[0.8rem] font-bold text-[#0c0b0a] no-underline transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(229,149,0,0.35)] sm:text-sm"
+              className="g-press inline-flex min-h-12 items-center rounded-md bg-g-cobalt px-5 text-[1rem] font-medium text-white hover:bg-g-cobalt-deep"
             >
-              Get Started
+              Get started
             </Link>
             <Link
-              href="https://github.com/EtanHey/golems"
-              className="flex min-h-11 items-center justify-center rounded-lg border border-[#a6998733] px-5 py-2 text-[0.8rem] font-medium text-[#a69987] no-underline transition-all hover:border-[#a6998766] hover:bg-[#a699870f] hover:text-[#c0b8a8] sm:text-sm"
+              href="/golems/skills"
+              className="g-press inline-flex min-h-12 items-center rounded-md border border-g-ink px-5 text-[1rem] font-medium text-g-ink hover:bg-g-raised"
             >
-              GitHub &rarr;
+              Browse {evidenceTotals.skills} skills
             </Link>
           </div>
         </div>
-      </div>
-    </header>
-  );
-}
-
-/* ── Before/After Comparison ──────────────────────────────────── */
-
-const comparisons = [
-  {
-    before: "Your agent forgets everything between sessions",
-    after: "Persistent memory across every conversation",
-    product: "BrainLayer",
-    color: "#e59500",
-  },
-  {
-    before: "You type every command by hand",
-    after: "Talk to your agents, hear them respond",
-    product: "VoiceLayer",
-    color: "#2dd4a8",
-  },
-  {
-    before: "One terminal, one task, waiting for each to finish",
-    after: "Spawn parallel agents across coordinated panes",
-    product: "cmuxLayer",
-    color: "#6ab0f3",
-  },
-];
-
-function BeforeAfterSection() {
-  return (
-    <section className="relative bg-gradient-to-b from-[#0c0b0a] to-[#0a0908] py-12 md:py-20">
-      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950033] to-transparent" />
-      <div className="mx-auto max-w-[900px] px-4 sm:px-6">
-        <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
-          What Changes
-        </h2>
-        <p className="mb-10 text-center text-[#b0a89c] italic">
-          Three problems. Three open-source solutions.
-        </p>
-
-        <div className="flex flex-col gap-4">
-          {comparisons.map((c) => (
-            <div
-              key={c.product}
-              className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border sm:grid-cols-[1fr_auto_1fr]"
-              style={{ borderColor: `${c.color}15` }}
-            >
-              {/* Before */}
-              <div className="flex items-center gap-3 bg-[#14120e]/90 px-5 py-4">
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ff555520] text-xs font-bold text-[#ff5555]">
-                  &times;
-                </div>
-                <p className="m-0 text-sm leading-snug text-[#a09080]">
-                  {c.before}
-                </p>
-              </div>
-
-              {/* Arrow divider */}
-              <div
-                className="hidden items-center justify-center bg-[#14120e]/90 px-3 sm:flex"
-                style={{ color: c.color }}
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M5 12h14M13 6l6 6-6 6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    opacity="0.6"
-                  />
-                </svg>
-              </div>
-
-              {/* After */}
-              <div className="flex items-center gap-3 bg-[#14120e]/90 px-5 py-4">
-                <div
-                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold"
-                  style={{
-                    backgroundColor: `${c.color}20`,
-                    color: c.color,
-                  }}
-                >
-                  &#10003;
-                </div>
-                <div>
-                  <p className="m-0 text-sm leading-snug text-[#e8e2d6]">
-                    {c.after}
-                  </p>
-                  <span
-                    className="mt-0.5 inline-block text-[0.7rem] font-bold"
-                    style={{ color: c.color }}
-                  >
-                    {c.product}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="g-rise [animation-delay:120ms]">
+          <EmetInscription />
         </div>
       </div>
     </section>
   );
 }
 
-/* ── Install Section ──────────────────────────────────────────── */
+/* ── Evidence strip ───────────────────────────────────────────── */
 
-const individualInstalls = [
-  {
-    name: "BrainLayer",
-    command: "pip install brainlayer",
-    description:
-      "Persistent memory — semantic search, entity graph, knowledge digest",
-    color: "#e59500",
-    language: "Python",
-  },
-  {
-    name: "VoiceLayer",
-    command: "npm i voicelayer-mcp",
-    description: "Voice I/O — speech-to-text, text-to-speech, 11 MCP tools",
-    color: "#2dd4a8",
-    language: "Node.js",
-  },
-  {
-    name: "cmuxLayer",
-    command: "npm i cmuxlayer",
-    description:
-      "Multi-terminal — spawn agents, coordinate panes, monitor output",
-    color: "#6ab0f3",
-    language: "Node.js",
-  },
-];
+function EvidenceStrip() {
+  const cells = [
+    {
+      value: String(evidenceTotals.skills),
+      text: (
+        <>
+          published skills, read from{" "}
+          <code className="font-g-mono text-[0.9em]">skills/golem-powers</code> on{" "}
+          {formatDay(manifestGeneratedAt)}
+        </>
+      ),
+    },
+    {
+      value: String(evidenceTotals.withSuite),
+      mark: "g-mark-written",
+      text: (
+        <>
+          have eval scenarios written in{" "}
+          <code className="font-g-mono text-[0.9em]">evals/evals.json</code>
+        </>
+      ),
+    },
+    {
+      value: String(evidenceTotals.withFixtures),
+      mark: "g-mark-fixtures",
+      text: <>ship fixtures that those scenarios run against</>,
+    },
+    {
+      value: "None",
+      mark: "g-mark-pending",
+      text: <>have results published for current models yet</>,
+    },
+  ];
 
-function InstallSection() {
   return (
-    <section className="relative bg-gradient-to-b from-[#0c0b0a] to-[#0a0908] py-12 md:py-20">
-      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950033] to-transparent" />
-      <div className="mx-auto max-w-[900px] px-4 sm:px-6">
-        <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
-          Get Started
-        </h2>
-        <p className="mb-10 text-center text-[#b0a89c]">
-          One command for everything, or install what you need.{" "}
-          <Link
-            href="/golems/docs/getting-started"
-            className="text-[#e59500] no-underline hover:underline"
+    <section aria-label="What the evidence covers" className="mx-auto max-w-[1200px] px-4 pb-16 md:px-6 md:pb-24">
+      <dl className="grid grid-cols-1 border-t-2 border-g-ink sm:grid-cols-2 lg:grid-cols-4">
+        {cells.map((cell, i) => (
+          <div
+            key={i}
+            className="flex flex-col-reverse gap-2 border-b border-g-rule py-5 sm:pr-6 lg:border-b-0 lg:border-l lg:px-6 lg:first:border-l-0 lg:first:pl-0"
           >
-            Full guide &rarr;
-          </Link>
-        </p>
-
-        {/* Primary: one-command install */}
-        <div className="mb-8 rounded-xl border border-[#e5950030] bg-[#14120e]/90 p-6">
-          <div className="mb-3 text-center text-xs font-bold tracking-wider text-[#e59500] uppercase">
-            Full ecosystem
-          </div>
-          <div className="group relative mx-auto max-w-lg">
-            <div className="flex items-center justify-center rounded-lg border border-[#2dd4a840] bg-[#0d0d0d] px-4 py-3 pr-14">
-              <code className="font-mono text-sm text-[#2dd4a8] sm:text-base">
-                <span className="text-[#b0a89c]">$</span> npx golems-cli install
-              </code>
-            </div>
-            <CopyButton text="npx golems-cli install" />
-          </div>
-          <p className="m-0 mt-3 text-center text-[0.78rem] text-[#b0a89c]">
-            Installs all three MCP servers, wires Claude Code config, and
-            verifies the setup.
-          </p>
-        </div>
-
-        {/* Divider */}
-        <div className="mb-8 flex items-center gap-4">
-          <div className="h-px flex-1 bg-[#e5950015]" />
-          <span className="text-xs font-medium text-[#b0a89c]">
-            or install individually
-          </span>
-          <div className="h-px flex-1 bg-[#e5950015]" />
-        </div>
-
-        {/* Individual installs */}
-        <div className="mb-8 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-3">
-          {individualInstalls.map((pkg) => (
-            <div
-              key={pkg.name}
-              className="group relative flex flex-col rounded-xl border bg-[#14120e]/90 p-4"
-              style={{ borderColor: `${pkg.color}15` }}
-            >
-              <CopyButton text={pkg.command} />
-              <div className="mb-2 flex items-center justify-between">
-                <span
-                  className="text-sm font-bold"
-                  style={{ color: pkg.color }}
-                >
-                  {pkg.name}
-                </span>
-                <span className="rounded-md bg-[#ffffff08] px-1.5 py-0.5 text-[0.65rem] text-[#b0a89c]">
-                  {pkg.language}
-                </span>
-              </div>
-              <code
-                className="mb-2 block rounded-md border bg-black/40 px-2.5 py-1.5 font-mono text-[0.72rem] text-[#2dd4a8]"
-                style={{ borderColor: `${pkg.color}1a` }}
-              >
-                {pkg.command}
-              </code>
-              <p className="m-0 text-[0.75rem] leading-snug text-[#a09080]">
-                {pkg.description}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div className="text-center">
-          <Link
-            href="/golems/docs/getting-started"
-            className="rounded-lg bg-gradient-to-br from-[#e59500] to-[#c46d3c] px-6 py-2.5 text-sm font-bold text-[#0c0b0a] no-underline transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_24px_rgba(229,149,0,0.35)]"
-          >
-            Full Setup Guide
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Numbers Strip ────────────────────────────────────────────── */
-
-const ecosystemStats = [
-  { value: "45", label: "MCP Tools", color: "#e59500" },
-  {
-    value: (
-      golemsStats.brainlayer.pythonTests +
-      golemsStats.brainlayer.swiftTests +
-      golemsStats.voicelayer.tests +
-      golemsStats.cmuxlayer.tests
-    ).toLocaleString(),
-    label: "Tests Passing",
-    color: "#2dd4a8",
-  },
-  { value: "313K+", label: "Knowledge Chunks", color: "#e59500" },
-  { value: "8,790", label: "KG Entities", color: "#c46d3c" },
-  {
-    value: String(skillsManifest.skillCount),
-    label: "Skills",
-    color: "#6ab0f3",
-  },
-];
-
-function NumbersStrip() {
-  return (
-    <section className="relative bg-[#0a0908] py-10 md:py-14">
-      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950020] to-transparent" />
-      <div className="absolute right-0 bottom-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950020] to-transparent" />
-      <div className="mx-auto flex max-w-[900px] flex-wrap items-center justify-center gap-8 px-4 sm:gap-12 md:gap-16">
-        {ecosystemStats.map((s) => (
-          <div key={s.label} className="flex flex-col items-center gap-1">
-            <span
-              className="text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl"
-              style={{ color: s.color }}
-            >
-              {s.value}
-            </span>
-            <span className="text-[0.7rem] font-medium tracking-wider text-[#b0a89c] uppercase">
-              {s.label}
-            </span>
+            <dt className="text-[0.95rem] leading-snug text-g-ash">{cell.text}</dt>
+            <dd className="flex items-center gap-3 font-g-display text-[2.4rem] leading-none text-g-ink">
+              {cell.value}
+              {cell.mark && <span aria-hidden="true" className={`g-mark ${cell.mark}`} />}
+            </dd>
           </div>
         ))}
-      </div>
+      </dl>
     </section>
   );
 }
 
-/* ── Builder Profile ──────────────────────────────────────────── */
+/* ── Start ────────────────────────────────────────────────────── */
 
-function BuilderProfile() {
+const startSteps = [
+  {
+    title: "Clone and run the tests",
+    body: "Bun installs the workspace. The README lists current totals, including known failures on a clean clone.",
+    lines: ["git clone https://github.com/EtanHey/golems.git", "cd golems", "bun install", "bun test"],
+  },
+  {
+    title: "Check your machine",
+    body: "Reports whether bun, git, and claude are installed and where.",
+    lines: ["bun packages/golems-cli/src/index.ts setup --check"],
+  },
+  {
+    title: "Find a skill",
+    body: "Reads what is published on master through the GitHub API, so it needs network access.",
+    lines: ["bun packages/golem-skills/src/index.ts skills list"],
+  },
+  {
+    title: "Install it, then call it",
+    body: "Once installed, invoke it by name in a Claude Code session.",
+    lines: ["bun packages/golem-skills/src/index.ts skills install pr-loop", "# then, in Claude Code: /pr-loop"],
+  },
+];
+
+function StartSection() {
   return (
-    <section className="relative bg-gradient-to-b from-[#0c0b0a] to-[#080807] py-12 md:py-20">
-      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#e5950026] to-transparent" />
-      <div className="mx-auto max-w-[700px] px-4 sm:px-6">
-        <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
-          Built by Etan Heyman
-        </h2>
-        <p className="mb-8 text-center text-[#b0a89c] italic">
-          AI engineer building open-source tools for AI agents.
-        </p>
-
-        <div className="rounded-xl border border-[#e5950020] bg-[#14120e]/90 p-6">
-          <div className="mb-4 flex flex-col items-center gap-4 sm:flex-row sm:items-start">
-            <Image
-              src="/images/golems-logo.svg"
-              alt="Etan Heyman"
-              width={56}
-              height={56}
-              className="h-14 w-14 rounded-full"
-            />
-            <div className="text-center sm:text-left">
-              <div className="text-lg font-bold text-[#f0ebe0]">
-                Etan Heyman
-              </div>
-              <div className="text-sm text-[#b0a89c]">
-                AI Infrastructure &amp; Developer Tools
-              </div>
-            </div>
-          </div>
-
-          <p className="mb-4 text-sm leading-relaxed text-[#a09080]">
-            Designed the architecture and built 3 MCP servers, 60 AI-agnostic
-            skills, and an agent orchestration layer. BrainLayer indexes 313K+
-            chunks across 8,790 KG entities. Orchestrated parallel AI agents for
-            implementation. Every component is open-source, tested (2,900+
-            tests), and documented.
+    <section aria-labelledby="start-heading" className="border-t border-g-rule bg-g-raised/60">
+      <div className="mx-auto grid max-w-[1200px] gap-10 px-4 py-16 md:px-6 md:py-24 lg:grid-cols-[0.8fr_1.5fr] lg:gap-16">
+        <div>
+          <h2 id="start-heading" className="font-g-display text-[2rem] leading-tight md:text-[2.75rem]">
+            Start in four steps
+          </h2>
+          <p className="mt-4 max-w-[34ch] text-[1.05rem] leading-relaxed text-g-ash">
+            Everything runs from a checkout. Skills live inside your coding
+            agent; only the golem packages need secrets.
           </p>
-
-          <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
-            <Link
-              href="/"
-              className="rounded-lg border border-[#e5950030] px-4 py-2 text-[0.8rem] font-medium text-[#e59500] no-underline transition-all hover:border-[#e5950060] hover:bg-[#e5950008]"
-            >
-              Portfolio
-            </Link>
-            <a
-              href="https://github.com/EtanHey"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-lg border border-[#a6998730] px-4 py-2 text-[0.8rem] font-medium text-[#a69987] no-underline transition-all hover:border-[#a6998760] hover:bg-[#a699870a]"
-            >
-              GitHub
-            </a>
-            <a
-              href="https://linkedin.com/in/etanheyman"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-lg border border-[#6ab0f330] px-4 py-2 text-[0.8rem] font-medium text-[#6ab0f3] no-underline transition-all hover:border-[#6ab0f360] hover:bg-[#6ab0f308]"
-            >
-              LinkedIn
-            </a>
-          </div>
+          <Link href="/golems/docs/getting-started" className="g-link mt-6 inline-block text-[1rem]">
+            Read the full getting-started guide
+          </Link>
         </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Cross-AI Portability Section ──────────────────────────────── */
-
-function CrossAISection() {
-  return (
-    <section className="relative bg-gradient-to-b from-[#0a0908] to-[#0c0b0a] py-12 md:py-20">
-      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-[#f9731626] to-transparent" />
-      <div className="mx-auto max-w-[1000px] px-4 sm:px-6">
-        <h2 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-[#f0ebe0] sm:text-4xl">
-          Skills Work on Any AI
-        </h2>
-        <p className="mb-10 text-center text-[#b0a89c] italic">
-          3-layer adapter architecture · one adapter file per CLI
-        </p>
-
-        {/* Architecture layers */}
-        <div className="mb-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {[
-            {
-              layer: "Layer 1",
-              title: "SKILL.md",
-              desc: "Universal best practices with platform-agnostic fallbacks. Any AI can follow it.",
-              color: "#e59500",
-            },
-            {
-              layer: "Layer 2",
-              title: "capabilities.yaml",
-              desc: "Machine-readable feature matrix. Routes tasks to the right CLI automatically.",
-              color: "#2dd4a8",
-            },
-            {
-              layer: "Layer 3",
-              title: "adapters/",
-              desc: "Exact flags, models, and syntax per CLI. One file per AI. 40-80 lines each.",
-              color: "#6ab0f3",
-            },
-          ].map((l) => (
-            <div
-              key={l.layer}
-              className="rounded-xl border p-4"
-              style={{
-                borderColor: `${l.color}20`,
-                backgroundColor: `${l.color}06`,
-              }}
-            >
-              <div
-                className="mb-1 font-mono text-xs font-bold"
-                style={{ color: l.color }}
-              >
-                {l.layer}
+        <ol className="space-y-8">
+          {startSteps.map((step, i) => (
+            <li key={step.title} className="grid gap-3 sm:grid-cols-[2.5rem_1fr]">
+              <span aria-hidden="true" className="font-g-display text-[1.6rem] leading-none text-g-cobalt">
+                {i + 1}
+              </span>
+              <div className="min-w-0">
+                <h3 className="text-[1.1rem] font-semibold">{step.title}</h3>
+                <p className="mt-1 mb-3 text-[0.98rem] leading-relaxed text-g-ash">{step.body}</p>
+                <CommandBlock lines={step.lines} label={step.title} />
               </div>
-              <div className="mb-1 text-sm font-bold text-[#e8e2d6]">
-                {l.title}
-              </div>
-              <div className="text-[0.75rem] leading-snug text-[#b0a89c]">
-                {l.desc}
-              </div>
-            </div>
+            </li>
           ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* ── How evidence is earned ───────────────────────────────────── */
+
+function EvidenceLadder() {
+  const rungs = [
+    {
+      title: "Written",
+      mark: "g-mark-written",
+      body: "Scenarios in evals/evals.json describe a prompt and the behaviour the skill must show. Some ship fixtures to run against.",
+      status: `${evidenceTotals.withSuite} of ${evidenceTotals.skills} skills`,
+    },
+    {
+      title: "Run",
+      mark: "g-mark-pending",
+      body: "The scenarios execute on a named model, and the run records which model actually answered.",
+      status: "Not yet, for current models",
+    },
+    {
+      title: "Published",
+      mark: "g-mark-pending",
+      body: "Results appear on the skill's page with that provenance attached. Until then the page says so.",
+      status: "Nothing published",
+    },
+  ];
+
+  return (
+    <section aria-labelledby="ladder-heading" className="border-t border-g-rule">
+      <div className="mx-auto max-w-[1200px] px-4 py-16 md:px-6 md:py-24">
+        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.5fr] lg:gap-16">
+          <div>
+            <h2 id="ladder-heading" className="font-g-display text-[2rem] leading-tight md:text-[2.75rem]">
+              How a skill earns a score
+            </h2>
+            <p className="mt-4 max-w-[36ch] text-[1.05rem] leading-relaxed text-g-ash">
+              Written scenarios are not results. This site shows a pass rate only
+              after a run names the model that produced it, so most of this
+              ladder is honestly empty.
+            </p>
+          </div>
+          <ol className="grid gap-px overflow-hidden rounded-xl border border-g-rule bg-g-rule md:grid-cols-3">
+            {rungs.map((rung, i) => (
+              <li key={rung.title} className="flex flex-col bg-g-slip p-5 md:p-6">
+                <p className="flex items-center gap-2.5 text-sm text-g-ash">
+                  <span aria-hidden="true" className={`g-mark ${rung.mark}`} />
+                  Step {i + 1}
+                </p>
+                <h3 className="mt-3 font-g-display text-[1.5rem]">{rung.title}</h3>
+                <p className="mt-2 flex-1 text-[0.97rem] leading-relaxed text-g-ash">{rung.body}</p>
+                <p className="mt-5 border-t border-g-rule pt-3 text-[0.95rem] font-medium text-g-ink">
+                  {rung.status}
+                </p>
+              </li>
+            ))}
+          </ol>
         </div>
 
-        {/* Skills with adapters */}
-        <div className="rounded-xl border border-[#e5950014] bg-[#14120e]/90 px-5 py-4">
-          <p className="mb-2 text-xs font-bold tracking-wider text-[#b0a89c] uppercase">
-            Skills with adapter support
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {["cmux-agents", "pr-loop", "coach"]
-              .filter((s) => s in skillsManifest.skills)
-              .map((s) => (
-                <Link
-                  key={s}
-                  href={`/golems/skills/${s}`}
-                  className="rounded-lg border border-[#e5950020] bg-[#e595000a] px-3 py-1.5 font-mono text-xs font-bold text-[#e59500] no-underline transition-colors hover:border-[#e5950060]"
-                >
-                  /{s}
-                </Link>
-              ))}
-          </div>
+        <div className="mt-14 grid gap-6 border-t border-g-rule pt-10 lg:grid-cols-[0.8fr_1.5fr] lg:gap-16">
+          <h3 className="font-g-display text-[1.5rem] leading-snug">
+            One skill, any coding agent
+          </h3>
+          <dl className="grid gap-6 sm:grid-cols-3">
+            {[
+              ["SKILL.md", "The workflow itself, written so any agent can follow it."],
+              ["capabilities.yaml", "A machine-readable list of what each CLI can do, used for routing."],
+              ["adapters/", "Exact flags and syntax per CLI: Claude Code, Cursor, Gemini, Codex, Kiro."],
+            ].map(([term, desc]) => (
+              <div key={term}>
+                <dt className="font-g-mono text-[0.95rem] font-medium text-g-ink">{term}</dt>
+                <dd className="mt-1.5 text-[0.97rem] leading-relaxed text-g-ash">{desc}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>
   );
 }
 
-/* ── Page ──────────────────────────────────────────────────────── */
+/* ── Story ────────────────────────────────────────────────────── */
+
+const storyEntries = [
+  {
+    date: "Before 2026",
+    title: "Ralph",
+    body: "A loop that spawns a fresh Claude session per PRD story. It showed agents could work through structured tasks alone.",
+    href: "/golems/docs/heritage/ralph",
+  },
+  {
+    date: "11 Jan 2026",
+    title: "Memory first",
+    body: "BrainLayer, first called Zikaron (Hebrew for memory), starts as a local sqlite-vec store before any golem exists.",
+  },
+  {
+    date: "17 Jan 2026",
+    title: "The first golem",
+    body: "An email router. It set the rule the project still follows: golems are domain experts, not I/O channels.",
+  },
+  {
+    date: "2 Feb 2026",
+    title: "One monorepo",
+    body: "Three parallel Claude sessions, coordinating through a shared collab file, merge the packages into one tree.",
+  },
+  {
+    date: "17 May 2026",
+    title: "Rules ship with evidence",
+    body: "Eight PRs in one night. Each new rule shipped only after a live A/B run against an unmodified agent flipped its signal.",
+  },
+  {
+    date: formatDay(manifestGeneratedAt),
+    title: "Today",
+    body: `${evidenceTotals.skills} published skills, ${evidenceTotals.withSuite} with eval scenarios written, and runs on current models still to come.`,
+  },
+];
+
+function StorySection() {
+  return (
+    <section aria-labelledby="story-heading" className="border-t border-g-rule bg-g-raised/60">
+      <div className="mx-auto max-w-[1200px] px-4 py-16 md:px-6 md:py-24">
+        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <h2 id="story-heading" className="font-g-display text-[2rem] leading-tight md:text-[2.75rem]">
+            How it got here
+          </h2>
+          <Link href="/golems/docs/journey" className="g-link text-[1rem]">
+            Read the full engineering journey
+          </Link>
+        </div>
+        <ol className="relative grid gap-0 md:grid-cols-3">
+          {storyEntries.map((entry) => (
+            <li key={entry.title} className="relative border-t border-g-ink py-5 md:pr-8">
+              <p className="g-tabular text-sm text-g-ash">{entry.date}</p>
+              <h3 className="mt-1.5 font-g-display text-[1.35rem]">
+                {entry.href ? (
+                  <Link href={entry.href} className="g-link text-g-ink">
+                    {entry.title}
+                  </Link>
+                ) : (
+                  entry.title
+                )}
+              </h3>
+              <p className="mt-2 max-w-[40ch] text-[0.97rem] leading-relaxed text-g-ash">{entry.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* ── Sibling projects ─────────────────────────────────────────── */
+
+const siblings = [
+  { name: "BrainLayer", body: "Persistent memory for AI agents.", href: "https://brainlayer.etanheyman.com" },
+  { name: "VoiceLayer", body: "Voice input and output for AI agents.", href: "https://voicelayer.etanheyman.com" },
+  { name: "cmuxLayer", body: "Spawning and coordinating agents across terminal panes.", href: "https://cmuxlayer.etanheyman.com" },
+];
+
+function SiblingsSection() {
+  return (
+    <section aria-labelledby="siblings-heading" className="border-t border-g-rule">
+      <div className="mx-auto grid max-w-[1200px] gap-8 px-4 py-14 md:px-6 md:py-20 lg:grid-cols-[0.8fr_1.5fr] lg:gap-16">
+        <div>
+          <h2 id="siblings-heading" className="font-g-display text-[1.75rem] leading-tight">
+            Built alongside
+          </h2>
+          <p className="mt-3 max-w-[34ch] text-[1rem] leading-relaxed text-g-ash">
+            Separate projects by the same author that many skills call into.
+          </p>
+        </div>
+        <ul className="divide-y divide-g-rule border-y border-g-rule">
+          {siblings.map((s) => (
+            <li key={s.name}>
+              <a
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex min-h-16 items-center justify-between gap-4 py-4 transition-colors duration-150 hover:bg-g-raised/70 sm:px-2"
+              >
+                <span className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+                  <span className="font-g-display text-[1.3rem] text-g-ink">{s.name}</span>
+                  <span className="text-[0.97rem] text-g-ash">{s.body}</span>
+                </span>
+                <ArrowUpRight
+                  aria-hidden="true"
+                  className="h-5 w-5 shrink-0 text-g-ash transition-transform duration-200 ease-[var(--ease-g-out)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-g-cobalt"
+                />
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/* ── Page ─────────────────────────────────────────────────────── */
 
 export default function GolemsHome() {
   return (
     <>
-      <HomepageHero />
-      <BeforeAfterSection />
-      <InstallSection />
-      <NumbersStrip />
+      <Hero />
+      <EvidenceStrip />
       <SkillsShowcase />
-      <CrossAISection />
-      <BuilderProfile />
+      <EvidenceLadder />
+      <StartSection />
+      <StorySection />
+      <SiblingsSection />
     </>
   );
 }
