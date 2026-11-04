@@ -369,6 +369,7 @@ export default async function SkillDetailPage({
                 <pre
                   className="scrollbar-thin max-h-48 overflow-auto py-3 pr-11 pl-3.5 font-g-mono text-[0.76rem] leading-relaxed whitespace-pre-wrap text-g-kiln-text [overflow-wrap:anywhere]"
                   aria-label="Install prompt for Claude Code"
+                  tabIndex={0}
                 >
                   {installPrompt}
                 </pre>

@@ -172,6 +172,12 @@
   margin: 0;
 }
 
+/* github-dark-dimmed comments (#768390) are 3.9:1 on the kiln surface; lift
+   them to the kiln-muted tone (7.1:1) so comments stay readable. */
+pre[data-theme] span[style*="#768390"] {
+  color: var(--color-g-kiln-muted) !important;
+}
+
 /* Emet inscription: the aleph is erased with a clip, not removed from layout. */
 .g-aleph {
   display: inline-block;

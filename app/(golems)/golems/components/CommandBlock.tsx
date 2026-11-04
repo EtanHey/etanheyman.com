@@ -14,6 +14,7 @@ export default function CommandBlock({
     <div className="g-on-kiln relative overflow-hidden rounded-lg bg-g-kiln">
       <pre
         aria-label={label}
+        tabIndex={0}
         className="scrollbar-thin overflow-x-auto py-3.5 pr-12 pl-4 font-g-mono text-[0.84rem] leading-[1.7] text-g-kiln-text"
       >
         {lines.map((line, i) =>

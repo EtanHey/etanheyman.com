@@ -36,6 +36,7 @@ function Pre({ children, ...props }: PreProps) {
     <div className="g-on-kiln relative my-5">
       <pre
         {...props}
+        tabIndex={0}
         className="scrollbar-thin overflow-x-auto rounded-lg bg-g-kiln py-4 pr-12 pl-4 font-g-mono text-[0.84rem] leading-[1.7] text-g-kiln-text [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[inherit]"
       >
         {children}
@@ -97,7 +98,8 @@ export const golemsMdxComponents = {
     <blockquote className="my-5 border-l-[3px] border-g-cobalt pl-4 text-g-ash [&>p]:text-g-ash">{children}</blockquote>
   ),
   table: ({ children }: ComponentPropsWithoutRef<"table">) => (
-    <div className="scrollbar-thin my-5 overflow-x-auto">
+    // Focusable so keyboard users can scroll wide tables on small screens.
+    <div tabIndex={0} className="scrollbar-thin my-5 overflow-x-auto">
       <table className="w-full border-collapse text-left text-[0.95rem] text-g-ink">{children}</table>
     </div>
   ),
