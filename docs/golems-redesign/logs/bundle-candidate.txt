@@ -1,0 +1,5 @@
+├ ○ /golems                              3.21 kB         110 kB
+├ ○ /golems/docs                           149 B         104 kB
+├ ƒ /golems/docs/[...slug]               4.43 kB         291 kB
+├ ○ /golems/skills                       2.88 kB         110 kB
+├ ● /golems/skills/[name]                2.25 kB         289 kB
