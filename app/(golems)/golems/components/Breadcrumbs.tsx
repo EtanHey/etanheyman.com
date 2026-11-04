@@ -37,15 +37,19 @@ export default function Breadcrumbs({ title }: { title: string }) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="mb-4 flex items-center gap-1.5 text-xs text-[#b0a89c] md:mb-6"
+      className="mb-4 flex flex-wrap items-center gap-1.5 text-sm text-g-ash"
     >
-      <Link href="/golems" className="transition-colors hover:text-[#c0b8a8]">
+      <Link href="/golems" className="rounded-sm transition-colors duration-150 hover:text-g-ink">
         Golems
       </Link>
-      <ChevronRight className="h-3 w-3" />
-      <span>{section}</span>
-      <ChevronRight className="h-3 w-3" />
-      <span className="max-w-[200px] truncate text-[#c0b8a8]">{title}</span>
+      {section !== title && (
+        <>
+          <ChevronRight aria-hidden="true" className="h-3.5 w-3.5" />
+          <span>{section}</span>
+        </>
+      )}
+      <ChevronRight aria-hidden="true" className="h-3.5 w-3.5" />
+      <span aria-current="page" className="max-w-[220px] truncate text-g-ink">{title}</span>
     </nav>
   );
 }

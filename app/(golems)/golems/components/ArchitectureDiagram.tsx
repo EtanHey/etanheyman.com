@@ -12,7 +12,7 @@ const C = {
   pink: "#f472b6",
   text: "#e2e8f0",
   muted: "#94a3b8",
-  dim: "#64748b",
+  dim: "#94a3b8", // was #64748b (3.6:1 on cards); lifted for 4.5:1
   bg: "#111110",
   cardBg: "#1a1510",
   cloudBg: "#151210",
@@ -129,21 +129,15 @@ export default function ArchitectureDiagram() {
         }
       `}</style>
 
-      {/* Desktop: full SVG */}
-      <div className="my-8 hidden md:block">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/img/architecture-flow.svg"
-          alt="Architecture — Surfaces flow into Golem Plugins which connect to Infrastructure"
-          className="mx-auto w-full max-w-[920px] rounded-lg"
-        />
-      </div>
+      {/* AIDEV-NOTE: Desktop shows the same /img/architecture-flow.svg that
+          content/golems/architecture.md already embeds, so only the mobile
+          fallback renders here (it previously appeared twice on desktop). */}
 
       {/* Mobile: vertical interactive layout */}
-      <div className="my-6 space-y-0 md:hidden">
+      <div className="g-on-kiln my-6 space-y-0 rounded-xl bg-[#111110] px-2 py-5 md:hidden">
         {/* Title */}
         <div className="mb-4 text-center">
-          <span className="text-[10px] font-bold tracking-[0.2em] text-[#64748b] uppercase">
+          <span className="text-[10px] font-bold tracking-[0.2em] text-g-kiln-muted uppercase">
             ARCHITECTURE
           </span>
         </div>
@@ -153,7 +147,7 @@ export default function ArchitectureDiagram() {
           <div className="mb-2 text-center">
             <span
               className="text-[9px] font-bold tracking-[0.15em] uppercase"
-              style={{ color: C.amber, opacity: 0.6 }}
+              style={{ color: C.amber }}
             >
               Surfaces
             </span>
@@ -174,7 +168,7 @@ export default function ArchitectureDiagram() {
                 >
                   {s.name}
                 </span>
-                <span className="text-[10px] opacity-60">{s.sub}</span>
+                <span className="text-[10px] text-g-kiln-muted">{s.sub}</span>
               </div>
             ))}
           </div>
@@ -187,7 +181,7 @@ export default function ArchitectureDiagram() {
           <div className="mb-2 text-center">
             <span
               className="text-[9px] font-bold tracking-[0.15em] uppercase"
-              style={{ color: C.amber, opacity: 0.6 }}
+              style={{ color: C.amber }}
             >
               Golem Plugins
             </span>
@@ -210,7 +204,7 @@ export default function ArchitectureDiagram() {
                 </div>
                 <div
                   className="text-[10px]"
-                  style={{ color: C.amber, opacity: 0.7 }}
+                  style={{ color: C.amber }}
                 >
                   orchestrator
                 </div>
@@ -273,7 +267,7 @@ export default function ArchitectureDiagram() {
           <div className="mb-2 text-center">
             <span
               className="text-[9px] font-bold tracking-[0.15em] uppercase"
-              style={{ color: C.cyan, opacity: 0.6 }}
+              style={{ color: C.cyan }}
             >
               Infrastructure
             </span>
@@ -324,16 +318,16 @@ export default function ArchitectureDiagram() {
 
         {/* Bottom stats */}
         <div className="flex justify-center gap-4 pt-4 pb-2">
-          <span className="text-[9px]" style={{ color: C.amber, opacity: 0.5 }}>
+          <span className="text-[9px]" style={{ color: C.amber }}>
             {golemsStats.agents.count} agents
           </span>
-          <span className="text-[9px]" style={{ color: C.amber, opacity: 0.5 }}>
+          <span className="text-[9px]" style={{ color: C.amber }}>
             {skillsManifest.skillCount} skills
           </span>
-          <span className="text-[9px]" style={{ color: C.cyan, opacity: 0.5 }}>
+          <span className="text-[9px]" style={{ color: C.cyan }}>
             {golemsStats.mcp.count} MCP servers
           </span>
-          <span className="text-[9px]" style={{ color: C.pink, opacity: 0.5 }}>
+          <span className="text-[9px]" style={{ color: C.pink }}>
             {golemsStats.brainlayer.chunksDisplay} chunks
           </span>
         </div>

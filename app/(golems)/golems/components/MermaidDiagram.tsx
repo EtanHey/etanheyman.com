@@ -5,21 +5,23 @@ import mermaid from "mermaid";
 
 mermaid.initialize({
   startOnLoad: false,
-  theme: "dark",
+  theme: "base",
   themeVariables: {
-    darkMode: true,
-    background: "#0d0d0d",
-    primaryColor: "#c4783c",
-    primaryTextColor: "#f0ebe0",
-    primaryBorderColor: "#a89078",
-    lineColor: "#a89078",
-    secondaryColor: "#1a1816",
-    tertiaryColor: "#0d0d0d",
-    fontFamily: "var(--font-golems-mono), 'JetBrains Mono', monospace",
-    fontSize: "16px",
-    noteBkgColor: "#1a1816",
-    noteTextColor: "#c0b8a8",
-    noteBorderColor: "#e5950033",
+    darkMode: false,
+    background: "#e9eae4",
+    primaryColor: "#e9eae4",
+    primaryTextColor: "#1b2321",
+    primaryBorderColor: "#4f5651",
+    lineColor: "#4f5651",
+    secondaryColor: "#dedfd8",
+    tertiaryColor: "#d2d4cc",
+    clusterBkg: "#dedfd8",
+    clusterBorder: "#b9bbb2",
+    fontFamily: "var(--font-golems-sans), 'IBM Plex Sans', sans-serif",
+    fontSize: "15px",
+    noteBkgColor: "#d2d4cc",
+    noteTextColor: "#1b2321",
+    noteBorderColor: "#b9bbb2",
   },
 });
 
@@ -44,16 +46,16 @@ export default function MermaidDiagram({ chart }: { chart: string }) {
 
   if (error) {
     return (
-      <div className="mb-4 overflow-x-auto rounded-lg border border-[#e5950026] bg-[#0d0d0d] p-4 font-mono text-sm">
-        <pre className="text-[#c0b8a8]">{chart}</pre>
+      <div className="my-5 overflow-x-auto rounded-lg bg-g-kiln p-4 font-g-mono text-sm">
+        <pre className="text-g-kiln-text">{chart}</pre>
       </div>
     );
   }
 
   if (!svg) {
     return (
-      <div className="mb-4 flex min-h-[100px] items-center justify-center rounded-lg border border-[#e5950026] bg-[#0d0d0d] p-4">
-        <span className="text-sm text-[#a89078]">Loading diagram...</span>
+      <div className="my-5 flex min-h-[100px] items-center justify-center rounded-lg border border-g-rule bg-g-raised p-4">
+        <span className="text-sm text-g-ash">Loading diagram…</span>
       </div>
     );
   }
@@ -61,7 +63,7 @@ export default function MermaidDiagram({ chart }: { chart: string }) {
   return (
     <div
       ref={containerRef}
-      className="mb-4 flex justify-center overflow-x-auto rounded-lg border border-[#e5950026] bg-[#0d0d0d] p-4 [&_svg]:mx-auto [&_svg]:max-w-full"
+      className="my-5 flex justify-center overflow-x-auto rounded-lg border border-g-rule bg-g-raised p-4 [&_svg]:mx-auto [&_svg]:max-w-full"
       dangerouslySetInnerHTML={{ __html: svg }}
     />
   );
