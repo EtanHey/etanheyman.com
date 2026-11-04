@@ -39,7 +39,7 @@ export function MiniSiteNav({
   const cleanLogoUrl = logoUrl?.replace("#svg", "").replace("#logo", "");
 
   return (
-    <div className="sticky top-[88px] z-40 w-full self-stretch">
+    <div className="sticky top-16 z-30 w-full self-stretch md:top-[72px]">
       <nav
         className="border-b border-white/[0.06] bg-[#00003F]/95 backdrop-blur-xl"
         style={{
@@ -50,7 +50,7 @@ export function MiniSiteNav({
           {/* Left: Back link */}
           <Link
             href={isOverview ? "/projects" : basePath}
-            className="mr-3 flex shrink-0 items-center gap-1.5 py-3.5 font-mono text-[11px] tracking-wide text-white/30 transition-colors hover:text-white/55 md:mr-4"
+            className="mr-3 flex shrink-0 items-center gap-1.5 py-3.5 text-[14px] text-[var(--pf-sky)] transition-colors hover:text-white md:mr-4"
           >
             <ArrowLeft className="h-3 w-3" />
             <span className="hidden sm:inline">
@@ -122,7 +122,7 @@ export function MiniSiteNav({
           )}
 
           {/* Tabs — scrollable on mobile, all visible on desktop */}
-          <div className="flex min-w-0 flex-1 overflow-x-auto md:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex min-w-0 flex-1 overflow-x-auto lg:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {tabs.map((tab) => {
               const href = `${basePath}${tab.path}`;
               const isActive =
@@ -134,10 +134,11 @@ export function MiniSiteNav({
                 <Link
                   key={tab.label}
                   href={href}
-                  className={`relative shrink-0 px-3 py-3.5 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors duration-200 md:px-4 md:text-[12px] md:tracking-[0.15em] ${
+                  aria-current={isActive ? "page" : undefined}
+                  className={`relative shrink-0 px-3 py-3.5 text-[14px] transition-colors duration-200 md:px-4 md:text-[15px] ${
                     isActive
                       ? "text-white"
-                      : "text-white/40 hover:text-white/60"
+                      : "text-[var(--pf-sky)] hover:text-white"
                   }`}
                 >
                   {tab.label}

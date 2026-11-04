@@ -1,0 +1,139 @@
+{
+  "keyboardHome1440": [
+    {
+      "tag": "a",
+      "text": "Skip to content",
+      "href": "#main",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Etan Heyman",
+      "href": "/",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Work",
+      "href": "/projects",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Skills",
+      "href": "/#skills",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "About",
+      "href": "/about",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Contact",
+      "href": "/contact",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "See the work",
+      "href": "#work",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Get in touch",
+      "href": "/contact",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Golems skillsHow agents work57 SKILL.md workflows, 37 with e",
+      "href": "#skills",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "cmuxLayerOrchestrationRuns coding agents in parallel termina",
+      "href": "/projects/cmuxlayer",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "VoiceLayerVoiceSpeech in and out for coding agents, with loc",
+      "href": "/projects/voicelayer",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "BrainLayerMemoryPersistent memory over MCP, kept in one loca",
+      "href": "/projects/brainlayer",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Case study for BrainLayer",
+      "href": "/projects/brainlayer",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Source code for BrainLayer (opens in a new tab)",
+      "href": "https://github.com/EtanHey/brainlayer",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Docs for BrainLayer (opens in a new tab)",
+      "href": "https://etanhey.github.io/brainlayer",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    },
+    {
+      "tag": "a",
+      "text": "Live site for BrainLayer (opens in a new tab)",
+      "href": "https://brainlayer.etanheyman.com",
+      "outline": "solid 3px rgb(255, 194, 75)"
+    }
+  ],
+  "skipLinkTarget": "main",
+  "plateHoverTransform_no-preference": "matrix(1, 0, 0, 1, 10, 0)",
+  "plateHoverTransform_reduce": "none",
+  "mobileMenu": {
+    "dialogOpened": true,
+    "focusStayedInsideFor8Tabs": true,
+    "ariaCurrentInMenu": [
+      "Work"
+    ],
+    "dialogClosedOnEscape": true,
+    "focusReturnedTo": {
+      "tag": "button",
+      "text": "Menu",
+      "href": null,
+      "outline": "solid 3px rgb(255, 194, 75)"
+    }
+  },
+  "settle_reduce": {
+    "animationName": "pf-fade",
+    "animationDuration": "1e-05s"
+  },
+  "settle_no-preference": {
+    "animationName": "pf-settle",
+    "animationDuration": "0.52s"
+  },
+  "contrast": {
+    "ice on ink (body text)": 17.62,
+    "sky on ink (secondary text)": 11.5,
+    "sky on deeper (skills surface)": 10.5,
+    "ice on deep (plates)": 13.03,
+    "sky on deep (plate notes)": 8.5,
+    "white on signal (buttons, band text)": 5.33,
+    "ice on signal (top plate text)": 4.8,
+    "ice on ink (band ink button label)": 17.62,
+    "ink button edge on signal (non-text 3:1)": 3.67,
+    "old brand blue with white text (for comparison)": 3.88,
+    "marigold on ink (focus ring, non-text 3:1)": 12.2,
+    "ink focus ring inside band (non-text 3:1)": 3.67
+  }
+}

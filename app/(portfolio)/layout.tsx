@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Source_Serif_4 } from "next/font/google";
+// Order matters: portfolio-type.css must declare its cascade layer before globals.css.
+import "./portfolio-type.css";
 import "../globals.css";
+import "./portfolio.css";
 
 import { Toaster } from "@/components/ui/sonner";
-import Footer from "@/app/components/Footer";
-import {
-  BottomMobileBgCover,
-  TopMobileBgCover,
-} from "@/app/components/navigation/mobileBgCover";
-import Nav from "@/app/components/navigation/Nav";
+import SiteFooter from "./_components/SiteFooter";
+import SiteNav from "./_components/SiteNav";
 
 // Configure Nutmeg font for headers (purchased web fonts)
 const nutmeg = localFont({
@@ -38,10 +38,17 @@ const nutmeg = localFont({
   display: "swap",
 });
 
+// Prose face for descriptions and long text; Nutmeg stays the display and UI voice.
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-pf-serif",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Etan Heyman — AI Engineer",
   description:
-    "Building open-source tools for AI agents. Creator of Golems: 3 MCP servers, 44 tools — persistent memory, voice I/O, multi-agent orchestration.",
+    "AI engineer building open-source tools for AI coding agents: persistent memory, voice I/O and parallel agent orchestration over MCP, plus the Golems skills and their evals.",
   keywords: [
     "AI engineer",
     "MCP server",
@@ -79,7 +86,7 @@ export const metadata: Metadata = {
     url: "https://etanheyman.com",
     title: "Etan Heyman",
     description:
-      "AI Engineer building open-source tools for AI agents. Creator of the Golems ecosystem: 3 MCP servers, 44 tools.",
+      "AI engineer building open-source tools for AI coding agents: memory, voice, orchestration and skills.",
     siteName: "Etan Heyman | AI Engineer",
     images: [
       {
@@ -94,7 +101,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Etan Heyman",
     description:
-      "AI Engineer building open-source tools for AI agents. Creator of the Golems ecosystem: 3 MCP servers, 44 tools.",
+      "AI engineer building open-source tools for AI coding agents: memory, voice, orchestration and skills.",
     images: ["/favicon/web-app-manifest-512x512.png"],
   },
   verification: {
@@ -113,17 +120,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden scroll-smooth">
       <body
-        className={`${nutmeg.variable} relative -z-20 flex h-full min-h-screen flex-col justify-center overscroll-none antialiased *:text-white`}
+        className={`${nutmeg.variable} ${sourceSerif.variable} pf-root flex min-h-screen flex-col antialiased`}
       >
-        {/* Top SVGs (fixed to viewport) */}
-        <Nav />
-        {/* Main content */}
-        <div className="bg-background relative z-0 flex h-full grow flex-col items-center justify-center">
-          <TopMobileBgCover />
-          <BottomMobileBgCover />
+        <SiteNav />
+        <div id="main" tabIndex={-1} className="flex grow flex-col outline-none">
           {children}
         </div>
-        <Footer />
+        <SiteFooter />
         <Toaster />
       </body>
     </html>

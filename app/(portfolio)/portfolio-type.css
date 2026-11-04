@@ -1,0 +1,17 @@
+/*
+  AIDEV-NOTE: app/globals.css sets `* { font-family: Nutmeg !important }` inside
+  @layer base. For !important declarations, an EARLIER cascade layer wins, so this
+  file is imported before globals.css in app/(portfolio)/layout.tsx to declare
+  pf-type first. That lets portfolio prose use the serif without editing the shared
+  globals file. Keep this file to font-family only.
+*/
+@layer pf-type {
+  .pf-prose,
+  .pf-prose *,
+  .pf-lede,
+  .pf-lede *,
+  .pf-row-desc,
+  .pf-plate-note {
+    font-family: var(--font-pf-serif), Georgia, "Times New Roman", serif !important;
+  }
+}

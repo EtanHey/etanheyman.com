@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getAllProjects } from "@/lib/projects";
-import { ProjectCard } from "@/app/components/ProjectCard";
+import ContactBand from "../_components/ContactBand";
+import WorkLedger from "../_components/WorkLedger";
+import { claimStatusOf, groupProjects } from "../_lib/portfolio-content";
 
 export const metadata: Metadata = {
   title: "Projects | Etan Heyman",
@@ -11,29 +13,59 @@ export const metadata: Metadata = {
 
 export default async function ProjectsPage() {
   const projects = await getAllProjects();
+  const groups = groupProjects(projects);
+  const checked = projects.filter((p) => claimStatusOf(p).checked).length;
 
   return (
-    <main className="relative z-10 container mx-auto px-4 py-8 md:px-8 lg:px-16">
-      {/* Header */}
-      <div className="mb-12">
-        <h1 className="mb-4 font-[Nutmeg] text-[34px] font-semibold text-blue-200 md:text-[64px]">
-          All Projects
-        </h1>
-        <p className="font-[Nutmeg] text-[14px] leading-[1.2] font-light text-white/80 md:text-[18px]">
-          Explore my complete portfolio of web development, machine learning,
-          and software engineering projects
-        </p>
-      </div>
+    <main className="flex w-full flex-col">
+      <section aria-labelledby="projects-heading">
+        <div className="pf-container pt-12 pb-8 md:pt-20 md:pb-12">
+          <h1 id="projects-heading" className="pf-h1">
+            All projects
+          </h1>
+          <p className="pf-lede mt-5">
+            {projects.length} projects, from agent tooling to client sites. Each one links to
+            something you can open: the source, a live site, docs or a case study.
+          </p>
+          <div className="mt-8 flex flex-col gap-x-10 gap-y-2 sm:flex-row sm:flex-wrap">
+            <p className="pf-claim pf-claim-checked mt-0">
+              <span className="pf-claim-dot" aria-hidden="true" />
+              Description checked against the repository ({checked} of {projects.length})
+            </p>
+            <p className="pf-claim mt-0">
+              <span className="pf-claim-dot" aria-hidden="true" />
+              Description not yet checked against the repository
+            </p>
+          </div>
+          <nav aria-label="Project groups" className="mt-10 flex flex-wrap gap-2">
+            {groups.map((group) => (
+              <a key={group.id} href={`#${group.id}`} className="pf-evidence-link border border-[var(--pf-line)] px-4">
+                {group.title}
+                <span className="text-[var(--pf-sky)]">{group.projects.length}</span>
+              </a>
+            ))}
+          </nav>
+        </div>
+      </section>
 
-      {/* Projects Grid */}
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
-        {projects.map((project, index) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            priority={index < 4}
-          />
-        ))}
+      {groups.map((group) => (
+        <section key={group.id} id={group.id} aria-labelledby={`${group.id}-heading`} className="scroll-mt-20">
+          <div className="pf-container py-10 md:py-14">
+            <div className="grid gap-4 md:grid-cols-[1.2fr_1fr] md:items-end">
+              <h2 id={`${group.id}-heading`} className="pf-h2">
+                {group.title}
+              </h2>
+              <p className="pf-prose text-[var(--pf-sky)]">{group.intro}</p>
+            </div>
+            <div className="mt-8">
+              <WorkLedger projects={group.projects} />
+            </div>
+          </div>
+        </section>
+      ))}
+
+      <div className="mt-12">
+        <ContactBand heading="Want the story behind one of these?" />
       </div>
     </main>
   );

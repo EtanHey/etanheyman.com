@@ -1,0 +1,154 @@
+[
+  {
+    "route": "/",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects/brainlayer",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/about",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": [
+      "pageerror: Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full e"
+    ]
+  },
+  {
+    "route": "/contact",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 77,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects/brainlayer",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 302,
+    "consoleErrors": []
+  },
+  {
+    "route": "/about",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": [
+      "pageerror: Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full e"
+    ]
+  },
+  {
+    "route": "/contact",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": [
+      "pageerror: Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full e"
+    ]
+  },
+  {
+    "route": "/",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": [
+      "pageerror: Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full e"
+    ]
+  },
+  {
+    "route": "/projects/brainlayer",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/about",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": [
+      "pageerror: Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full e"
+    ]
+  },
+  {
+    "route": "/contact",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects/brainlayer",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/about",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": [
+      "pageerror: Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full e"
+    ]
+  },
+  {
+    "route": "/contact",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  }
+]

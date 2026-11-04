@@ -1,0 +1,142 @@
+[
+  {
+    "route": "/",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects/brainlayer",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/about",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/contact",
+    "width": 1440,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects/brainlayer",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/about",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/contact",
+    "width": 768,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects/brainlayer",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/about",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/contact",
+    "width": 390,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/projects/brainlayer",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/about",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  },
+  {
+    "route": "/contact",
+    "width": 320,
+    "status": 200,
+    "overflowPx": 0,
+    "consoleErrors": []
+  }
+]

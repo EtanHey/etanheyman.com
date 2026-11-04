@@ -1,0 +1,589 @@
+/*
+  Portfolio design system ("layer stack").
+  AIDEV-NOTE: Imported only by app/(portfolio)/layout.tsx, which is its own root
+  layout. The Golems site has a separate root layout and never loads this file.
+  Every selector is a single .pf-* class (no element selectors) so specificity
+  stays flat and nothing here can restyle shared components by accident.
+  Everything sits in @layer components so Tailwind utilities (md:hidden, mt-6)
+  still win over these defaults, as they would for any component class.
+*/
+
+@layer components {
+
+.pf-root {
+  --pf-ink: #00003f; /* page ground, brand navy */
+  --pf-deep: #002072; /* raised plates */
+  --pf-deeper: #000a55; /* plate shadow edge */
+  --pf-line: rgb(136 207 248 / 0.22); /* hairlines on navy */
+  /* Actions + contact band. One step deeper than brand #0f82eb so white text
+     clears WCAG AA (5.33:1 vs 3.88:1). */
+  --pf-signal: #0a6acb;
+  --pf-signal-press: #0959b0;
+  --pf-ice: #e7f5fe; /* primary text */
+  --pf-sky: #88cff8; /* secondary text, 10:1 on ink */
+  --pf-marigold: #ffc24b; /* focus + "checked" marker, the one warm note */
+
+  --pf-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --pf-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  --pf-display: var(--font-nutmeg), ui-sans-serif, system-ui, sans-serif;
+  --pf-prose: var(--font-pf-serif), Georgia, "Times New Roman", serif;
+
+  --pf-gutter: 16px;
+  --pf-max: 1200px;
+
+  background: var(--pf-ink);
+  color: var(--pf-ice);
+  font-family: var(--pf-display);
+}
+
+@media (min-width: 768px) {
+  .pf-root {
+    --pf-gutter: 40px;
+  }
+}
+@media (min-width: 1280px) {
+  .pf-root {
+    --pf-gutter: 64px;
+  }
+}
+
+.pf-root ::selection {
+  background: var(--pf-marigold);
+  color: var(--pf-ink);
+}
+
+/* One focus style everywhere: marigold reads on navy, ice and signal blue. */
+.pf-root :focus-visible {
+  outline: 3px solid var(--pf-marigold);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.pf-skip {
+  position: absolute;
+  left: var(--pf-gutter);
+  top: -100px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--pf-marigold);
+  color: var(--pf-ink);
+  font-weight: 700;
+}
+.pf-skip:focus {
+  top: 12px;
+}
+
+.pf-container {
+  width: 100%;
+  max-width: calc(var(--pf-max) + 2 * var(--pf-gutter));
+  margin-inline: auto;
+  padding-inline: var(--pf-gutter);
+}
+
+/* ---------- Type ---------- */
+
+.pf-display {
+  font-family: var(--pf-display);
+  font-weight: 700;
+  font-size: clamp(40px, 6.2vw, 80px);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.pf-h1 {
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.pf-h2 {
+  font-weight: 700;
+  font-size: clamp(26px, 3.4vw, 44px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.pf-h3 {
+  font-weight: 700;
+  font-size: clamp(20px, 1.9vw, 26px);
+  line-height: 1.15;
+}
+.pf-lede {
+  font-family: var(--pf-prose);
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.55;
+  color: var(--pf-sky);
+  max-width: 34em;
+  text-wrap: pretty;
+}
+.pf-prose {
+  font-family: var(--pf-prose);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--pf-ice);
+  max-width: 38em;
+  text-wrap: pretty;
+}
+.pf-small {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--pf-sky);
+}
+
+/* ---------- Links and buttons ---------- */
+
+.pf-link {
+  color: var(--pf-ice);
+  text-decoration: underline;
+  text-decoration-color: rgb(136 207 248 / 0.5);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 160ms ease, color 160ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .pf-link:hover {
+    text-decoration-color: var(--pf-ice);
+  }
+}
+
+.pf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: transform 140ms var(--pf-ease-out), background-color 160ms ease, border-color 160ms ease;
+}
+.pf-btn:active {
+  transform: scale(0.97);
+}
+.pf-btn-primary {
+  background: var(--pf-signal);
+  color: #fff;
+}
+.pf-btn-ghost {
+  border: 1px solid rgb(136 207 248 / 0.55);
+  color: var(--pf-ice);
+}
+.pf-btn-ink {
+  background: var(--pf-ink);
+  color: var(--pf-ice);
+}
+.pf-btn-light {
+  border: 1px solid rgb(231 245 254 / 0.7);
+  color: #fff;
+}
+@media (hover: hover) and (pointer: fine) {
+  .pf-btn-primary:hover {
+    background: var(--pf-signal-press);
+  }
+  .pf-btn-ghost:hover {
+    border-color: var(--pf-ice);
+  }
+  .pf-btn-ink:hover {
+    background: var(--pf-deep);
+  }
+  .pf-btn-light:hover {
+    border-color: #fff;
+  }
+}
+
+/* ---------- Nav ---------- */
+
+.pf-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgb(0 0 63 / 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--pf-line);
+}
+.pf-nav-link {
+  position: relative;
+  padding: 8px 2px;
+  font-size: 16px;
+  color: var(--pf-sky);
+  transition: color 160ms ease;
+}
+.pf-nav-link[aria-current="page"] {
+  color: var(--pf-ice);
+}
+.pf-nav-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--pf-marigold);
+}
+@media (hover: hover) and (pointer: fine) {
+  .pf-nav-link:hover {
+    color: var(--pf-ice);
+  }
+}
+
+.pf-sheet {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  left: 12px;
+  z-index: 60;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--pf-deep);
+  border: 1px solid var(--pf-line);
+  box-shadow: 0 24px 60px rgb(0 0 30 / 0.6);
+  transform-origin: top right;
+  transition: opacity 200ms var(--pf-ease-out), transform 200ms var(--pf-ease-out);
+}
+.pf-sheet[data-state="closed"] {
+  opacity: 0;
+  transform: scale(0.97) translateY(-6px);
+  transition-duration: 140ms;
+}
+@starting-style {
+  .pf-sheet[data-state="open"] {
+    opacity: 0;
+    transform: scale(0.97) translateY(-6px);
+  }
+}
+.pf-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgb(0 0 30 / 0.55);
+}
+
+/* ---------- Hero layer stack ---------- */
+
+.pf-stack {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding-left: 0;
+}
+@media (min-width: 1024px) {
+  .pf-stack {
+    gap: 0;
+    padding-top: 8px;
+  }
+}
+
+.pf-plate {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 16px;
+  min-height: 84px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: var(--pf-deep);
+  border: 1px solid var(--pf-line);
+  box-shadow: 0 10px 0 -2px var(--pf-deeper);
+  color: var(--pf-ice);
+  transition: transform 220ms var(--pf-ease-out), border-color 160ms ease, background-color 160ms ease;
+}
+.pf-plate-top {
+  background: var(--pf-signal);
+  border-color: rgb(231 245 254 / 0.45);
+}
+.pf-plate-name {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.pf-plate-role {
+  font-size: 15px;
+  color: var(--pf-sky);
+}
+.pf-plate-top .pf-plate-role {
+  color: var(--pf-ice);
+}
+.pf-plate-note {
+  grid-column: 1 / -1;
+  font-family: var(--pf-prose);
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--pf-sky);
+}
+.pf-plate-top .pf-plate-note {
+  color: #fff;
+}
+
+/* Desktop: plates overlap and step right, like a section drawing of a stack. */
+@media (min-width: 1024px) {
+  .pf-plate {
+    margin-bottom: -14px;
+    margin-left: calc(var(--i, 0) * 22px);
+    margin-right: calc((3 - var(--i, 0)) * 22px);
+    z-index: calc(10 - var(--i, 0));
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .pf-plate:hover {
+    transform: translateX(10px);
+    border-color: rgb(231 245 254 / 0.6);
+  }
+}
+
+/* The single orchestrated moment: the stack settles on first paint. */
+.pf-settle {
+  animation: pf-settle 520ms var(--pf-ease-out) both;
+  animation-delay: calc(120ms + var(--i, 0) * 70ms);
+}
+@keyframes pf-settle {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Ledger (work rows) ---------- */
+
+.pf-ledger {
+  border-top: 1px solid var(--pf-line);
+}
+.pf-row {
+  display: grid;
+  gap: 12px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--pf-line);
+}
+@media (min-width: 900px) {
+  .pf-row {
+    grid-template-columns: minmax(200px, 3fr) minmax(0, 5fr) minmax(190px, 2.4fr);
+    gap: 32px;
+    padding: 28px 0;
+    align-items: start;
+  }
+}
+.pf-row-name {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--pf-ice);
+}
+.pf-row-context {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--pf-sky);
+}
+.pf-row-desc {
+  font-family: var(--pf-prose);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--pf-ice);
+  max-width: 36em;
+}
+
+.pf-evidence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+@media (min-width: 900px) {
+  .pf-evidence {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+.pf-evidence-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--pf-line);
+  font-size: 15px;
+  color: var(--pf-ice);
+  transition: border-color 160ms ease, background-color 160ms ease, transform 140ms var(--pf-ease-out);
+}
+.pf-evidence-link:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .pf-evidence-link:hover {
+    border-color: var(--pf-sky);
+    background: rgb(136 207 248 / 0.08);
+  }
+}
+@media (min-width: 900px) {
+  .pf-evidence-link {
+    min-height: 32px;
+    padding: 4px 0;
+    border: 0;
+    border-radius: 4px;
+  }
+  .pf-evidence-link:hover {
+    background: transparent;
+    color: #fff;
+  }
+}
+
+/* Claim status: shape + words, never colour alone. */
+.pf-claim {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--pf-sky);
+}
+.pf-claim-dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 1.5px solid var(--pf-sky);
+  transform: translateY(1px);
+}
+.pf-claim-checked .pf-claim-dot {
+  background: var(--pf-marigold);
+  border-color: var(--pf-marigold);
+}
+.pf-claim-checked {
+  color: var(--pf-ice);
+}
+
+/* ---------- Skills ledger ---------- */
+
+.pf-skill {
+  display: grid;
+  gap: 10px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--pf-line);
+}
+@media (min-width: 900px) {
+  .pf-skill {
+    grid-template-columns: minmax(180px, 2fr) minmax(0, 4fr) minmax(150px, 1.4fr);
+    gap: 32px;
+    align-items: baseline;
+  }
+}
+.pf-skill-name {
+  font-size: 19px;
+  font-weight: 700;
+}
+.pf-assertions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.pf-assertion {
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: rgb(136 207 248 / 0.1);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--pf-ice);
+}
+.pf-count {
+  font-size: 15px;
+  color: var(--pf-sky);
+  font-variant-numeric: tabular-nums;
+}
+.pf-count-strong {
+  color: var(--pf-ice);
+  font-weight: 700;
+}
+
+.pf-notice {
+  display: grid;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px dashed rgb(136 207 248 / 0.45);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--pf-sky);
+}
+.pf-notice-strong {
+  color: var(--pf-ice);
+  font-weight: 700;
+}
+
+/* A second ground for sections that should read as their own room. */
+.pf-surface {
+  background: var(--pf-deeper);
+  border-block: 1px solid var(--pf-line);
+}
+
+/* ---------- Contact band ---------- */
+
+.pf-band {
+  background: var(--pf-signal);
+  color: #fff;
+}
+.pf-band .pf-lede {
+  color: #fff;
+}
+.pf-band :focus-visible {
+  outline-color: var(--pf-ink);
+}
+
+/* ---------- Footer ---------- */
+
+.pf-footer {
+  border-top: 1px solid var(--pf-line);
+  background: var(--pf-ink);
+}
+
+/* ---------- Portrait ---------- */
+
+.pf-portrait {
+  border-radius: 999px;
+  background: var(--pf-sky);
+  object-fit: cover;
+}
+
+/* ---------- Motion preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-settle {
+    animation-name: pf-fade;
+    animation-duration: 200ms;
+    animation-delay: 0ms;
+  }
+  .pf-plate,
+  .pf-sheet,
+  .pf-btn,
+  .pf-evidence-link {
+    transition-property: opacity, color, background-color, border-color;
+  }
+  .pf-plate:hover {
+    transform: none;
+  }
+  .pf-btn:active,
+  .pf-evidence-link:active {
+    transform: none;
+  }
+}
+@keyframes pf-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+}
