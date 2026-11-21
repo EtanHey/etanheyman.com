@@ -19,9 +19,9 @@ const subscribeToMotion = (onChange: () => void) => {
   return () => query.removeEventListener("change", onChange);
 };
 const getReducedMotion = () => window.matchMedia(motionQuery).matches;
-// AIDEV-NOTE: SSR and hydration share a motion-free snapshot. Read the device
-// preference after hydration so conditional decorations cannot change the tree.
-const getServerReducedMotion = () => true;
+// AIDEV-NOTE: Match SSR during hydration and preserve the ordinary card entrance.
+// Reduced-motion clients adopt their preference and remount entrances afterward.
+const getServerReducedMotion = () => false;
 
 // --- Brand color constants (single source of truth) ---
 const BRAND_BLUE = "#0F82EB";
@@ -199,6 +199,7 @@ function TimelineCard({
 
       {/* Entrance animation wrapper — 3D unfold on scroll */}
       <motion.div
+        key={reducedMotion ? "reduced" : "motion"}
         initial={
           reducedMotion ? { opacity: 0 } : { opacity: 0, y: 30, rotateX: 6 }
         }

@@ -20,13 +20,27 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
         }
       });
       await installFixtureRoutes(page);
-      await page.goto("/about", { waitUntil: "networkidle" });
+      const response = await page.goto("/about", { waitUntil: "networkidle" });
+      if (!response) throw new Error("About navigation returned no response");
       await expect(
         page.getByRole("heading", { name: "Etan Heyman", exact: true }),
       ).toBeVisible();
-      await page
-        .getByRole("heading", { name: "My career journey" })
-        .scrollIntoViewIfNeeded();
+      const entrance = page.locator(
+        "#career-section ol li:last-child > div > div:nth-child(2)",
+      );
+      if (reducedMotion === "no-preference") {
+        // The last card is below the viewport: preserve its slide/tilt start.
+        expect
+          .soft(await entrance.evaluate((el) => getComputedStyle(el).transform))
+          .not.toBe("none");
+        expect
+          .soft((await response.text()).match(/translateY\(30px\)/g))
+          .toHaveLength(9);
+      } else {
+        await entrance.scrollIntoViewIfNeeded();
+        await expect(entrance).toHaveCSS("opacity", "1");
+        await expect(entrance).toHaveCSS("transform", "none");
+      }
       await expect(errors).toEqual([]);
     });
   });
