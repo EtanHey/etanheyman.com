@@ -65,6 +65,10 @@ export interface ProjectJourneyStep {
 
 // Mappers
 function mapProjectFromDB(dbProject: ProjectDB, journeySteps?: ProjectJourneyStepDB[]): Project {
+  // AIDEV-NOTE: Remote SVG is application/octet-stream + nosniff. Remove this
+  // override once the database row points at a working image file.
+  const imageOverride = dbProject.slug === "cantaloupe-ai"
+    ? "/images/projects/cantaloupe-ai.svg" : null;
   return {
     id: dbProject.id,
     slug: dbProject.slug,
@@ -72,8 +76,8 @@ function mapProjectFromDB(dbProject: ProjectDB, journeySteps?: ProjectJourneySte
     description: dbProject.description,
     shortDescription: dbProject.short_description,
     logoPath: dbProject.logo_path,
-    logoUrl: dbProject.logo_url,
-    previewImage: dbProject.preview_image,
+    logoUrl: imageOverride ?? dbProject.logo_url,
+    previewImage: imageOverride ?? dbProject.preview_image,
     technologies: dbProject.technologies,
     gitUrl: dbProject.git_url,
     liveUrl: dbProject.live_url,

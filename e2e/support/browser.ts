@@ -5,7 +5,10 @@ import assets from "../fixtures/assets.json";
 
 const assetMap = new Map(Object.entries(assets));
 
-export async function installFixtureRoutes(page: Page) {
+export async function installFixtureRoutes(
+  page: Page,
+  baseURL = "http://127.0.0.1:45320",
+) {
   await page.route("**/*", async (route) => {
     if (route.request().method() !== "GET") return route.abort();
     if (process.env.BASE_URL) return route.continue();
@@ -30,7 +33,7 @@ export async function installFixtureRoutes(page: Page) {
       )
         return route.abort();
     }
-    if (url.origin === "http://127.0.0.1:45320") return route.continue();
+    if (url.origin === new URL(baseURL).origin) return route.continue();
     return route.abort();
   });
 }

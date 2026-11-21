@@ -122,6 +122,25 @@ function isSvgOrLogoAsset(imageUrl: string | null): imageUrl is string {
   );
 }
 
+function useImageDecode(
+  source: string | null,
+  onFailure: (source: string) => void,
+) {
+  const imageRef = useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    const image = imageRef.current;
+    if (!image || !source) return;
+    let active = true;
+    image.decode().catch(() => {
+      if (active) onFailure(source);
+    });
+    return () => {
+      active = false;
+    };
+  }, [source, onFailure]);
+  return imageRef;
+}
+
 function useHoverCounter(targetValue: number, active: boolean) {
   const [value, setValue] = useState(0);
   const frameRef = useRef<number | null>(null);
@@ -213,7 +232,18 @@ function ProjectCardBase({
   const [isHovering, setIsHovering] = useState(false);
 
   const accent = ACCENT_STYLES[getProjectAccent(project)];
-  const isSvgOrLogo = isSvgOrLogoAsset(project.previewImage);
+  const previewImage = project.previewImage;
+  const [failedPreview, setFailedPreview] = useState<string | null>(null);
+  const [failedLogo, setFailedLogo] = useState<string | null>(null);
+  const isSvgOrLogo = isSvgOrLogoAsset(previewImage);
+  const previewRef = useImageDecode(
+    isSvgOrLogo ? previewImage : null,
+    setFailedPreview,
+  );
+  const logoRef = useImageDecode(
+    !previewImage || failedPreview === previewImage ? project.logoUrl : null,
+    setFailedLogo,
+  );
   const isFeatured = variant === "featured";
 
   const toolsCount = inferToolsCount(project);
@@ -247,22 +277,23 @@ function ProjectCardBase({
             isFeatured ? "aspect-[2.4/1] sm:aspect-[2.2/1]" : "aspect-[16/10]",
           )}
         >
-          {project.previewImage ? (
+          {previewImage && failedPreview !== previewImage ? (
             <>
               {isSvgOrLogo && <div className="absolute inset-0 bg-blue-50" />}
               {isSvgOrLogo ? (
                 <img
-                  src={project.previewImage
-                    .replace("#svg", "")
-                    .replace("#logo", "")}
+                  src={previewImage.replace("#svg", "").replace("#logo", "")}
                   alt={project.title}
+                  onError={() => setFailedPreview(previewImage)}
+                  ref={previewRef}
                   className="absolute inset-0 h-full w-full object-contain object-center p-8"
                   loading={priority ? "eager" : "lazy"}
                 />
               ) : (
                 <Image
-                  src={project.previewImage}
+                  src={previewImage}
                   alt={project.title}
+                  onError={() => setFailedPreview(previewImage)}
                   fill
                   priority={priority}
                   sizes={sizes}
@@ -272,22 +303,29 @@ function ProjectCardBase({
             </>
           ) : (
             <div
+              data-image-fallback
               className={cn(
-                "absolute inset-0 bg-gradient-to-br",
+                "absolute inset-0 flex items-center justify-center bg-gradient-to-br p-8",
                 accent.fallbackGradient,
               )}
             >
-              {project.logoUrl && (
+              {project.logoUrl && failedLogo !== project.logoUrl ? (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <img
                     src={project.logoUrl
                       .replace("#svg", "")
                       .replace("#logo", "")}
                     alt={project.title}
+                    onError={() => setFailedLogo(project.logoUrl)}
+                    ref={logoRef}
                     className="h-[40%] w-[40%] object-contain opacity-30 transition-opacity duration-500 group-hover/card:opacity-50"
                     loading="lazy"
                   />
                 </div>
+              ) : (
+                <span className="text-center font-[Nutmeg] text-xl font-semibold text-white/80 md:text-2xl">
+                  {project.title}
+                </span>
               )}
             </div>
           )}
