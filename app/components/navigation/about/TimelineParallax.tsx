@@ -8,10 +8,20 @@ import {
   useInView,
   useMotionValue,
   useMotionValueEvent,
-  useReducedMotion,
 } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import SendRightPointer from "./SendRightPointer";
+
+const motionQuery = "(prefers-reduced-motion: reduce)";
+const subscribeToMotion = (onChange: () => void) => {
+  const query = window.matchMedia(motionQuery);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+};
+const getReducedMotion = () => window.matchMedia(motionQuery).matches;
+// AIDEV-NOTE: Match SSR during hydration and preserve the ordinary card entrance.
+// Reduced-motion clients adopt their preference and remount entrances afterward.
+const getServerReducedMotion = () => false;
 
 // --- Brand color constants (single source of truth) ---
 const BRAND_BLUE = "#0F82EB";
@@ -189,6 +199,7 @@ function TimelineCard({
 
       {/* Entrance animation wrapper — 3D unfold on scroll */}
       <motion.div
+        key={reducedMotion ? "reduced" : "motion"}
         initial={
           reducedMotion ? { opacity: 0 } : { opacity: 0, y: 30, rotateX: 6 }
         }
@@ -316,7 +327,11 @@ function TimelineCard({
 
 // --- Main Timeline Component ---
 const TimelineParallax = () => {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useSyncExternalStore(
+    subscribeToMotion,
+    getReducedMotion,
+    getServerReducedMotion,
+  );
   const timelineRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
