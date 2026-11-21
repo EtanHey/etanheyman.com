@@ -1,0 +1,8 @@
+{
+  "verificationTarget": "local PR production build",
+  "viewportCasesPassed": 2,
+  "ogImage": "https://etanheyman.com/images/projects/cantaloupe-ai.svg",
+  "checkedURL": "http://127.0.0.1:45420/images/projects/cantaloupe-ai.svg",
+  "status": 200,
+  "contentType": "image/svg+xml"
+}

@@ -122,6 +122,25 @@ function isSvgOrLogoAsset(imageUrl: string | null): imageUrl is string {
   );
 }
 
+function useImageDecode(
+  source: string | null,
+  onFailure: (source: string) => void,
+) {
+  const imageRef = useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    const image = imageRef.current;
+    if (!image || !source) return;
+    let active = true;
+    image.decode().catch(() => {
+      if (active) onFailure(source);
+    });
+    return () => {
+      active = false;
+    };
+  }, [source, onFailure]);
+  return imageRef;
+}
+
 function useHoverCounter(targetValue: number, active: boolean) {
   const [value, setValue] = useState(0);
   const frameRef = useRef<number | null>(null);
@@ -213,13 +232,18 @@ function ProjectCardBase({
   const [isHovering, setIsHovering] = useState(false);
 
   const accent = ACCENT_STYLES[getProjectAccent(project)];
-  const previewImage =
-    project.slug === "cantaloupe-ai"
-      ? "/images/projects/cantaloupe-ai.svg"
-      : project.previewImage;
+  const previewImage = project.previewImage;
   const [failedPreview, setFailedPreview] = useState<string | null>(null);
   const [failedLogo, setFailedLogo] = useState<string | null>(null);
   const isSvgOrLogo = isSvgOrLogoAsset(previewImage);
+  const previewRef = useImageDecode(
+    isSvgOrLogo ? previewImage : null,
+    setFailedPreview,
+  );
+  const logoRef = useImageDecode(
+    !previewImage || failedPreview === previewImage ? project.logoUrl : null,
+    setFailedLogo,
+  );
   const isFeatured = variant === "featured";
 
   const toolsCount = inferToolsCount(project);
@@ -261,11 +285,7 @@ function ProjectCardBase({
                   src={previewImage.replace("#svg", "").replace("#logo", "")}
                   alt={project.title}
                   onError={() => setFailedPreview(previewImage)}
-                  ref={(image) => {
-                    if (image?.complete && image.naturalWidth === 0) {
-                      setFailedPreview(previewImage);
-                    }
-                  }}
+                  ref={previewRef}
                   className="absolute inset-0 h-full w-full object-contain object-center p-8"
                   loading={priority ? "eager" : "lazy"}
                 />
@@ -297,11 +317,7 @@ function ProjectCardBase({
                       .replace("#logo", "")}
                     alt={project.title}
                     onError={() => setFailedLogo(project.logoUrl)}
-                    ref={(image) => {
-                      if (image?.complete && image.naturalWidth === 0) {
-                        setFailedLogo(project.logoUrl);
-                      }
-                    }}
+                    ref={logoRef}
                     className="h-[40%] w-[40%] object-contain opacity-30 transition-opacity duration-500 group-hover/card:opacity-50"
                     loading="lazy"
                   />
