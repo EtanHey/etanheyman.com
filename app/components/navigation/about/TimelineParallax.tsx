@@ -8,10 +8,20 @@ import {
   useInView,
   useMotionValue,
   useMotionValueEvent,
-  useReducedMotion,
 } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import SendRightPointer from "./SendRightPointer";
+
+const motionQuery = "(prefers-reduced-motion: reduce)";
+const subscribeToMotion = (onChange: () => void) => {
+  const query = window.matchMedia(motionQuery);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+};
+const getReducedMotion = () => window.matchMedia(motionQuery).matches;
+// AIDEV-NOTE: SSR and hydration share a motion-free snapshot. Read the device
+// preference after hydration so conditional decorations cannot change the tree.
+const getServerReducedMotion = () => true;
 
 // --- Brand color constants (single source of truth) ---
 const BRAND_BLUE = "#0F82EB";
@@ -316,7 +326,11 @@ function TimelineCard({
 
 // --- Main Timeline Component ---
 const TimelineParallax = () => {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useSyncExternalStore(
+    subscribeToMotion,
+    getReducedMotion,
+    getServerReducedMotion,
+  );
   const timelineRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
