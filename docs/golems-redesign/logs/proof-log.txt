@@ -1,0 +1,18 @@
+TAB1 focused: Skip to content
+TAB order: ["Golems home","Docs","Skills","Journey","For LLMs","GitHub(opens in a new tab)","etanheyman.com(opens in a new tab)","Get started","Browse 57 skills"]
+EMET pressed: true
+AXE /golems []
+SHOWCASE rows after filter: 3
+LEDGER "review": Showing 6 of 57 skills
+LEDGER review+none: Showing 1 of 57 skills
+LEDGER cleared: Showing 57 of 57 skills
+LEDGER Quality: Showing 2 of 57 skills
+AXE /golems/skills []
+TABS after 2x ArrowRight selected: Eval status focused: Eval status
+TABS End: Record
+AXE /golems/skills/pr-loop [{"id":"scrollable-region-focusable","impact":"serious","n":1,"sample":[".max-h-48"]}]
+AXE /golems/docs/getting-started [{"id":"color-contrast","impact":"serious","n":3,"sample":["figure:nth-child(28) > .my-5.g-on-kiln.relative > pre[data-language=\"bash\"][data-theme=\"github-dark-dimmed\"] > .rounded-\\[4px\\].text-\\[0\\.88em\\] > span[data-line=\"\"]:nth-child(1) > span","figure:nth-child(28) > .my-5.g-on-kiln.relative > pre[data-language=\"bash\"][data-theme=\"github-dark-dimmed\"] > .rounded-\\[4px\\].text-\\[0\\.88em\\] > span[data-line=\"\"]:nth-child(4) > span"]}]
+MENU open expanded: true
+MENU after Escape visible: 0
+REDUCED MOTION before: {"alephTransition":"opacity 0.2s","alephClip":"none","riseDuration":"1e-05s"}
+REDUCED MOTION erased: {"opacity":"0","clip":"none"}

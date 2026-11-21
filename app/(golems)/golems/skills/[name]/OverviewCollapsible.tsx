@@ -30,11 +30,13 @@ export default function OverviewCollapsible({
           <button
             onClick={() => setExpanded(!expanded)}
             type="button"
-            className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-[#e5950025] bg-[#e5950008] px-4 py-2.5 text-sm font-medium text-[#e59500] transition-colors hover:border-[#e5950040] hover:bg-[#e5950012]"
+            aria-expanded={expanded}
+            className="g-press mt-6 inline-flex min-h-11 items-center gap-2 rounded-md border border-g-ink px-4 text-[0.95rem] font-medium text-g-ink hover:bg-g-raised"
           >
             {expanded ? "Show less" : "Show full documentation"}
             <ChevronDown
-              className={`h-4 w-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+              aria-hidden="true"
+              className={`h-4 w-4 transition-transform duration-200 ease-[var(--ease-g-out)] ${expanded ? "rotate-180" : ""}`}
             />
           </button>
         </>

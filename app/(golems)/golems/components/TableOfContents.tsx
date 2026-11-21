@@ -4,6 +4,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 type TocItem = { id: string; text: string; level: number };
 
+const scrollBehavior = (): ScrollBehavior =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ? "auto"
+    : "smooth";
+
 export default function TableOfContents() {
   const [headings, setHeadings] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState("");
@@ -17,12 +23,12 @@ export default function TableOfContents() {
       `a[href="#${CSS.escape(id)}"]`,
     );
     if (activeLink) {
-      activeLink.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      activeLink.scrollIntoView({ block: "nearest", behavior: scrollBehavior() });
     }
   }, []);
 
   useEffect(() => {
-    const article = document.querySelector("article");
+    const article = document.querySelector("article[data-golems-doc]");
     if (!article) return;
 
     const els = article.querySelectorAll("h2, h3");
@@ -41,7 +47,7 @@ export default function TableOfContents() {
     if (window.location.hash) {
       const target = document.getElementById(window.location.hash.slice(1));
       if (target) {
-        setTimeout(() => target.scrollIntoView({ behavior: "smooth" }), 100);
+        setTimeout(() => target.scrollIntoView({ behavior: scrollBehavior() }), 100);
       }
     }
 
@@ -78,16 +84,18 @@ export default function TableOfContents() {
       onMouseLeave={() => {
         isHovering.current = false;
       }}
-      className="scrollbar-none sticky top-20 hidden max-h-[calc(100vh-6rem)] w-56 shrink-0 overflow-y-auto xl:block"
+      aria-label="On this page"
+      className="scrollbar-thin sticky top-24 hidden max-h-[calc(100vh-7rem)] w-56 shrink-0 overflow-y-auto xl:block"
     >
-      <p className="mb-3 text-xs font-semibold tracking-wider text-[#e59500] uppercase">
+      <p className="mb-3 font-g-display text-[1rem] text-g-ink">
         On this page
       </p>
-      <ul className="space-y-1 text-sm">
+      <ul className="space-y-0.5 border-l border-g-rule text-[0.88rem]">
         {headings.map((h, i) => (
           <li
             key={`${h.id}-${i}`}
             style={{ paddingLeft: `${(h.level - 2) * 12}px` }}
+            className="-ml-px"
           >
             <a
               href={`#${h.id}`}
@@ -95,15 +103,17 @@ export default function TableOfContents() {
                 e.preventDefault();
                 const el = document.getElementById(h.id);
                 if (el) {
-                  el.scrollIntoView({ behavior: "smooth" });
+                  el.scrollIntoView({ behavior: scrollBehavior() });
+                  el.focus({ preventScroll: true });
                   history.pushState(null, "", `#${h.id}`);
                   setActiveId(h.id);
                 }
               }}
-              className={`block py-1 leading-snug transition-colors ${
+              aria-current={activeId === h.id ? "location" : undefined}
+              className={`block border-l-2 py-1 pl-3 leading-snug transition-colors duration-150 ${
                 activeId === h.id
-                  ? "text-[#e59500]"
-                  : "text-[#a89078] hover:text-[#c0b8a8]"
+                  ? "border-g-cobalt text-g-ink"
+                  : "border-transparent text-g-ash hover:text-g-ink"
               }`}
             >
               {h.text}

@@ -1,4 +1,4 @@
-import { readFileSync, existsSync, readdirSync, statSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import matter from 'gray-matter';
 import { MDXRemote } from 'next-mdx-remote/rsc';
@@ -7,34 +7,16 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { useMDXComponents } from '@/mdx-components';
-import MermaidDiagram from '../../components/MermaidDiagram';
-import CopyButton from '../../components/CopyButton';
 import TableOfContents from '../../components/TableOfContents';
 import ArchitectureDiagram from '../../components/ArchitectureDiagram';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import { getDocsNav, flattenNav } from '../../lib/docs-nav';
+import { golemsMdxComponents } from '../../lib/golems-mdx';
 
 const CONTENT_DIR = join(process.cwd(), 'content', 'golems');
 
 function isArchivedSlug(slug: string[]): boolean {
   return slug.includes('_archived');
-}
-
-function getAllDocPaths(dir: string, prefix = ''): string[] {
-  const paths: string[] = [];
-  if (!existsSync(dir)) return paths;
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    const rel = prefix ? `${prefix}/${entry}` : entry;
-    if (statSync(full).isDirectory()) {
-      if (entry === '_archived') continue;
-      paths.push(...getAllDocPaths(full, rel));
-    } else if (entry.endsWith('.md')) {
-      paths.push(rel.replace(/\.md$/, ''));
-    }
-  }
-  return paths;
 }
 
 // Skip static generation — MDX content may contain chars that break prerendering
@@ -54,18 +36,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-function extractTextContent(node: React.ReactNode): string {
-  if (typeof node === 'string') return node;
-  if (typeof node === 'number') return String(node);
-  if (!node) return '';
-  if (Array.isArray(node)) return node.map(extractTextContent).join('');
-  if (typeof node === 'object' && 'props' in node) {
-    const el = node as React.ReactElement<{ children?: React.ReactNode }>;
-    return extractTextContent(el.props.children);
-  }
-  return '';
-}
-
 export default async function DocsPage({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
   if (isArchivedSlug(slug)) notFound();
@@ -77,13 +47,14 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   const { data, content } = matter(raw);
   const pageTitle = data.title || content.match(/^#\s+(.+)/m)?.[1] || slug[slug.length - 1];
   const headingTitle = content.match(/^#\s+(.+)/m)?.[1] || pageTitle;
+  const description = typeof data.description === 'string' ? data.description : null;
   const badges = [
     typeof data.type === 'string' ? data.type : null,
     data.retired ? 'retired' : null,
     typeof data.status === 'string' ? data.status : null,
   ].filter((badge): badge is string => Boolean(badge));
 
-  // Strip first H1 from content to avoid duplicate title rendering (matches dashboard)
+  // Strip the first H1: the page renders its own visible title above the content.
   const strippedContent = content.replace(/^#\s+.+\n?/m, '');
 
   // Prev/next navigation from auto-generated nav (matches sidebar order)
@@ -92,55 +63,33 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
   const prevDoc = currentIndex > 0 ? docOrder[currentIndex - 1] : null;
   const nextDoc = currentIndex >= 0 && currentIndex < docOrder.length - 1 ? docOrder[currentIndex + 1] : null;
 
-  const baseComponents = useMDXComponents({});
-  const components = {
-    ...baseComponents,
-    pre: ({ children, ...props }: React.ComponentPropsWithoutRef<'pre'> & { children?: React.ReactNode; 'data-language'?: string }) => {
-      const child = children as React.ReactElement<{ className?: string; children?: React.ReactNode }> | undefined;
-      const lang = props['data-language'] || child?.props?.className?.replace('language-', '');
-      // Mermaid blocks → render as diagram
-      if (lang === 'mermaid') {
-        const chart = extractTextContent(children);
-        return <MermaidDiagram chart={chart} />;
-      }
-      // Regular code blocks → styled with copy button
-      const codeText = extractTextContent(children);
-      return (
-        <div className="relative group mb-4">
-          <pre
-            className="bg-[#0d0d0d] border border-[#e5950026] rounded-lg p-4 overflow-x-auto text-sm scrollbar-none [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[inherit]"
-            style={{ fontFamily: "var(--font-golems-mono), 'JetBrains Mono', 'Fira Code', monospace" }}
-            {...props}
-          >
-            {children}
-          </pre>
-          {codeText.trim() && <CopyButton text={codeText} />}
-        </div>
-      );
-    },
-  };
-
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-6 pt-4 md:pt-8 pb-12 flex gap-8">
-      <article className="flex-1 min-w-0 max-w-3xl">
-        <Breadcrumbs title={pageTitle} />
-        <h1 className="sr-only">{headingTitle}</h1>
-        {badges.length > 0 && (
-          <div className="mb-4 flex flex-wrap gap-2">
-            {badges.map((badge) => (
-              <span
-                key={badge}
-                className="rounded-sm border border-[#e5950026] bg-[#e595000a] px-2 py-1 text-[0.65rem] font-semibold tracking-wide text-[#8b7355] uppercase"
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
-        )}
+    <div className="mx-auto flex max-w-6xl gap-12 px-4 pt-8 pb-16 md:px-8 md:pt-12">
+      <article data-golems-doc className="min-w-0 max-w-[72ch] flex-1">
+        <header className="mb-10 border-b border-g-ink pb-6">
+          <Breadcrumbs title={pageTitle} />
+          <h1 className="font-g-display text-[2.2rem] leading-[1.08] text-g-ink md:text-[2.9rem]">{headingTitle}</h1>
+          {description && (
+            <p className="mt-3 text-[1.1rem] leading-relaxed text-g-ash">{description}</p>
+          )}
+          {badges.length > 0 && (
+            <ul className="mt-4 flex flex-wrap gap-2" aria-label="Page status">
+              {badges.map((badge) => (
+                <li
+                  key={badge}
+                  className="rounded-sm border border-g-edge px-2 py-0.5 font-g-mono text-[0.78rem] text-g-ash"
+                >
+                  {badge}
+                </li>
+              ))}
+            </ul>
+          )}
+        </header>
         {slugStr === 'architecture' && <ArchitectureDiagram />}
+        <div className="[&>h2:first-child]:mt-0 [&>h2:first-child]:border-t-0 [&>h2:first-child]:pt-0">
         <MDXRemote
           source={strippedContent}
-          components={components}
+          components={golemsMdxComponents}
           options={{
             mdxOptions: {
               remarkPlugins: [remarkGfm],
@@ -154,30 +103,26 @@ export default async function DocsPage({ params }: { params: Promise<{ slug: str
             },
           }}
         />
+        </div>
 
-        {/* Prev/Next Navigation */}
         {(prevDoc || nextDoc) && (
-          <nav className="flex justify-between items-center mt-12 pt-6 border-t border-[#e5950026]">
+          <nav aria-label="Previous and next page" className="mt-16 grid gap-3 border-t border-g-rule pt-6 sm:grid-cols-2">
             {prevDoc ? (
               <Link
                 href={`/golems/docs/${prevDoc.slug}`}
-                className="flex flex-col gap-1 text-left group"
+                className="g-press group flex flex-col gap-1 rounded-lg border border-g-rule px-4 py-3 hover:border-g-ink"
               >
-                <span className="text-xs text-[#8b7355]">Previous</span>
-                <span className="text-[#c0b8a8] group-hover:text-[#e59500] transition-colors">
-                  &larr; {prevDoc.title}
-                </span>
+                <span className="text-sm text-g-ash">Previous</span>
+                <span className="font-g-display text-[1.15rem] text-g-ink">{prevDoc.title}</span>
               </Link>
-            ) : <div />}
+            ) : <div className="hidden sm:block" />}
             {nextDoc ? (
               <Link
                 href={`/golems/docs/${nextDoc.slug}`}
-                className="flex flex-col gap-1 text-right group"
+                className="g-press group flex flex-col gap-1 rounded-lg border border-g-rule px-4 py-3 text-right hover:border-g-ink"
               >
-                <span className="text-xs text-[#8b7355]">Next</span>
-                <span className="text-[#c0b8a8] group-hover:text-[#e59500] transition-colors">
-                  {nextDoc.title} &rarr;
-                </span>
+                <span className="text-sm text-g-ash">Next</span>
+                <span className="font-g-display text-[1.15rem] text-g-ink">{nextDoc.title}</span>
               </Link>
             ) : <div />}
           </nav>

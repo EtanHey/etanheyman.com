@@ -16,6 +16,8 @@ describe('docs page title', () => {
     const page = await DocsPage({ params: Promise.resolve({ slug: [slug] }) });
     const html = renderToStaticMarkup(page);
     expect(html.match(/<h1\b/g)).toHaveLength(1);
-    expect(html).toContain(`<h1 class="sr-only">${title}</h1>`);
+    // The title is now visible (the redesign shows it above the content).
+    expect(html).toMatch(new RegExp(`<h1 class="[^"]*">${title}</h1>`));
+    expect(html).not.toContain('<h1 class="sr-only">');
   });
 });
